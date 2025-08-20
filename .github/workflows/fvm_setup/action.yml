@@ -1,0 +1,36 @@
+name: FVM Setup
+description: "Install Dart, setup FVM, cache SDKs, and install Flutter via FVM"
+runs:
+  using: "composite"
+  steps:
+    # Dartがないと `dart pub global activate fvm` が使えないので先にDartを入れる
+    - name: Setup Dart
+      uses: dart-lang/setup-dart@v1
+      with:
+        sdk: stable
+
+    - name: Install FVM
+      shell: bash
+      run: |
+        dart pub global activate fvm
+        echo "$HOME/.pub-cache/bin" >> "$GITHUB_PATH"
+        # FVMのホーム（SDK格納先）を固定しておくとキャッシュしやすい
+        echo "FVM_HOME=$HOME/.fvm" >> "$GITHUB_ENV"
+
+    # FVMとpubのキャッシュを復元
+    - name: Cache FVM & Pub
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.fvm
+          ~/.pub-cache
+        key: fvm-${{ runner.os }}-${{ hashFiles('.fvmrc') }}
+        restore-keys: |
+          fvm-${{ runner.os }}-
+
+    # .fvmrcに基づいてFlutterをインストール（キャッシュがあれば高速で完了）
+    - name: Install Flutter via FVM
+      shell: bash
+      run: |
+        fvm install
+        fvm flutter --version

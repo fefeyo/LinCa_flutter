@@ -1,6 +1,6 @@
 # Makefile
 
-.PHONY: init format analyze build clean env pubget
+.PHONY: init format analyze build clean env pubget test
 
 init: env pubget build
 
@@ -15,6 +15,9 @@ analyze:
 
 build:
 	bash scripts/build_runner.sh
+
+test:
+	bash scripts/flutter_test.sh
 
 clean:
 	bash scripts/clean.sh
