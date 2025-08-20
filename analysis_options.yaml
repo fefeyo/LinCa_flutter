@@ -1,0 +1,37 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+
+linter:
+  rules:
+    # --- const 関連 ---
+    - prefer_const_constructors
+    - prefer_const_literals_to_create_immutables
+    - prefer_const_declarations
+
+    # --- 型安全 ---
+    - always_specify_types
+    - avoid_dynamic_calls
+
+    # --- 無駄なコード防止 ---
+    - avoid_unnecessary_containers
+    - unnecessary_null_checks
+    - unnecessary_this
+    - no_duplicate_case_values
+
+    # --- コードスタイル ---
+    - sort_constructors_first
+    - use_super_parameters
+    - prefer_single_quotes
+
+    # --- 可読性 ---
+    - lines_longer_than_80_chars
+    - avoid_print # logger などの使用を促す
+
+    # --- その他 ---
+    - avoid_classes_with_only_static_members
+    - avoid_empty_else
+    - prefer_final_locals

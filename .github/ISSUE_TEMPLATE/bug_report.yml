@@ -1,0 +1,30 @@
+name: バグ報告
+description: アプリ内のバグを報告します
+title: "[Bug] "
+labels: [ bug ]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: 問題の内容
+      description: どのような問題が発生しましたか？
+      placeholder: バグの詳細を入力してください
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 再現手順
+      description: バグを再現するためのステップ
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. Scroll down to '...'
+        4. See error
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: 環境情報
+      description: OSやバージョン、Flutterのバージョンなど

@@ -1,0 +1,90 @@
+name: Flutter CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  setup:
+    name: Setup & init
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.35.0'
+          channel: 'stable'
+
+      - name: Install fvm
+        run: |
+          dart pub global activate fvm
+          echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
+
+      - name: Install Flutter
+        run: |
+          fvm install
+          fvm flutter --version
+
+      - name: Setup Make
+        run: sudo apt-get update && sudo apt-get install -y make
+
+      - name: Run env
+        run: make env
+
+      - name: Run pub get
+        run: fvm flutter pub get
+
+      - name: Run build
+        run: make build
+
+  build:
+    name: Flutter Build
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.35.0'
+          channel: stable
+
+      - name: Run env
+        run: make env
+
+      - name: Run pub get
+        run: flutter pub get
+
+      - name: Run build
+        run: make build
+
+      - name: Run build apk
+        run: flutter build apk
+
+  analyze:
+    name: Flutter Analyze
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.35.0'
+          channel: stable
+
+      - name: Run env
+        run: make env
+
+      - name: Run pub get
+        run: flutter pub get
+
+      - name: Run build
+        run: make build
+
+      - name: Run Analyze
+        run: flutter analyze
