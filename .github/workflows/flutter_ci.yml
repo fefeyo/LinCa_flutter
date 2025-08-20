@@ -16,6 +16,7 @@ jobs:
     name: Setup & Codegen
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: ./.github/workflows/setup
 
   analyze:
@@ -24,6 +25,7 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: ./.github/workflows/setup
       - run: make analyze
 
@@ -33,6 +35,7 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: ./.github/workflows/setup
       - run: make test
 
@@ -42,5 +45,6 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: ./.github/workflows/setup
       - run: fvm flutter build apk
