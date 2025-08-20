@@ -1,8 +1,11 @@
 # Makefile
 
-.PHONY: init format analyze build clean env
+.PHONY: init format analyze build clean env pubget
 
-init: build env
+init: env pubget build
+
+pubget:
+	bash scripts/pubget.sh
 
 format:
 	bash scripts/format.sh
