@@ -5,6 +5,11 @@ on:
     branches: [ main, develop ]
   pull_request:
     branches: [ main, develop ]
+    types: [opened, synchronize, reopened, closed]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   setup:
@@ -15,76 +20,62 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.35.0'
-          channel: 'stable'
-
-      - name: Install fvm
-        run: |
-          dart pub global activate fvm
-          echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
-
-      - name: Install Flutter
-        run: |
-          fvm install
-          fvm flutter --version
-
-      - name: Setup Make
-        run: sudo apt-get update && sudo apt-get install -y make
-
-      - name: Run env
-        run: make env
-
-      - name: Run pub get
-        run: fvm flutter pub get
-
-      - name: Run build
-        run: make build
+      - name: cache fvm
+        uses: ./.github/workflows/fvm_setup
 
   build:
     name: Flutter Build
     needs: setup
     runs-on: ubuntu-latest
+    if: >
+      (github.event_name == 'pull_request' &&
+       github.event.action == 'closed' &&
+       github.event.pull_request.merged == true &&
+       github.event.pull_request.base.ref == 'develop')
+      || (github.event_name == 'push' && github.ref == 'refs/heads/develop')
     steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.35.0'
-          channel: stable
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - name: Run env
-        run: make env
+      - name: cache fvm
+        uses: ./.github/workflows/fvm_setup
 
-      - name: Run pub get
-        run: flutter pub get
-
-      - name: Run build
-        run: make build
+      - name: Run init
+        run: make init
 
       - name: Run build apk
-        run: flutter build apk
+        run: fvm flutter build apk
 
   analyze:
     name: Flutter Analyze
     needs: setup
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.35.0'
-          channel: stable
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - name: Run env
-        run: make env
+      - name: cache fvm
+        uses: ./.github/workflows/fvm_setup
 
-      - name: Run pub get
-        run: flutter pub get
-
-      - name: Run build
-        run: make build
+      - name: Run init
+        run: make init
 
       - name: Run Analyze
-        run: flutter analyze
+        run: make analyze
+
+  test:
+    name: Flutter test
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: cache fvm
+        uses: ./.github/workflows/fvm_setup
+
+      - name: Run init
+        run: make init
+
+      - name: Run test
+        run: make test

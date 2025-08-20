@@ -11,7 +11,8 @@ class TradedLincaListPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final TradedLincaListState state = ref.watch(tradedLincaListViewModelProvider);
+    final TradedLincaListState state =
+        ref.watch(tradedLincaListViewModelProvider);
     return Scaffold(
       appBar: AppBar(title: const Text('traded_linca_list')),
       body: Center(

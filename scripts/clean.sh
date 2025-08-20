@@ -5,7 +5,7 @@ set -e
 
 echo "🧹 Cleaning Flutter project..."
 
-flutter clean
+fvm flutter clean
 rm -rf pubspec.lock .dart_tool build
 
 echo "✅ Clean completed."

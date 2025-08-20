@@ -11,7 +11,8 @@ class CreatedEventListPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final CreatedEventListState state = ref.watch(createdEventListViewModelProvider);
+    final CreatedEventListState state =
+        ref.watch(createdEventListViewModelProvider);
     return Scaffold(
       appBar: AppBar(title: const Text('created_event_list')),
       body: Center(
