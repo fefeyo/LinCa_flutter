@@ -24,13 +24,7 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/workflows/fvm-setup-only
-      - name: Download codegen
-        uses: actions/download-artifact@v4
-        with:
-          name: codegen-${{ github.sha }}
-          path: .
+      - uses: ./.github/workflows/setup
       - run: make analyze
 
   test:
@@ -39,13 +33,7 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/workflows/fvm-setup-only
-      - name: Download codegen
-        uses: actions/download-artifact@v4
-        with:
-          name: codegen-${{ github.sha }}
-          path: .
+      - uses: ./.github/workflows/setup
       - run: make test
 
   build:
@@ -54,12 +42,5 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/workflows/fvm-setup-only
-      - name: Download codegen
-        uses: actions/download-artifact@v4
-        with:
-          name: codegen-${{ github.sha }}
-          path: .
-      - run: make init
+      - uses: ./.github/workflows/setup
       - run: fvm flutter build apk
