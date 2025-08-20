@@ -18,3 +18,6 @@ clean:
 
 env:
 	bash scripts/prepare_env.sh
+
+create-feature:
+	@bash scripts/create_feature.sh $(name)
