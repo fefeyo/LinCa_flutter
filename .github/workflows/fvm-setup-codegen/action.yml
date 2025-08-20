@@ -32,16 +32,16 @@ runs:
         fvm install
         fvm flutter --version
 
-    - name: Flutter pub get
+    - name: make init
       shell: bash
-      run: fvm flutter pub get
+      run: make init
 
-    - name: Codegen (build_runner)
-      shell: bash
-      run: |
-        fvm flutter pub run build_runner build \
-          --delete-conflicting-outputs \
-          --build-filter "lib/**"
+#    - name: Codegen (build_runner)
+#      shell: bash
+#      run: |
+#        fvm flutter pub run build_runner build \
+#          --delete-conflicting-outputs \
+#          --build-filter "lib/**"
 
     - name: Upload codegen artifacts
       uses: actions/upload-artifact@v4
