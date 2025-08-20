@@ -5,4 +5,4 @@ set -e
 echo "Running flutter test with FVM..."
 
 # テスト実行
-fvm flutter test --reporter expanded
+flutter test --reporter expanded

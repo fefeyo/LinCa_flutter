@@ -16,8 +16,7 @@ jobs:
     name: Setup & Codegen
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/workflows/fvm-setup-codegen   # ← 生成＋artifact upload までここで
+      - uses: ./.github/workflows/setup
 
   analyze:
     name: Analyze (PR)
