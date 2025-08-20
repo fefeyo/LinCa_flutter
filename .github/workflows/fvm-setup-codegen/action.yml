@@ -41,7 +41,7 @@ runs:
       run: |
         fvm flutter pub run build_runner build \
           --delete-conflicting-outputs \
-          --build-filter lib/**
+          --build-filter "lib/**"
 
     - name: Upload codegen artifacts
       uses: actions/upload-artifact@v4
