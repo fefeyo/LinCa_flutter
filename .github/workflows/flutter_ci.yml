@@ -21,7 +21,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: cache fvm
-        uses: ./fvm-setup
+        uses: ./.github/fvm_setup
 
   build:
     name: Flutter Build
@@ -38,7 +38,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: cache fvm
-        uses: ./fvm-setup
+        uses: ./.github/fvm_setup
 
       - name: Run init
         run: make init
@@ -55,7 +55,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: cache fvm
-        uses: ./fvm-setup
+        uses: ./.github/fvm_setup
 
       - name: Run init
         run: make init
@@ -72,7 +72,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: cache fvm
-        uses: ./fvm-setup
+        uses: ./.github/fvm_setup
 
       - name: Run init
         run: make init
