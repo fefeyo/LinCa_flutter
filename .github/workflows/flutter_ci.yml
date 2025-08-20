@@ -2,10 +2,10 @@ name: Flutter CI
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ develop ]              # マージ後のdevelopをビルドしたいなら
   pull_request:
     branches: [ main, develop ]
-    types: [opened, synchronize, reopened, closed]
+    types: [ opened, synchronize, reopened ]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -13,69 +13,38 @@ concurrency:
 
 jobs:
   setup:
-    name: Setup & init
+    name: Setup & Codegen
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: cache fvm
-        uses: ./.github/workflows/fvm_setup
-
-  build:
-    name: Flutter Build
-    needs: setup
-    runs-on: ubuntu-latest
-    if: >
-      (github.event_name == 'pull_request' &&
-       github.event.action == 'closed' &&
-       github.event.pull_request.merged == true &&
-       github.event.pull_request.base.ref == 'develop')
-      || (github.event_name == 'push' && github.ref == 'refs/heads/develop')
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: cache fvm
-        uses: ./.github/workflows/fvm_setup
-
-      - name: Run init
-        run: make init
-
-      - name: Run build apk
-        run: fvm flutter build apk
+      - uses: actions/checkout@v4
+      - uses: ./.github/workflows/setup
 
   analyze:
-    name: Flutter Analyze
+    name: Analyze (PR)
+    if: github.event_name == 'pull_request'
     needs: setup
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: cache fvm
-        uses: ./.github/workflows/fvm_setup
-
-      - name: Run init
-        run: make init
-
-      - name: Run Analyze
-        run: make analyze
+      - uses: actions/checkout@v4
+      - uses: ./.github/workflows/setup
+      - run: make analyze
 
   test:
-    name: Flutter test
+    name: Test (PR)
+    if: github.event_name == 'pull_request'
     needs: setup
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: ./.github/workflows/setup
+      - run: make test
 
-      - name: cache fvm
-        uses: ./.github/workflows/fvm_setup
-
-      - name: Run init
-        run: make init
-
-      - name: Run test
-        run: make test
+  build:
+    name: Build (develop push)
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/workflows/setup
+      - run: flutter build apk
