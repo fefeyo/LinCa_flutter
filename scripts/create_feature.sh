@@ -8,7 +8,10 @@ if [ -z "$NAME" ]; then
 fi
 
 # PascalCase へ変換
-CLASS_NAME="$(tr '[:lower:]' '[:upper:]' <<< ${NAME:0:1})${NAME:1}"
+CLASS_NAME=$(echo "$NAME" | perl -pe 's/(^|_)([a-z])/\U$2/g')
+
+# camelCase へ変換
+VAR_NAME="$(tr 'A-Z' 'a-z' <<< ${CLASS_NAME:0:1})${CLASS_NAME:1}"
 
 BASE_DIR="lib/features/${NAME}"
 mkdir -p $BASE_DIR/{data,view,view_model}
@@ -23,7 +26,7 @@ part '${NAME}_state.g.dart';
 @freezed
 abstract class ${CLASS_NAME}State with _\$${CLASS_NAME}State {
   const factory ${CLASS_NAME}State({
-    @Default("") String name,
+    @Default('') String name,
   }) = _${CLASS_NAME}State;
 
   factory ${CLASS_NAME}State.fromJson(Map<String, dynamic> json) =>
@@ -36,9 +39,10 @@ cat <<EOF > $BASE_DIR/view_model/${NAME}_view_model.dart
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../data/${NAME}_state.dart';
 
-final ${NAME}ViewModelProvider =
+final StateNotifierProvider<${CLASS_NAME}ViewModel, ${CLASS_NAME}State>
+    ${VAR_NAME}ViewModelProvider =
     StateNotifierProvider<${CLASS_NAME}ViewModel, ${CLASS_NAME}State>(
-        (ref) => ${CLASS_NAME}ViewModel());
+        (Ref ref) => ${CLASS_NAME}ViewModel());
 
 class ${CLASS_NAME}ViewModel extends StateNotifier<${CLASS_NAME}State> {
   ${CLASS_NAME}ViewModel() : super(const ${CLASS_NAME}State());
@@ -51,6 +55,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'data/${NAME}_state.dart';
 import 'view_model/${NAME}_view_model.dart';
 
 @RoutePage()
@@ -59,7 +64,7 @@ class ${CLASS_NAME}Page extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(${NAME}ViewModelProvider);
+    final ${CLASS_NAME}State state = ref.watch(${VAR_NAME}ViewModelProvider);
     return Scaffold(
       appBar: AppBar(title: const Text('${NAME}')),
       body: Center(

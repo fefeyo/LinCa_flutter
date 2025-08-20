@@ -27,6 +27,7 @@ dependencies:
   dio: ^5.8.0+1
   retrofit: ^4.6.0
   json_annotation: ^4.9.0
+  freezed_annotation: ^3.1.0
   intl: ^0.20.2
 
   # Env
@@ -44,7 +45,6 @@ dev_dependencies:
   # Codegen / Generators（開発時のみ）
   build_runner: ^2.5.4
   freezed: ^3.1.0
-  freezed_annotation: ^3.1.0
   json_serializable: ^6.9.5
   retrofit_generator: ^9.7.0
   envied_generator: ^1.1.1
