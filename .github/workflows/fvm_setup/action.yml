@@ -14,18 +14,19 @@ runs:
       run: |
         dart pub global activate fvm
         echo "$HOME/.pub-cache/bin" >> "$GITHUB_PATH"
-        # FVMのホーム（SDK格納先）を固定しておくとキャッシュしやすい
-        echo "FVM_HOME=$HOME/.fvm" >> "$GITHUB_ENV"
+        # FVM のキャッシュパス（SDK配置先）を固定
+        echo "FVM_CACHE_PATH=$HOME/.fvm" >> "$GITHUB_ENV"
 
     # FVMとpubのキャッシュを復元
     - name: Cache FVM & Pub
       uses: actions/cache@v4
       with:
         path: |
-          ~/.fvm
+          ${{ env.FVM_CACHE_PATH }}        # ← 固定パスではなく env を参照
           ~/.pub-cache
-        key: fvm-${{ runner.os }}-${{ hashFiles('.fvmrc') }}
+        key: fvm-${{ runner.os }}-${{ hashFiles('.fvmrc') }}-pub-${{ hashFiles('**/pubspec.lock') }}
         restore-keys: |
+          fvm-${{ runner.os }}-${{ hashFiles('.fvmrc') }}-
           fvm-${{ runner.os }}-
 
     # .fvmrcに基づいてFlutterをインストール（キャッシュがあれば高速で完了）
