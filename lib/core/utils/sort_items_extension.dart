@@ -26,29 +26,31 @@ enum SeriesTag {
 
 extension DisplayOrderExtension on DisplayOrder {
   String label(BuildContext context) => switch (this) {
-        DisplayOrder.newest => context.l10n.app_name,
-        DisplayOrder.oldest => context.l10n.app_name,
-        DisplayOrder.title => context.l10n.app_name,
+        DisplayOrder.newest => context.l10n.displayOrder_newest,
+        DisplayOrder.oldest => context.l10n.displayOrder_oldest,
+        DisplayOrder.title => context.l10n.displayOrder_title,
       };
 }
 
 extension ParticipationFilterExtension on ParticipationFilter {
   String label(BuildContext context) => switch (this) {
-        ParticipationFilter.onSite => context.l10n.app_name,
-        ParticipationFilter.streaming => context.l10n.app_name,
-        ParticipationFilter.liveViewing => context.l10n.app_name,
-        ParticipationFilter.absent => context.l10n.app_name,
+        ParticipationFilter.onSite => context.l10n.participationFilter_onSite,
+        ParticipationFilter.streaming =>
+          context.l10n.participationFilter_streaming,
+        ParticipationFilter.liveViewing =>
+          context.l10n.participationFilter_liveViewing,
+        ParticipationFilter.absent => context.l10n.participationFilter_absent,
       };
 }
 
 extension SeriesTagExtension on SeriesTag {
   String label(BuildContext context) => switch (this) {
-        SeriesTag.muse => context.l10n.app_name,
-        SeriesTag.aqours => context.l10n.app_name,
-        SeriesTag.nijigasaki => context.l10n.app_name,
-        SeriesTag.liella => context.l10n.app_name,
-        SeriesTag.hasunosora => context.l10n.app_name,
-        SeriesTag.ikizulive => context.l10n.app_name,
-        SeriesTag.collaborative => context.l10n.app_name,
+        SeriesTag.muse => context.l10n.seriesTag_muse,
+        SeriesTag.aqours => context.l10n.seriesTag_aqours,
+        SeriesTag.nijigasaki => context.l10n.seriesTag_nijigasaki,
+        SeriesTag.liella => context.l10n.seriesTag_liella,
+        SeriesTag.hasunosora => context.l10n.seriesTag_hasunosora,
+        SeriesTag.ikizulive => context.l10n.seriesTag_ikizulive,
+        SeriesTag.collaborative => context.l10n.seriesTag_collaborative,
       };
 }

@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:fefeyo_flutter_template/core/utils/context_extension.dart';
 import 'package:fefeyo_flutter_template/core/utils/sort_items_extension.dart';
 import 'package:flutter/material.dart';
@@ -12,9 +13,9 @@ class MyEventSortBottomSheet extends StatelessWidget {
         bottom: MediaQuery.of(context).viewInsets.bottom, // ← キーボード重なり対策
       ),
       child: ConstrainedBox(
-        constraints: const BoxConstraints(
+        constraints: BoxConstraints(
           minWidth: double.infinity,
-          minHeight: 800,
+          maxHeight: MediaQuery.of(context).size.height * 0.8,
         ),
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -23,8 +24,8 @@ class MyEventSortBottomSheet extends StatelessWidget {
               const SizedBox(height: 16),
               SearchBar(
                 leading: const Icon(Icons.search),
-                hintText: 'キーワードを入力',
-                onChanged: (value) {
+                hintText: context.l10n.filter_search_hint,
+                onChanged: (String value) {
                   // 入力に応じた処理
                 },
               ),
@@ -39,10 +40,10 @@ class MyEventSortBottomSheet extends StatelessWidget {
                     return ChoiceChip(
                       label: Text(
                         displayOrder.label(context),
-                        style: Theme.of(context).textTheme.titleLarge,
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
                       visualDensity: VisualDensity.comfortable,
-                      selected: false,
+                      selected: displayOrder == DisplayOrder.newest,
                     );
                   },
                 ).toList(),
@@ -58,7 +59,7 @@ class MyEventSortBottomSheet extends StatelessWidget {
                     return ChoiceChip(
                       label: Text(
                         participationFilter.label(context),
-                        style: Theme.of(context).textTheme.titleLarge,
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
                       visualDensity: VisualDensity.comfortable,
                       selected: false,
@@ -77,7 +78,7 @@ class MyEventSortBottomSheet extends StatelessWidget {
                     return ChoiceChip(
                       label: Text(
                         seriesTag.label(context),
-                        style: Theme.of(context).textTheme.titleLarge,
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
                       visualDensity: VisualDensity.comfortable,
                       selected: false,
@@ -99,15 +100,14 @@ class MyEventSortBottomSheet extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    // 適用処理を書く
-                    Navigator.of(context).pop(); // シートを閉じるなど
+                    context.router.pop();
                   },
                   child: Text(
-                    '適用',
+                    context.l10n.filter_apply_button,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Colors.white, // 適用ボタンは白文字が定番
-                      fontWeight: FontWeight.bold,
-                    ),
+                          color: Colors.white, // 適用ボタンは白文字が定番
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                 ),
               ),
@@ -121,5 +121,6 @@ class MyEventSortBottomSheet extends StatelessWidget {
   static Future<void> show(BuildContext context) async => showModalBottomSheet(
       context: context,
       enableDrag: false,
+      isScrollControlled: true,
       builder: (BuildContext context) => const MyEventSortBottomSheet());
 }

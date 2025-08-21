@@ -27,18 +27,18 @@ class AddEventBottomSheet extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Text(
-              'イベントを追加する',
+              context.l10n.add_event_title,
               style: context.textTheme.headlineMedium,
             ),
             Padding(
               padding: const EdgeInsets.all(32),
               child: Column(
-                children: [
+                children: <Widget>[
                   ListTile(
                     tileColor: context.colorScheme.surface,
                     leading: const Icon(Icons.event),
                     title: Text(
-                      'イベント一覧から選択',
+                      context.l10n.add_event_select_from_list,
                       style: context.textTheme.titleMedium,
                     ),
                     onTap: () => transitPage(const ChooseEventRoute()),
@@ -48,7 +48,7 @@ class AddEventBottomSheet extends StatelessWidget {
                     tileColor: context.colorScheme.surface,
                     leading: const Icon(Icons.public),
                     title: Text(
-                      '公開イベントを作成',
+                      context.l10n.add_event_create_public,
                       style: context.textTheme.titleMedium,
                     ),
                     onTap: () => transitPage(CreateEventRoute(
@@ -59,7 +59,7 @@ class AddEventBottomSheet extends StatelessWidget {
                     tileColor: context.colorScheme.surface,
                     leading: const Icon(Icons.lock),
                     title: Text(
-                      '非公開イベントを作成',
+                      context.l10n.add_event_create_private,
                       style: context.textTheme.titleMedium,
                     ),
                     onTap: () => transitPage(CreateEventRoute(

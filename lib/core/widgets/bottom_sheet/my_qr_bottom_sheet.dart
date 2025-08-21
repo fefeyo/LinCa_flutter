@@ -35,7 +35,7 @@ class MyQRBottomSheet extends StatelessWidget {
               ),
               const SizedBox(height: 32),
               Text(
-                'このQRコードをスキャンすると\nあなたのプロフィールが交換されるよ！',
+                context.l10n.qr_share_message,
                 style: context.textTheme.titleMedium,
               )
             ],
