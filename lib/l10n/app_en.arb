@@ -1,4 +1,42 @@
 {
   "@@locale": "en",
-  "appTitle": "LinCa"
+  "app_name": "LinCa",
+  "menu_title": "Menu",
+  "my_event_title": "MyEvent",
+  "recent_event_title": "RecentEvent",
+  "my_page_title": "MyPage",
+  "traded_linca_list_title": "TradedLinCaList",
+  "my_qr_code_title": "ShowMyQRCode",
+  "edit_my_linca_title": "EditMyLinCa",
+  "obtained_badges_title": "ObtainedBadges",
+  "created_events_title": "CreatedEvents",
+  "app_settings_title": "AppSettings",
+  "delete_account_title": "DeleteMyAccount",
+  "events_count": "{count} 件のイベント",
+  "@events_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "welcome_user": "{user} さん、{count} 件あります。",
+  "@welcome_user": {
+    "placeholders": {
+      "user": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "last_login": "最終ログイン: {date}",
+  "@last_login": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  }
 }

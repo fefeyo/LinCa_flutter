@@ -137,3 +137,9 @@ app.*.symbols
 *.ipr
 *.iws
 .idea/
+
+# Flutter gen-l10n output
+lib/l10n/app_localizations.dart
+lib/l10n/app_localizations_en.dart
+lib/l10n/app_localizations_ja.dart
+
