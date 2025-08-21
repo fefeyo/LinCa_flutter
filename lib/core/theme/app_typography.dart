@@ -17,13 +17,18 @@ TextTheme buildTextTheme(ColorScheme scheme) {
     headlineSmall: base.headlineSmall
         ?.copyWith(color: onSurface, fontWeight: FontWeight.w600),
     titleLarge: base.titleLarge?.copyWith(color: onSurface),
-    titleMedium: base.titleMedium?.copyWith(color: onSurface.withOpacity(.9)),
-    titleSmall: base.titleSmall?.copyWith(color: onSurface.withOpacity(.9)),
+    titleMedium:
+        base.titleMedium?.copyWith(color: onSurface.withValues(alpha: .9)),
+    titleSmall:
+        base.titleSmall?.copyWith(color: onSurface.withValues(alpha: .9)),
     bodyLarge: base.bodyLarge?.copyWith(color: onSurface),
-    bodyMedium: base.bodyMedium?.copyWith(color: onSurface.withOpacity(.87)),
-    bodySmall: base.bodySmall?.copyWith(color: onSurface.withOpacity(.7)),
+    bodyMedium:
+        base.bodyMedium?.copyWith(color: onSurface.withValues(alpha: .87)),
+    bodySmall: base.bodySmall?.copyWith(color: onSurface.withValues(alpha: .7)),
     labelLarge: base.labelLarge?.copyWith(color: scheme.onPrimary),
-    labelMedium: base.labelMedium?.copyWith(color: onSurface.withOpacity(.8)),
-    labelSmall: base.labelSmall?.copyWith(color: onSurface.withOpacity(.6)),
+    labelMedium:
+        base.labelMedium?.copyWith(color: onSurface.withValues(alpha: .8)),
+    labelSmall:
+        base.labelSmall?.copyWith(color: onSurface.withValues(alpha: .6)),
   );
 }

@@ -11,7 +11,15 @@
   "obtained_badges_title": "獲得バッジ一覧",
   "created_events_title": "作成したイベント一覧",
   "app_settings_title": "アプリ設定",
+  "drawer_linca_card_title": "LinCaカード",
+  "drawer_event_title": "イベント",
+  "drawer_settings_title": "設定",
   "delete_account_title": "アカウント削除",
+  "participation_on_site": "現地参加",
+  "participation_streaming": "配信参加",
+  "participation_live_viewing": "ライブビューイング参加",
+  "participation_absent": "不参加",
+  "participation_planned": "参加予定",
   "events_count": "{count} events",
   "@events_count": {
     "placeholders": {
