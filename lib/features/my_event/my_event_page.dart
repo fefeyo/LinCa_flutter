@@ -5,8 +5,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../core/constants/participation_type.dart';
-import 'data/my_event_state.dart';
-import 'view_model/my_event_view_model.dart';
 
 @RoutePage()
 class MyEventPage extends HookConsumerWidget {
@@ -14,14 +12,13 @@ class MyEventPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final MyEventState state = ref.watch(myEventViewModelProvider);
     return Scaffold(
       body: const Center(
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
               EventCard(
-                event: Event(type: ParticipationType.onSite, tags: [
+                event: Event(type: ParticipationType.onSite, tags: <String>[
                   '#ラブライブ！スーパースター！',
                   '#Liella!',
                   'tag1',
@@ -33,17 +30,17 @@ class MyEventPage extends HookConsumerWidget {
               EventCard(
                 event: Event(
                     type: ParticipationType.streaming,
-                    tags: ['#ラブライブ！スーパースター！', '#Liella!']),
+                    tags: <String>['#ラブライブ！スーパースター！', '#Liella!']),
               ),
               EventCard(
                 event: Event(
                     type: ParticipationType.liveViewing,
-                    tags: ['#ラブライブ！スーパースター！', '#Liella!']),
+                    tags: <String>['#ラブライブ！スーパースター！', '#Liella!']),
               ),
               EventCard(
                 event: Event(
                     type: ParticipationType.absent,
-                    tags: ['#ラブライブ！スーパースター！', '#Liella!']),
+                    tags: <String>['#ラブライブ！スーパースター！', '#Liella!']),
               ),
             ],
           ),

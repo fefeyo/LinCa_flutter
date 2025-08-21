@@ -10,7 +10,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> titles = [
+    final List<String> titles = <String>[
       context.l10n.my_event_title,
       context.l10n.recent_event_title,
       context.l10n.my_page_title,
@@ -42,7 +42,7 @@ class HomePage extends StatelessWidget {
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: tabs.activeIndex,
             onTap: tabs.setActiveIndex,
-            items: [
+            items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: const Icon(Icons.event),
                 label: titles[0],

@@ -32,7 +32,7 @@ class HomeDrawer extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: <Widget>[
                 CircleAvatar(
                   radius: 30,
                   backgroundImage: AssetImage(Assets.images.userIcon.path),

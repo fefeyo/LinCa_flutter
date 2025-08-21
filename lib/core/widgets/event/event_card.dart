@@ -50,7 +50,8 @@ class EventCard extends StatelessWidget {
                 backgroundColor: Colors.transparent,
               ),
               title: Text(
-                'ラブライブ！スーパースター Liella! First Generation LoveLive! ～Wonderful Starlines～',
+                'ラブライブ！スーパースター Liella! First Gener'
+                    'ation LoveLive! ～Wonderful Starlines～',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               subtitle: Column(
