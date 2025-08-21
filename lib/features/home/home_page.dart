@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:fefeyo_flutter_template/core/router/app_router.gr.dart';
 import 'package:fefeyo_flutter_template/core/utils/context_extension.dart';
+import 'package:fefeyo_flutter_template/core/widgets/bottom_sheet/my_event_sort_bottom_sheet.dart';
 import 'package:fefeyo_flutter_template/features/home/view/home_drawer.dart';
 import 'package:flutter/material.dart';
 
@@ -29,12 +30,11 @@ class HomePage extends StatelessWidget {
           appBar: AppBar(
             title: Text(titles[tabs.activeIndex]),
             actions: <Widget>[
-              IconButton(
-                onPressed: () {
-                  /// TODO: ソート用ボトムシート表示
-                },
-                icon: const Icon(Icons.sort),
-              ),
+              if (tabs.activeIndex == 0)
+                IconButton(
+                  onPressed: () => MyEventSortBottomSheet.show(context),
+                  icon: const Icon(Icons.sort),
+                ),
             ],
           ),
           drawer: const HomeDrawer(),
