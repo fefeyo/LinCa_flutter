@@ -11,7 +11,15 @@
   "obtained_badges_title": "ObtainedBadges",
   "created_events_title": "CreatedEvents",
   "app_settings_title": "AppSettings",
+  "drawer_linca_card_title": "LinCaCard",
+  "drawer_event_title": "Event",
+  "drawer_settings_title": "Setting",
   "delete_account_title": "DeleteMyAccount",
+  "participation_on_site": "On-site",
+  "participation_streaming": "Streaming",
+  "participation_live_viewing": "Live Viewing",
+  "participation_absent": "Absent",
+  "participation_planned": "Planned",
   "events_count": "{count} 件のイベント",
   "@events_count": {
     "placeholders": {
