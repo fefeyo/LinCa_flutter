@@ -31,7 +31,7 @@ class MyQRBottomSheet extends StatelessWidget {
                   dataModuleShape: QrDataModuleShape.square,
                   color: Theme.of(context).colorScheme.onSurface,
                 ),
-                backgroundColor: Colors.transparent,
+                backgroundColor: Colors.white,
               ),
               const SizedBox(height: 32),
               Text(

@@ -34,7 +34,7 @@ ThemeData buildAppTheme(ColorScheme scheme) {
       ),
     ),
     bottomSheetTheme: BottomSheetThemeData(
-      backgroundColor: scheme.surface,
+      backgroundColor: scheme.surfaceContainer,
       showDragHandle: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
