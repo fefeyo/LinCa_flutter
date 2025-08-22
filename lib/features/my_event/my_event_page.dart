@@ -1,4 +1,5 @@
 import 'package:fefeyo_flutter_template/core/network/model/event.dart';
+import 'package:fefeyo_flutter_template/core/widgets/bottom_sheet/add_event_bottom_sheet.dart';
 import 'package:fefeyo_flutter_template/core/widgets/event/event_card.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
@@ -47,7 +48,7 @@ class MyEventPage extends HookConsumerWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => AddEventBottomSheet.show(context),
         child: const Icon(Icons.add),
       ),
     );

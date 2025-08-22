@@ -1,0 +1,4 @@
+enum CreateEventType {
+  public,
+  private,
+}
