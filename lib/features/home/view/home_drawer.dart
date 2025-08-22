@@ -83,7 +83,7 @@ class HomeDrawer extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             child: Text(
-              context.l10n.drawer_linca_card_title,
+              context.l10n.common_linca_card,
               style: context.textTheme.bodyLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -125,7 +125,7 @@ class HomeDrawer extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             child: Text(
-              context.l10n.drawer_event_title,
+              context.l10n.common_event,
               style: context.textTheme.bodyLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -143,7 +143,7 @@ class HomeDrawer extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             child: Text(
-              context.l10n.drawer_settings_title,
+              context.l10n.common_setting,
               style: context.textTheme.bodyLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -165,7 +165,9 @@ class HomeDrawer extends StatelessWidget {
             ),
             onTap: () => transitPage(const MyEventRoute()),
           ),
-          const SizedBox(height: 16,)
+          const SizedBox(
+            height: 16,
+          )
         ],
       ),
     );
