@@ -9,6 +9,6 @@ extension SeriesTagExtension on SeriesTag {
         SeriesTag.liella => const Color(0xFF9932CC),
         SeriesTag.hasunosora => const Color(0xFFFFC0CB),
         SeriesTag.ikizulive => const Color(0xFF87CEEB),
-        SeriesTag.collaborative => Colors.transparent,
+        SeriesTag.collaborative => const Color(0xFFFF5E5B),
       };
 }

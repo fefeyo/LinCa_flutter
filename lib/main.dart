@@ -9,6 +9,7 @@ import 'core/router/app_router.dart';
 final AppRouter appRouter = AppRouter();
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(
     const ProviderScope(
       child: MyApp(),

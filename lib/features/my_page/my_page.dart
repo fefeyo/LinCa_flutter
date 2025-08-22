@@ -1,3 +1,4 @@
+import 'package:fefeyo_flutter_template/core/router/app_router.gr.dart';
 import 'package:fefeyo_flutter_template/core/utils/context_extension.dart';
 import 'package:fefeyo_flutter_template/core/utils/sort_items_extension.dart';
 import 'package:fefeyo_flutter_template/core/widgets/bottom_sheet/my_qr_bottom_sheet.dart';
@@ -7,7 +8,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import 'view/linca_vertical_small.dart';
+import 'view/linca_vertical.dart';
 
 @RoutePage()
 class MyPage extends HookConsumerWidget {
@@ -22,22 +23,26 @@ class MyPage extends HookConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const LincaVerticalSmall(
-                name: 'ふぇふぇ',
-                avatar: AssetImage('assets/images/user.png'),
-                seriesChips: <SeriesTag>[
-                  SeriesTag.muse,
-                  SeriesTag.aqours,
-                  SeriesTag.nijigasaki,
-                  SeriesTag.liella,
-                  SeriesTag.hasunosora,
-                  SeriesTag.ikizulive,
-                  SeriesTag.collaborative,
-                ],
-                bio:
-                    '''現地参戦メイン。物販列情報はXで共有します！現地参戦メイン。物販列情報はXで共有します！現地参戦メイン。物販列情報はXで共有します！現地参戦メイン。物販列情報はXで共有します！現地参戦メイン。物販列情報はXで共有します！
+              Hero(
+                tag: 'LinCaCard',
+                child: LincaVertical(
+                  name: 'ふぇふぇ',
+                  avatar: const AssetImage('assets/images/user.png'),
+                  seriesChips: const <SeriesTag>[
+                    SeriesTag.muse,
+                    SeriesTag.aqours,
+                    SeriesTag.nijigasaki,
+                    SeriesTag.liella,
+                    SeriesTag.hasunosora,
+                    SeriesTag.ikizulive,
+                    SeriesTag.collaborative,
+                  ],
+                  bio:
+                  '''現地参戦メイン。物販列情報はXで共有します！現地参戦メイン。物販列情報はXで共有します！現地参戦メイン。物販列情報はXで共有します！現地参戦メイン。物販列情報はXで共有します！現地参戦メイン。物販列情報はXで共有します！
                 ''',
-                tintColor: Colors.purple, // シリーズ色など
+                  tintColor: Colors.purple,
+                  onTap: () => context.router.push(const LincaDetailRoute()),
+                ),
               ),
               const SizedBox(height: 32),
               Text(
