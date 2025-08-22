@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "630270810691",
+    "project_id": "linca-4202a",
+    "storage_bucket": "linca-4202a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:630270810691:android:fe132caa7c460f8c6d92f6",
+        "android_client_info": {
+          "package_name": "com.example.fefeyo_flutter_template"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlyiP8YNlhiwjPUE7hL5ha0j1K7sH--bs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:630270810691:android:e9c324a8ea8ce2f46d92f6",
+        "android_client_info": {
+          "package_name": "com.fefeyo.linca"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlyiP8YNlhiwjPUE7hL5ha0j1K7sH--bs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:630270810691:android:c3353870bde7d7ed6d92f6",
+        "android_client_info": {
+          "package_name": "com.fefeyo.linca_otaku_manager"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlyiP8YNlhiwjPUE7hL5ha0j1K7sH--bs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
