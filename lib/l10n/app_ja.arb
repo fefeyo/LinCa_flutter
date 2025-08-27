@@ -67,5 +67,21 @@
   "seriesTag_liella": "Liella!",
   "seriesTag_hasunosora": "蓮ノ空学院スクールアイドルクラブ",
   "seriesTag_ikizulive": "イキヅライブ！",
-  "seriesTag_collaborative": "合同イベント"
+  "seriesTag_collaborative": "合同イベント",
+  "signin_with_guest": "ゲストとしてサインイン",
+  "signin_failure": "ログインに失敗しました：{error_code}",
+  "@signin_failure": {
+    "placeholders": {
+      "error_code": {
+        "type": "String"
+      }
+    }
+  },
+  "link_to_google_account": "Googleアカウント連携",
+  "link_to_x_account": "Xアカウント連携",
+  "success_link_account": "アカウントのリンクに成功しました",
+  "already_linked": "連携済み",
+  "not_linked": "未連携",
+  "release_link": "連携解除",
+  "sign_out": "サインアウト"
 }

@@ -6,10 +6,14 @@ class MyPageItem extends StatelessWidget {
     super.key,
     required this.title,
     required this.onClickItem,
+    this.subtitle,
+    this.trailing = const Icon(Icons.arrow_right),
   });
 
   final String title;
   final VoidCallback onClickItem;
+  final String? subtitle;
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +23,13 @@ class MyPageItem extends StatelessWidget {
         title,
         style: context.textTheme.titleMedium,
       ),
-      trailing: const Icon(Icons.arrow_right),
+      subtitle: subtitle != null
+          ? Text(
+              subtitle!,
+              style: context.textTheme.bodyMedium,
+            )
+          : null,
+      trailing: trailing,
       onTap: onClickItem,
     );
   }

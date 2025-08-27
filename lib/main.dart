@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'core/theme/app_schemes.dart';
 import 'core/theme/app_theme.dart';
@@ -15,6 +16,10 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  GoogleSignIn.instance.initialize(
+      serverClientId:
+          '630270810691-cavclpg0rs7vr4kgojc93fv0'
+              '8ovrssgl.apps.googleusercontent.com');
   runApp(
     const ProviderScope(
       child: MyApp(),

@@ -67,5 +67,21 @@
   "seriesTag_liella": "Liella!",
   "seriesTag_hasunosora": "Hasunosora Girls’ High School Idol Club",
   "seriesTag_ikizulive": "Ikizulive!",
-  "seriesTag_collaborative": "Collaborative"
+  "seriesTag_collaborative": "Collaborative",
+  "signin_with_guest": "Sign in with GUEST",
+  "signin_failure": "Sign in failure",
+  "@signin_failure": {
+    "placeholders": {
+      "error_code": {
+        "type": "String"
+      }
+    }
+  },
+  "link_to_google_account": "Link to Google account",
+  "link_to_x_account": "Link to X account",
+  "success_link_account": "Success account link.",
+  "already_linked": "Already linked.",
+  "not_linked": "Not linked.",
+  "release_link": "Release link.",
+  "sign_out": "Sign out"
 }
