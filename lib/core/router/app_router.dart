@@ -1,19 +1,28 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:fefeyo_flutter_template/core/router/app_router.gr.dart';
 
+import 'auth_guard.dart';
+
 /// ルーティング設定するページ一覧
 
 @AutoRouterConfig(replaceInRouteName: 'Page,Route')
 class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => <AutoRoute>[
-        AutoRoute(page: HomeRoute.page, initial: true, children: <AutoRoute>[
-          AutoRoute(page: MyEventRoute.page),
-          AutoRoute(page: RecentEventsRoute.page),
-          AutoRoute(page: MyRoute.page),
-        ]),
+        AutoRoute(
+          page: HomeRoute.page,
+          children: <AutoRoute>[
+            AutoRoute(page: MyEventRoute.page),
+            AutoRoute(page: RecentEventsRoute.page),
+            AutoRoute(page: MyRoute.page),
+          ],
+          guards: const <AutoRouteGuard>[AuthGuard()],
+          initial: true,
+        ),
         AutoRoute(page: OnboardingRoute.page),
-        AutoRoute(page: LoginRoute.page),
+        AutoRoute(
+          page: LoginRoute.page,
+        ),
         AutoRoute(page: ChooseEventRoute.page),
         AutoRoute(page: EventListRoute.page),
         AutoRoute(page: EventDetailRoute.page),

@@ -1,3 +1,5 @@
+import 'package:fefeyo_flutter_template/core/auth/controller/auth_controller.dart';
+import 'package:fefeyo_flutter_template/core/auth/providers.dart';
 import 'package:fefeyo_flutter_template/core/router/app_router.gr.dart';
 import 'package:fefeyo_flutter_template/core/utils/context_extension.dart';
 import 'package:fefeyo_flutter_template/core/utils/sort_items_extension.dart';
@@ -8,6 +10,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../core/auth/data/auth_state.dart';
 import 'view/linca_vertical.dart';
 
 @RoutePage()
@@ -16,6 +19,10 @@ class MyPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final AsyncValue<AuthState> authState = ref.watch(authControllerProvider);
+    final AuthController authController =
+        ref.read(authControllerProvider.notifier);
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -38,7 +45,7 @@ class MyPage extends HookConsumerWidget {
                     SeriesTag.collaborative,
                   ],
                   bio:
-                  '''現地参戦メイン。物販列情報はXで共有します！現地参戦メイン。物販列情報はXで共有します！現地参戦メイン。物販列情報はXで共有します！現地参戦メイン。物販列情報はXで共有します！現地参戦メイン。物販列情報はXで共有します！
+                      '''現地参戦メイン。物販列情報はXで共有します！現地参戦メイン。物販列情報はXで共有します！現地参戦メイン。物販列情報はXで共有します！現地参戦メイン。物販列情報はXで共有します！現地参戦メイン。物販列情報はXで共有します！
                 ''',
                   tintColor: Colors.purple,
                   onTap: () => context.router.push(const LincaDetailRoute()),
@@ -95,9 +102,72 @@ class MyPage extends HookConsumerWidget {
                 onClickItem: () => openAppSettings(),
               ),
               MyPageItem(
+                title: context.l10n.link_to_google_account,
+                subtitle: authState.value?.isGoogleLinked == true
+                    ? context.l10n.already_linked
+                    : context.l10n.not_linked,
+                trailing: authState.value?.isGoogleLinked == true
+                    ? ElevatedButton(
+                        onPressed: () {},
+                        child: Text(context.l10n.release_link),
+                      )
+                    : null,
+                onClickItem: authState.value?.isGoogleLinked == true
+                    ? () {}
+                    : () async {
+                        await authController.linkGoogle();
+                        if (!context.mounted) return;
+                        final String message = authState.hasError == true
+                            ? context.l10n
+                                .signin_failure(authState.error.toString())
+                            : context.l10n.success_link_account;
+
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(SnackBar(content: Text(message)));
+                      },
+              ),
+              MyPageItem(
+                title: context.l10n.link_to_x_account,
+                subtitle: authState.value?.isTwitterLinked == true
+                    ? context.l10n.already_linked
+                    : context.l10n.not_linked,
+                trailing: authState.value?.isTwitterLinked == true
+                    ? ElevatedButton(
+                        onPressed: () {},
+                        child: Text(context.l10n.release_link),
+                      )
+                    : null,
+                onClickItem: authState.value?.isTwitterLinked == true
+                    ? () {}
+                    : () async {
+                        await authController.linkTwitter();
+                        if (!context.mounted) return;
+                        final String message = authState.hasError == true
+                            ? context.l10n
+                                .signin_failure(authState.error.toString())
+                            : context.l10n.success_link_account;
+
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(SnackBar(content: Text(message)));
+                      },
+              ),
+              MyPageItem(
+                title: context.l10n.sign_out,
+                trailing: null,
+                onClickItem: () {
+                  // TODO: サインアウトダイアログ表示
+                  authController.signOut();
+                  context.router.replace(const LoginRoute());
+                },
+              ),
+              const SizedBox(height: 32),
+              MyPageItem(
                 title: context.l10n.delete_account_title,
+                trailing: null,
                 onClickItem: () {
                   // TODO: アカウント削除ダイアログ表示
+                  authController.deleteMyAccount();
+                  context.router.replace(const LoginRoute());
                 },
               ),
             ],
