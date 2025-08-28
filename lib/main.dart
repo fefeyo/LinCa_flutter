@@ -1,3 +1,4 @@
+import 'package:fefeyo_flutter_template/core/network/providers.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -20,6 +21,15 @@ void main() async {
       serverClientId:
           '630270810691-cavclpg0rs7vr4kgojc93fv0'
               '8ovrssgl.apps.googleusercontent.com');
+
+  final ProviderContainer container = ProviderContainer();
+  await container.read(userControllerProvider.future);
+  await container.read(badgeControllerProvider.future);
+  await container.read(groupControllerProvider.future);
+  await container.read(tagControllerProvider.future);
+  await container.read(venueControllerProvider.future);
+  await container.read(eventControllerProvider.future);
+
   runApp(
     const ProviderScope(
       child: MyApp(),

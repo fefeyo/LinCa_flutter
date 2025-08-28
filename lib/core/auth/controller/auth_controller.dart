@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../network/providers.dart';
 import '../data/auth_state.dart';
 import '../providers.dart';
 
@@ -30,11 +31,6 @@ class AuthController extends AsyncNotifier<AuthState> {
         isGoogleLinked: authRepository.isGoogleLinked(),
         isTwitterLinked: authRepository.isTwitterLinked(),
       );
-
-  /// 状態を更新する共通関数
-  void _updateState() {
-    state = AsyncData<AuthState>(_buildAuthState());
-  }
 
   // ---------------------------
   // 公開 API（Android / iOS）

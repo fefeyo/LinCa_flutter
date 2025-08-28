@@ -1,23 +1,28 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:fefeyo_flutter_template/core/constants/participation_type.dart';
 import 'package:fefeyo_flutter_template/core/router/app_router.gr.dart';
+import 'package:fefeyo_flutter_template/core/utils/date_extention.dart';
 import 'package:fefeyo_flutter_template/core/utils/participation_type_extension.dart';
 import 'package:fefeyo_flutter_template/core/widgets/event/participation_status_badge.dart';
 import 'package:flutter/material.dart';
 
 import '../../asset_gen/assets.gen.dart';
-import '../../network/model/event.dart';
+import '../../models/linca_event.dart';
+import '../../network/model/tag.dart';
 
 class EventCard extends StatelessWidget {
   const EventCard({
     super.key,
-    required this.event,
+    required this.lincaEvent,
   });
 
-  final Event event;
+  final LincaEvent lincaEvent;
+
+  // TODO: Participationテーブル参照して、参加タイプを取得する
+  final ParticipationType dummyType = ParticipationType.none;
 
   Color _badgeColor(BuildContext context) {
-    switch (event.type) {
+    switch (dummyType) {
       case ParticipationType.none:
         return Colors.transparent;
       case ParticipationType.onSite:
@@ -31,12 +36,12 @@ class EventCard extends StatelessWidget {
     }
   }
 
-  String _badgeLabel(BuildContext context) => event.type.label(context);
+  String _badgeLabel(BuildContext context) => dummyType.label(context);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsetsGeometry.symmetric(vertical: 8, horizontal: 16),
+      padding: const EdgeInsetsGeometry.symmetric(vertical: 2, horizontal: 16),
       child: Card(
         child: Stack(
           clipBehavior: Clip.none,
@@ -50,15 +55,14 @@ class EventCard extends StatelessWidget {
                 backgroundColor: Colors.transparent,
               ),
               title: Text(
-                'ラブライブ！スーパースター Liella! First Gener'
-                    'ation LoveLive! ～Wonderful Starlines～',
+                lincaEvent.event.title,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    '8/20(土)〜8/21(日)',
+                    lincaEvent.event.date?.simpleDateFormat() ?? '',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   const SizedBox(
@@ -66,17 +70,15 @@ class EventCard extends StatelessWidget {
                   ),
                   Wrap(
                     spacing: 4,
-                    children: event.tags.map(
-                      (String tag) {
-                        return Chip(
-                          label: Text(
-                            tag,
-                            style: Theme.of(context).textTheme.labelSmall,
-                          ),
-                          visualDensity: VisualDensity.compact,
-                        );
-                      },
-                    ).toList(),
+                    children: lincaEvent.tags.map((Tag tag) {
+                      return Chip(
+                        label: Text(
+                          tag.name,
+                          style: Theme.of(context).textTheme.labelSmall,
+                        ),
+                        visualDensity: VisualDensity.compact,
+                      );
+                    }).toList(),
                   ),
                 ],
               ),
@@ -86,12 +88,12 @@ class EventCard extends StatelessWidget {
                 type: MaterialType.transparency,
                 child: InkWell(
                   borderRadius: BorderRadius.circular(16),
-                  onTap: () =>
-                      context.router.push(EventDetailRoute(event: event)),
+                  onTap: () => context.router
+                      .push(EventDetailRoute(lincaEvent: lincaEvent)),
                 ),
               ),
             ),
-            if (event.type != ParticipationType.none)
+            if (dummyType != ParticipationType.none)
               Positioned(
                 right: 0,
                 top: -12,

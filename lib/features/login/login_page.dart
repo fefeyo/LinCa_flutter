@@ -2,7 +2,6 @@ import 'package:fefeyo_flutter_template/core/auth/controller/auth_controller.dar
 import 'package:fefeyo_flutter_template/core/auth/providers.dart';
 import 'package:fefeyo_flutter_template/core/router/app_router.gr.dart';
 import 'package:fefeyo_flutter_template/core/utils/context_extension.dart';
-import 'package:fefeyo_flutter_template/features/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

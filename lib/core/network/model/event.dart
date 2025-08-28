@@ -1,5 +1,6 @@
-import 'package:fefeyo_flutter_template/core/constants/participation_type.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
+import '../../utils/date_extention.dart';
 
 part 'event.freezed.dart';
 
@@ -8,16 +9,15 @@ part 'event.g.dart';
 @freezed
 abstract class Event with _$Event {
   const factory Event({
-    @Default(0) int id,
-    @Default('') String organizer,
-    @Default(ParticipationType.none) ParticipationType type,
+    @Default('') String id,
     @Default('') String title,
-    @Default(null) DateTime? startAt,
-    @Default(null) DateTime? endAt,
-    @Default('') String venue,
+    @Default('') String organizer,
+    @Default('') String venueId,
+    @JsonKey(fromJson: fromJsonDate, toJson: toJsonDate) DateTime? date,
+    @Default('') String status,
     @Default('') String url,
-    @Default(<String>[]) List<String> tags,
-    @Default('') String memo,
+    @Default(<String>[]) List<String> tagIds,
+    @Default('') String createdBy,
   }) = _Event;
 
   factory Event.fromJson(Map<String, dynamic> json) => _$EventFromJson(json);

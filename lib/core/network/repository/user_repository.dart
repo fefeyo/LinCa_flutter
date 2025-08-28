@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../model/user.dart';
+
 class UserRepository {
   const UserRepository(this.fireStore);
 
@@ -19,13 +21,9 @@ class UserRepository {
           'displayName': '幻の学院生',
           'photoUrl': '',
           'bio': '',
-          'artistIds':<String>[],
+          'artistIds': <String>[],
           'badgeIds': <String>[],
-          'links': <String, String>{
-            'x': '',
-            'instagram': '',
-            'bluesky': ''
-          },
+          'links': <String, String>{'x': '', 'instagram': '', 'bluesky': ''},
           'createdAt': FieldValue.serverTimestamp(),
           'updatedAt': FieldValue.serverTimestamp(),
         });
@@ -34,5 +32,14 @@ class UserRepository {
             <String, dynamic>{'updatedAt': FieldValue.serverTimestamp()});
       }
     });
+  }
+
+  Future<User> getUserData(String uid) async {
+    final DocumentSnapshot<Map<String, dynamic>> result =
+        await fireStore.collection('users').doc(uid).get();
+    final Map<String, dynamic>? data = result.data();
+    if (data == null) return const User();
+
+    return User.fromJson(data);
   }
 }
