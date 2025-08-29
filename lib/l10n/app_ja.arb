@@ -83,5 +83,17 @@
   "already_linked": "連携済み",
   "not_linked": "未連携",
   "release_link": "連携解除",
-  "sign_out": "サインアウト"
+  "sign_out": "サインアウト",
+  "onboarding_step1_title": "ようこそ、LinCa へ！",
+  "onboarding_step1_description": "あなたのイベント参加の記録と、仲間との思い出をつなぐアプリです。\n",
+  "onboarding_step2_title": "イベントの思い出を記録",
+  "onboarding_step2_description": "参加したイベントを日付・場所・タグで記録して、あなただけのイベント履歴を作ろう。\n",
+  "onboarding_step3_title": "LinCaカードでつながる",
+  "onboarding_step3_description": "プロフィールを交換して、イベントで出会った人たちと楽しくつながろう。",
+  "onboarding_step4_title": "はじめにニックネームを設定しよう",
+  "onboarding_step4_description": "あなたの LinCaカードに表示される名前です。あとから変更もできます。\n",
+  "onboarding_step5_title": "LinCaをはじめよう！",
+  "onboarding_step5_description": "これで準備はバッチリ！\nイベントの思い出を記録して、素敵な出会いをつなげていこう。",
+  "onboarding_next": "次へ",
+  "onboarding_start": "はじめる"
 }

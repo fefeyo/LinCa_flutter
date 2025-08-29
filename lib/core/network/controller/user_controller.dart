@@ -13,16 +13,20 @@ class UserController extends AsyncNotifier<User>{
 
   @override
   FutureOr<User> build() async {
-    uid = ref.read(uidProvider);
+    uid = ref.watch(uidProvider);
     if (uid == null) return const User();
     userRepository = ref.read(userRepositoryProvider);
     return await userRepository.getUserData(uid!);
   }
 
   Future<User> getUserData() async {
-    uid = ref.read(uidProvider);
     if (uid == null) return const User();
     return await userRepository.getUserData(uid!);
+  }
+
+  Future<void> updateDisplayName(String displayName) async {
+    if (uid == null) return;
+    await userRepository.updateDisplayName(uid!, displayName);
   }
 
 }

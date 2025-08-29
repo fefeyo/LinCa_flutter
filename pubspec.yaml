@@ -20,6 +20,7 @@ dependencies:
   flutter_svg: ^2.0.13
   qr_flutter: ^4.1.0
   sign_in_button: ^4.0.1
+  smooth_page_indicator: ^1.2.1
 
   # Platform / Device
   camera: ^0.11.2
@@ -75,6 +76,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/lottie/
 
 flutter_gen:
   output: lib/core/asset_gen/
