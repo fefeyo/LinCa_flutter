@@ -8,4 +8,8 @@ final StateNotifierProvider<OnboardingViewModel, OnboardingState>
 
 class OnboardingViewModel extends StateNotifier<OnboardingState> {
   OnboardingViewModel() : super(const OnboardingState());
+
+  void setNickName(String nickname) {
+    state = state.copyWith(nickname: nickname);
+  }
 }

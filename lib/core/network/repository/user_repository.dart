@@ -42,4 +42,12 @@ class UserRepository {
 
     return User.fromJson(data);
   }
+
+  Future<void> updateDisplayName(String uid, String displayName) async {
+    final DocumentReference<Map<String, dynamic>> document = doc(uid);
+    await document.update(<String, dynamic>{
+      'displayName': displayName,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
 }

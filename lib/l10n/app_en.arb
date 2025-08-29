@@ -83,5 +83,17 @@
   "already_linked": "Already linked.",
   "not_linked": "Not linked.",
   "release_link": "Release link.",
-  "sign_out": "Sign out"
+  "sign_out": "Sign out",
+  "onboarding_step1_title": "Welcome to LinCa",
+  "onboarding_step1_description": "LinCa is an app to record your event experiences and connect with others who share your passions.",
+  "onboarding_step2_title": "Record Your Event Memories",
+  "onboarding_step2_description": "Easily log events you’ve attended with the date, venue, and tags. Create your personal event history.",
+  "onboarding_step3_title": "Connect Through LinCa Cards",
+  "onboarding_step3_description": "Exchange your profile with people you meet at events and build lasting connections.",
+  "onboarding_step4_title": "Set Your Nickname First",
+  "onboarding_step4_description": "This name will appear on your LinCa card. You can change it anytime later.",
+  "onboarding_step5_title": "Let’s Get Started with LinCa!",
+  "onboarding_step5_description": "You’re all set!\nStart recording your event memories and connect with amazing people",
+  "onboarding_next": "next",
+  "onboarding_start": "start"
 }
