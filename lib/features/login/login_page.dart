@@ -38,7 +38,7 @@ class LoginPage extends HookConsumerWidget {
         final PageRouteInfo<void> destination =
             onboardingShown ? const HomeRoute() : const OnboardingRoute();
         if (context.mounted) {
-          context.router.replace(OnboardingRoute());
+          context.router.replace(destination);
         }
       }
     }
