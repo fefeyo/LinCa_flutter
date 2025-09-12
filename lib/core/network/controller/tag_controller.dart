@@ -17,7 +17,7 @@ class TagController extends AsyncNotifier<List<Tag>> {
     tagRepository = ref.read(tagRepositoryProvider);
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    List<Tag> tags = await getTags();
+    List<Tag> tags = await fetchTags();
     if (preferences.getString(AppConstants.tagVersionKey) !=
             packageInfo.version ||
         tags.isEmpty) {

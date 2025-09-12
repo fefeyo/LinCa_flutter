@@ -26,14 +26,15 @@ class EventController extends AsyncNotifier<List<LincaEvent>> {
     venueRepository = ref.read(venueRepositoryProvider);
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    List<Event> events = await getEvents();
-    if (preferences.getString(AppConstants.eventVersionKey) !=
-            packageInfo.version ||
-        events.isEmpty) {
-      events = await fetchEvents();
-      await preferences.setString(
-          AppConstants.eventVersionKey, packageInfo.version);
-    }
+    List<Event> events = await fetchEvents();
+    // 一旦イベント一覧は毎回取得
+    // if (preferences.getString(AppConstants.eventVersionKey) !=
+    //         packageInfo.version ||
+    //     events.isEmpty) {
+    //   events = await fetchEvents();
+    //   await preferences.setString(
+    //       AppConstants.eventVersionKey, packageInfo.version);
+    // }
 
     return Future.wait(events.map((Event event) async {
       // タグ一覧を取得

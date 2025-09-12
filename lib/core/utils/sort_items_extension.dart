@@ -7,7 +7,7 @@ enum DisplayOrder {
   title, // イベント名順
 }
 
-enum ParticipationFilter {
+enum Participation {
   onSite, // 現地参加
   streaming, // 配信参加
   liveViewing, // ライブビューイング参加
@@ -32,14 +32,14 @@ extension DisplayOrderExtension on DisplayOrder {
       };
 }
 
-extension ParticipationFilterExtension on ParticipationFilter {
+extension ParticipationFilterExtension on Participation {
   String label(BuildContext context) => switch (this) {
-        ParticipationFilter.onSite => context.l10n.participationFilter_onSite,
-        ParticipationFilter.streaming =>
+        Participation.onSite => context.l10n.participationFilter_onSite,
+        Participation.streaming =>
           context.l10n.participationFilter_streaming,
-        ParticipationFilter.liveViewing =>
+        Participation.liveViewing =>
           context.l10n.participationFilter_liveViewing,
-        ParticipationFilter.absent => context.l10n.participationFilter_absent,
+        Participation.absent => context.l10n.participationFilter_absent,
       };
 }
 

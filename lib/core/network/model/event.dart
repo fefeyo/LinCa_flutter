@@ -11,6 +11,7 @@ abstract class Event with _$Event {
   const factory Event({
     @Default('') String id,
     @Default('') String title,
+    @Default('') String kana,
     @Default('') String organizer,
     @Default('') String venueId,
     @JsonKey(fromJson: fromJsonDate, toJson: toJsonDate) DateTime? date,

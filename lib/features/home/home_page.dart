@@ -32,7 +32,7 @@ class HomePage extends StatelessWidget {
             actions: <Widget>[
               if (tabs.activeIndex == 0)
                 IconButton(
-                  onPressed: () => MyEventSortBottomSheet.show(context),
+                  onPressed: () => MyEventSortBottomSheet.showWithInput(context),
                   icon: const Icon(Icons.sort),
                 ),
             ],
