@@ -1,32 +1,33 @@
 import 'dart:async';
 
-import 'package:fefeyo_flutter_template/core/models/linca_event.dart';
-import 'package:fefeyo_flutter_template/core/network/model/tag.dart';
-import 'package:fefeyo_flutter_template/core/network/model/venue.dart';
-import 'package:fefeyo_flutter_template/core/network/repository/tag_repository.dart';
-import 'package:fefeyo_flutter_template/core/network/repository/venue_repository.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../constants/app_constants.dart';
+import '../../models/linca_event.dart';
 import '../model/event.dart';
+import '../model/group.dart';
+import '../model/tag.dart';
+import '../model/venue.dart';
 import '../providers.dart';
 import '../repository/event_repository.dart';
+import '../repository/group_repository.dart';
+import '../repository/tag_repository.dart';
+import '../repository/venue_repository.dart';
 
 class EventController extends AsyncNotifier<List<LincaEvent>> {
   late EventRepository eventRepository;
   late TagRepository tagRepository;
   late VenueRepository venueRepository;
+  late GroupRepository groupRepository;
 
   @override
   FutureOr<List<LincaEvent>> build() async {
     eventRepository = ref.read(eventRepositoryProvider);
     tagRepository = ref.read(tagRepositoryProvider);
     venueRepository = ref.read(venueRepositoryProvider);
-    final SharedPreferences preferences = await SharedPreferences.getInstance();
-    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    List<Event> events = await fetchEvents();
+    groupRepository = ref.read(groupRepositortyProvider);
+    // final SharedPreferences preferences = await SharedPreferences.getInstance();
+    // final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    final List<Event> events = await fetchEvents();
     // 一旦イベント一覧は毎回取得
     // if (preferences.getString(AppConstants.eventVersionKey) !=
     //         packageInfo.version ||
@@ -45,10 +46,13 @@ class EventController extends AsyncNotifier<List<LincaEvent>> {
       // 会場情報を取得
       final Venue venue = await venueRepository.getVenueById(event.venueId);
 
+      final Group group = await groupRepository.getGroupBySlug(event.organizer);
+
       return LincaEvent(
         event: event,
         tags: tags,
         venue: venue,
+        group: group,
       );
     }).toList());
   }
@@ -56,4 +60,5 @@ class EventController extends AsyncNotifier<List<LincaEvent>> {
   Future<List<Event>> fetchEvents() => eventRepository.fetchEvents();
 
   Future<List<Event>> getEvents() => eventRepository.getEvents();
+
 }

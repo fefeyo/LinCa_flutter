@@ -1,10 +1,10 @@
-import 'package:fefeyo_flutter_template/core/utils/color_extension.dart';
-import 'package:fefeyo_flutter_template/core/utils/context_extension.dart';
-import 'package:fefeyo_flutter_template/core/utils/sort_items_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../core/utils/series_tag_extension.dart';
+import '../../../core/utils/context_extension.dart';
 import '../../../core/asset_gen/assets.gen.dart';
+import '../../../core/utils/sort_items_extension.dart';
 
 class LincaVertical extends StatelessWidget {
   const LincaVertical({

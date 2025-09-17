@@ -1,5 +1,6 @@
-import 'package:fefeyo_flutter_template/core/network/model/tag.dart';
-import 'package:fefeyo_flutter_template/core/network/repository/firestore_repository.dart';
+
+import '../model/tag.dart';
+import 'firestore_repository.dart';
 
 class TagRepository extends FirestoreRepository<Tag> {
   TagRepository(super.fireStore);

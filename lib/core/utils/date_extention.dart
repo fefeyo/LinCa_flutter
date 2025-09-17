@@ -3,6 +3,13 @@ import 'package:intl/intl.dart';
 
 extension DateTimeExtention on DateTime {
   String simpleDateFormat() => DateFormat('yyyy/MM/dd').format(this);
+
+  bool get isToday {
+    final DateTime now = DateTime.now();
+    return year == now.year &&
+        month == now.month &&
+        day == now.day;
+  }
 }
 
 /// Firestore Timestamp + ISO8601文字列 両対応

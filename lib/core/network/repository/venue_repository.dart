@@ -1,5 +1,6 @@
-import 'package:fefeyo_flutter_template/core/network/model/venue.dart';
-import 'package:fefeyo_flutter_template/core/network/repository/firestore_repository.dart';
+
+import '../model/venue.dart';
+import 'firestore_repository.dart';
 
 class VenueRepository extends FirestoreRepository<Venue> {
   VenueRepository(super.fireStore);

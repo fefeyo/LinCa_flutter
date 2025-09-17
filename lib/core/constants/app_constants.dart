@@ -8,4 +8,5 @@ class AppConstants {
   static const String tagVersionKey = 'tag_version_key';
   static const String venueVersionKey = 'venue_version_key';
   static const String hasSeenOnboarding = 'has_seen_onboarding';
+  static const String participationVersionKey = 'participation_version_key';
 }

@@ -1,24 +1,27 @@
-import 'package:fefeyo_flutter_template/core/models/linca_event.dart';
-import 'package:fefeyo_flutter_template/core/network/controller/badge_controller.dart';
-import 'package:fefeyo_flutter_template/core/network/controller/event_controller.dart';
-import 'package:fefeyo_flutter_template/core/network/controller/group_controller.dart';
-import 'package:fefeyo_flutter_template/core/network/controller/tag_controller.dart';
-import 'package:fefeyo_flutter_template/core/network/controller/user_controller.dart';
-import 'package:fefeyo_flutter_template/core/network/controller/venue_controller.dart';
-import 'package:fefeyo_flutter_template/core/network/repository/badge_repository.dart';
-import 'package:fefeyo_flutter_template/core/network/repository/event_repository.dart';
-import 'package:fefeyo_flutter_template/core/network/repository/group_repository.dart';
-import 'package:fefeyo_flutter_template/core/network/repository/tag_repository.dart';
-import 'package:fefeyo_flutter_template/core/network/repository/user_repository.dart';
-import 'package:fefeyo_flutter_template/core/network/repository/venue_repository.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/network/controller/participation_controller.dart';
+import 'package:linca_otaku_support/core/network/model/participation_info.dart';
+import 'package:linca_otaku_support/core/network/repository/participation_repository.dart';
 
 import '../auth/providers.dart';
+import '../models/linca_event.dart';
+import 'controller/badge_controller.dart';
+import 'controller/event_controller.dart';
+import 'controller/group_controller.dart';
+import 'controller/tag_controller.dart';
+import 'controller/user_controller.dart';
+import 'controller/venue_controller.dart';
 import 'model/badge.dart';
 import 'model/group.dart';
 import 'model/tag.dart';
 import 'model/user.dart';
 import 'model/venue.dart';
+import 'repository/badge_repository.dart';
+import 'repository/event_repository.dart';
+import 'repository/group_repository.dart';
+import 'repository/tag_repository.dart';
+import 'repository/user_repository.dart';
+import 'repository/venue_repository.dart';
 
 final Provider<UserRepository> userRepositoryProvider =
     Provider<UserRepository>(
@@ -71,3 +74,13 @@ final Provider<VenueRepository> venueRepositoryProvider =
 final AsyncNotifierProvider<VenueController, List<Venue>>
     venueControllerProvider =
     AsyncNotifierProvider<VenueController, List<Venue>>(VenueController.new);
+
+final Provider<ParticipationRepository> participationRepositoryProvider =
+    Provider<ParticipationRepository>((Ref ref) {
+  return ParticipationRepository(ref.watch(fireStoreProvider));
+});
+
+final AsyncNotifierProvider<ParticipationController,
+        Map<LincaEvent, ParticipationInfo>> participationControllerProvider =
+    AsyncNotifierProvider<ParticipationController,
+        Map<LincaEvent, ParticipationInfo>>(ParticipationController.new);

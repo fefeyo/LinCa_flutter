@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:fefeyo_flutter_template/core/router/app_router.gr.dart';
-import 'package:fefeyo_flutter_template/core/utils/context_extension.dart';
 import 'package:flutter/material.dart';
 
+import '../../../core/router/app_router.gr.dart';
+import '../../../core/utils/context_extension.dart';
 import '../../../features/create_event/data/create_event_type.dart';
 
 class AddEventBottomSheet extends StatelessWidget {

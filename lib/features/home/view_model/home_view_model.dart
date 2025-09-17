@@ -1,5 +1,6 @@
-import 'package:fefeyo_flutter_template/features/home/data/home_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import '../data/home_state.dart';
 
 final StateNotifierProvider<HomeViewModel, HomeState> homeViewModelProvider =
     StateNotifierProvider<HomeViewModel, HomeState>((Ref ref) {

@@ -1,8 +1,8 @@
-import 'package:fefeyo_flutter_template/core/network/providers.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'core/network/providers.dart';
 import 'core/theme/app_schemes.dart';
 import 'core/theme/app_theme.dart';
 import 'firebase_options.dart';
@@ -29,6 +29,7 @@ void main() async {
   await container.read(tagControllerProvider.future);
   await container.read(venueControllerProvider.future);
   await container.read(eventControllerProvider.future);
+  await container.read(participationControllerProvider.future);
 
   runApp(
     const ProviderScope(

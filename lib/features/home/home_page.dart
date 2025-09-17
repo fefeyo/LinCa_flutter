@@ -1,9 +1,10 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:fefeyo_flutter_template/core/router/app_router.gr.dart';
-import 'package:fefeyo_flutter_template/core/utils/context_extension.dart';
-import 'package:fefeyo_flutter_template/core/widgets/bottom_sheet/my_event_sort_bottom_sheet.dart';
-import 'package:fefeyo_flutter_template/features/home/view/home_drawer.dart';
 import 'package:flutter/material.dart';
+
+import '../../../core/utils/context_extension.dart';
+import '../../core/router/app_router.gr.dart';
+import '../../core/widgets/bottom_sheet/my_event_sort_bottom_sheet.dart';
+import 'view/home_drawer.dart';
 
 @RoutePage()
 class HomePage extends StatelessWidget {
@@ -32,7 +33,8 @@ class HomePage extends StatelessWidget {
             actions: <Widget>[
               if (tabs.activeIndex == 0)
                 IconButton(
-                  onPressed: () => MyEventSortBottomSheet.showWithInput(context),
+                  onPressed: () =>
+                      MyEventSortBottomSheet.showWithInput(context),
                   icon: const Icon(Icons.sort),
                 ),
             ],

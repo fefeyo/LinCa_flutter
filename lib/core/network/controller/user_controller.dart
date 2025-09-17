@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:fefeyo_flutter_template/core/auth/providers.dart';
-import 'package:fefeyo_flutter_template/core/network/providers.dart';
-import 'package:fefeyo_flutter_template/core/network/repository/user_repository.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../auth/providers.dart';
 import '../model/user.dart';
+import '../providers.dart';
+import '../repository/user_repository.dart';
 
 class UserController extends AsyncNotifier<User>{
   late String? uid;

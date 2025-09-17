@@ -1,6 +1,6 @@
-import 'package:fefeyo_flutter_template/core/network/repository/firestore_repository.dart';
 
 import '../model/event.dart';
+import 'firestore_repository.dart';
 
 class EventRepository extends FirestoreRepository<Event> {
   EventRepository(super.fireStore);

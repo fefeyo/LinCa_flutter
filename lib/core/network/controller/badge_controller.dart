@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:fefeyo_flutter_template/core/constants/app_constants.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+import '../../constants/app_constants.dart';
 import '../model/badge.dart';
 import '../providers.dart';
 import '../repository/badge_repository.dart';

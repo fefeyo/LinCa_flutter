@@ -1,6 +1,7 @@
-import 'package:fefeyo_flutter_template/core/models/filter_settings.dart';
-import 'package:fefeyo_flutter_template/core/models/linca_event.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
+import '../../../core/models/filter_settings.dart';
+import '../../../core/models/linca_event.dart';
 
 part 'choose_event_state.freezed.dart';
 

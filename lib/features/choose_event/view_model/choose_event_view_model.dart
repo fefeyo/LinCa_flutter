@@ -1,6 +1,6 @@
-import 'package:fefeyo_flutter_template/core/models/linca_event.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../core/models/filter_settings.dart';
+import '../../../core/models/linca_event.dart';
 import '../../../core/network/providers.dart';
 import '../../../core/utils/sort_items_extension.dart';
 import '../data/choose_event_state.dart';

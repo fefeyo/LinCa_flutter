@@ -1,7 +1,8 @@
-import 'package:fefeyo_flutter_template/core/network/model/tag.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../network/model/event.dart';
+import '../network/model/group.dart';
+import '../network/model/tag.dart';
 import '../network/model/venue.dart';
 
 part 'linca_event.freezed.dart';
@@ -12,5 +13,6 @@ abstract class LincaEvent with _$LincaEvent {
     @Default(Event()) Event event,
     @Default(<Tag>[]) List<Tag> tags,
     @Default(Venue()) Venue venue,
+    @Default(Group()) Group group,
   }) = _LincaEvent;
 }

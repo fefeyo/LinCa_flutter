@@ -1,5 +1,5 @@
-import 'package:fefeyo_flutter_template/core/network/model/badge.dart';
-import 'package:fefeyo_flutter_template/core/network/repository/firestore_repository.dart';
+import '../model/badge.dart';
+import 'firestore_repository.dart';
 
 class BadgeRepository extends FirestoreRepository<Badge> {
   BadgeRepository(super.fireStore);
