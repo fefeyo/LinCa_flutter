@@ -3,8 +3,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../core/models/filter_settings.dart';
 import '../../core/models/linca_event.dart';
-import '../../core/widgets/bottom_sheet/my_event_sort_bottom_sheet.dart';
+import '../../core/widgets/bottom_sheet/event_sort_bottom_sheet.dart';
 import '../../core/widgets/event/event_card.dart';
 import 'data/choose_event_state.dart';
 import 'view_model/choose_event_view_model.dart';
@@ -28,7 +29,7 @@ class ChooseEventPage extends HookConsumerWidget {
                 controller: searchController,
                 autofocus: true,
                 decoration: const InputDecoration(
-                  hintText: 'キーワード、イベントコードを入力',
+                  hintText: 'キーワードを入力',
                   border: InputBorder.none,
                 ),
                 onChanged: (String value) {
@@ -38,7 +39,17 @@ class ChooseEventPage extends HookConsumerWidget {
             : const Text('イベント一覧'),
         actions: <Widget>[
           IconButton(
-            onPressed: () => MyEventSortBottomSheet.show(context),
+            onPressed: () async {
+              final FilterSettings? result = await EventSortBottomSheet.show(
+                context,
+                state.filterSettings,
+                needDisplayOrderArea: true,
+                needSeriesTagArea: true,
+              );
+              if (result != null) {
+                viewModel.setFilterSettings(result);
+              }
+            },
             icon: const Icon(Icons.sort),
           ),
           IconButton(

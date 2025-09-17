@@ -1,8 +1,9 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/utils/linca_event_extension.dart';
+import 'package:linca_otaku_support/core/utils/sort_items_extension.dart';
 import '../../../core/models/filter_settings.dart';
 import '../../../core/models/linca_event.dart';
 import '../../../core/network/providers.dart';
-import '../../../core/utils/sort_items_extension.dart';
 import '../data/choose_event_state.dart';
 
 final StateNotifierProvider<ChooseEventViewModel, ChooseEventState>
@@ -20,7 +21,12 @@ final StateNotifierProvider<ChooseEventViewModel, ChooseEventState>
 
 class ChooseEventViewModel extends StateNotifier<ChooseEventState> {
   ChooseEventViewModel(this.initialEvents)
-      : super(ChooseEventState(sortedEvents: initialEvents));
+      : super(
+          ChooseEventState(
+            sortedEvents:
+                initialEvents.sortWithDisplayOrder(DisplayOrder.newest),
+          ),
+        );
 
   final List<LincaEvent> initialEvents;
 
@@ -34,31 +40,7 @@ class ChooseEventViewModel extends StateNotifier<ChooseEventState> {
     );
   }
 
-  void setDisplayOrder(DisplayOrder? displayOrder) {
-    final FilterSettings filterSettings =
-        state.filterSettings.copyWith(displayOrder: displayOrder);
-
-    state = state.copyWith(
-      filterSettings: filterSettings,
-      sortedEvents: sortEvents(filterSettings),
-    );
-  }
-
-  void setParticipationFilter(Participation? participationFilter) {
-    final FilterSettings filterSettings =
-        state.filterSettings.copyWith(participationFilter: participationFilter);
-
-    state = state.copyWith(
-        filterSettings: filterSettings,
-        sortedEvents: sortEvents(
-          filterSettings,
-        ));
-  }
-
-  void setSeriesTag(SeriesTag? seriesTag) {
-    final FilterSettings filterSettings =
-        state.filterSettings.copyWith(seriesTag: seriesTag);
-
+  void setFilterSettings(FilterSettings filterSettings) {
     state = state.copyWith(
       filterSettings: filterSettings,
       sortedEvents: sortEvents(filterSettings),
@@ -67,12 +49,11 @@ class ChooseEventViewModel extends StateNotifier<ChooseEventState> {
 
   List<LincaEvent> sortEvents(FilterSettings filterSettings) {
     List<LincaEvent> sortedEvents = <LincaEvent>[];
-    final List<String> keywords = filterSettings.keyword.split(' ');
-    sortedEvents = initialEvents.where((LincaEvent event) {
-      return keywords.any((String keyword) =>
-          event.event.title.contains(keyword) ||
-          event.event.kana.contains(keyword));
-    }).toList();
+
+    sortedEvents = initialEvents.filterWithKeyword(filterSettings.keyword);
+    sortedEvents =
+        sortedEvents.sortWithDisplayOrder(filterSettings.displayOrder);
+    sortedEvents = sortedEvents.filterWithGroup(filterSettings.groups);
 
     return sortedEvents;
   }
