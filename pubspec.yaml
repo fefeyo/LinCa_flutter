@@ -9,6 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
   # UI
   cupertino_icons: ^1.0.8
@@ -44,8 +46,6 @@ dependencies:
 
   # Env
   envied: ^1.1.1
-  flutter_localizations:
-    sdk: flutter
 
 dev_dependencies:
   flutter_test:

@@ -40,81 +40,78 @@ class EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsetsGeometry.symmetric(vertical: 2, horizontal: 16),
-      child: Card(
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: <Widget>[
-            ListTile(
-              contentPadding: const EdgeInsetsGeometry.symmetric(
-                  vertical: 12, horizontal: 16),
-              leading: CircleAvatar(
-                radius: 20,
-                backgroundImage: AssetImage(Assets.images.userIcon.path),
-                backgroundColor: Colors.transparent,
+    return Card(
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: <Widget>[
+          ListTile(
+            contentPadding: const EdgeInsetsGeometry.symmetric(
+                vertical: 12, horizontal: 16),
+            leading: CircleAvatar(
+              radius: 20,
+              backgroundImage: AssetImage(Assets.images.userIcon.path),
+              backgroundColor: Colors.transparent,
+            ),
+            title: Text(
+              lincaEvent.event.title,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  lincaEvent.event.date?.simpleDateFormat() ?? '',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                Wrap(
+                  spacing: 4,
+                  children: lincaEvent.tags.map((Tag tag) {
+                    return Chip(
+                      label: Text(
+                        tag.name,
+                        style: Theme.of(context).textTheme.labelSmall,
+                      ),
+                      visualDensity: VisualDensity.compact,
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
+          ),
+          Positioned.fill(
+            child: Material(
+              type: MaterialType.transparency,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(16),
+                onTap: () => context.router
+                    .push(EventDetailRoute(lincaEvent: lincaEvent)),
               ),
-              title: Text(
-                lincaEvent.event.title,
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            ),
+          ),
+          if (dummyType != ParticipationType.none)
+            Positioned(
+              right: 0,
+              top: -12,
+              child: Row(
                 children: <Widget>[
-                  Text(
-                    lincaEvent.event.date?.simpleDateFormat() ?? '',
-                    style: Theme.of(context).textTheme.bodyMedium,
+                  const ParticipationStatusBadge(
+                    text: '参加予定',
+                    color: Colors.green,
                   ),
                   const SizedBox(
-                    height: 4,
+                    width: 4,
                   ),
-                  Wrap(
-                    spacing: 4,
-                    children: lincaEvent.tags.map((Tag tag) {
-                      return Chip(
-                        label: Text(
-                          tag.name,
-                          style: Theme.of(context).textTheme.labelSmall,
-                        ),
-                        visualDensity: VisualDensity.compact,
-                      );
-                    }).toList(),
+                  ParticipationStatusBadge(
+                    text: _badgeLabel(context),
+                    color: _badgeColor(context),
                   ),
                 ],
               ),
             ),
-            Positioned.fill(
-              child: Material(
-                type: MaterialType.transparency,
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(16),
-                  onTap: () => context.router
-                      .push(EventDetailRoute(lincaEvent: lincaEvent)),
-                ),
-              ),
-            ),
-            if (dummyType != ParticipationType.none)
-              Positioned(
-                right: 0,
-                top: -12,
-                child: Row(
-                  children: <Widget>[
-                    const ParticipationStatusBadge(
-                      text: '参加予定',
-                      color: Colors.green,
-                    ),
-                    const SizedBox(
-                      width: 4,
-                    ),
-                    ParticipationStatusBadge(
-                      text: _badgeLabel(context),
-                      color: _badgeColor(context),
-                    ),
-                  ],
-                ),
-              ),
-          ],
-        ),
+        ],
       ),
     );
   }

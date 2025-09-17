@@ -17,7 +17,7 @@ class VenueController extends AsyncNotifier<List<Venue>> {
     venueRepository = ref.read(venueRepositoryProvider);
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    List<Venue> venues = await getVenues();
+    List<Venue> venues = await fetchVenues();
     if (preferences.getString(AppConstants.venueVersionKey) !=
             packageInfo.version ||
         venues.isEmpty) {
