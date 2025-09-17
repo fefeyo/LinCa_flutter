@@ -95,5 +95,18 @@
   "onboarding_step5_title": "Let’s Get Started with LinCa!",
   "onboarding_step5_description": "You’re all set!\nStart recording your event memories and connect with amazing people",
   "onboarding_next": "next",
-  "onboarding_start": "start"
+  "onboarding_start": "start",
+  "snackbar_title_deleted": "Event deleted",
+  "snackbar_title_saved": "Event saved",
+  "event_detail_delete": "Delete event",
+  "map_launch_url": "https://www.google.com/maps/search/?api=1&query={query}",
+  "@map_launch_url": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "common_save": "Save",
+  "event_detail_memo_hint": ""
 }

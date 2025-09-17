@@ -12,7 +12,7 @@ import 'package:linca_otaku_support/features/event_detail/view/custom_participat
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/utils/context_extension.dart';
-import '../../../core/utils/date_extention.dart';
+import '../../../core/utils/date_extension.dart';
 import '../../core/asset_gen/assets.gen.dart';
 import '../../core/models/linca_event.dart';
 import '../../core/network/model/tag.dart';
@@ -66,8 +66,8 @@ class EventDetailPage extends HookConsumerWidget {
               );
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('削除に成功しました'),
+                  SnackBar(
+                    content: Text(context.l10n.snackbar_title_deleted),
                   ),
                 );
                 context.router.pop();
@@ -81,7 +81,7 @@ class EventDetailPage extends HookConsumerWidget {
               ),
             ),
             child: Text(
-              'このイベントを削除する',
+              context.l10n.event_detail_delete,
               style: context.textTheme.titleMedium?.copyWith(
                 color: Colors.white,
               ),
@@ -148,10 +148,10 @@ class EventDetailPage extends HookConsumerWidget {
                       Row(
                         children: <Widget>[
                           IconButton(
-                            onPressed: () async {
-                              final Uri url = Uri.parse(
-                                  'https://www.google.com/maps/search/?api=1&query=${lincaEvent.venue.name}');
-                              await launchUrl(url,
+                            onPressed: () {
+                              final Uri url = Uri.parse(context.l10n
+                                  .map_launch_url(lincaEvent.venue.name));
+                              launchUrl(url,
                                   mode: LaunchMode.externalApplication);
                             },
                             icon: const Icon(Icons.pin_drop),
@@ -250,13 +250,14 @@ class EventDetailPage extends HookConsumerWidget {
                         style: Theme.of(context).textTheme.bodyLarge,
                         textInputAction: TextInputAction.newline,
                         decoration: InputDecoration(
-                          hintText: 'このイベントに関するメモを自由に書こう！',
+                          hintText: context.l10n.event_detail_memo_hint,
                           hintStyle: TextStyle(
-                            color:
-                                context.colorScheme.onSurface.withOpacity(0.5),
+                            color: context.colorScheme.onSurface
+                                .withValues(alpha: 0.5),
                           ),
                           filled: true,
-                          fillColor: context.colorScheme.surfaceVariant,
+                          fillColor:
+                              context.colorScheme.surfaceContainerHighest,
                           contentPadding: const EdgeInsets.symmetric(
                             vertical: 16,
                             horizontal: 20,
@@ -300,8 +301,8 @@ class EventDetailPage extends HookConsumerWidget {
                 );
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('保存に成功しました'),
+                    SnackBar(
+                      content: Text(context.l10n.snackbar_title_saved),
                     ),
                   );
                 }
@@ -321,7 +322,7 @@ class EventDetailPage extends HookConsumerWidget {
                       color: context.colorScheme.surface),
                   const SizedBox(width: 8),
                   Text(
-                    '保存',
+                    context.l10n.common_save,
                     style: context.textTheme.titleMedium?.copyWith(
                       color: context.colorScheme.surface,
                     ),

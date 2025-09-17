@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:linca_otaku_support/core/utils/date_extention.dart';
+import 'package:linca_otaku_support/core/utils/date_extension.dart';
 import 'package:linca_otaku_support/core/utils/group_extension.dart';
 
 import '../../../core/utils/participation_type_extension.dart';
@@ -43,7 +43,7 @@ class EventCard extends StatelessWidget {
         return <Widget>[const SizedBox.shrink()];
       }
 
-      return [
+      return <Widget>[
         const ParticipationStatusBadge(
           text: 'イベント当日',
           color: Colors.red,
@@ -71,7 +71,7 @@ class EventCard extends StatelessWidget {
                   height: 8,
                 ),
                 Row(
-                  children: [
+                  children: <Widget>[
                     Expanded(
                       flex: 2,
                       child: Wrap(

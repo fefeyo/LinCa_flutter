@@ -25,8 +25,6 @@ class EventController extends AsyncNotifier<List<LincaEvent>> {
     tagRepository = ref.read(tagRepositoryProvider);
     venueRepository = ref.read(venueRepositoryProvider);
     groupRepository = ref.read(groupRepositortyProvider);
-    // final SharedPreferences preferences = await SharedPreferences.getInstance();
-    // final PackageInfo packageInfo = await PackageInfo.fromPlatform();
     final List<Event> events = await fetchEvents();
     // 一旦イベント一覧は毎回取得
     // if (preferences.getString(AppConstants.eventVersionKey) !=
@@ -60,5 +58,4 @@ class EventController extends AsyncNotifier<List<LincaEvent>> {
   Future<List<Event>> fetchEvents() => eventRepository.fetchEvents();
 
   Future<List<Event>> getEvents() => eventRepository.getEvents();
-
 }

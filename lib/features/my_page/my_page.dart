@@ -71,7 +71,6 @@ class MyPage extends HookConsumerWidget {
                 title: context.l10n.edit_my_linca_title,
                 onClickItem: () {
                   // TODO: マイLinCa編集画面へ
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('保存に成功しました')));
                 },
               ),
               MyPageItem(
