@@ -33,8 +33,12 @@ class ParticipationController
         <LincaEvent, ParticipationInfo>{};
     for (final ParticipationInfo participation in participationInfos) {
       final LincaEvent event = events.firstWhere(
-          (LincaEvent event) => event.event.id == participation.eventId);
-      myEvents[event] = participation;
+        (LincaEvent event) => event.event.id == participation.eventId,
+        orElse: () => const LincaEvent(),
+      );
+      if (event.event.id.isNotEmpty) {
+        myEvents[event] = participation;
+      }
     }
 
     return myEvents;
