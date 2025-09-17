@@ -1,14 +1,14 @@
 import 'dart:async';
 
-import 'package:fefeyo_flutter_template/core/auth/repository/auth_repository.dart';
-import 'package:fefeyo_flutter_template/core/network/repository/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../network/providers.dart';
+import '../../network/repository/user_repository.dart';
 import '../data/auth_state.dart';
 import '../providers.dart';
+import '../repository/auth_repository.dart';
 
 class AuthController extends AsyncNotifier<AuthState> {
   late AuthRepository authRepository;

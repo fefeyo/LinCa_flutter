@@ -1,6 +1,7 @@
-import 'package:fefeyo_flutter_template/core/utils/context_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+
+import '../../../core/utils/context_extension.dart';
 
 class TutorialStepPage extends StatelessWidget {
   const TutorialStepPage({

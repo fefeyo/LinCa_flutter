@@ -1,5 +1,5 @@
-import 'package:fefeyo_flutter_template/core/utils/context_extension.dart';
-import 'package:fefeyo_flutter_template/core/utils/string_extension.dart';
+import '../../../core/utils/context_extension.dart';
+import '../../../core/utils/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 

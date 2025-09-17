@@ -1,82 +1,99 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:fefeyo_flutter_template/core/constants/participation_type.dart';
-import 'package:fefeyo_flutter_template/core/router/app_router.gr.dart';
-import 'package:fefeyo_flutter_template/core/utils/date_extention.dart';
-import 'package:fefeyo_flutter_template/core/utils/participation_type_extension.dart';
-import 'package:fefeyo_flutter_template/core/widgets/event/participation_status_badge.dart';
 import 'package:flutter/material.dart';
+import 'package:linca_otaku_support/core/utils/date_extension.dart';
+import 'package:linca_otaku_support/core/utils/group_extension.dart';
 
-import '../../asset_gen/assets.gen.dart';
+import '../../../core/utils/participation_type_extension.dart';
 import '../../models/linca_event.dart';
+import '../../network/model/participation_info.dart';
 import '../../network/model/tag.dart';
+import '../../router/app_router.gr.dart';
+import 'participation_status_badge.dart';
 
 class EventCard extends StatelessWidget {
   const EventCard({
     super.key,
     required this.lincaEvent,
+    this.participationInfo,
   });
 
   final LincaEvent lincaEvent;
-
-  // TODO: Participationテーブル参照して、参加タイプを取得する
-  final ParticipationType dummyType = ParticipationType.none;
-
-  Color _badgeColor(BuildContext context) {
-    switch (dummyType) {
-      case ParticipationType.none:
-        return Colors.transparent;
-      case ParticipationType.onSite:
-        return Colors.red;
-      case ParticipationType.streaming:
-        return Colors.blue;
-      case ParticipationType.liveViewing:
-        return Colors.orange;
-      case ParticipationType.absent:
-        return Colors.purple;
-    }
-  }
-
-  String _badgeLabel(BuildContext context) => dummyType.label(context);
+  final ParticipationInfo? participationInfo;
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> getScheduledBadgeIfNeeded() {
+      if (lincaEvent.event.date?.isAfter(DateTime.now()) == false) {
+        return <Widget>[const SizedBox.shrink()];
+      }
+
+      return <Widget>[
+        const ParticipationStatusBadge(
+          text: '参加予定',
+          color: Colors.green,
+        ),
+        const SizedBox(
+          width: 4,
+        ),
+      ];
+    }
+
+    List<Widget> getTodayBadgeIfNeeded() {
+      if (lincaEvent.event.date?.isToday == false) {
+        return <Widget>[const SizedBox.shrink()];
+      }
+
+      return <Widget>[
+        const ParticipationStatusBadge(
+          text: 'イベント当日',
+          color: Colors.red,
+        ),
+        const SizedBox(
+          width: 4,
+        ),
+      ];
+    }
+
     return Card(
       child: Stack(
         clipBehavior: Clip.none,
         children: <Widget>[
           ListTile(
-            contentPadding: const EdgeInsetsGeometry.symmetric(
-                vertical: 12, horizontal: 16),
-            leading: CircleAvatar(
-              radius: 20,
-              backgroundImage: AssetImage(Assets.images.userIcon.path),
-              backgroundColor: Colors.transparent,
-            ),
-            title: Text(
-              lincaEvent.event.title,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            subtitle: Column(
+            contentPadding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+            title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  lincaEvent.event.date?.simpleDateFormat() ?? '',
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  lincaEvent.event.title,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
                 const SizedBox(
-                  height: 4,
+                  height: 8,
                 ),
-                Wrap(
-                  spacing: 4,
-                  children: lincaEvent.tags.map((Tag tag) {
-                    return Chip(
-                      label: Text(
-                        tag.name,
-                        style: Theme.of(context).textTheme.labelSmall,
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 2,
+                      child: Wrap(
+                        spacing: 4,
+                        children: lincaEvent.tags.map((Tag tag) {
+                          return Chip(
+                            label: Text(
+                              tag.name,
+                              style: Theme.of(context).textTheme.labelSmall,
+                            ),
+                            visualDensity: VisualDensity.compact,
+                          );
+                        }).toList(),
                       ),
-                      visualDensity: VisualDensity.compact,
-                    );
-                  }).toList(),
+                    ),
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: lincaEvent.group.getLogoWidget(),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -86,27 +103,27 @@ class EventCard extends StatelessWidget {
               type: MaterialType.transparency,
               child: InkWell(
                 borderRadius: BorderRadius.circular(16),
-                onTap: () => context.router
-                    .push(EventDetailRoute(lincaEvent: lincaEvent)),
+                onTap: () => context.router.push(
+                  EventDetailRoute(
+                    lincaEvent: lincaEvent,
+                    participationInfo: participationInfo,
+                  ),
+                ),
               ),
             ),
           ),
-          if (dummyType != ParticipationType.none)
+          if (participationInfo != null)
             Positioned(
               right: 0,
               top: -12,
               child: Row(
                 children: <Widget>[
-                  const ParticipationStatusBadge(
-                    text: '参加予定',
-                    color: Colors.green,
-                  ),
-                  const SizedBox(
-                    width: 4,
-                  ),
+                  ...getScheduledBadgeIfNeeded(),
+                  ...getTodayBadgeIfNeeded(),
                   ParticipationStatusBadge(
-                    text: _badgeLabel(context),
-                    color: _badgeColor(context),
+                    text: participationInfo!.participationType.label(context),
+                    color: participationInfo!.participationType
+                        .badgeColor(context),
                   ),
                 ],
               ),

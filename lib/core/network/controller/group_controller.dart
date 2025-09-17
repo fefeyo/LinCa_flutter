@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:fefeyo_flutter_template/core/network/providers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants/app_constants.dart';
 import '../model/group.dart';
+import '../providers.dart';
 import '../repository/group_repository.dart';
 
 class GroupController extends AsyncNotifier<List<Group>> {

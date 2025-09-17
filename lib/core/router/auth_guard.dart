@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:fefeyo_flutter_template/core/router/app_router.gr.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import 'app_router.gr.dart';
 
 class AuthGuard extends AutoRouteGuard {
   const AuthGuard();

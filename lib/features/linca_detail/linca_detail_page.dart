@@ -1,12 +1,12 @@
-import 'package:fefeyo_flutter_template/core/widgets/common/flip_card.dart';
-import 'package:fefeyo_flutter_template/features/my_page/view/linca_vertical.dart';
-import 'package:fefeyo_flutter_template/features/my_page/view/linca_vertical_back.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../core/utils/sort_items_extension.dart';
+import '../../core/widgets/common/flip_card.dart';
+import '../my_page/view/linca_vertical.dart';
+import '../my_page/view/linca_vertical_back.dart';
 
 @RoutePage()
 class LincaDetailPage extends HookConsumerWidget {

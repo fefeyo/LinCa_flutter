@@ -1,16 +1,11 @@
-import 'package:fefeyo_flutter_template/core/network/model/group.dart';
-import 'package:fefeyo_flutter_template/core/widgets/event/event_card.dart';
-import 'package:fefeyo_flutter_template/features/choose_event/view/choose_official_event_card.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../core/models/linca_event.dart';
-import '../../core/network/providers.dart';
 import '../../core/widgets/bottom_sheet/my_event_sort_bottom_sheet.dart';
-import '../../core/widgets/common/common_simple_list_error.dart';
-import '../../core/widgets/common/common_simple_loading.dart';
+import '../../core/widgets/event/event_card.dart';
 import 'data/choose_event_state.dart';
 import 'view_model/choose_event_view_model.dart';
 

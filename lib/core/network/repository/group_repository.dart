@@ -1,5 +1,6 @@
-import 'package:fefeyo_flutter_template/core/network/model/group.dart';
-import 'package:fefeyo_flutter_template/core/network/repository/firestore_repository.dart';
+
+import '../model/group.dart';
+import 'firestore_repository.dart';
 
 class GroupRepository extends FirestoreRepository<Group> {
   GroupRepository(super.fireStore);
@@ -9,4 +10,14 @@ class GroupRepository extends FirestoreRepository<Group> {
 
   Future<List<Group>> getGroups() => fetchAllFromCache(
       'groups', (Map<String, dynamic> json) => Group.fromJson(json));
+
+  Future<Group> getGroupById(String id) async {
+    final List<Group> groups = await getGroups();
+    return groups.firstWhere((Group group) => group.id == id);
+  }
+
+  Future<Group> getGroupBySlug(String slug) async {
+    final List<Group> groups = await getGroups();
+    return groups.firstWhere((Group group) => group.slug == slug);
+  }
 }

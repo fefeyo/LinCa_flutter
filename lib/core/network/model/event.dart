@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../utils/date_extention.dart';
+import '../../utils/date_extension.dart';
 
 part 'event.freezed.dart';
 

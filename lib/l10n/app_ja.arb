@@ -95,5 +95,18 @@
   "onboarding_step5_title": "LinCaをはじめよう！",
   "onboarding_step5_description": "これで準備はバッチリ！\nイベントの思い出を記録して、素敵な出会いをつなげていこう。",
   "onboarding_next": "次へ",
-  "onboarding_start": "はじめる"
+  "onboarding_start": "はじめる",
+  "snackbar_title_deleted": "削除に成功しました",
+  "snackbar_title_saved": "保存に成功しました",
+  "event_detail_delete": "このイベントを削除する",
+  "map_launch_url": "https://www.google.com/maps/search/?api=1&query={query}",
+  "@map_launch_url": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "common_save": "保存",
+  "event_detail_memo_hint": "このイベントに関するメモを自由に書こう！"
 }

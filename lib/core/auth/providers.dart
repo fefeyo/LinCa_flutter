@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fefeyo_flutter_template/core/auth/controller/auth_controller.dart';
-import 'package:fefeyo_flutter_template/core/auth/data/auth_state.dart';
-import 'package:fefeyo_flutter_template/core/auth/repository/auth_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import 'controller/auth_controller.dart';
+import 'data/auth_state.dart';
+import 'repository/auth_repository.dart';
 
 final Provider<FirebaseAuth> firebaseAuthProvider = Provider<FirebaseAuth>((_) {
   return FirebaseAuth.instance;

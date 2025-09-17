@@ -1,5 +1,6 @@
-import 'package:fefeyo_flutter_template/core/utils/sort_items_extension.dart';
 import 'package:flutter/material.dart';
+
+import 'sort_items_extension.dart';
 
 extension SeriesTagExtension on SeriesTag {
   Color color() => switch (this) {

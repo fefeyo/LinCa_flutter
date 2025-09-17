@@ -1,17 +1,17 @@
-import 'package:fefeyo_flutter_template/core/auth/controller/auth_controller.dart';
-import 'package:fefeyo_flutter_template/core/auth/providers.dart';
-import 'package:fefeyo_flutter_template/core/router/app_router.gr.dart';
-import 'package:fefeyo_flutter_template/core/utils/context_extension.dart';
-import 'package:fefeyo_flutter_template/core/utils/sort_items_extension.dart';
-import 'package:fefeyo_flutter_template/core/widgets/bottom_sheet/my_qr_bottom_sheet.dart';
-import 'package:fefeyo_flutter_template/features/my_page/view/my_page_item.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../core/utils/context_extension.dart';
+import '../../core/auth/controller/auth_controller.dart';
 import '../../core/auth/data/auth_state.dart';
+import '../../core/auth/providers.dart';
+import '../../core/router/app_router.gr.dart';
+import '../../core/utils/sort_items_extension.dart';
+import '../../core/widgets/bottom_sheet/my_qr_bottom_sheet.dart';
 import 'view/linca_vertical.dart';
+import 'view/my_page_item.dart';
 
 @RoutePage()
 class MyPage extends HookConsumerWidget {

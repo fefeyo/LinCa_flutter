@@ -1,4 +1,4 @@
-import 'package:fefeyo_flutter_template/core/utils/context_extension.dart';
+import '../../../core/utils/context_extension.dart';
 import 'package:flutter/material.dart';
 
 class ParticipationStatusBadge extends StatelessWidget {
