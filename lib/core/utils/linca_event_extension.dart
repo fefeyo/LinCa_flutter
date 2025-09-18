@@ -1,9 +1,9 @@
 import 'package:linca_otaku_support/core/models/linca_event.dart';
 import 'package:linca_otaku_support/core/network/model/group.dart';
+import 'package:linca_otaku_support/core/network/model/participation_info.dart';
 import 'package:linca_otaku_support/core/utils/sort_items_extension.dart';
 
 extension LincaEventsExtension on List<LincaEvent> {
-
   // キーワードフィルタリング
   List<LincaEvent> filterWithKeyword(String keyword) {
     List<LincaEvent> sortedEvents = this;
@@ -62,5 +62,17 @@ extension LincaEventsExtension on List<LincaEvent> {
     }
 
     return sortedEvents;
+  }
+}
+
+extension LincaParticipationEventExtension
+    on Map<LincaEvent, ParticipationInfo> {
+  Map<LincaEvent, ParticipationInfo> sort() {
+    List<LincaEvent> events = keys.toList();
+    events = events.sortWithDisplayOrder(DisplayOrder.newest);
+
+    return <LincaEvent, ParticipationInfo>{
+      for (final LincaEvent event in events) event: this[event]!,
+    };
   }
 }

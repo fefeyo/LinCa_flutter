@@ -34,7 +34,7 @@ class ParticipationRepository extends FirestoreRepository<ParticipationInfo> {
         .doc(participation.eventId)
         .set(<String, dynamic>{
       'eventId': participation.eventId,
-      'participationType': participation.participationType.name,
+      'participationType': participation.participationType?.name,
       'participationMemo': participation.participationMemo,
     });
   }

@@ -6,6 +6,7 @@ import 'package:linca_otaku_support/core/models/filter_settings.dart';
 import 'package:linca_otaku_support/core/network/model/group.dart';
 
 import '../../../core/utils/context_extension.dart';
+import '../../constants/participation_type.dart';
 import '../../network/providers.dart';
 import '../../utils/sort_items_extension.dart';
 
@@ -30,7 +31,7 @@ class EventSortBottomSheet extends HookConsumerWidget {
     final ValueNotifier<String> keyword = useState(initialSettings.keyword);
     final ValueNotifier<DisplayOrder> currentDisplayOrder =
         useState(initialSettings.displayOrder);
-    final ValueNotifier<List<Participation>> currentParticipations =
+    final ValueNotifier<List<ParticipationType>> currentParticipationTypes =
         useState(initialSettings.participationFilters);
     final ValueNotifier<List<Group>> currentGroups =
         useState(initialSettings.groups);
@@ -90,24 +91,26 @@ class EventSortBottomSheet extends HookConsumerWidget {
         Wrap(
           spacing: 4,
           runSpacing: 8,
-          children: Participation.values.map(
-            (Participation participation) {
+          children: ParticipationType.values.map(
+            (ParticipationType participationType) {
               return ChoiceChip(
                 label: Text(
-                  participation.label(context),
+                  participationType.label(context),
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 visualDensity: VisualDensity.comfortable,
-                selected: currentParticipations.value.contains(participation),
+                selected:
+                    currentParticipationTypes.value.contains(participationType),
                 onSelected: (bool selected) {
-                  final List<Participation> current =
-                      List<Participation>.of(currentParticipations.value);
+                  final List<ParticipationType> current =
+                      List<ParticipationType>.of(
+                          currentParticipationTypes.value);
                   if (selected) {
-                    current.add(participation);
+                    current.add(participationType);
                   } else {
-                    current.remove(participation);
+                    current.remove(participationType);
                   }
-                  currentParticipations.value = current;
+                  currentParticipationTypes.value = current;
                 },
               );
             },
@@ -186,7 +189,7 @@ class EventSortBottomSheet extends HookConsumerWidget {
                         FilterSettings(
                           keyword: keyword.value,
                           displayOrder: currentDisplayOrder.value,
-                          participationFilters: currentParticipations.value,
+                          participationFilters: currentParticipationTypes.value,
                           groups: currentGroups.value,
                         ),
                       );

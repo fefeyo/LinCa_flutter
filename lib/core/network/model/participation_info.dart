@@ -10,7 +10,7 @@ part 'participation_info.g.dart';
 abstract class ParticipationInfo with _$ParticipationInfo {
   const factory ParticipationInfo({
     @Default('') String eventId,
-    @Default(ParticipationType.none) ParticipationType participationType,
+    ParticipationType? participationType,
     @Default('') String participationMemo,
   }) = _ParticipationInfo;
 

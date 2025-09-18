@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../constants/participation_type.dart';
 import '../network/model/group.dart';
 import '../utils/sort_items_extension.dart';
 
@@ -10,7 +11,8 @@ abstract class FilterSettings with _$FilterSettings {
   const factory FilterSettings({
     @Default('') String keyword,
     @Default(DisplayOrder.newest) DisplayOrder displayOrder,
-    @Default(<Participation>[]) List<Participation> participationFilters,
+    @Default(<ParticipationType>[])
+    List<ParticipationType> participationFilters,
     @Default(<Group>[]) List<Group> groups,
   }) = _FilterSettings;
 }

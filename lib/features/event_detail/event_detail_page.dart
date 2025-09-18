@@ -127,9 +127,9 @@ class EventDetailPage extends HookConsumerWidget {
                           const Spacer(),
                           if (participationInfo != null)
                             ParticipationStatusBadge(
-                              text: participationInfo!.participationType
+                              text: participationInfo!.participationType!
                                   .label(context),
-                              color: participationInfo!.participationType
+                              color: participationInfo!.participationType!
                                   .badgeColor(context),
                             ),
                         ],

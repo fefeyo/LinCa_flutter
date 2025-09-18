@@ -48,12 +48,12 @@ class ChooseEventViewModel extends StateNotifier<ChooseEventState> {
   }
 
   List<LincaEvent> sortEvents(FilterSettings filterSettings) {
-    List<LincaEvent> sortedEvents = <LincaEvent>[];
+    List<LincaEvent> sortedEvents = initialEvents;
 
-    sortedEvents = initialEvents.filterWithKeyword(filterSettings.keyword);
-    sortedEvents =
-        sortedEvents.sortWithDisplayOrder(filterSettings.displayOrder);
-    sortedEvents = sortedEvents.filterWithGroup(filterSettings.groups);
+    sortedEvents = sortedEvents
+        .filterWithKeyword(filterSettings.keyword)
+        .sortWithDisplayOrder(filterSettings.displayOrder)
+        .filterWithGroup(filterSettings.groups);
 
     return sortedEvents;
   }
