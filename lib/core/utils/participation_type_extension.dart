@@ -6,8 +6,6 @@ import '../constants/participation_type.dart';
 extension ParticipationTypeExtension on ParticipationType {
   String label(BuildContext context) {
     switch (this) {
-      case ParticipationType.none:
-        return '';
       case ParticipationType.onSite:
         return context.l10n.participation_on_site; // 現地参加
       case ParticipationType.streaming:
@@ -21,8 +19,6 @@ extension ParticipationTypeExtension on ParticipationType {
 
   Color badgeColor(BuildContext context) {
     switch (this) {
-      case ParticipationType.none:
-        return Colors.transparent;
       case ParticipationType.onSite:
         return Colors.red;
       case ParticipationType.streaming:

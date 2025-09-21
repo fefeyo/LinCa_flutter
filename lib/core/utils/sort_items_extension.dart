@@ -1,18 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../../core/utils/context_extension.dart';
+import '../constants/participation_type.dart';
 
 enum DisplayOrder {
   newest, // 最新順
   oldest, // 古い順
   title, // イベント名順
-}
-
-enum Participation {
-  onSite, // 現地参加
-  streaming, // 配信参加
-  liveViewing, // ライブビューイング参加
-  absent, // 不参加
 }
 
 enum SeriesTag {
@@ -33,14 +27,14 @@ extension DisplayOrderExtension on DisplayOrder {
       };
 }
 
-extension ParticipationFilterExtension on Participation {
+extension ParticipationFilterExtension on ParticipationType {
   String label(BuildContext context) => switch (this) {
-        Participation.onSite => context.l10n.participationFilter_onSite,
-        Participation.streaming =>
+        ParticipationType.onSite => context.l10n.participationFilter_onSite,
+        ParticipationType.streaming =>
           context.l10n.participationFilter_streaming,
-        Participation.liveViewing =>
+        ParticipationType.liveViewing =>
           context.l10n.participationFilter_liveViewing,
-        Participation.absent => context.l10n.participationFilter_absent,
+        ParticipationType.absent => context.l10n.participationFilter_absent,
       };
 }
 

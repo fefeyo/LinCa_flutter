@@ -121,8 +121,8 @@ class EventCard extends StatelessWidget {
                   ...getScheduledBadgeIfNeeded(),
                   ...getTodayBadgeIfNeeded(),
                   ParticipationStatusBadge(
-                    text: participationInfo!.participationType.label(context),
-                    color: participationInfo!.participationType
+                    text: participationInfo!.participationType!.label(context),
+                    color: participationInfo!.participationType!
                         .badgeColor(context),
                   ),
                 ],

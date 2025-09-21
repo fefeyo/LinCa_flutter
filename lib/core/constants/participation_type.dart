@@ -1,5 +1,4 @@
 enum ParticipationType {
-  none,          // タイプなし
   onSite,        // 現地参加
   streaming,     // 配信参加
   liveViewing,   // ライブビューイング参加
