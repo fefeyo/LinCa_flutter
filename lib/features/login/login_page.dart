@@ -73,19 +73,7 @@ class LoginPage extends HookConsumerWidget {
                 Buttons.anonymous,
                 onPressed: () async {
                   await authController.signInAnonymously();
-                  if (!context.mounted) return;
-                  if (authState.hasError) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          context.l10n
-                              .signin_failure(authState.error.toString()),
-                        ),
-                      ),
-                    );
-                  } else {
-                    context.router.replace(const HomeRoute());
-                  }
+                  actionAfterSignIn();
                 },
               ),
               SignInButton(

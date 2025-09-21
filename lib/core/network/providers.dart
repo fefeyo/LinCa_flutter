@@ -7,17 +7,19 @@ import '../auth/providers.dart';
 import '../models/linca_event.dart';
 import 'controller/badge_controller.dart';
 import 'controller/event_controller.dart';
+import 'controller/friend_controller.dart';
 import 'controller/group_controller.dart';
 import 'controller/tag_controller.dart';
 import 'controller/user_controller.dart';
 import 'controller/venue_controller.dart';
-import 'model/badge.dart';
 import 'model/group.dart';
+import 'model/linca_badge.dart';
 import 'model/tag.dart';
 import 'model/user.dart';
 import 'model/venue.dart';
 import 'repository/badge_repository.dart';
 import 'repository/event_repository.dart';
+import 'repository/friend_repository.dart';
 import 'repository/group_repository.dart';
 import 'repository/tag_repository.dart';
 import 'repository/user_repository.dart';
@@ -36,9 +38,10 @@ final Provider<BadgeRepository> badgeRepositoryProvider =
   (Ref ref) => BadgeRepository(ref.watch(fireStoreProvider)),
 );
 
-final AsyncNotifierProvider<BadgeController, List<Badge>>
+final AsyncNotifierProvider<BadgeController, List<LincaBadge>>
     badgeControllerProvider =
-    AsyncNotifierProvider<BadgeController, List<Badge>>(BadgeController.new);
+    AsyncNotifierProvider<BadgeController, List<LincaBadge>>(
+        BadgeController.new);
 
 final Provider<EventRepository> eventRepositoryProvider =
     Provider<EventRepository>(
@@ -76,11 +79,18 @@ final AsyncNotifierProvider<VenueController, List<Venue>>
     AsyncNotifierProvider<VenueController, List<Venue>>(VenueController.new);
 
 final Provider<ParticipationRepository> participationRepositoryProvider =
-    Provider<ParticipationRepository>((Ref ref) {
-  return ParticipationRepository(ref.watch(fireStoreProvider));
-});
+    Provider<ParticipationRepository>(
+        (Ref ref) => ParticipationRepository(ref.watch(fireStoreProvider)));
 
 final AsyncNotifierProvider<ParticipationController,
         Map<LincaEvent, ParticipationInfo>> participationControllerProvider =
     AsyncNotifierProvider<ParticipationController,
         Map<LincaEvent, ParticipationInfo>>(ParticipationController.new);
+
+final Provider<FriendRepository> friendRepositoryProvider =
+    Provider<FriendRepository>(
+        (Ref ref) => FriendRepository(ref.watch(fireStoreProvider)));
+
+final AsyncNotifierProvider<FriendController, List<User>>
+    friendControllerProvider =
+    AsyncNotifierProvider<FriendController, List<User>>(FriendController.new);

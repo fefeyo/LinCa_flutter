@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/models/user_profile.dart';
+import 'package:linca_otaku_support/features/my_page/data/my_page_state.dart';
+import 'package:linca_otaku_support/features/my_page/view_model/my_page_view_model.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../core/constants/app_constants.dart';
 import '../../core/utils/context_extension.dart';
 import '../../core/auth/controller/auth_controller.dart';
 import '../../core/auth/data/auth_state.dart';
 import '../../core/auth/providers.dart';
 import '../../core/router/app_router.gr.dart';
-import '../../core/utils/sort_items_extension.dart';
 import '../../core/widgets/bottom_sheet/my_qr_bottom_sheet.dart';
 import 'view/linca_vertical.dart';
 import 'view/my_page_item.dart';
@@ -22,6 +25,7 @@ class MyPage extends HookConsumerWidget {
     final AsyncValue<AuthState> authState = ref.watch(authControllerProvider);
     final AuthController authController =
         ref.read(authControllerProvider.notifier);
+    final MyPageState state = ref.watch(myPageViewModelProvider);
 
     return Scaffold(
       body: Padding(
@@ -30,25 +34,16 @@ class MyPage extends HookConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Hero(
-                tag: 'LinCaCard',
-                child: LincaVertical(
-                  name: 'ふぇふぇ',
-                  avatar: const AssetImage('assets/images/user.png'),
-                  seriesChips: const <SeriesTag>[
-                    SeriesTag.muse,
-                    SeriesTag.aqours,
-                    SeriesTag.nijigasaki,
-                    SeriesTag.liella,
-                    SeriesTag.hasunosora,
-                    SeriesTag.ikizulive,
-                    SeriesTag.collaborative,
-                  ],
-                  bio:
-                      '''現地参戦メイン。物販列情報はXで共有します！現地参戦メイン。物販列情報はXで共有します！現地参戦メイン。物販列情報はXで共有します！現地参戦メイン。物販列情報はXで共有します！現地参戦メイン。物販列情報はXで共有します！
-                ''',
-                  tintColor: Colors.purple,
-                  onTap: () => context.router.push(const LincaDetailRoute()),
+              LincaVertical(
+                userProfile: state.userProfile,
+                tintColor: context.colorScheme.primary,
+                animationTag: AppConstants.heroTagLincaCardMyPage,
+                onTap: (UserProfile userProfile, String animationTag) =>
+                    context.router.push(
+                  LincaDetailRoute(
+                    userProfile: userProfile,
+                    animationTag: animationTag,
+                  ),
                 ),
               ),
               const SizedBox(height: 32),
@@ -59,9 +54,8 @@ class MyPage extends HookConsumerWidget {
               const SizedBox(height: 16),
               MyPageItem(
                 title: context.l10n.traded_linca_list_title,
-                onClickItem: () {
-                  // TODO: 交換済みLinCaカード一覧画面へ
-                },
+                onClickItem: () =>
+                    context.router.push(const TradedLincaListRoute()),
               ),
               MyPageItem(
                 title: context.l10n.my_qr_code_title,
@@ -69,9 +63,7 @@ class MyPage extends HookConsumerWidget {
               ),
               MyPageItem(
                 title: context.l10n.edit_my_linca_title,
-                onClickItem: () {
-                  // TODO: マイLinCa編集画面へ
-                },
+                onClickItem: () => context.router.push(const LincaEditRoute()),
               ),
               MyPageItem(
                 title: context.l10n.obtained_badges_title,
@@ -87,9 +79,8 @@ class MyPage extends HookConsumerWidget {
               const SizedBox(height: 16),
               MyPageItem(
                 title: context.l10n.created_events_title,
-                onClickItem: () {
-                  // TODO: 作成したイベント一覧画面へ
-                },
+                onClickItem: () =>
+                    context.router.push(const CreatedEventListRoute()),
               ),
               const SizedBox(height: 16),
               Text(

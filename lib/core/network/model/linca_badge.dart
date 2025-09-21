@@ -1,12 +1,12 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'badge.freezed.dart';
+part 'linca_badge.freezed.dart';
 
-part 'badge.g.dart';
+part 'linca_badge.g.dart';
 
 @freezed
-abstract class Badge with _$Badge {
-  const factory Badge({
+abstract class LincaBadge with _$LincaBadge {
+  const factory LincaBadge({
     @Default('') String id,
     @Default('') String name,
     @Default('') String slug,
@@ -15,7 +15,8 @@ abstract class Badge with _$Badge {
     @Default('') String category,
     @Default(false) bool active,
     @Default(0) int order,
-  }) = _Badge;
+  }) = _LincaBadge;
 
-  factory Badge.fromJson(Map<String, dynamic> json) => _$BadgeFromJson(json);
+  factory LincaBadge.fromJson(Map<String, dynamic> json) =>
+      _$LincaBadgeFromJson(json);
 }

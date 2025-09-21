@@ -5,19 +5,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../constants/app_constants.dart';
-import '../model/badge.dart';
+import '../model/linca_badge.dart';
 import '../providers.dart';
 import '../repository/badge_repository.dart';
 
-class BadgeController extends AsyncNotifier<List<Badge>> {
+class BadgeController extends AsyncNotifier<List<LincaBadge>> {
   late BadgeRepository badgeRepository;
 
   @override
-  FutureOr<List<Badge>> build() async {
+  FutureOr<List<LincaBadge>> build() async {
     badgeRepository = ref.read(badgeRepositoryProvider);
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    List<Badge> badges = await getBadges();
+    List<LincaBadge> badges = await getBadges();
     if (preferences.getString(AppConstants.badgeVersionKey) ==
         packageInfo.version) {
       badges = await fetchBadges();
@@ -28,7 +28,7 @@ class BadgeController extends AsyncNotifier<List<Badge>> {
     return badges;
   }
 
-  Future<List<Badge>> fetchBadges() => badgeRepository.fetchBadges();
+  Future<List<LincaBadge>> fetchBadges() => badgeRepository.fetchBadges();
 
-  Future<List<Badge>> getBadges() => badgeRepository.getBadges();
+  Future<List<LincaBadge>> getBadges() => badgeRepository.getBadges();
 }
