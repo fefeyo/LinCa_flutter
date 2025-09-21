@@ -30,10 +30,12 @@ void main() async {
   await container.read(venueControllerProvider.future);
   await container.read(eventControllerProvider.future);
   await container.read(participationControllerProvider.future);
+  await container.read(friendControllerProvider.future);
 
   runApp(
-    const ProviderScope(
-      child: MyApp(),
+    UncontrolledProviderScope(
+      container: container,
+      child: const MyApp(),
     ),
   );
 }

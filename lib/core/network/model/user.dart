@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:linca_otaku_support/core/network/model/datetime_timestamp_converter.dart';
 
 part 'user.freezed.dart';
 
@@ -11,11 +12,11 @@ abstract class User with _$User {
     @Default('') String displayName,
     @Default('') String photoUrl,
     @Default('') String bio,
-    @Default(<String>[]) List<String> artistIds,
-    @Default(<String>[]) List<String> badgeIds,
+    @Default(<String>[]) List<String> favoriteGroups,
+    @Default(<String>[]) List<String> favoriteBadges,
     @Default(<String, String>{}) Map<String, String> links,
-    @Default(null) DateTime? createdAt,
-    @Default(null) DateTime? updatedAt,
+    @DateTimeTimestampConverter() DateTime? createdAt,
+    @DateTimeTimestampConverter() DateTime? updatedAt,
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

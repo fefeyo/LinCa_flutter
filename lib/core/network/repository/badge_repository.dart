@@ -1,12 +1,12 @@
-import '../model/badge.dart';
+import '../model/linca_badge.dart';
 import 'firestore_repository.dart';
 
-class BadgeRepository extends FirestoreRepository<Badge> {
+class BadgeRepository extends FirestoreRepository<LincaBadge> {
   BadgeRepository(super.fireStore);
 
-  Future<List<Badge>> fetchBadges() =>
-      fetchAll('badges', (Map<String, dynamic> json) => Badge.fromJson(json));
+  Future<List<LincaBadge>> fetchBadges() => fetchAll(
+      'badges', (Map<String, dynamic> json) => LincaBadge.fromJson(json));
 
-  Future<List<Badge>> getBadges() => fetchAllFromCache(
-      'badges', (Map<String, dynamic> json) => Badge.fromJson(json));
+  Future<List<LincaBadge>> getBadges() => fetchAllFromCache(
+      'badges', (Map<String, dynamic> json) => LincaBadge.fromJson(json));
 }

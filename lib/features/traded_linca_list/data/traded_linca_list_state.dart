@@ -1,14 +1,11 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:linca_otaku_support/core/models/user_profile.dart';
 
 part 'traded_linca_list_state.freezed.dart';
-part 'traded_linca_list_state.g.dart';
 
 @freezed
 abstract class TradedLincaListState with _$TradedLincaListState {
   const factory TradedLincaListState({
-    @Default('') String name,
+    @Default(<UserProfile>[]) List<UserProfile> friends,
   }) = _TradedLincaListState;
-
-  factory TradedLincaListState.fromJson(Map<String, dynamic> json) =>
-      _$TradedLincaListStateFromJson(json);
 }

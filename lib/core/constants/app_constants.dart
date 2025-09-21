@@ -9,4 +9,8 @@ class AppConstants {
   static const String venueVersionKey = 'venue_version_key';
   static const String hasSeenOnboarding = 'has_seen_onboarding';
   static const String participationVersionKey = 'participation_version_key';
+
+  // Hero Animation Tag
+  static const String heroTagLincaCardMyPage = 'LinCaCardMyPage';
+  static const String heroTagLincaCardFriend = 'LinCaCardFriend';
 }

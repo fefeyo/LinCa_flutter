@@ -4,7 +4,10 @@ import '../../../core/utils/context_extension.dart';
 class LincaVerticalBack extends StatelessWidget {
   const LincaVerticalBack({
     super.key,
+    this.animationTag = '',
   });
+
+  final String animationTag;
 
   @override
   Widget build(BuildContext context) {
@@ -12,10 +15,13 @@ class LincaVerticalBack extends StatelessWidget {
         ? context.colorScheme.surface
         : context.colorScheme.surfaceContainer;
 
-    return Material(
-      color: Colors.transparent,
-      child: SizedBox.expand(
-        child: _buildCard(context, backgroundColor),
+    return Hero(
+      tag: animationTag,
+      child: Material(
+        color: Colors.transparent,
+        child: SizedBox.expand(
+          child: _buildCard(context, backgroundColor),
+        ),
       ),
     );
   }
