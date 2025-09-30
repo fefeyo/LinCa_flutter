@@ -3,6 +3,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/models/user_profile.dart';
+import 'package:linca_otaku_support/core/utils/context_extension.dart';
 
 import '../../core/widgets/common/flip_card.dart';
 import '../my_page/view/linca_vertical.dart';
@@ -32,7 +33,7 @@ class LincaDetailPage extends HookConsumerWidget {
               FlipCard(
                 front: LincaVertical(
                   userProfile: userProfile,
-                  tintColor: Colors.purple,
+                  tintColor: context.colorScheme.primary,
                   isFullScreen: true,
                   animationTag: animationTag,
                 ),

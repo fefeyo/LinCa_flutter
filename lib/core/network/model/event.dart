@@ -17,6 +17,7 @@ abstract class Event with _$Event {
     @JsonKey(fromJson: fromJsonDate, toJson: toJsonDate) DateTime? date,
     @Default('') String status,
     @Default('') String url,
+    @Default('') String imageUrl,
     @Default(<String>[]) List<String> tagIds,
     @Default('') String createdBy,
   }) = _Event;

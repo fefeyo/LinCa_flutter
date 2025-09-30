@@ -7,31 +7,25 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:630270810691:android:fe132caa7c460f8c6d92f6",
-        "android_client_info": {
-          "package_name": "com.example.fefeyo_flutter_template"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBlyiP8YNlhiwjPUE7hL5ha0j1K7sH--bs"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:630270810691:android:e9c324a8ea8ce2f46d92f6",
         "android_client_info": {
           "package_name": "com.fefeyo.linca"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "630270810691-o1qo7tid48c0rj66bga3gp787fgadqne.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fefeyo.linca",
+            "certificate_hash": "27397a9e08cfcec8cb75fa15ea7c52f53a834ede"
+          }
+        },
+        {
+          "client_id": "630270810691-cavclpg0rs7vr4kgojc93fv08ovrssgl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBlyiP8YNlhiwjPUE7hL5ha0j1K7sH--bs"
@@ -39,26 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:630270810691:android:c3353870bde7d7ed6d92f6",
-        "android_client_info": {
-          "package_name": "com.fefeyo.linca_otaku_manager"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBlyiP8YNlhiwjPUE7hL5ha0j1K7sH--bs"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "630270810691-cavclpg0rs7vr4kgojc93fv08ovrssgl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "630270810691-mo60isvre5hc52lu4p9rq548q0jf31d2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.fefeyo.linca"
+              }
+            }
+          ]
         }
       }
     }

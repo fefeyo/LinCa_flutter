@@ -91,6 +91,36 @@ class EventDetailPage extends HookConsumerWidget {
       ];
     }
 
+    List<Widget> buildBadgeAreaIfNeeded() {
+      final List<Widget> widgets = <Widget>[];
+      if (participationInfo == null) return widgets;
+
+      if (lincaEvent.event.date?.isAfter(DateTime.now()) == true) {
+        widgets.add(
+          const ParticipationStatusBadge(
+            text: '参加予定',
+            color: Colors.green,
+          ),
+        );
+        widgets.add(const SizedBox(width: 4));
+
+      }
+
+      widgets.add(
+        ParticipationStatusBadge(
+          text: participationInfo!.participationType!.label(context),
+          color: participationInfo!.participationType!.badgeColor(context),
+        ),
+      );
+
+      widgets.add(const SizedBox(height: 4));
+
+      return <Widget>[
+        Row(children: widgets),
+        const SizedBox(height: 4),
+      ];
+    }
+
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -105,7 +135,9 @@ class EventDetailPage extends HookConsumerWidget {
                 pinned: true,
                 flexibleSpace: FlexibleSpaceBar(
                   background: Image(
-                    image: AssetImage(Assets.images.defaultLiveBackground.path),
+                    image: lincaEvent.event.imageUrl.isNotEmpty
+                        ? NetworkImage(lincaEvent.event.imageUrl)
+                        : AssetImage(Assets.images.defaultLiveBackground.path),
                     fit: BoxFit.cover,
                   ),
                   collapseMode: CollapseMode.parallax,
@@ -117,22 +149,11 @@ class EventDetailPage extends HookConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Text(
-                            lincaEvent.group.name,
-                            style: context.textTheme.titleMedium
-                                ?.copyWith(color: Colors.grey),
-                          ),
-                          const Spacer(),
-                          if (participationInfo != null)
-                            ParticipationStatusBadge(
-                              text: participationInfo!.participationType!
-                                  .label(context),
-                              color: participationInfo!.participationType!
-                                  .badgeColor(context),
-                            ),
-                        ],
+                      ...buildBadgeAreaIfNeeded(),
+                      Text(
+                        lincaEvent.group.name,
+                        style: context.textTheme.titleMedium
+                            ?.copyWith(color: Colors.grey),
                       ),
                       const SizedBox(height: 4),
                       Text(
@@ -156,9 +177,11 @@ class EventDetailPage extends HookConsumerWidget {
                             },
                             icon: const Icon(Icons.pin_drop),
                           ),
-                          Text(
-                            lincaEvent.venue.name,
-                            style: context.textTheme.headlineSmall,
+                          Expanded(
+                            child: Text(
+                              lincaEvent.venue.name,
+                              style: context.textTheme.headlineSmall,
+                            ),
                           ),
                         ],
                       ),
@@ -230,6 +253,8 @@ class EventDetailPage extends HookConsumerWidget {
                       ),
                       const SizedBox(height: 8),
                       Wrap(
+                        spacing: 4,
+                        runSpacing: 8,
                         children: <Widget>[
                           ...lincaEvent.tags.map((Tag tag) {
                             return Chip(

@@ -20,7 +20,7 @@ class MyEventPage extends HookConsumerWidget {
 
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         child: state.sortedEvents.isEmpty
             ? Center(
                 child: Text(

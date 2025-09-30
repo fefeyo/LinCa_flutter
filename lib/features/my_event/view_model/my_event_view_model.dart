@@ -7,26 +7,21 @@ import '../../../core/network/providers.dart';
 import '../data/my_event_state.dart';
 
 final StateNotifierProvider<MyEventViewModel, MyEventState>
-myEventViewModelProvider =
-StateNotifierProvider<MyEventViewModel, MyEventState>((Ref ref) {
+    myEventViewModelProvider =
+    StateNotifierProvider<MyEventViewModel, MyEventState>((Ref ref) {
   final AsyncValue<Map<LincaEvent, ParticipationInfo>> myEventsAsync =
-  ref.watch(participationControllerProvider);
+      ref.watch(participationControllerProvider);
 
   return myEventsAsync.when(
     data: (Map<LincaEvent, ParticipationInfo> events) =>
-        MyEventViewModel(events),
+        MyEventViewModel(events.sort()),
     error: (_, __) => MyEventViewModel(<LincaEvent, ParticipationInfo>{}),
     loading: () => MyEventViewModel(<LincaEvent, ParticipationInfo>{}),
   );
 });
 
 class MyEventViewModel extends StateNotifier<MyEventState> {
-  MyEventViewModel(this.myEvents)
-      : super(
-    MyEventState(
-      sortedEvents: myEvents.sort(),
-    ),
-  );
+  MyEventViewModel(this.myEvents) : super(MyEventState(sortedEvents: myEvents));
 
   final Map<LincaEvent, ParticipationInfo> myEvents;
 
@@ -45,13 +40,12 @@ class MyEventViewModel extends StateNotifier<MyEventState> {
         .sortWithDisplayOrder(filterSettings.displayOrder)
         .filterWithGroup(filterSettings.groups);
 
-    final Map<LincaEvent, ParticipationInfo> sortedMap = <
-        LincaEvent,
-        ParticipationInfo>{};
+    final Map<LincaEvent, ParticipationInfo> sortedMap =
+        <LincaEvent, ParticipationInfo>{};
     for (final LincaEvent event in events) {
       if (filterSettings.participationFilters.isNotEmpty &&
-          !filterSettings.participationFilters.contains(
-              myEvents[event]!.participationType)) {
+          !filterSettings.participationFilters
+              .contains(myEvents[event]!.participationType)) {
         continue;
       }
       sortedMap[event] = myEvents[event]!;

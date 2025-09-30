@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/utils/linca_event_extension.dart';
+import 'package:linca_otaku_support/core/utils/sort_items_extension.dart';
 
 import '../../models/linca_event.dart';
 import '../model/event.dart';
@@ -35,7 +37,7 @@ class EventController extends AsyncNotifier<List<LincaEvent>> {
     //       AppConstants.eventVersionKey, packageInfo.version);
     // }
 
-    return Future.wait(events.map((Event event) async {
+    final List<LincaEvent> lincaEvents = await Future.wait(events.map((Event event) async {
       // タグ一覧を取得
       final List<Tag> tags = await Future.wait(
         event.tagIds.map((String tagId) => tagRepository.getTagById(tagId)),
@@ -53,6 +55,8 @@ class EventController extends AsyncNotifier<List<LincaEvent>> {
         group: group,
       );
     }).toList());
+
+    return lincaEvents.sortWithDisplayOrder(DisplayOrder.newest);
   }
 
   Future<List<Event>> fetchEvents() => eventRepository.fetchEvents();

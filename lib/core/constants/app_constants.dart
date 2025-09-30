@@ -1,5 +1,8 @@
 class AppConstants {
   static const String lincaScheme = 'linca://card/';
+  static const String twitterScheme = 'https://x.com/';
+  static const String instagramScheme = 'https://instagram.com/';
+  static const String blueskyScheme = 'https://bsky.app/profile/';
 
   // SharedPreferences
   static const String badgeVersionKey = 'badge_version_key';

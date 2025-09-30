@@ -50,4 +50,20 @@ class UserRepository {
       'updatedAt': FieldValue.serverTimestamp(),
     });
   }
+
+  Future<void> updateUserPhoto(String uid, String photoUrl) async {
+    final DocumentReference<Map<String, dynamic>> document = doc(uid);
+    await document.update(<String, dynamic>{
+      'photoUrl': photoUrl,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+  Future<void> updateUserData(String uid, User user) async {
+    final DocumentReference<Map<String, dynamic>> document = doc(uid);
+    await document.update(<String, dynamic>{
+      ...user.toJson(),
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
 }
