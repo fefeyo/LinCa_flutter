@@ -1,14 +1,11 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:linca_otaku_support/core/models/user_profile.dart';
 
 part 'linca_edit_state.freezed.dart';
-part 'linca_edit_state.g.dart';
 
 @freezed
 abstract class LincaEditState with _$LincaEditState {
   const factory LincaEditState({
-    @Default('') String name,
+    UserProfile? userProfile,
   }) = _LincaEditState;
-
-  factory LincaEditState.fromJson(Map<String, dynamic> json) =>
-      _$LincaEditStateFromJson(json);
 }

@@ -25,6 +25,8 @@ class GroupController extends AsyncNotifier<List<Group>> {
           AppConstants.groupVersionKey, packageInfo.version);
     }
 
+    groups.sort((Group a, Group b) => a.order.compareTo(b.order));
+
     return groups;
   }
 

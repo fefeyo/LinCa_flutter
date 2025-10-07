@@ -63,7 +63,11 @@ class MyPage extends HookConsumerWidget {
               ),
               MyPageItem(
                 title: context.l10n.edit_my_linca_title,
-                onClickItem: () => context.router.push(const LincaEditRoute()),
+                onClickItem: () => context.router.push(
+                  LincaEditRoute(
+                    userProfile: state.userProfile,
+                  ),
+                ),
               ),
               MyPageItem(
                 title: context.l10n.obtained_badges_title,

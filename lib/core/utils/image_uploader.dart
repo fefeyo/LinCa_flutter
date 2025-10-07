@@ -1,0 +1,47 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+
+Future<String?> pickCompressAndUploadImage(String uid) async {
+  try {
+    // 画像を選択
+    final XFile? pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile == null) {
+      return null;
+    }
+    final File originalFile = File(pickedFile.path);
+    // 2. 一時ディレクトリへ圧縮
+    final Directory tempDir = await getTemporaryDirectory();
+    final String targetPath = '${tempDir.path}/profile.jpg';
+
+    final XFile? compressedFile = await FlutterImageCompress.compressAndGetFile(
+      originalFile.path,
+      targetPath,
+      quality: 75, // 0〜100（小さいほど圧縮される）
+      minWidth: 600, // サイズ調整（任意）
+      minHeight: 600,
+    );
+
+    if (compressedFile == null) throw Exception('Image compression failed');
+
+    // 3. Firebase Storage にアップロード
+    final Reference storageRef =
+        FirebaseStorage.instance.ref().child('users/$uid/profile.jpg');
+
+    await storageRef.putFile(
+      File(compressedFile.path),
+      SettableMetadata(contentType: 'image/jpeg'),
+    );
+
+    // 4. ダウンロードURLを取得
+    final String downloadUrl = await storageRef.getDownloadURL();
+    return downloadUrl;
+  } catch (e) {
+    print('❌ Error uploading image: $e');
+    return null;
+  }
+}

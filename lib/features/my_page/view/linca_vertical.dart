@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/models/linca_event.dart';
 import 'package:linca_otaku_support/core/models/user_profile.dart';
 import 'package:linca_otaku_support/core/network/model/group.dart';
+import 'package:linca_otaku_support/core/network/model/linca_badge.dart';
+import 'package:linca_otaku_support/core/network/model/participation_info.dart';
+import 'package:linca_otaku_support/core/network/providers.dart';
 import 'package:linca_otaku_support/core/utils/color_extension.dart';
+import 'package:linca_otaku_support/core/widgets/event/event_card.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/utils/context_extension.dart';
@@ -29,9 +34,99 @@ class LincaVertical extends HookConsumerWidget {
     final Color backgroundColor = context.theme.brightness == Brightness.light
         ? context.colorScheme.surface
         : context.colorScheme.surfaceContainer;
+    final Map<LincaEvent, ParticipationInfo> myEvents =
+        ref.watch(participationControllerProvider).value ??
+            <LincaEvent, ParticipationInfo>{};
+
+    List<Widget> buildUpcomingEvent() {
+      if (!isFullScreen) return <Widget>[];
+      final DateTime now = DateTime.now();
+
+      // 未来のイベントだけを抽出し、開催日時でソートして最も近いものを取得
+      final List<LincaEvent> upcomingEvent = myEvents.keys
+          .where((LincaEvent event) =>
+              event.event.date != null && event.event.date!.isAfter(now))
+          .toList()
+        ..sort((LincaEvent a, LincaEvent b) =>
+            a.event.date!.compareTo(b.event.date!));
+
+      final LincaEvent? nextEvent =
+          upcomingEvent.isNotEmpty ? upcomingEvent.first : null;
+      if (nextEvent != null) {
+        return <Widget>[
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                '直近の参加予定イベント',
+                style: context.textTheme.titleLarge,
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: EventCard(lincaEvent: nextEvent),
+          ),
+          const SizedBox(height: 16),
+        ];
+      } else {
+        return <Widget>[];
+      }
+    }
+
+    Widget buildSnsAccounts() {
+      if (!isFullScreen) return const SizedBox.shrink();
+      const double iconSize = 32;
+      return Row(
+        children: <Widget>[
+          Expanded(
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () => launchUrl(
+                  Uri.parse('https://x.com/nigafefe')),
+              child: Assets.icons.x.svg(
+                width: iconSize,
+                height: iconSize,
+                colorFilter: const ColorFilter.mode(
+                    Colors.black, BlendMode.srcIn),
+              ),
+            ),
+          ),
+          Expanded(
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () => launchUrl(Uri.parse(
+                  'https://instagram.com/your_handle')),
+              child: Assets.icons.instagram.svg(
+                width: iconSize,
+                height: iconSize,
+                colorFilter: const ColorFilter.mode(
+                    Color(0xFFFF0069), BlendMode.srcIn),
+              ),
+            ),
+          ),
+          Expanded(
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () => launchUrl(
+                  Uri.parse(
+                      'https://bsky.app/profile/your_handle'),
+                  mode: LaunchMode.externalApplication),
+              child: Assets.icons.bluesky.svg(
+                width: iconSize,
+                height: iconSize,
+                colorFilter: const ColorFilter.mode(
+                    Color(0xFF0285FF), BlendMode.srcIn),
+              ),
+            ),
+          ),
+        ],
+      );
+    }
 
     Widget buildCard() {
-      const double iconSize = 32;
       const double badgeSize = 30;
 
       return Card(
@@ -72,7 +167,7 @@ class LincaVertical extends HookConsumerWidget {
                       const SizedBox(height: 8),
                       Text(
                         userProfile.user.displayName,
-                        style: context.textTheme.titleLarge?.copyWith(
+                        style: context.textTheme.headlineSmall?.copyWith(
                           fontWeight: FontWeight.w700,
                         ),
                         maxLines: 1,
@@ -80,6 +175,7 @@ class LincaVertical extends HookConsumerWidget {
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 16),
+                      // 推しグループ
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             vertical: 0, horizontal: 16),
@@ -105,14 +201,15 @@ class LincaVertical extends HookConsumerWidget {
                               .toList(),
                         ),
                       ),
+                      // 自己紹介
                       if (userProfile.user.bio.isNotEmpty) ...<Widget>[
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 16),
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 0, horizontal: 16),
                           child: Text(
                             userProfile.user.bio,
-                            style: Theme.of(context).textTheme.bodyMedium,
+                            style: Theme.of(context).textTheme.titleMedium,
                             maxLines: isFullScreen ? null : 2,
                             overflow:
                                 isFullScreen ? null : TextOverflow.ellipsis,
@@ -120,53 +217,12 @@ class LincaVertical extends HookConsumerWidget {
                           ),
                         ),
                       ],
-                      if (!isFullScreen) const SizedBox(height: 16),
-                      if (isFullScreen)
-                        Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: GestureDetector(
-                                behavior: HitTestBehavior.opaque,
-                                onTap: () => launchUrl(
-                                    Uri.parse('https://x.com/nigafefe')),
-                                child: Assets.icons.x.svg(
-                                  width: iconSize,
-                                  height: iconSize,
-                                  colorFilter: const ColorFilter.mode(
-                                      Colors.black, BlendMode.srcIn),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: GestureDetector(
-                                behavior: HitTestBehavior.opaque,
-                                onTap: () => launchUrl(Uri.parse(
-                                    'https://instagram.com/your_handle')),
-                                child: Assets.icons.instagram.svg(
-                                  width: iconSize,
-                                  height: iconSize,
-                                  colorFilter: const ColorFilter.mode(
-                                      Color(0xFFFF0069), BlendMode.srcIn),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: GestureDetector(
-                                behavior: HitTestBehavior.opaque,
-                                onTap: () => launchUrl(
-                                    Uri.parse(
-                                        'https://bsky.app/profile/your_handle'),
-                                    mode: LaunchMode.externalApplication),
-                                child: Assets.icons.bluesky.svg(
-                                  width: iconSize,
-                                  height: iconSize,
-                                  colorFilter: const ColorFilter.mode(
-                                      Color(0xFF0285FF), BlendMode.srcIn),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                      const SizedBox(height: 32),
+
+                      ...buildUpcomingEvent(),
+
+                      // Xアカウント、Instagramアカウント、Blueskyアカウント
+                      buildSnsAccounts(),
                     ],
                   ),
                 ],
@@ -193,8 +249,11 @@ class LincaVertical extends HookConsumerWidget {
                       )
                     ],
                   ),
-                  child: Image(
-                    image: AssetImage(Assets.images.userIcon.path),
+                  child: CircleAvatar(
+                    backgroundImage:
+                        userProfile.user.photoUrl.isNotEmpty == true
+                            ? NetworkImage(userProfile.user.photoUrl)
+                            : AssetImage(Assets.images.userIcon.path),
                   ),
                 ),
               ),
@@ -205,31 +264,17 @@ class LincaVertical extends HookConsumerWidget {
               top: 8,
               right: 8,
               child: Row(
-                children: <Widget>[
-                  SizedBox(
-                    width: badgeSize,
-                    height: badgeSize,
-                    child: Image(
-                      image: AssetImage(Assets.images.userIcon.path),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  SizedBox(
-                    width: badgeSize,
-                    height: badgeSize,
-                    child: Image(
-                      image: AssetImage(Assets.images.userIcon.path),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  SizedBox(
-                    width: badgeSize,
-                    height: badgeSize,
-                    child: Image(
-                      image: AssetImage(Assets.images.userIcon.path),
-                    ),
-                  ),
-                ],
+                children: userProfile.favoriteBadges
+                    .map(
+                      (LincaBadge badge) => SizedBox(
+                        width: badgeSize,
+                        height: badgeSize,
+                        child: CircleAvatar(
+                          backgroundImage: NetworkImage(badge.iconUrl),
+                        ),
+                      ),
+                    )
+                    .toList(),
               ),
             ),
           ],

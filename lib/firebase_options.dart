@@ -63,6 +63,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '630270810691',
     projectId: 'linca-4202a',
     storageBucket: 'linca-4202a.firebasestorage.app',
+    androidClientId: '630270810691-o1qo7tid48c0rj66bga3gp787fgadqne.apps.googleusercontent.com',
+    iosClientId: '630270810691-mo60isvre5hc52lu4p9rq548q0jf31d2.apps.googleusercontent.com',
     iosBundleId: 'com.fefeyo.linca',
   );
+
 }
