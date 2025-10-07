@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
@@ -136,7 +137,7 @@ class EventDetailPage extends HookConsumerWidget {
                 flexibleSpace: FlexibleSpaceBar(
                   background: Image(
                     image: lincaEvent.event.imageUrl.isNotEmpty
-                        ? NetworkImage(lincaEvent.event.imageUrl)
+                        ? CachedNetworkImageProvider(lincaEvent.event.imageUrl)
                         : AssetImage(Assets.images.defaultLiveBackground.path),
                     fit: BoxFit.cover,
                   ),

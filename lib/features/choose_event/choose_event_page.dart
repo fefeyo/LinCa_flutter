@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/network/model/participation_info.dart';
 
 import '../../core/models/filter_settings.dart';
 import '../../core/models/linca_event.dart';
+import '../../core/network/providers.dart';
 import '../../core/widgets/bottom_sheet/event_sort_bottom_sheet.dart';
 import '../../core/widgets/event/event_card.dart';
 import 'data/choose_event_state.dart';
@@ -21,6 +23,9 @@ class ChooseEventPage extends HookConsumerWidget {
         ref.read(chooseEventViewModelProvider.notifier);
     final ValueNotifier<bool> isSearching = useState(false);
     final TextEditingController searchController = useTextEditingController();
+    final Map<LincaEvent, ParticipationInfo> participations =
+        ref.watch(participationControllerProvider).value ??
+            <LincaEvent, ParticipationInfo>{};
 
     return Scaffold(
       appBar: AppBar(
@@ -70,10 +75,14 @@ class ChooseEventPage extends HookConsumerWidget {
           itemCount: state.sortedEvents.length,
           itemBuilder: (BuildContext context, int index) {
             final LincaEvent event = state.sortedEvents[index];
-            return EventCard(lincaEvent: event);
+            final ParticipationInfo? participationInfo = participations[event];
+            return EventCard(
+              lincaEvent: event,
+              participationInfo: participationInfo,
+            );
           },
           separatorBuilder: (BuildContext context, int index) =>
-              const SizedBox(height: 4),
+              const SizedBox(height: 12),
         ),
       ),
     );

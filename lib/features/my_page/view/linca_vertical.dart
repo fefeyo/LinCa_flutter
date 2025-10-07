@@ -68,7 +68,10 @@ class LincaVertical extends HookConsumerWidget {
           const SizedBox(height: 4),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: EventCard(lincaEvent: nextEvent),
+            child: EventCard(
+              lincaEvent: nextEvent,
+              participationInfo: myEvents[nextEvent],
+            ),
           ),
           const SizedBox(height: 16),
         ];

@@ -43,14 +43,14 @@ class TradedLincaListPage extends HookConsumerWidget {
           : Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                children: [
+                children: <Widget>[
                   Text(
-                    'QRコードでLinCaを交換しよう！',
+                    context.l10n.traded_linca_list_empty_title,
                     style: context.textTheme.titleMedium,
                   ),
                   TextButton(
                     onPressed: () => MyQRBottomSheet.show(context),
-                    child: Text('マイQRコード表示'),
+                    child: Text(context.l10n.traded_linca_list_empty_button),
                   )
                 ],
               ),
