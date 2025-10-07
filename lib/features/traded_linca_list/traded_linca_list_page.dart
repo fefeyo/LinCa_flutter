@@ -3,6 +3,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/constants/app_constants.dart';
 import 'package:linca_otaku_support/core/models/user_profile.dart';
+import 'package:linca_otaku_support/core/utils/context_extension.dart';
+import 'package:linca_otaku_support/core/widgets/bottom_sheet/my_qr_bottom_sheet.dart';
 import 'package:linca_otaku_support/features/my_page/view/linca_vertical.dart';
 
 import '../../core/router/app_router.gr.dart';
@@ -19,24 +21,40 @@ class TradedLincaListPage extends HookConsumerWidget {
         ref.watch(tradedLincaListViewModelProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('交換済みLinCaリスト')),
-      body: ListView.builder(
-        itemCount: state.friends.length,
-        itemBuilder: (BuildContext context, int index) {
-          final UserProfile userProfile = state.friends[index];
-          return LincaVertical(
-            userProfile: userProfile,
-            animationTag: AppConstants.heroTagLincaCardFriend,
-            onTap: (UserProfile userProfile, String animationTag) =>
-                context.router.push(
-              LincaDetailRoute(
-                userProfile: userProfile,
-                animationTag: animationTag,
+      appBar: AppBar(title: Text(context.l10n.traded_linca_list_title)),
+      body: state.friends.isNotEmpty
+          ? ListView.builder(
+              itemCount: state.friends.length,
+              itemBuilder: (BuildContext context, int index) {
+                final UserProfile userProfile = state.friends[index];
+                return LincaVertical(
+                  userProfile: userProfile,
+                  animationTag: AppConstants.heroTagLincaCardFriend,
+                  onTap: (UserProfile userProfile, String animationTag) =>
+                      context.router.push(
+                    LincaDetailRoute(
+                      userProfile: userProfile,
+                      animationTag: animationTag,
+                    ),
+                  ),
+                );
+              },
+            )
+          : Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'QRコードでLinCaを交換しよう！',
+                    style: context.textTheme.titleMedium,
+                  ),
+                  TextButton(
+                    onPressed: () => MyQRBottomSheet.show(context),
+                    child: Text('マイQRコード表示'),
+                  )
+                ],
               ),
             ),
-          );
-        },
-      ),
     );
   }
 }

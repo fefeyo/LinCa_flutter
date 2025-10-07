@@ -108,5 +108,39 @@
     }
   },
   "common_save": "保存",
-  "event_detail_memo_hint": "このイベントに関するメモを自由に書こう！"
+  "event_detail_memo_hint": "このイベントに関するメモを自由に書こう！",
+  "traded_linca_list_empty_title": "QRコードでLinCaを交換しよう！",
+  "traded_linca_list_empty_button": "マイQRコード表示",
+  "latest_participate_upcoming_event": "直近の参加予定イベント",
+  "sns_scheme_x": "https://x.com/{user_id}",
+  "@sns_scheme_x": {
+    "placeholders": {
+      "user_id": {
+        "type": "String"
+      }
+    }
+  },
+  "sns_scheme_instagram": "https://instagram.com/{user_id}",
+  "@sns_scheme_instagram": {
+    "placeholders": {
+      "user_id": {
+        "type": "String"
+      }
+    }
+  },
+  "sns_scheme_bluesky": "https://bsky.app/profile/{user_id}",
+  "@sns_scheme_bluesky": {
+    "placeholders": {
+      "user_id": {
+        "type": "String"
+      }
+    }
+  },
+  "linca_edit_success_save": "保存に成功しました",
+  "linca_edit_label_nickname": "ニックネームを設定しよう",
+  "linca_edit_label_favorite_group": "推しグループ",
+  "linca_edit_label_bio": "自己紹介",
+  "linca_edit_label_user_id_x": "xアカウント名",
+  "linca_edit_label_user_id_instagram": "instagramアカウント名",
+  "linca_edit_label_user_id_bluesky": "blueskyアカウント名"
 }

@@ -21,15 +21,8 @@ class ParticipationController
     participationRepository = ref.read(participationRepositoryProvider);
     final List<LincaEvent> events =
         ref.watch(eventControllerProvider).value ?? <LincaEvent>[];
-    final SharedPreferences preferences = await SharedPreferences.getInstance();
-    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    List<ParticipationInfo> participationInfos = await getParticipations();
-    if (preferences.getString(AppConstants.participationVersionKey) ==
-        packageInfo.version) {
-      participationInfos = await fetchParticipations();
-      await preferences.setString(
-          AppConstants.participationVersionKey, packageInfo.version);
-    }
+    final List<ParticipationInfo> participationInfos =
+        await fetchParticipations();
     final Map<LincaEvent, ParticipationInfo> myEvents =
         <LincaEvent, ParticipationInfo>{};
     for (final ParticipationInfo participation in participationInfos) {

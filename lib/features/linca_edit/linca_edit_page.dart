@@ -74,8 +74,8 @@ class LincaEditPage extends HookConsumerWidget {
       await userController.updateUserData(user);
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('保存に成功しました'),
+          SnackBar(
+            content: Text(context.l10n.linca_edit_success_save),
           ),
         );
         context.router.pop();
@@ -84,7 +84,7 @@ class LincaEditPage extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('マイLinCa編集'),
+        title: Text(context.l10n.edit_my_linca_title),
         actions: <Widget>[
           IconButton(onPressed: updateUserData, icon: const Icon(Icons.save))
         ],
@@ -147,8 +147,8 @@ class LincaEditPage extends HookConsumerWidget {
                     child: TextField(
                       controller: displayNameController,
                       style: context.textTheme.titleMedium,
-                      decoration: const InputDecoration(
-                        labelText: 'ニックネーム',
+                      decoration: InputDecoration(
+                        labelText: context.l10n.linca_edit_label_nickname,
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -159,7 +159,7 @@ class LincaEditPage extends HookConsumerWidget {
                 height: 32,
               ),
               Text(
-                '推しグループ',
+                context.l10n.linca_edit_label_favorite_group,
                 style: context.textTheme.titleMedium,
               ),
               const SizedBox(
@@ -199,9 +199,9 @@ class LincaEditPage extends HookConsumerWidget {
                 controller: bioController,
                 style: context.textTheme.titleMedium,
                 maxLines: 10,
-                decoration: const InputDecoration(
-                  labelText: '自己紹介',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: context.l10n.linca_edit_label_bio,
+                  border: const OutlineInputBorder(),
                 ),
               ),
               const SizedBox(
@@ -210,9 +210,9 @@ class LincaEditPage extends HookConsumerWidget {
               TextField(
                 controller: xController,
                 style: context.textTheme.titleMedium,
-                decoration: const InputDecoration(
-                  labelText: 'xアカウント名',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: context.l10n.linca_edit_label_user_id_x,
+                  border: const OutlineInputBorder(),
                 ),
               ),
               const SizedBox(
@@ -221,9 +221,9 @@ class LincaEditPage extends HookConsumerWidget {
               TextField(
                 controller: instagramController,
                 style: context.textTheme.titleMedium,
-                decoration: const InputDecoration(
-                  labelText: 'instagramアカウント名',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: context.l10n.linca_edit_label_user_id_instagram,
+                  border: const OutlineInputBorder(),
                 ),
               ),
               const SizedBox(
@@ -232,9 +232,9 @@ class LincaEditPage extends HookConsumerWidget {
               TextField(
                 controller: blueskyController,
                 style: context.textTheme.titleMedium,
-                decoration: const InputDecoration(
-                  labelText: 'blueskyアカウント名',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: context.l10n.linca_edit_label_user_id_bluesky,
+                  border: const OutlineInputBorder(),
                 ),
               ),
               const SizedBox(

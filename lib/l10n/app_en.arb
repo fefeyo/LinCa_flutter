@@ -108,5 +108,39 @@
     }
   },
   "common_save": "Save",
-  "event_detail_memo_hint": ""
+  "event_detail_memo_hint": "Memo here",
+  "traded_linca_list_empty_title": "Let's trade LinCa using QR!",
+  "traded_linca_list_empty_button": "Show my QR code",
+  "latest_participate_upcoming_event": "Latest participate upcoming event",
+  "sns_scheme_x": "https://x.com/{user_id}",
+  "@sns_scheme_x": {
+    "placeholders": {
+      "user_id": {
+        "type": "String"
+      }
+    }
+  },
+  "sns_scheme_instagram": "https://instagram.com/{user_id}",
+  "@sns_scheme_instagram": {
+    "placeholders": {
+      "user_id": {
+        "type": "String"
+      }
+    }
+  },
+  "sns_scheme_bluesky": "https://bsky.app/profile/{user_id}",
+  "@sns_scheme_bluesky": {
+    "placeholders": {
+      "user_id": {
+        "type": "String"
+      }
+    }
+  },
+  "linca_edit_success_save": "linca_edit_success_save",
+  "linca_edit_label_nickname": "linca_edit_label_nickname",
+  "linca_edit_label_favorite_group": "linca_edit_label_favorite_group",
+  "linca_edit_label_bio": "linca_edit_label_bio",
+  "linca_edit_label_user_id_x": "linca_edit_label_user_id_x",
+  "linca_edit_label_user_id_instagram": "linca_edit_label_user_id_instagram",
+  "linca_edit_label_user_id_bluesky": "linca_edit_label_user_id_bluesky"
 }
