@@ -37,7 +37,8 @@ class EventController extends AsyncNotifier<List<LincaEvent>> {
     //       AppConstants.eventVersionKey, packageInfo.version);
     // }
 
-    final List<LincaEvent> lincaEvents = await Future.wait(events.map((Event event) async {
+    final List<LincaEvent> lincaEvents =
+        await Future.wait(events.map((Event event) async {
       // タグ一覧を取得
       final List<Tag> tags = await Future.wait(
         event.tagIds.map((String tagId) => tagRepository.getTagById(tagId)),

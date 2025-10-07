@@ -9,6 +9,7 @@ import 'package:linca_otaku_support/core/network/providers.dart';
 import 'package:linca_otaku_support/core/utils/color_extension.dart';
 import 'package:linca_otaku_support/core/widgets/event/event_card.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../../core/utils/context_extension.dart';
 import '../../../core/asset_gen/assets.gen.dart';
@@ -59,15 +60,18 @@ class LincaVertical extends HookConsumerWidget {
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                '直近の参加予定イベント',
-                style: context.textTheme.titleLarge,
+                context.l10n.latest_participate_upcoming_event,
+                style: context.textTheme.titleMedium,
               ),
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 4),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: EventCard(lincaEvent: nextEvent),
+            child: EventCard(
+              lincaEvent: nextEvent,
+              participationInfo: myEvents[nextEvent],
+            ),
           ),
           const SizedBox(height: 16),
         ];
@@ -81,47 +85,62 @@ class LincaVertical extends HookConsumerWidget {
       const double iconSize = 32;
       return Row(
         children: <Widget>[
-          Expanded(
-            child: GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () => launchUrl(
-                  Uri.parse('https://x.com/nigafefe')),
-              child: Assets.icons.x.svg(
-                width: iconSize,
-                height: iconSize,
-                colorFilter: const ColorFilter.mode(
-                    Colors.black, BlendMode.srcIn),
-              ),
-            ),
-          ),
-          Expanded(
-            child: GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () => launchUrl(Uri.parse(
-                  'https://instagram.com/your_handle')),
-              child: Assets.icons.instagram.svg(
-                width: iconSize,
-                height: iconSize,
-                colorFilter: const ColorFilter.mode(
-                    Color(0xFFFF0069), BlendMode.srcIn),
-              ),
-            ),
-          ),
-          Expanded(
-            child: GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () => launchUrl(
-                  Uri.parse(
-                      'https://bsky.app/profile/your_handle'),
-                  mode: LaunchMode.externalApplication),
-              child: Assets.icons.bluesky.svg(
-                width: iconSize,
-                height: iconSize,
-                colorFilter: const ColorFilter.mode(
-                    Color(0xFF0285FF), BlendMode.srcIn),
-              ),
-            ),
-          ),
+          userProfile.user.links['x']?.isNotEmpty == true
+              ? Expanded(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () => launchUrl(
+                      Uri.parse(
+                        context.l10n.sns_scheme_x(userProfile.user.links['x']!),
+                      ),
+                    ),
+                    child: Assets.icons.x.svg(
+                      width: iconSize,
+                      height: iconSize,
+                      colorFilter:
+                          const ColorFilter.mode(Colors.black, BlendMode.srcIn),
+                    ),
+                  ),
+                )
+              : const SizedBox.shrink(),
+          userProfile.user.links['instagram']?.isNotEmpty == true
+              ? Expanded(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () => launchUrl(
+                      Uri.parse(
+                        context.l10n.sns_scheme_instagram(
+                            userProfile.user.links['instagram']!),
+                      ),
+                    ),
+                    child: Assets.icons.instagram.svg(
+                      width: iconSize,
+                      height: iconSize,
+                      colorFilter: const ColorFilter.mode(
+                          Color(0xFFFF0069), BlendMode.srcIn),
+                    ),
+                  ),
+                )
+              : const SizedBox.shrink(),
+          userProfile.user.links['bluesky']?.isNotEmpty == true
+              ? Expanded(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () => launchUrl(
+                        Uri.parse(
+                          context.l10n.sns_scheme_bluesky(
+                              userProfile.user.links['bluesky']!),
+                        ),
+                        mode: LaunchMode.externalApplication),
+                    child: Assets.icons.bluesky.svg(
+                      width: iconSize,
+                      height: iconSize,
+                      colorFilter: const ColorFilter.mode(
+                          Color(0xFF0285FF), BlendMode.srcIn),
+                    ),
+                  ),
+                )
+              : const SizedBox.shrink(),
         ],
       );
     }
@@ -250,10 +269,10 @@ class LincaVertical extends HookConsumerWidget {
                     ],
                   ),
                   child: CircleAvatar(
-                    backgroundImage:
-                        userProfile.user.photoUrl.isNotEmpty == true
-                            ? NetworkImage(userProfile.user.photoUrl)
-                            : AssetImage(Assets.images.userIcon.path),
+                    backgroundImage: userProfile.user.photoUrl.isNotEmpty ==
+                            true
+                        ? CachedNetworkImageProvider(userProfile.user.photoUrl)
+                        : AssetImage(Assets.images.userIcon.path),
                   ),
                 ),
               ),
@@ -270,7 +289,8 @@ class LincaVertical extends HookConsumerWidget {
                         width: badgeSize,
                         height: badgeSize,
                         child: CircleAvatar(
-                          backgroundImage: NetworkImage(badge.iconUrl),
+                          backgroundImage:
+                              CachedNetworkImageProvider(badge.iconUrl),
                         ),
                       ),
                     )
