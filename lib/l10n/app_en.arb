@@ -48,7 +48,8 @@
   "participation_absent": "Absent",
   "participation_planned": "Planned",
   "add_event_title": "Add event",
-  "add_event_select_from_list": "Choose from event list",
+  "add_official_event_select_from_list": "Choose from event list",
+  "add_unofficial_event_select_from_list": "Choose from event list",
   "add_event_create_public": "Create public event",
   "add_event_create_private": "Create private event",
   "filter_search_hint": "Search by keyword",
@@ -142,5 +143,36 @@
   "linca_edit_label_bio": "linca_edit_label_bio",
   "linca_edit_label_user_id_x": "linca_edit_label_user_id_x",
   "linca_edit_label_user_id_instagram": "linca_edit_label_user_id_instagram",
-  "linca_edit_label_user_id_bluesky": "linca_edit_label_user_id_bluesky"
+  "linca_edit_label_user_id_bluesky": "linca_edit_label_user_id_bluesky",
+  "create_public_event_title": "create_public_event_title",
+  "create_private_event_title": "create_private_event_title",
+  "hint_choose_official_event_keyword": "hint_search_keyword",
+  "hint_choose_unofficial_event_keyword": "hint_search_keyword",
+  "title_choose_event": "title_choose_event",
+  "input_create_event_title": "input_create_event_title",
+  "input_create_event_description": "input_create_event_description",
+  "text_create_event_choose_date": "text_create_event_choose_date",
+  "input_create_event_choose_date": "input_create_event_choose_date",
+  "input_create_event_venue": "input_create_event_venue",
+  "input_create_event_event_url": "input_create_event_event_url",
+  "input_create_event_tag": "input_create_event_tag",
+  "text_unofficial_event_organizer": "text_unofficial_event_organizer",
+  "@text_unofficial_event_organizer": {
+    "placeholders": {
+      "organizer": {
+        "type": "String"
+      }
+    }
+  },
+  "text_unofficial_event_description": "text_unofficial_event_description",
+  "event_detail_text_event_code": "event_detail_text_event_code",
+  "@event_detail_text_event_code": {
+    "placeholders": {
+      "eventId": {
+        "type": "String"
+      }
+    }
+  },
+  "event_detail_text_event_code_copy": "event_detail_text_event_code_copy",
+  "event_detail_text_event_code_copied": "event_detail_text_event_code_copied"
 }

@@ -17,7 +17,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  GoogleSignIn.instance.initialize(
+  await GoogleSignIn.instance.initialize(
       serverClientId:
           '630270810691-cavclpg0rs7vr4kgojc93fv0'
               '8ovrssgl.apps.googleusercontent.com');
@@ -29,6 +29,7 @@ void main() async {
   await container.read(tagControllerProvider.future);
   await container.read(venueControllerProvider.future);
   await container.read(eventControllerProvider.future);
+  await container.read(userEventControllerProvider.future);
   await container.read(participationControllerProvider.future);
   await container.read(friendControllerProvider.future);
 

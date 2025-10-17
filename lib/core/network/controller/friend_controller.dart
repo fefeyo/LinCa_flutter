@@ -13,7 +13,7 @@ class FriendController extends AsyncNotifier<List<User>> {
 
   @override
   FutureOr<List<User>> build() async {
-    uid = ref.watch(uidProvider);
+    uid = ref.read(uidProvider);
     if (uid == null) return <User>[];
     friendRepository = ref.read(friendRepositoryProvider);
     return await fetchFriends();

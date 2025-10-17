@@ -7,9 +7,16 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/constants/participation_type.dart';
 import 'package:linca_otaku_support/core/network/controller/participation_controller.dart';
+import 'package:linca_otaku_support/core/network/controller/user_controller.dart';
+import 'package:linca_otaku_support/core/network/model/event_base.dart';
 import 'package:linca_otaku_support/core/network/model/participation_info.dart';
+import 'package:linca_otaku_support/core/network/model/user.dart';
+import 'package:linca_otaku_support/core/utils/event_base_extension.dart';
+import 'package:linca_otaku_support/core/utils/linca_event_extension.dart';
 import 'package:linca_otaku_support/core/utils/participation_type_extension.dart';
+import 'package:linca_otaku_support/features/event_detail/data/event_detail_state.dart';
 import 'package:linca_otaku_support/features/event_detail/view/custom_participation_button.dart';
+import 'package:linca_otaku_support/features/event_detail/view_model/event_detail_view_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/utils/context_extension.dart';
@@ -33,94 +40,36 @@ class EventDetailPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final EventDetailState state = ref.read(eventDetailViewModelProvider);
+    final EventDetailViewModel viewModel =
+        ref.read(eventDetailViewModelProvider.notifier);
     final ParticipationController participationController =
         ref.read(participationControllerProvider.notifier);
     final ValueNotifier<ParticipationType> selectedParticipationType = useState(
         participationInfo?.participationType ?? ParticipationType.onSite);
     final TextEditingController participationMemoController =
         useTextEditingController(text: participationInfo?.participationMemo);
+    final UserController userController =
+        ref.read(userControllerProvider.notifier);
 
     useEffect(() {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+      if (lincaEvent.event is UnOfficialEvent) {
+        final UnOfficialEvent event = lincaEvent.event as UnOfficialEvent;
+        Future<void>.microtask(() async {
+          if (event.createdBy.isNotEmpty) {
+            final User organizerUser =
+                await userController.fetchUserData(userId: event.createdBy);
+            viewModel.updateOrganizerUser(organizerUser);
+          }
+        });
+      }
 
       return () {
         // 戻るときに元に戻す
         SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
       };
     }, const <Object?>[]);
-
-    List<Widget> generateDeleteButtonIfNeeded() {
-      if (participationInfo == null) {
-        return <Widget>[const SizedBox.shrink()];
-      }
-
-      return <Widget>[
-        const SizedBox(
-          height: 60,
-        ),
-        Center(
-          child: ElevatedButton(
-            onPressed: () {
-              participationController.deleteParticipation(
-                lincaEvent,
-                participationInfo!,
-              );
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(context.l10n.snackbar_title_deleted),
-                  ),
-                );
-                context.router.pop();
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 0),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(24),
-              ),
-            ),
-            child: Text(
-              context.l10n.event_detail_delete,
-              style: context.textTheme.titleMedium?.copyWith(
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ),
-      ];
-    }
-
-    List<Widget> buildBadgeAreaIfNeeded() {
-      final List<Widget> widgets = <Widget>[];
-      if (participationInfo == null) return widgets;
-
-      if (lincaEvent.event.date?.isAfter(DateTime.now()) == true) {
-        widgets.add(
-          const ParticipationStatusBadge(
-            text: '参加予定',
-            color: Colors.green,
-          ),
-        );
-        widgets.add(const SizedBox(width: 4));
-
-      }
-
-      widgets.add(
-        ParticipationStatusBadge(
-          text: participationInfo!.participationType!.label(context),
-          color: participationInfo!.participationType!.badgeColor(context),
-        ),
-      );
-
-      widgets.add(const SizedBox(height: 4));
-
-      return <Widget>[
-        Row(children: widgets),
-        const SizedBox(height: 4),
-      ];
-    }
 
     return Scaffold(
       body: Stack(
@@ -136,8 +85,9 @@ class EventDetailPage extends HookConsumerWidget {
                 pinned: true,
                 flexibleSpace: FlexibleSpaceBar(
                   background: Image(
-                    image: lincaEvent.event.imageUrl.isNotEmpty
-                        ? CachedNetworkImageProvider(lincaEvent.event.imageUrl)
+                    image: lincaEvent.event.imageUrlIfOfficial.isNotEmpty
+                        ? CachedNetworkImageProvider(
+                            lincaEvent.event.imageUrlIfOfficial)
                         : AssetImage(Assets.images.defaultLiveBackground.path),
                     fit: BoxFit.cover,
                   ),
@@ -150,13 +100,9 @@ class EventDetailPage extends HookConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      ...buildBadgeAreaIfNeeded(),
-                      Text(
-                        lincaEvent.group.name,
-                        style: context.textTheme.titleMedium
-                            ?.copyWith(color: Colors.grey),
-                      ),
-                      const SizedBox(height: 4),
+                      ..._buildBadgeAreaIfNeeded(context: context),
+                      ..._buildOrganizerArea(
+                          context: context, user: state.organizerUser),
                       Text(
                         lincaEvent.event.title,
                         style: context.textTheme.headlineMedium,
@@ -172,7 +118,7 @@ class EventDetailPage extends HookConsumerWidget {
                           IconButton(
                             onPressed: () {
                               final Uri url = Uri.parse(context.l10n
-                                  .map_launch_url(lincaEvent.venue.name));
+                                  .map_launch_url(lincaEvent.venueName));
                               launchUrl(url,
                                   mode: LaunchMode.externalApplication);
                             },
@@ -180,76 +126,27 @@ class EventDetailPage extends HookConsumerWidget {
                           ),
                           Expanded(
                             child: Text(
-                              lincaEvent.venue.name,
+                              lincaEvent.venueName,
                               style: context.textTheme.headlineSmall,
                             ),
                           ),
                         ],
                       ),
                       const SizedBox(height: 8),
-                      RichText(
-                        text: TextSpan(
-                          text: lincaEvent.event.url,
-                          style: context.textTheme.titleMedium?.copyWith(
-                            color: Colors.blue,
-                            decoration: TextDecoration.underline,
-                          ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () async {
-                              await launchUrl(Uri.parse(lincaEvent.event.url));
-                            },
-                        ),
-                      ),
-                      const SizedBox(height: 8),
+                      ..._buildUrlAreaIfNeeded(context: context),
+                      ..._buildDescriptionAreaIfNeeded(context: context),
+                      ..._buildEventCodeAreaIfNeeded(context: context),
                       Container(
                         decoration: BoxDecoration(
                           color: context.colorScheme.secondaryContainer,
                           borderRadius: BorderRadius.circular(24),
                         ),
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: CustomParticipationButton(
-                                participationType: ParticipationType.onSite,
-                                selectedParticipationType:
-                                    selectedParticipationType.value,
-                                iconData: Icons.place,
-                                onClick: () => selectedParticipationType.value =
-                                    ParticipationType.onSite,
-                              ),
-                            ),
-                            Expanded(
-                              child: CustomParticipationButton(
-                                participationType:
-                                    ParticipationType.liveViewing,
-                                selectedParticipationType:
-                                    selectedParticipationType.value,
-                                iconData: Icons.directions_bus,
-                                onClick: () => selectedParticipationType.value =
-                                    ParticipationType.liveViewing,
-                              ),
-                            ),
-                            Expanded(
-                              child: CustomParticipationButton(
-                                participationType: ParticipationType.streaming,
-                                selectedParticipationType:
-                                    selectedParticipationType.value,
-                                iconData: Icons.bookmark,
-                                onClick: () => selectedParticipationType.value =
-                                    ParticipationType.streaming,
-                              ),
-                            ),
-                            Expanded(
-                              child: CustomParticipationButton(
-                                participationType: ParticipationType.absent,
-                                selectedParticipationType:
-                                    selectedParticipationType.value,
-                                iconData: Icons.notifications_off,
-                                onClick: () => selectedParticipationType.value =
-                                    ParticipationType.absent,
-                              ),
-                            ),
-                          ],
+                        child: _buildButtonArea(
+                          selectedParticipationType:
+                              selectedParticipationType.value,
+                          onClickButton: (ParticipationType participationType) {
+                            selectedParticipationType.value = participationType;
+                          },
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -294,7 +191,23 @@ class EventDetailPage extends HookConsumerWidget {
                           ),
                         ),
                       ),
-                      ...generateDeleteButtonIfNeeded(),
+                      ..._generateDeleteButtonIfNeeded(
+                          context: context,
+                          onClickDelete: () {
+                            participationController.deleteParticipation(
+                              lincaEvent,
+                              participationInfo!,
+                            );
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content:
+                                      Text(context.l10n.snackbar_title_deleted),
+                                ),
+                              );
+                              context.router.pop();
+                            }
+                          }),
                     ],
                   ),
                 ),
@@ -318,8 +231,8 @@ class EventDetailPage extends HookConsumerWidget {
             child: ElevatedButton(
               onPressed: () async {
                 await participationController.createParticipation(
-                  lincaEvent,
-                  ParticipationInfo(
+                  lincaEvent: lincaEvent,
+                  participation: ParticipationInfo(
                     eventId: lincaEvent.event.id,
                     participationType: selectedParticipationType.value,
                     participationMemo: participationMemoController.text,
@@ -360,5 +273,237 @@ class EventDetailPage extends HookConsumerWidget {
         ],
       ),
     );
+  }
+
+  List<Widget> _buildBadgeAreaIfNeeded({
+    required BuildContext context,
+  }) {
+    final List<Widget> widgets = <Widget>[];
+    if (participationInfo == null) return widgets;
+
+    if (lincaEvent.event.date?.isAfter(DateTime.now()) == true) {
+      widgets.add(
+        ParticipationStatusBadge(
+          text: context.l10n.participation_planned,
+          color: Colors.green,
+        ),
+      );
+      widgets.add(const SizedBox(width: 4));
+    }
+
+    widgets.add(
+      ParticipationStatusBadge(
+        text: participationInfo!.participationType!.label(context),
+        color: participationInfo!.participationType!.badgeColor(context),
+      ),
+    );
+
+    widgets.add(const SizedBox(height: 4));
+
+    return <Widget>[
+      Row(children: widgets),
+      const SizedBox(height: 4),
+    ];
+  }
+
+  List<Widget> _buildOrganizerArea({
+    required BuildContext context,
+    required User? user,
+  }) {
+    final String organizerName;
+    switch (lincaEvent.event) {
+      case OfficialEvent():
+        {
+          organizerName = lincaEvent.group.name;
+          break;
+        }
+      case UnOfficialEvent():
+        {
+          if (user == null) return <Widget>[];
+          organizerName =
+              context.l10n.text_unofficial_event_organizer(user.displayName);
+          break;
+        }
+    }
+
+    if (context.mounted) {
+      return <Widget>[
+        Text(
+          organizerName,
+          style: context.textTheme.titleMedium?.copyWith(color: Colors.grey),
+        ),
+        const SizedBox(height: 4),
+      ];
+    } else {
+      return <Widget>[];
+    }
+  }
+
+  List<Widget> _buildUrlAreaIfNeeded({
+    required BuildContext context,
+  }) {
+    if (lincaEvent.event.url.isEmpty) return <Widget>[];
+
+    return <Widget>[
+      RichText(
+        text: TextSpan(
+          text: lincaEvent.event.url,
+          style: context.textTheme.titleMedium?.copyWith(
+            color: Colors.blue,
+            decoration: TextDecoration.underline,
+          ),
+          recognizer: TapGestureRecognizer()
+            ..onTap = () async {
+              await launchUrl(Uri.parse(lincaEvent.event.url));
+            },
+        ),
+      ),
+      const SizedBox(height: 8),
+    ];
+  }
+
+  Widget _buildButtonArea({
+    required ParticipationType selectedParticipationType,
+    required Function(ParticipationType participationType) onClickButton,
+  }) {
+    final List<Widget> buttons = <Widget>[];
+    buttons.add(
+      Expanded(
+        child: CustomParticipationButton(
+          participationType: ParticipationType.onSite,
+          selectedParticipationType: selectedParticipationType,
+          iconData: Icons.place,
+          onClick: () => onClickButton(ParticipationType.onSite),
+        ),
+      ),
+    );
+    if (lincaEvent.event is OfficialEvent) {
+      buttons.add(
+        Expanded(
+          child: CustomParticipationButton(
+            participationType: ParticipationType.liveViewing,
+            selectedParticipationType: selectedParticipationType,
+            iconData: Icons.directions_bus,
+            onClick: () => onClickButton(ParticipationType.liveViewing),
+          ),
+        ),
+      );
+      buttons.add(
+        Expanded(
+          child: CustomParticipationButton(
+            participationType: ParticipationType.streaming,
+            selectedParticipationType: selectedParticipationType,
+            iconData: Icons.bookmark,
+            onClick: () => onClickButton(ParticipationType.streaming),
+          ),
+        ),
+      );
+    }
+
+    buttons.add(
+      Expanded(
+        child: CustomParticipationButton(
+          participationType: ParticipationType.absent,
+          selectedParticipationType: selectedParticipationType,
+          iconData: Icons.notifications_off,
+          onClick: () => onClickButton(ParticipationType.absent),
+        ),
+      ),
+    );
+
+    return Row(children: buttons);
+  }
+
+  List<Widget> _generateDeleteButtonIfNeeded({
+    required BuildContext context,
+    required Function() onClickDelete,
+  }) {
+    if (participationInfo == null) {
+      return <Widget>[const SizedBox.shrink()];
+    }
+
+    return <Widget>[
+      const SizedBox(
+        height: 60,
+      ),
+      Center(
+        child: ElevatedButton(
+          onPressed: onClickDelete,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.red,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24),
+            ),
+          ),
+          child: Text(
+            context.l10n.event_detail_delete,
+            style: context.textTheme.titleMedium?.copyWith(
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    ];
+  }
+
+  List<Widget> _buildDescriptionAreaIfNeeded({
+    required BuildContext context,
+  }) {
+    if (lincaEvent.event is OfficialEvent) return <Widget>[];
+    final UnOfficialEvent userEvent = lincaEvent.event as UnOfficialEvent;
+
+    return <Widget>[
+      Text(
+        context.l10n.text_unofficial_event_description,
+        style: context.textTheme.headlineSmall,
+      ),
+      const SizedBox(height: 4),
+      Text(
+        userEvent.desrcription,
+        style: context.textTheme.titleMedium,
+      ),
+      const SizedBox(height: 8),
+    ];
+  }
+
+  List<Widget> _buildEventCodeAreaIfNeeded({
+    required BuildContext context,
+  }) {
+    if (lincaEvent.event is OfficialEvent) return <Widget>[];
+    final UnOfficialEvent userEvent = lincaEvent.event as UnOfficialEvent;
+
+    return <Widget>[
+      Row(
+        children: <Widget>[
+          Expanded(
+            child: Text(
+              context.l10n.event_detail_text_event_code(userEvent.id),
+              style: context.textTheme.headlineSmall,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          IconButton(
+            tooltip: context.l10n.event_detail_text_event_code_copy,
+            icon: const Icon(Icons.copy, size: 20),
+            onPressed: () async {
+              await Clipboard.setData(ClipboardData(text: userEvent.id));
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content:
+                        Text(context.l10n.event_detail_text_event_code_copied),
+                    behavior: SnackBarBehavior.floating,
+                    duration: const Duration(seconds: 1),
+                    backgroundColor: context.colorScheme.secondaryContainer,
+                  ),
+                );
+              }
+            },
+          ),
+        ],
+      ),
+      const SizedBox(height: 8),
+    ];
   }
 }
