@@ -48,7 +48,8 @@
   "participation_absent": "不参加",
   "participation_planned": "参加予定",
   "add_event_title": "イベントを追加する",
-  "add_event_select_from_list": "イベント一覧から選択",
+  "add_official_event_select_from_list": "公式イベント一覧から選択",
+  "add_unofficial_event_select_from_list": "ユーザーイベント一覧から選択",
   "add_event_create_public": "公開イベントを作成",
   "add_event_create_private": "非公開イベントを作成",
   "filter_search_hint": "キーワードを入力",
@@ -142,5 +143,36 @@
   "linca_edit_label_bio": "自己紹介",
   "linca_edit_label_user_id_x": "xアカウント名",
   "linca_edit_label_user_id_instagram": "instagramアカウント名",
-  "linca_edit_label_user_id_bluesky": "blueskyアカウント名"
+  "linca_edit_label_user_id_bluesky": "blueskyアカウント名",
+  "create_public_event_title": "公開イベント作成",
+  "create_private_event_title": "非公開イベント作成",
+  "hint_choose_official_event_keyword": "キーワードを入力",
+  "hint_choose_unofficial_event_keyword": "キーワードまたはイベントコードを入力",
+  "title_choose_event": "イベント一覧",
+  "input_create_event_title": "イベントタイトル",
+  "input_create_event_description": "イベント概要",
+  "text_create_event_choose_date": "開催日を選択",
+  "input_create_event_choose_date": "日付選択",
+  "input_create_event_venue": "開催場所",
+  "input_create_event_event_url": "イベントURL",
+  "input_create_event_tag": "タグ",
+  "text_unofficial_event_organizer": "主催者：{organizer}",
+  "@text_unofficial_event_organizer": {
+    "placeholders": {
+      "organizer": {
+        "type": "String"
+      }
+    }
+  },
+  "text_unofficial_event_description": "イベント概要",
+  "event_detail_text_event_code": "イベントコード：{eventId}",
+  "@event_detail_text_event_code": {
+    "placeholders": {
+      "eventId": {
+        "type": "String"
+      }
+    }
+  },
+  "event_detail_text_event_code_copy": "コピー",
+  "event_detail_text_event_code_copied": "イベントコードをコピーしました"
 }

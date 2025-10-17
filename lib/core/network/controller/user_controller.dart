@@ -16,12 +16,11 @@ class UserController extends AsyncNotifier<User> {
     uid = ref.watch(uidProvider);
     if (uid == null) return const User();
     userRepository = ref.read(userRepositoryProvider);
-    return await userRepository.getUserData(uid!);
+    return await userRepository.fetchUserData(uid!);
   }
 
-  Future<User> getUserData() async {
-    if (uid == null) return const User();
-    return await userRepository.getUserData(uid!);
+  Future<User> fetchUserData({required String userId}) async {
+    return await userRepository.fetchUserData(userId);
   }
 
   Future<void> updateDisplayName(String displayName) async {

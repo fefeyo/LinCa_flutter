@@ -1,7 +1,9 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/network/controller/participation_controller.dart';
+import 'package:linca_otaku_support/core/network/controller/user_event_controller.dart';
 import 'package:linca_otaku_support/core/network/model/participation_info.dart';
 import 'package:linca_otaku_support/core/network/repository/participation_repository.dart';
+import 'package:linca_otaku_support/core/network/repository/user_event_repository.dart';
 
 import '../auth/providers.dart';
 import '../models/linca_event.dart';
@@ -94,3 +96,12 @@ final Provider<FriendRepository> friendRepositoryProvider =
 final AsyncNotifierProvider<FriendController, List<User>>
     friendControllerProvider =
     AsyncNotifierProvider<FriendController, List<User>>(FriendController.new);
+
+final Provider<UserEventRepository> userEventRepositoryProvider =
+    Provider<UserEventRepository>(
+        (Ref ref) => UserEventRepository(ref.watch(fireStoreProvider)));
+
+final AsyncNotifierProvider<UserEventController, List<LincaEvent>>
+    userEventControllerProvider =
+    AsyncNotifierProvider<UserEventController, List<LincaEvent>>(
+        UserEventController.new);

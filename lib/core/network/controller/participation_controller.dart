@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/models/linca_event.dart';
 import 'package:linca_otaku_support/core/network/model/participation_info.dart';
@@ -18,16 +19,19 @@ class ParticipationController
     participationRepository = ref.read(participationRepositoryProvider);
     final List<LincaEvent> events =
         ref.watch(eventControllerProvider).value ?? <LincaEvent>[];
+    final List<LincaEvent> userEvents =
+        ref.watch(userEventControllerProvider).value ?? <LincaEvent>[];
     final List<ParticipationInfo> participationInfos =
         await fetchParticipations();
     final Map<LincaEvent, ParticipationInfo> myEvents =
         <LincaEvent, ParticipationInfo>{};
     for (final ParticipationInfo participation in participationInfos) {
-      final LincaEvent event = events.firstWhere(
-        (LincaEvent event) => event.event.id == participation.eventId,
-        orElse: () => const LincaEvent(),
-      );
-      if (event.event.id.isNotEmpty) {
+      LincaEvent? event = events.firstWhereOrNull(
+          (LincaEvent event) => event.event.id == participation.eventId);
+      event ??= userEvents.firstWhereOrNull(
+          (LincaEvent event) => event.event.id == participation.eventId);
+
+      if (event != null) {
         myEvents[event] = participation;
       }
     }
@@ -35,8 +39,10 @@ class ParticipationController
     return myEvents.sort();
   }
 
-  Future<void> createParticipation(
-      LincaEvent lincaEvent, ParticipationInfo participation) async {
+  Future<void> createParticipation({
+    required LincaEvent lincaEvent,
+    required ParticipationInfo participation,
+  }) async {
     if (uid == null) return;
     await participationRepository.create(uid!, participation);
 

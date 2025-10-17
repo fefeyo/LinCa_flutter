@@ -5,7 +5,7 @@ import 'package:linca_otaku_support/core/utils/linca_event_extension.dart';
 import 'package:linca_otaku_support/core/utils/sort_items_extension.dart';
 
 import '../../models/linca_event.dart';
-import '../model/event.dart';
+import '../model/event_base.dart';
 import '../model/group.dart';
 import '../model/tag.dart';
 import '../model/venue.dart';
@@ -27,7 +27,7 @@ class EventController extends AsyncNotifier<List<LincaEvent>> {
     tagRepository = ref.read(tagRepositoryProvider);
     venueRepository = ref.read(venueRepositoryProvider);
     groupRepository = ref.read(groupRepositortyProvider);
-    final List<Event> events = await fetchEvents();
+    final List<OfficialEvent> events = await fetchEvents();
     // 一旦イベント一覧は毎回取得
     // if (preferences.getString(AppConstants.eventVersionKey) !=
     //         packageInfo.version ||
@@ -38,7 +38,7 @@ class EventController extends AsyncNotifier<List<LincaEvent>> {
     // }
 
     final List<LincaEvent> lincaEvents =
-        await Future.wait(events.map((Event event) async {
+        await Future.wait(events.map((OfficialEvent event) async {
       // タグ一覧を取得
       final List<Tag> tags = await Future.wait(
         event.tagIds.map((String tagId) => tagRepository.getTagById(tagId)),
@@ -60,7 +60,7 @@ class EventController extends AsyncNotifier<List<LincaEvent>> {
     return lincaEvents.sortWithDisplayOrder(DisplayOrder.newest);
   }
 
-  Future<List<Event>> fetchEvents() => eventRepository.fetchEvents();
+  Future<List<OfficialEvent>> fetchEvents() => eventRepository.fetchEvents();
 
-  Future<List<Event>> getEvents() => eventRepository.getEvents();
+  Future<List<OfficialEvent>> getEvents() => eventRepository.getEvents();
 }

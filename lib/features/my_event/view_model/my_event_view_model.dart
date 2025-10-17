@@ -9,15 +9,11 @@ import '../data/my_event_state.dart';
 final StateNotifierProvider<MyEventViewModel, MyEventState>
     myEventViewModelProvider =
     StateNotifierProvider<MyEventViewModel, MyEventState>((Ref ref) {
-  final AsyncValue<Map<LincaEvent, ParticipationInfo>> myEventsAsync =
-      ref.watch(participationControllerProvider);
+  final Map<LincaEvent, ParticipationInfo> myEvents =
+      ref.watch(participationControllerProvider).value ??
+          <LincaEvent, ParticipationInfo>{};
 
-  return myEventsAsync.when(
-    data: (Map<LincaEvent, ParticipationInfo> events) =>
-        MyEventViewModel(events.sort()),
-    error: (_, __) => MyEventViewModel(<LincaEvent, ParticipationInfo>{}),
-    loading: () => MyEventViewModel(<LincaEvent, ParticipationInfo>{}),
-  );
+  return MyEventViewModel(myEvents.sort());
 });
 
 class MyEventViewModel extends StateNotifier<MyEventState> {

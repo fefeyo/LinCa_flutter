@@ -20,6 +20,8 @@ abstract class Event with _$Event {
     @Default('') String imageUrl,
     @Default(<String>[]) List<String> tagIds,
     @Default('') String createdBy,
+    @Default(true) bool visibility,
+    @JsonKey(fromJson: fromJsonDate, toJson: toJsonDate) DateTime? updatedAt,
   }) = _Event;
 
   factory Event.fromJson(Map<String, dynamic> json) => _$EventFromJson(json);

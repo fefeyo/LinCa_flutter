@@ -34,7 +34,7 @@ class UserRepository {
     });
   }
 
-  Future<User> getUserData(String uid) async {
+  Future<User> fetchUserData(String uid) async {
     final DocumentSnapshot<Map<String, dynamic>> result =
         await fireStore.collection('users').doc(uid).get();
     final Map<String, dynamic>? data = result.data();

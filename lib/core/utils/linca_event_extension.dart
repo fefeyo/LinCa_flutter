@@ -1,7 +1,15 @@
 import 'package:linca_otaku_support/core/models/linca_event.dart';
+import 'package:linca_otaku_support/core/network/model/event_base.dart';
 import 'package:linca_otaku_support/core/network/model/group.dart';
 import 'package:linca_otaku_support/core/network/model/participation_info.dart';
+import 'package:linca_otaku_support/core/utils/event_base_extension.dart';
 import 'package:linca_otaku_support/core/utils/sort_items_extension.dart';
+
+extension LincaEventExtension on LincaEvent {
+  String get venueName => event is OfficialEvent
+      ? venue.name
+      : (event as UnOfficialEvent).venueName;
+}
 
 extension LincaEventsExtension on List<LincaEvent> {
   // キーワードフィルタリング
@@ -10,8 +18,9 @@ extension LincaEventsExtension on List<LincaEvent> {
     final List<String> keywords = keyword.split(' ');
     sortedEvents = where((LincaEvent event) {
       return keywords.any((String keyword) =>
-          event.event.title.contains(keyword) ||
-          event.event.kana.contains(keyword));
+              event.event.title.contains(keyword) ||
+              event.event.kanaIfOfficial.contains(keyword)) ||
+          event.event.id == keyword;
     }).toList();
 
     return sortedEvents;

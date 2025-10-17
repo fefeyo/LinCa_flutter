@@ -1,4 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import '../../../core/network/model/user.dart';
 import '../data/event_detail_state.dart';
 
 final StateNotifierProvider<EventDetailViewModel, EventDetailState>
@@ -8,4 +9,8 @@ final StateNotifierProvider<EventDetailViewModel, EventDetailState>
 
 class EventDetailViewModel extends StateNotifier<EventDetailState> {
   EventDetailViewModel() : super(const EventDetailState());
+
+  void updateOrganizerUser(User organizerUser) {
+    state = state.copyWith(organizerUser: organizerUser);
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:linca_otaku_support/core/constants/event_type.dart';
 
 import '../../../core/router/app_router.gr.dart';
 import '../../../core/utils/context_extension.dart';
@@ -22,7 +23,7 @@ class AddEventBottomSheet extends StatelessWidget {
       child: ConstrainedBox(
         constraints: const BoxConstraints(
           minWidth: double.infinity,
-          maxHeight: 320,
+          maxHeight: 400,
         ),
         child: Column(
           children: <Widget>[
@@ -38,10 +39,28 @@ class AddEventBottomSheet extends StatelessWidget {
                     tileColor: context.colorScheme.surface,
                     leading: const Icon(Icons.event),
                     title: Text(
-                      context.l10n.add_event_select_from_list,
+                      context.l10n.add_official_event_select_from_list,
                       style: context.textTheme.titleMedium,
                     ),
-                    onTap: () => transitPage(const ChooseEventRoute()),
+                    onTap: () => transitPage(
+                      ChooseEventRoute(
+                        eventType: EventType.official,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  ListTile(
+                    tileColor: context.colorScheme.surface,
+                    leading: const Icon(Icons.event),
+                    title: Text(
+                      context.l10n.add_unofficial_event_select_from_list,
+                      style: context.textTheme.titleMedium,
+                    ),
+                    onTap: () => transitPage(
+                      ChooseEventRoute(
+                        eventType: EventType.unofficial,
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 16),
                   ListTile(

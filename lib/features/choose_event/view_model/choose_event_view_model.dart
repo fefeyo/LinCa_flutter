@@ -1,22 +1,25 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/utils/linca_event_extension.dart';
 import 'package:linca_otaku_support/core/utils/sort_items_extension.dart';
+import '../../../core/constants/event_type.dart';
 import '../../../core/models/filter_settings.dart';
 import '../../../core/models/linca_event.dart';
+import '../../../core/network/model/event_base.dart';
 import '../../../core/network/providers.dart';
 import '../data/choose_event_state.dart';
 
 final StateNotifierProvider<ChooseEventViewModel, ChooseEventState>
     chooseEventViewModelProvider =
     StateNotifierProvider<ChooseEventViewModel, ChooseEventState>((Ref ref) {
-  final AsyncValue<List<LincaEvent>> eventAsync =
-      ref.watch(eventControllerProvider);
+  final List<LincaEvent> events =
+      ref.watch(eventControllerProvider).value ?? <LincaEvent>[];
+  final List<LincaEvent> userEvents =
+      ref.watch(userEventControllerProvider).value ?? <LincaEvent>[];
 
-  return eventAsync.when(
-    data: (List<LincaEvent> events) => ChooseEventViewModel(events),
-    loading: () => ChooseEventViewModel(<LincaEvent>[]),
-    error: (_, __) => ChooseEventViewModel(<LincaEvent>[]),
-  );
+  return ChooseEventViewModel(<LincaEvent>[
+    ...events,
+    ...userEvents,
+  ]);
 });
 
 class ChooseEventViewModel extends StateNotifier<ChooseEventState> {
@@ -29,6 +32,22 @@ class ChooseEventViewModel extends StateNotifier<ChooseEventState> {
         );
 
   final List<LincaEvent> initialEvents;
+
+  void setEventType(EventType eventType) {
+    final List<LincaEvent> events = initialEvents.where((LincaEvent event) {
+      if (eventType == EventType.official) {
+        return event.event is OfficialEvent;
+      }
+      if (eventType == EventType.unofficial) {
+        return event.event is UnOfficialEvent;
+      }
+      return true;
+    }).toList();
+    state = state.copyWith(
+      sortedEvents: events,
+      eventType: eventType,
+    );
+  }
 
   void setKeyword(String keyword) {
     final FilterSettings filterSettings =
@@ -48,7 +67,15 @@ class ChooseEventViewModel extends StateNotifier<ChooseEventState> {
   }
 
   List<LincaEvent> sortEvents(FilterSettings filterSettings) {
-    List<LincaEvent> sortedEvents = initialEvents;
+    List<LincaEvent> sortedEvents = initialEvents.where((LincaEvent event) {
+      if (state.eventType == EventType.official) {
+        return event.event is OfficialEvent;
+      }
+      if (state.eventType == EventType.unofficial) {
+        return event.event is UnOfficialEvent;
+      }
+      return true;
+    }).toList();
 
     sortedEvents = sortedEvents
         .filterWithKeyword(filterSettings.keyword)
