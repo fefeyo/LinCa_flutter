@@ -50,6 +50,37 @@ class CreateEventPage extends HookConsumerWidget {
           IconButton(
             icon: const Icon(Icons.save),
             onPressed: () async {
+              if (titleController.text.trim().isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'タイトルを入力してください',
+                      style: context.textTheme.titleMedium?.copyWith(
+                        color: Colors.white,
+                      ),
+                    ),
+                    backgroundColor: Colors.red,
+                    duration: const Duration(seconds: 1),
+                  ),
+                );
+                return;
+              }
+              if (selectedDate.value == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      '開催日を選択してください',
+                      style: context.textTheme.titleMedium?.copyWith(
+                        color: Colors.white,
+                      ),
+                    ),
+                    backgroundColor: Colors.red,
+                    duration: const Duration(seconds: 1),
+                  ),
+                );
+                return;
+              }
+
               final String eventId = const Uuid().v4();
               final UnOfficialEvent event = UnOfficialEvent(
                 title: titleController.text,
@@ -74,6 +105,20 @@ class CreateEventPage extends HookConsumerWidget {
                   participationType: ParticipationType.onSite,
                 ),
               );
+
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'イベントを作成しました',
+                      style: context.textTheme.titleMedium?.copyWith(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                );
+                context.router.pop();
+              }
             },
           ),
         ],
@@ -88,7 +133,7 @@ class CreateEventPage extends HookConsumerWidget {
               controller: titleController,
               decoration: InputDecoration(
                 labelText: context.l10n.input_create_event_title,
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 16),

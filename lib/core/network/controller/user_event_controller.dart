@@ -57,9 +57,10 @@ class UserEventController extends AsyncNotifier<List<LincaEvent>> {
     required String eventId,
   }) async {
     if (uid != null && user != null) {
+      final UnOfficialEvent createdEvent =
+          event.copyWith(id: eventId, createdBy: uid!);
       await userEventRepository.registerEvent(
-        event: event,
-        uid: uid!,
+        event: createdEvent,
         user: user!,
         documentId: eventId,
       );
@@ -70,10 +71,20 @@ class UserEventController extends AsyncNotifier<List<LincaEvent>> {
       state = AsyncData<List<LincaEvent>>(<LincaEvent>[
         ...events,
         LincaEvent(
-          event: event,
+          event: createdEvent,
           tags: tags,
         ),
       ]);
     }
+  }
+
+  Future<void> deleteEvent({
+    required LincaEvent event,
+  }) async {
+    await userEventRepository.deleteEvent(
+        event: event.event as UnOfficialEvent);
+    final List<LincaEvent> events = state.value ?? <LincaEvent>[];
+    events.remove(event);
+    state = AsyncData<List<LincaEvent>>(events);
   }
 }

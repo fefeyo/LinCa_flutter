@@ -42,12 +42,19 @@ class UserEventRepository extends FirestoreRepository<Event> {
 
   Future<void> registerEvent({
     required UnOfficialEvent event,
-    required String uid,
     required User user,
     required String documentId,
   }) async {
     final DocumentReference<Map<String, dynamic>> document =
         fireStore.collection('user_events').doc(documentId);
-    await document.set(event.copyWith(createdBy: uid).toJson());
+    await document.set(event.toJson());
+  }
+
+  Future<void> deleteEvent({
+    required UnOfficialEvent event,
+  }) async {
+    final DocumentReference<Map<String, dynamic>> document =
+        fireStore.collection('user_events').doc(event.id);
+    await document.delete();
   }
 }
