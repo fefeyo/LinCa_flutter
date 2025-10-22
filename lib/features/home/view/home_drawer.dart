@@ -116,7 +116,7 @@ class HomeDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.person),
             title: Text(
-              context.l10n.obtained_badges_title,
+              context.l10n.acquired_badges_title,
               style: context.textTheme.bodyLarge,
             ),
             onTap: () => transitPage(const MyEventRoute()),

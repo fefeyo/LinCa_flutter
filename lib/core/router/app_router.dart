@@ -32,5 +32,6 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: TradedLincaListRoute.page),
         AutoRoute(page: QrCodeReadRoute.page),
         AutoRoute(page: CreatedEventListRoute.page),
+        AutoRoute(page: AcquiredBadgeRoute.page),
       ];
 }

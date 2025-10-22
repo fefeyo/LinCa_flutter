@@ -66,9 +66,7 @@ class OnboardingPage extends HookConsumerWidget {
           curve: Curves.easeInOut,
         );
       } else {
-        if (onboardingState.nickname.isNotEmpty) {
-          await userController.updateDisplayName(onboardingState.nickname);
-        }
+        await userController.updateDisplayName(onboardingState.nickname);
         final SharedPreferences sharedPreferences =
             await SharedPreferences.getInstance();
         sharedPreferences.setBool(AppConstants.hasSeenOnboarding, true);

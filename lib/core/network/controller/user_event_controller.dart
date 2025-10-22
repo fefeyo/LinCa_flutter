@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/constants/participation_type.dart';
+import 'package:linca_otaku_support/core/models/linca_user.dart';
 import 'package:linca_otaku_support/core/network/repository/participation_repository.dart';
 
 import '../../auth/providers.dart';
@@ -19,15 +21,16 @@ class UserEventController extends AsyncNotifier<List<LincaEvent>> {
   late ParticipationRepository participationRepository;
   late TagRepository tagRepository;
   late String? uid;
-  late User? user;
+  late LincaUser? user;
 
   @override
   FutureOr<List<LincaEvent>> build() async {
     userEventRepository = ref.read(userEventRepositoryProvider);
     participationRepository = ref.read(participationRepositoryProvider);
     tagRepository = ref.read(tagRepositoryProvider);
-    uid = ref.read(uidProvider);
+    uid = ref.watch(uidProvider);
     user = ref.read(userControllerProvider).value;
+    if (uid == null) return <LincaEvent>[];
 
     final List<UnOfficialEvent> events = await fetchEvents();
     final List<LincaEvent> lincaEvents =
@@ -57,11 +60,17 @@ class UserEventController extends AsyncNotifier<List<LincaEvent>> {
     required String eventId,
   }) async {
     if (uid != null && user != null) {
-      final UnOfficialEvent createdEvent =
-          event.copyWith(id: eventId, createdBy: uid!);
+      final UnOfficialEvent createdEvent = event.copyWith(
+        id: eventId,
+        createdBy: uid!,
+        availableParticipationTypes: [
+          ParticipationType.onSite,
+          ParticipationType.absent,
+        ],
+      );
       await userEventRepository.registerEvent(
         event: createdEvent,
-        user: user!,
+        user: user!.user,
         documentId: eventId,
       );
       final List<LincaEvent> events = state.value ?? <LincaEvent>[];

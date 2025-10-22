@@ -35,7 +35,7 @@
   "traded_linca_list_title": "TradedLinCaList",
   "my_qr_code_title": "ShowMyQRCode",
   "edit_my_linca_title": "EditMyLinCa",
-  "obtained_badges_title": "ObtainedBadges",
+  "acquired_badges_title": "AcquiredBadges",
   "created_events_title": "CreatedEvents",
   "app_settings_title": "AppSettings",
   "common_linca_card": "LinCaCard",
@@ -174,5 +174,11 @@
     }
   },
   "event_detail_text_event_code_copy": "event_detail_text_event_code_copy",
-  "event_detail_text_event_code_copied": "event_detail_text_event_code_copied"
+  "event_detail_text_event_code_copied": "event_detail_text_event_code_copied",
+  "created_event_page_title": "created_event_page_title",
+  "acquired_badges_select_title": "acquired_badges_select_title",
+  "acquired_badges_list_title": "acquired_badges_list_title",
+  "acquired_badges_list_unselect": "acquired_badges_list_unselect",
+  "common_cancel": "common_cancel",
+  "common_ok": "common_ok"
 }

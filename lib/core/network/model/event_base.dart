@@ -1,6 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../constants/participation_type.dart';
 import '../../utils/date_extension.dart';
+import '../../utils/participation_type_extension.dart';
 
 part 'event_base.freezed.dart';
 
@@ -20,6 +22,13 @@ sealed class EventBase with _$EventBase {
     @Default('') String url,
     @Default('') String imageUrl,
     @Default(<String>[]) List<String> tagIds,
+    @Default(<ParticipationType>[])
+    @JsonKey(
+      name: 'available_participation_types',
+      fromJson: participationTypesFromJson,
+      toJson: participationTypesToJson,
+    )
+    List<ParticipationType> availableParticipationTypes,
     @Default(true) bool visibility,
     @JsonKey(fromJson: fromJsonDate, toJson: toJsonDate) DateTime? updatedAt,
   }) = OfficialEvent;
@@ -35,6 +44,13 @@ sealed class EventBase with _$EventBase {
     @Default(<String>[]) List<String> tagIds,
     @Default('') String createdBy,
     @Default(false) bool visibility,
+    @Default(<ParticipationType>[])
+    @JsonKey(
+      name: 'available_participation_types',
+      fromJson: participationTypesFromJson,
+      toJson: participationTypesToJson,
+    )
+    List<ParticipationType> availableParticipationTypes,
   }) = UnOfficialEvent;
 
   factory EventBase.fromJson(Map<String, dynamic> json) =>

@@ -17,7 +17,7 @@ class MyQRBottomSheet extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final String? uid = ref.watch(uidProvider);
     final FriendController friendController =
-        ref.read(friendControllerProvider.notifier);
+        ref.read(friendControllerProvider);
 
     return Padding(
       padding: EdgeInsets.only(
@@ -57,6 +57,7 @@ class MyQRBottomSheet extends HookConsumerWidget {
                   if (result != null) {
                     final String friendUid = result.userId;
                     await friendController.registerFriend(friendUid);
+                    await friendController.fetchFriends();
                   }
                 },
                 icon: const Icon(Icons.qr_code_scanner),

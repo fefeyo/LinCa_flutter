@@ -144,6 +144,8 @@ class EventDetailPage extends HookConsumerWidget {
                         child: _buildButtonArea(
                           selectedParticipationType:
                               selectedParticipationType.value,
+                          availableParticipationTypes:
+                              lincaEvent.event.availableParticipationTypes,
                           onClickButton: (ParticipationType participationType) {
                             selectedParticipationType.value = participationType;
                           },
@@ -192,22 +194,23 @@ class EventDetailPage extends HookConsumerWidget {
                         ),
                       ),
                       ..._generateDeleteButtonIfNeeded(
-                          context: context,
-                          onClickDelete: () {
-                            participationController.deleteParticipation(
-                              lincaEvent,
-                              participationInfo!,
+                        context: context,
+                        onClickDelete: () {
+                          participationController.deleteParticipation(
+                            lincaEvent,
+                            participationInfo!,
+                          );
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content:
+                                    Text(context.l10n.snackbar_title_deleted),
+                              ),
                             );
-                            if (context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content:
-                                      Text(context.l10n.snackbar_title_deleted),
-                                ),
-                              );
-                              context.router.pop();
-                            }
-                          }),
+                            context.router.pop();
+                          }
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -236,9 +239,11 @@ class EventDetailPage extends HookConsumerWidget {
                     eventId: lincaEvent.event.id,
                     participationType: selectedParticipationType.value,
                     participationMemo: participationMemoController.text,
+                    groupSlug: lincaEvent.organizerName,
                   ),
                 );
                 if (context.mounted) {
+                  context.router.pop();
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(context.l10n.snackbar_title_saved),
@@ -364,20 +369,23 @@ class EventDetailPage extends HookConsumerWidget {
 
   Widget _buildButtonArea({
     required ParticipationType selectedParticipationType,
+    required List<ParticipationType> availableParticipationTypes,
     required Function(ParticipationType participationType) onClickButton,
   }) {
     final List<Widget> buttons = <Widget>[];
-    buttons.add(
-      Expanded(
-        child: CustomParticipationButton(
-          participationType: ParticipationType.onSite,
-          selectedParticipationType: selectedParticipationType,
-          iconData: Icons.place,
-          onClick: () => onClickButton(ParticipationType.onSite),
+    if (availableParticipationTypes.contains(ParticipationType.onSite)) {
+      buttons.add(
+        Expanded(
+          child: CustomParticipationButton(
+            participationType: ParticipationType.onSite,
+            selectedParticipationType: selectedParticipationType,
+            iconData: Icons.place,
+            onClick: () => onClickButton(ParticipationType.onSite),
+          ),
         ),
-      ),
-    );
-    if (lincaEvent.event is OfficialEvent) {
+      );
+    }
+    if (availableParticipationTypes.contains(ParticipationType.liveViewing)) {
       buttons.add(
         Expanded(
           child: CustomParticipationButton(
@@ -388,6 +396,8 @@ class EventDetailPage extends HookConsumerWidget {
           ),
         ),
       );
+    }
+    if (availableParticipationTypes.contains(ParticipationType.streaming)) {
       buttons.add(
         Expanded(
           child: CustomParticipationButton(
@@ -399,17 +409,18 @@ class EventDetailPage extends HookConsumerWidget {
         ),
       );
     }
-
-    buttons.add(
-      Expanded(
-        child: CustomParticipationButton(
-          participationType: ParticipationType.absent,
-          selectedParticipationType: selectedParticipationType,
-          iconData: Icons.notifications_off,
-          onClick: () => onClickButton(ParticipationType.absent),
+    if (availableParticipationTypes.contains(ParticipationType.absent)) {
+      buttons.add(
+        Expanded(
+          child: CustomParticipationButton(
+            participationType: ParticipationType.absent,
+            selectedParticipationType: selectedParticipationType,
+            iconData: Icons.notifications_off,
+            onClick: () => onClickButton(ParticipationType.absent),
+          ),
         ),
-      ),
-    );
+      );
+    }
 
     return Row(children: buttons);
   }

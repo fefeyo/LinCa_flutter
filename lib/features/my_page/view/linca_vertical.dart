@@ -146,7 +146,7 @@ class LincaVertical extends HookConsumerWidget {
     }
 
     Widget buildCard() {
-      const double badgeSize = 30;
+      const double badgeSize = 50;
 
       return Card(
         color: backgroundColor,
@@ -288,10 +288,7 @@ class LincaVertical extends HookConsumerWidget {
                       (LincaBadge badge) => SizedBox(
                         width: badgeSize,
                         height: badgeSize,
-                        child: CircleAvatar(
-                          backgroundImage:
-                              CachedNetworkImageProvider(badge.iconUrl),
-                        ),
+                        child: CachedNetworkImage(imageUrl: badge.iconUrl),
                       ),
                     )
                     .toList(),

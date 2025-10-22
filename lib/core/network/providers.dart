@@ -1,4 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/models/linca_user.dart';
 import 'package:linca_otaku_support/core/network/controller/participation_controller.dart';
 import 'package:linca_otaku_support/core/network/controller/user_event_controller.dart';
 import 'package:linca_otaku_support/core/network/model/participation_info.dart';
@@ -32,8 +33,8 @@ final Provider<UserRepository> userRepositoryProvider =
   (Ref ref) => UserRepository(ref.watch(fireStoreProvider)),
 );
 
-final AsyncNotifierProvider<UserController, User> userControllerProvider =
-    AsyncNotifierProvider<UserController, User>(UserController.new);
+final AsyncNotifierProvider<UserController, LincaUser> userControllerProvider =
+    AsyncNotifierProvider<UserController, LincaUser>(UserController.new);
 
 final Provider<BadgeRepository> badgeRepositoryProvider =
     Provider<BadgeRepository>(
@@ -55,7 +56,7 @@ final AsyncNotifierProvider<EventController, List<LincaEvent>>
     AsyncNotifierProvider<EventController, List<LincaEvent>>(
         EventController.new);
 
-final Provider<GroupRepository> groupRepositortyProvider =
+final Provider<GroupRepository> groupRepositoryProvider =
     Provider<GroupRepository>(
   (Ref ref) => GroupRepository(ref.watch(fireStoreProvider)),
 );
@@ -93,9 +94,15 @@ final Provider<FriendRepository> friendRepositoryProvider =
     Provider<FriendRepository>(
         (Ref ref) => FriendRepository(ref.watch(fireStoreProvider)));
 
-final AsyncNotifierProvider<FriendController, List<User>>
-    friendControllerProvider =
-    AsyncNotifierProvider<FriendController, List<User>>(FriendController.new);
+final Provider<FriendController> friendControllerProvider =
+    Provider<FriendController>((Ref ref) {
+  final String? uid = ref.watch(uidProvider);
+  final FriendRepository friendRepository = ref.read(friendRepositoryProvider);
+  return FriendController(
+    uid: uid,
+    friendRepository: friendRepository,
+  );
+});
 
 final Provider<UserEventRepository> userEventRepositoryProvider =
     Provider<UserEventRepository>(

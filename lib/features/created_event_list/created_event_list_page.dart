@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/network/controller/user_event_controller.dart';
-import 'package:linca_otaku_support/core/network/model/event_base.dart';
 import 'package:linca_otaku_support/core/network/providers.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
+import 'package:linca_otaku_support/core/widgets/common/common_simple_dialog.dart';
 
 import '../../core/models/linca_event.dart';
-import '../../core/network/model/participation_info.dart';
 import '../../core/widgets/event/event_card.dart';
 import 'data/created_event_list_state.dart';
 import 'view_model/created_event_list_view_model.dart';
@@ -67,24 +66,12 @@ class CreatedEventListPage extends HookConsumerWidget {
             icon: const Icon(Icons.delete, color: Colors.red),
             tooltip: 'イベントを削除',
             onPressed: () async {
-              final bool? confirmed = await showDialog<bool>(
+              final bool? confirmed = await CommonSimpleDialog.show(
                 context: context,
-                builder: (BuildContext dialogContext) {
-                  return AlertDialog(
-                    title: const Text('削除の確認'),
-                    content: const Text('このイベントを削除しますか？'),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () => Navigator.of(dialogContext).pop(false),
-                        child: const Text('キャンセル'),
-                      ),
-                      TextButton(
-                        onPressed: () => Navigator.of(dialogContext).pop(true),
-                        child: const Text('削除する'),
-                      ),
-                    ],
-                  );
-                },
+                title: '削除の確認',
+                content: 'このイベントを削除しますか？',
+                cancelText: context.l10n.common_cancel,
+                okText: '削除する',
               );
 
               if (confirmed == true) {

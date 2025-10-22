@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/models/filter_settings.dart';
+import 'package:linca_otaku_support/core/models/linca_user.dart';
 import 'package:linca_otaku_support/core/network/providers.dart';
 import 'package:linca_otaku_support/features/my_event/data/my_event_state.dart';
 
@@ -26,7 +27,7 @@ class HomePage extends HookConsumerWidget {
     final MyEventState myEventState = ref.watch(myEventViewModelProvider);
     final MyEventViewModel myEventViewModel =
         ref.read(myEventViewModelProvider.notifier);
-    final User user = ref.watch(userControllerProvider).value!;
+    final LincaUser lincaUser = ref.watch(userControllerProvider).value!;
 
     return AutoTabsRouter(
       routes: const <PageRouteInfo<Object?>>[
@@ -62,7 +63,7 @@ class HomePage extends HookConsumerWidget {
             ],
           ),
           drawer: HomeDrawer(
-            user: user,
+            user: lincaUser.user,
           ),
           body: FadeTransition(opacity: animation, child: child),
           bottomNavigationBar: BottomNavigationBar(

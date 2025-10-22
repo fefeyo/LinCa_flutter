@@ -35,7 +35,7 @@
   "traded_linca_list_title": "交換済みLinCaカード一覧",
   "my_qr_code_title": "マイQRコード表示",
   "edit_my_linca_title": "マイLinCa編集",
-  "obtained_badges_title": "獲得バッジ一覧",
+  "acquired_badges_title": "獲得済みバッジ一覧",
   "created_events_title": "作成したイベント一覧",
   "app_settings_title": "アプリ設定",
   "common_linca_card": "LinCaカード",
@@ -99,7 +99,7 @@
   "onboarding_start": "はじめる",
   "snackbar_title_deleted": "削除に成功しました",
   "snackbar_title_saved": "保存に成功しました",
-  "event_detail_delete": "このイベントを削除する",
+  "event_detail_delete": "このイベントの参加情報を削除する",
   "map_launch_url": "https://www.google.com/maps/search/?api=1&query={query}",
   "@map_launch_url": {
     "placeholders": {
@@ -174,5 +174,11 @@
     }
   },
   "event_detail_text_event_code_copy": "コピー",
-  "event_detail_text_event_code_copied": "イベントコードをコピーしました"
+  "event_detail_text_event_code_copied": "イベントコードをコピーしました",
+  "created_event_page_title": "作成済みイベント一覧",
+  "acquired_badges_select_title": "バッジ選択画面",
+  "acquired_badges_list_title": "獲得済みバッジ一覧画面",
+  "acquired_badges_list_unselect": "未選択",
+  "common_cancel": "キャンセル",
+  "common_ok": "OK"
 }
