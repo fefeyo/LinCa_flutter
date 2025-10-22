@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/network/controller/user_event_controller.dart';
+import 'package:linca_otaku_support/core/network/model/event_base.dart';
+import 'package:linca_otaku_support/core/network/providers.dart';
+import 'package:linca_otaku_support/core/utils/context_extension.dart';
 
+import '../../core/models/linca_event.dart';
+import '../../core/network/model/participation_info.dart';
+import '../../core/widgets/event/event_card.dart';
 import 'data/created_event_list_state.dart';
 import 'view_model/created_event_list_view_model.dart';
 
@@ -13,11 +20,80 @@ class CreatedEventListPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final CreatedEventListState state =
         ref.watch(createdEventListViewModelProvider);
+    final UserEventController userEventController =
+        ref.read(userEventControllerProvider.notifier);
+
     return Scaffold(
-      appBar: AppBar(title: const Text('created_event_list')),
-      body: Center(
-        child: Text(state.name),
+      appBar: AppBar(title: const Text('作成済みイベント一覧')),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        child: state.events.isNotEmpty
+            ? ListView.separated(
+                itemCount: state.events.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final LincaEvent event = state.events[index];
+                  return _buildEventCardWithDelete(
+                    context: context,
+                    event: event,
+                    onDelete: () =>
+                        userEventController.deleteEvent(event: event),
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) =>
+                    const SizedBox(height: 12),
+              )
+            : Center(
+                child: Text(
+                  '作成したイベントがありません',
+                  style: context.textTheme.titleMedium,
+                ),
+              ),
       ),
+    );
+  }
+
+  Widget _buildEventCardWithDelete({
+    required BuildContext context,
+    required LincaEvent event,
+    required Function() onDelete,
+  }) {
+    return Stack(
+      children: <Widget>[
+        EventCard(lincaEvent: event),
+        Positioned(
+          bottom: 8,
+          right: 8,
+          child: IconButton(
+            icon: const Icon(Icons.delete, color: Colors.red),
+            tooltip: 'イベントを削除',
+            onPressed: () async {
+              final bool? confirmed = await showDialog<bool>(
+                context: context,
+                builder: (BuildContext dialogContext) {
+                  return AlertDialog(
+                    title: const Text('削除の確認'),
+                    content: const Text('このイベントを削除しますか？'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () => Navigator.of(dialogContext).pop(false),
+                        child: const Text('キャンセル'),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.of(dialogContext).pop(true),
+                        child: const Text('削除する'),
+                      ),
+                    ],
+                  );
+                },
+              );
+
+              if (confirmed == true) {
+                onDelete();
+              }
+            },
+          ),
+        ),
+      ],
     );
   }
 }
