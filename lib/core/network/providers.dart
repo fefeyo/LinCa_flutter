@@ -18,7 +18,6 @@ import 'controller/venue_controller.dart';
 import 'model/group.dart';
 import 'model/linca_badge.dart';
 import 'model/tag.dart';
-import 'model/user.dart';
 import 'model/venue.dart';
 import 'repository/badge_repository.dart';
 import 'repository/event_repository.dart';

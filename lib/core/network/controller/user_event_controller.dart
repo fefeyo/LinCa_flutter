@@ -10,7 +10,6 @@ import '../../models/linca_event.dart';
 import '../../utils/sort_items_extension.dart';
 import '../model/event_base.dart';
 import '../model/tag.dart';
-import '../model/user.dart';
 import '../providers.dart';
 import '../repository/tag_repository.dart';
 import '../repository/user_event_repository.dart';
@@ -63,7 +62,7 @@ class UserEventController extends AsyncNotifier<List<LincaEvent>> {
       final UnOfficialEvent createdEvent = event.copyWith(
         id: eventId,
         createdBy: uid!,
-        availableParticipationTypes: [
+        availableParticipationTypes: <ParticipationType>[
           ParticipationType.onSite,
           ParticipationType.absent,
         ],

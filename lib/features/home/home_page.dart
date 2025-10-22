@@ -7,7 +7,6 @@ import 'package:linca_otaku_support/core/network/providers.dart';
 import 'package:linca_otaku_support/features/my_event/data/my_event_state.dart';
 
 import '../../../core/utils/context_extension.dart';
-import '../../core/network/model/user.dart';
 import '../../core/router/app_router.gr.dart';
 import '../../core/widgets/bottom_sheet/event_sort_bottom_sheet.dart';
 import '../my_event/view_model/my_event_view_model.dart';

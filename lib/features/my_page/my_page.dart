@@ -167,9 +167,9 @@ class MyPage extends HookConsumerWidget {
                 onClickItem: () async {
                   final bool? comfirmed = await CommonSimpleDialog.show(
                       context: context,
-                      title: 'アカウントを削除してもよろしいですか？',
-                      content:
-                          'アカウントを削除すると、すべてのデータが失われ、元に戻すことはできません。\n本当に削除してもよろしいですか？');
+                      title: 'アカウントを削除してもよろ   しいですか？',
+                      content: 'アカウントを削除すると、すべてのデータが失われ、元に戻すことはできません。'
+                          '\n本当に削除してもよろしいですか？');
                   if (comfirmed == true && context.mounted) {
                     authController.deleteMyAccount();
                     context.router.replace(const LoginRoute());
