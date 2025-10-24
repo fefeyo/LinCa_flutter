@@ -30,3 +30,16 @@ extension ParticipationTypeExtension on ParticipationType {
     }
   }
 }
+
+List<ParticipationType> participationTypesFromJson(List<dynamic>? json) {
+  if (json == null) return <ParticipationType>[];
+  return json
+      .map(
+        (dynamic json) => ParticipationType.values.byName(json as String),
+      )
+      .toList();
+}
+
+List<String> participationTypesToJson(List<ParticipationType> types) {
+  return types.map((ParticipationType type) => type.name).toList();
+}

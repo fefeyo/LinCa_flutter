@@ -26,7 +26,7 @@ class EventController extends AsyncNotifier<List<LincaEvent>> {
     eventRepository = ref.read(eventRepositoryProvider);
     tagRepository = ref.read(tagRepositoryProvider);
     venueRepository = ref.read(venueRepositoryProvider);
-    groupRepository = ref.read(groupRepositortyProvider);
+    groupRepository = ref.read(groupRepositoryProvider);
     final List<OfficialEvent> events = await fetchEvents();
     // 一旦イベント一覧は毎回取得
     // if (preferences.getString(AppConstants.eventVersionKey) !=

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -41,7 +42,9 @@ Future<String?> pickCompressAndUploadImage(String uid) async {
     final String downloadUrl = await storageRef.getDownloadURL();
     return downloadUrl;
   } catch (e) {
-    print('❌ Error uploading image: $e');
+    if (kDebugMode) {
+      print('❌ Error uploading image: $e');
+    }
     return null;
   }
 }

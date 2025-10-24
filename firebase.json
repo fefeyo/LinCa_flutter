@@ -1,1 +1,46 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"linca-4202a","appId":"1:630270810691:android:e9c324a8ea8ce2f46d92f6","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"linca-4202a","appId":"1:630270810691:ios:d93523d35c22dcb96d92f6","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"linca-4202a","configurations":{"android":"1:630270810691:android:e9c324a8ea8ce2f46d92f6","ios":"1:630270810691:ios:d93523d35c22dcb96d92f6"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "linca-4202a",
+          "appId": "1:630270810691:android:e9c324a8ea8ce2f46d92f6",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "linca-4202a",
+          "appId": "1:630270810691:ios:d93523d35c22dcb96d92f6",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "linca-4202a",
+          "configurations": {
+            "android": "1:630270810691:android:e9c324a8ea8ce2f46d92f6",
+            "ios": "1:630270810691:ios:d93523d35c22dcb96d92f6"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ],
+      "predeploy": [
+        "npm --prefix functions run build"
+      ]
+    }
+  ]
+}

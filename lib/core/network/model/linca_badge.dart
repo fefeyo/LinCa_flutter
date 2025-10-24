@@ -19,4 +19,7 @@ abstract class LincaBadge with _$LincaBadge {
 
   factory LincaBadge.fromJson(Map<String, dynamic> json) =>
       _$LincaBadgeFromJson(json);
+
+  static const LincaBadge unselected =
+      LincaBadge(slug: '', name: '未選択', iconUrl: '');
 }

@@ -14,6 +14,7 @@ import 'package:linca_otaku_support/core/utils/image_uploader.dart';
 
 import '../../core/asset_gen/assets.gen.dart';
 import '../../core/network/model/user.dart';
+import '../../core/router/app_router.gr.dart';
 import 'data/linca_edit_state.dart';
 import 'view_model/linca_edit_view_model.dart';
 
@@ -122,7 +123,7 @@ class LincaEditPage extends HookConsumerWidget {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: context.colorScheme.surface,
+                          color: context.colorScheme.surfaceContainer,
                           width: 3,
                         ),
                         boxShadow: <BoxShadow>[
@@ -142,9 +143,7 @@ class LincaEditPage extends HookConsumerWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    width: 16,
-                  ),
+                  const SizedBox(width: 16),
                   Expanded(
                     child: TextField(
                       controller: displayNameController,
@@ -157,16 +156,28 @@ class LincaEditPage extends HookConsumerWidget {
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 32,
+              const SizedBox(height: 16),
+              Text(
+                'お気に入りバッジ',
+                style: context.textTheme.titleMedium,
               ),
+              const SizedBox(height: 8),
+              _buildSelectFavoriteBadgeWidget(
+                  context: context,
+                  favoriteBadges:
+                      state.userProfile?.favoriteBadges ?? <LincaBadge>[],
+                  onTap: (LincaBadge? changeBadge, LincaBadge selectedBadge) {
+                    viewModel.updateFavoriteBadges(
+                      changeBadge: changeBadge,
+                      selectedBadge: selectedBadge,
+                    );
+                  }),
+              const SizedBox(height: 16),
               Text(
                 context.l10n.linca_edit_label_favorite_group,
                 style: context.textTheme.titleMedium,
               ),
-              const SizedBox(
-                height: 4,
-              ),
+              const SizedBox(height: 4),
               Wrap(
                 spacing: 4,
                 runSpacing: 8,
@@ -194,9 +205,7 @@ class LincaEditPage extends HookConsumerWidget {
                     )
                     .toList(),
               ),
-              const SizedBox(
-                height: 16,
-              ),
+              const SizedBox(height: 16),
               TextField(
                 controller: bioController,
                 style: context.textTheme.titleMedium,
@@ -206,9 +215,7 @@ class LincaEditPage extends HookConsumerWidget {
                   border: const OutlineInputBorder(),
                 ),
               ),
-              const SizedBox(
-                height: 16,
-              ),
+              const SizedBox(height: 16),
               TextField(
                 controller: xController,
                 style: context.textTheme.titleMedium,
@@ -217,9 +224,7 @@ class LincaEditPage extends HookConsumerWidget {
                   border: const OutlineInputBorder(),
                 ),
               ),
-              const SizedBox(
-                height: 16,
-              ),
+              const SizedBox(height: 16),
               TextField(
                 controller: instagramController,
                 style: context.textTheme.titleMedium,
@@ -228,9 +233,7 @@ class LincaEditPage extends HookConsumerWidget {
                   border: const OutlineInputBorder(),
                 ),
               ),
-              const SizedBox(
-                height: 16,
-              ),
+              const SizedBox(height: 16),
               TextField(
                 controller: blueskyController,
                 style: context.textTheme.titleMedium,
@@ -239,13 +242,102 @@ class LincaEditPage extends HookConsumerWidget {
                   border: const OutlineInputBorder(),
                 ),
               ),
-              const SizedBox(
-                height: 32,
-              ),
+              const SizedBox(height: 32),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildSelectFavoriteBadgeWidget({
+    required BuildContext context,
+    required List<LincaBadge> favoriteBadges,
+    required Function(LincaBadge? changeBadge, LincaBadge selectedBadge) onTap,
+  }) {
+    final List<LincaBadge?> displayBadges = <LincaBadge?>[
+      ...favoriteBadges,
+      if (favoriteBadges.length < 3) null,
+    ].take(3).toList();
+
+    Widget buildBadgeWidget({
+      required LincaBadge? lincaBadge,
+    }) {
+      final CachedNetworkImageProvider? imageProvider = lincaBadge != null
+          ? CachedNetworkImageProvider(lincaBadge.iconUrl)
+          : null;
+      return Expanded(
+        child: InkWell(
+          onTap: () async {
+            final LincaBadge? result = await context.router
+                .push<LincaBadge>(AcquiredBadgeRoute(selectable: true));
+            if (result != null) {
+              onTap(lincaBadge, result);
+            }
+          },
+          child: Container(
+            height: 160,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.grey,
+                width: 1,
+              ),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: imageProvider != null
+                      ? Image(image: imageProvider)
+                      : const Icon(
+                          Icons.cancel,
+                          size: 40,
+                        ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Text(
+                    lincaBadge != null ? lincaBadge.name : '未選択',
+                    style: context.textTheme.bodyMedium,
+                  ),
+                ),
+                const SizedBox(height: 8),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: List<Widget>.generate(3, (int index) {
+        if (index < displayBadges.length) {
+          return Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(left: index > 0 ? 8 : 0),
+              child: buildBadgeWidget(lincaBadge: displayBadges[index]),
+            ),
+          );
+        } else {
+          // 空きスロットを表示しないように
+          return const Expanded(child: SizedBox.shrink());
+        }
+      }),
+    );
+
+    // return Row(
+    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //   children: <Widget>[
+    //     buildBadgeWidget(lincaBadge: displayBadges[0]),
+    //     const SizedBox(width: 8),
+    //     buildBadgeWidget(lincaBadge: displayBadges[1]),
+    //     const SizedBox(width: 8),
+    //     buildBadgeWidget(lincaBadge: displayBadges[2]),
+    //   ],
+    // );
   }
 }

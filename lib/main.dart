@@ -23,7 +23,6 @@ void main() async {
               '8ovrssgl.apps.googleusercontent.com');
 
   final ProviderContainer container = ProviderContainer();
-  await container.read(userControllerProvider.future);
   await container.read(badgeControllerProvider.future);
   await container.read(groupControllerProvider.future);
   await container.read(tagControllerProvider.future);
@@ -31,7 +30,7 @@ void main() async {
   await container.read(eventControllerProvider.future);
   await container.read(userEventControllerProvider.future);
   await container.read(participationControllerProvider.future);
-  await container.read(friendControllerProvider.future);
+  await container.read(userControllerProvider.future);
 
   runApp(
     UncontrolledProviderScope(

@@ -6,6 +6,6 @@ part 'created_event_list_state.freezed.dart';
 @freezed
 abstract class CreatedEventListState with _$CreatedEventListState {
   const factory CreatedEventListState({
-    @Default([]) List<LincaEvent> events,
+    @Default(<LincaEvent>[]) List<LincaEvent> events,
   }) = _CreatedEventListState;
 }

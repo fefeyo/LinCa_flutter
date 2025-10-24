@@ -9,9 +9,9 @@ class LincaVerticalBack extends StatelessWidget {
   });
 
   final String animationTag;
-  static final List<String> days = ['月', '火', '水', '木', '金', '土', '日'];
+  static final List<String> days = <String>['月', '火', '水', '木', '金', '土', '日'];
 
-  static final List<double> weeklyData = [30, 45, 28, 60, 90, 55, 40];
+  static final List<double> weeklyData = <double>[30, 45, 28, 60, 90, 55, 40];
 
   @override
   Widget build(BuildContext context) {
@@ -59,8 +59,12 @@ class LincaVerticalBack extends StatelessWidget {
               maxY: 100,
               barTouchData: BarTouchData(
                 enabled: true,
-                touchTooltipData: BarTouchTooltipData(
-                    getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                touchTooltipData: BarTouchTooltipData(getTooltipItem: (
+                  BarChartGroupData group,
+                  int groupIndex,
+                  BarChartRodData rod,
+                  int rodIndex,
+                ) {
                   return BarTooltipItem(
                     '${days[group.x]}: ${rod.toY.toInt()}万円',
                     const TextStyle(color: Colors.white, fontSize: 10),
@@ -90,10 +94,11 @@ class LincaVerticalBack extends StatelessWidget {
                 ),
               ),
               borderData: FlBorderData(show: false),
-              barGroups: weeklyData.asMap().entries.map((entry) {
+              barGroups:
+                  weeklyData.asMap().entries.map((MapEntry<int, double> entry) {
                 final int index = entry.key;
                 final double value = entry.value;
-                return BarChartGroupData(x: index, barRods: [
+                return BarChartGroupData(x: index, barRods: <BarChartRodData>[
                   BarChartRodData(
                       toY: value, width: 20, color: Colors.blueAccent),
                 ]);

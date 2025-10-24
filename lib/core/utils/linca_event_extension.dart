@@ -9,6 +9,9 @@ extension LincaEventExtension on LincaEvent {
   String get venueName => event is OfficialEvent
       ? venue.name
       : (event as UnOfficialEvent).venueName;
+
+  String get organizerName =>
+      event is OfficialEvent ? (event as OfficialEvent).organizer : '';
 }
 
 extension LincaEventsExtension on List<LincaEvent> {

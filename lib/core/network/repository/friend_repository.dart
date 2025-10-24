@@ -44,18 +44,15 @@ class FriendRepository extends FirestoreRepository<User> {
 
     if (friendUids.isEmpty) return <User>[];
 
-    final List<Future<DocumentSnapshot<Map<String, dynamic>>>> futures =
-        friendUids.map((String friendUid) {
-      return firestore.collection('users').doc(friendUid).get();
-    }).toList();
+    // 注意：whereIn の配列のサイズに制限があるので次節を参照
+    final QuerySnapshot<Map<String, dynamic>> querySnapshot = await firestore
+        .collection('users')
+        .where(FieldPath.documentId, whereIn: friendUids)
+        .get();
 
-    final List<DocumentSnapshot<Map<String, dynamic>>> userDocs =
-        await Future.wait(futures);
-
-    final List<User> friends = userDocs
-        .where((DocumentSnapshot<Map<String, dynamic>> doc) => doc.exists)
-        .map((DocumentSnapshot<Map<String, dynamic>> doc) =>
-            User.fromJson(doc.data()!))
+    final List<User> friends = querySnapshot.docs
+        .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) =>
+            User.fromJson(doc.data()))
         .toList();
 
     return friends;

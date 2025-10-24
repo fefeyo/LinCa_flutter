@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/models/user_profile.dart';
+import 'package:linca_otaku_support/core/utils/linca_user_extension.dart';
+import 'package:linca_otaku_support/core/widgets/common/common_simple_dialog.dart';
 import 'package:linca_otaku_support/features/my_page/data/my_page_state.dart';
 import 'package:linca_otaku_support/features/my_page/view_model/my_page_view_model.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -35,7 +37,7 @@ class MyPage extends HookConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               LincaVertical(
-                userProfile: state.userProfile,
+                userProfile: state.lincaUser.userProfile,
                 tintColor: context.colorScheme.primary,
                 animationTag: AppConstants.heroTagLincaCardMyPage,
                 onTap: (UserProfile userProfile, String animationTag) =>
@@ -65,15 +67,13 @@ class MyPage extends HookConsumerWidget {
                 title: context.l10n.edit_my_linca_title,
                 onClickItem: () => context.router.push(
                   LincaEditRoute(
-                    userProfile: state.userProfile,
+                    userProfile: state.lincaUser.userProfile,
                   ),
                 ),
               ),
               MyPageItem(
-                title: context.l10n.obtained_badges_title,
-                onClickItem: () {
-                  // TODO: 獲得バッジ一覧画面へ
-                },
+                title: context.l10n.acquired_badges_title,
+                onClickItem: () => context.router.push(AcquiredBadgeRoute()),
               ),
               const SizedBox(height: 16),
               Text(
@@ -149,20 +149,31 @@ class MyPage extends HookConsumerWidget {
               MyPageItem(
                 title: context.l10n.sign_out,
                 trailing: null,
-                onClickItem: () {
-                  // TODO: サインアウトダイアログ表示
-                  authController.signOut();
-                  context.router.replace(const LoginRoute());
+                onClickItem: () async {
+                  final bool? comfirmed = await CommonSimpleDialog.show(
+                    context: context,
+                    title: 'ログアウトしてもよろしいですか？',
+                  );
+                  if (comfirmed == true && context.mounted) {
+                    authController.signOut();
+                    context.router.replace(const LoginRoute());
+                  }
                 },
               ),
               const SizedBox(height: 32),
               MyPageItem(
                 title: context.l10n.delete_account_title,
                 trailing: null,
-                onClickItem: () {
-                  // TODO: アカウント削除ダイアログ表示
-                  authController.deleteMyAccount();
-                  context.router.replace(const LoginRoute());
+                onClickItem: () async {
+                  final bool? comfirmed = await CommonSimpleDialog.show(
+                      context: context,
+                      title: 'アカウントを削除してもよろ   しいですか？',
+                      content: 'アカウントを削除すると、すべてのデータが失われ、元に戻すことはできません。'
+                          '\n本当に削除してもよろしいですか？');
+                  if (comfirmed == true && context.mounted) {
+                    authController.deleteMyAccount();
+                    context.router.replace(const LoginRoute());
+                  }
                 },
               ),
             ],
