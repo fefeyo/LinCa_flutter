@@ -8,8 +8,6 @@ const Color kSecondarySeed = Color(0xFFFF5BA1); // 例：ピンク
 final ColorScheme lightScheme = ColorScheme.fromSeed(
   seedColor: kSeed,
   brightness: Brightness.light,
-  // オプション：セカンダリの雰囲気を強めたい場合に secondary を明示
-  // （fromSeed は primary を中心に調和色を作ります）
 );
 
 final ColorScheme darkScheme = ColorScheme.fromSeed(

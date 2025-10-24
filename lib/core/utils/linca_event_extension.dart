@@ -52,12 +52,13 @@ extension LincaEventsExtension on List<LincaEvent> {
           if (dateA == null && dateB == null) return 0;
           if (dateA == null) return 1;
           if (dateB == null) return -1;
+
+          if (dateA.day == dateB.day) {
+            return a.event.id.compareTo(b.event.id);
+          }
+
           return dateA.compareTo(dateB); // 古い順
         });
-        break;
-      case DisplayOrder.title:
-        sortedEvents.sort((LincaEvent a, LincaEvent b) =>
-            a.event.title.compareTo(b.event.title));
         break;
     }
 

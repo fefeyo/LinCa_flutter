@@ -1,14 +1,12 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:linca_otaku_support/core/models/linca_event.dart';
 
 part 'linca_detail_state.freezed.dart';
-part 'linca_detail_state.g.dart';
 
 @freezed
 abstract class LincaDetailState with _$LincaDetailState {
   const factory LincaDetailState({
-    @Default('') String name,
+    LincaEvent? upcomingEvent,
   }) = _LincaDetailState;
 
-  factory LincaDetailState.fromJson(Map<String, dynamic> json) =>
-      _$LincaDetailStateFromJson(json);
 }

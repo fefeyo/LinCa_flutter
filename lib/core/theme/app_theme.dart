@@ -16,6 +16,17 @@ ThemeData buildAppTheme(ColorScheme scheme) {
       elevation: 0,
       centerTitle: true,
     ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        foregroundColor: scheme.onPrimary,
+        backgroundColor: scheme.primary,
+        textStyle: const TextStyle(fontWeight: FontWeight.bold),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      ),
+    ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: scheme.primary,
       foregroundColor: scheme.onPrimary,
@@ -41,6 +52,12 @@ ThemeData buildAppTheme(ColorScheme scheme) {
           top: Radius.circular(24),
         ),
       ),
+    ),
+    snackBarTheme: SnackBarThemeData(
+      backgroundColor: scheme.inverseSurface,
+      contentTextStyle: TextStyle(color: scheme.onInverseSurface),
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
   );
 }

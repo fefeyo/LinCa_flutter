@@ -52,7 +52,7 @@ class FriendRepository extends FirestoreRepository<User> {
 
     final List<User> friends = querySnapshot.docs
         .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) =>
-            User.fromJson(doc.data()))
+            User.fromJson(doc.data()).copyWith(id: doc.id))
         .toList();
 
     return friends;

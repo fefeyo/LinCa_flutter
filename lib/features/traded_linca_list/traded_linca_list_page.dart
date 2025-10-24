@@ -23,22 +23,28 @@ class TradedLincaListPage extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.traded_linca_list_title)),
       body: state.friends.isNotEmpty
-          ? ListView.builder(
-              itemCount: state.friends.length,
-              itemBuilder: (BuildContext context, int index) {
-                final UserProfile userProfile = state.friends[index];
-                return LincaVertical(
-                  userProfile: userProfile,
-                  animationTag: AppConstants.heroTagLincaCardFriend,
-                  onTap: (UserProfile userProfile, String animationTag) =>
-                      context.router.push(
-                    LincaDetailRoute(
-                      userProfile: userProfile,
-                      animationTag: animationTag,
+          ? Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: ListView.separated(
+                itemCount: state.friends.length,
+                separatorBuilder: (BuildContext context, int index) {
+                  return const SizedBox(height: 16);
+                },
+                itemBuilder: (BuildContext context, int index) {
+                  final UserProfile userProfile = state.friends[index];
+                  return LincaVertical(
+                    userProfile: userProfile,
+                    animationTag: AppConstants.heroTagLincaCardFriend,
+                    onTap: (UserProfile userProfile, String animationTag) =>
+                        context.router.push(
+                      LincaDetailRoute(
+                        userProfile: userProfile,
+                        animationTag: animationTag,
+                      ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             )
           : Center(
               child: Column(

@@ -4,8 +4,6 @@ import 'package:linca_otaku_support/core/models/linca_event.dart';
 import 'package:linca_otaku_support/core/models/user_profile.dart';
 import 'package:linca_otaku_support/core/network/model/group.dart';
 import 'package:linca_otaku_support/core/network/model/linca_badge.dart';
-import 'package:linca_otaku_support/core/network/model/participation_info.dart';
-import 'package:linca_otaku_support/core/network/providers.dart';
 import 'package:linca_otaku_support/core/utils/color_extension.dart';
 import 'package:linca_otaku_support/core/widgets/event/event_card.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -18,6 +16,7 @@ class LincaVertical extends HookConsumerWidget {
   const LincaVertical({
     super.key,
     required this.userProfile,
+    this.upcomingEvent,
     this.tintColor,
     this.isFullScreen = false,
     this.animationTag = '',
@@ -25,6 +24,7 @@ class LincaVertical extends HookConsumerWidget {
   });
 
   final UserProfile userProfile;
+  final LincaEvent? upcomingEvent;
   final Color? tintColor;
   final bool isFullScreen;
   final String animationTag;
@@ -35,115 +35,6 @@ class LincaVertical extends HookConsumerWidget {
     final Color backgroundColor = context.theme.brightness == Brightness.light
         ? context.colorScheme.surface
         : context.colorScheme.surfaceContainer;
-    final Map<LincaEvent, ParticipationInfo> myEvents =
-        ref.watch(participationControllerProvider).value ??
-            <LincaEvent, ParticipationInfo>{};
-
-    List<Widget> buildUpcomingEvent() {
-      if (!isFullScreen) return <Widget>[];
-      final DateTime now = DateTime.now();
-
-      // 未来のイベントだけを抽出し、開催日時でソートして最も近いものを取得
-      final List<LincaEvent> upcomingEvent = myEvents.keys
-          .where((LincaEvent event) =>
-              event.event.date != null && event.event.date!.isAfter(now))
-          .toList()
-        ..sort((LincaEvent a, LincaEvent b) =>
-            a.event.date!.compareTo(b.event.date!));
-
-      final LincaEvent? nextEvent =
-          upcomingEvent.isNotEmpty ? upcomingEvent.first : null;
-      if (nextEvent != null) {
-        return <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                context.l10n.latest_participate_upcoming_event,
-                style: context.textTheme.titleMedium,
-              ),
-            ),
-          ),
-          const SizedBox(height: 4),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: EventCard(
-              lincaEvent: nextEvent,
-              participationInfo: myEvents[nextEvent],
-            ),
-          ),
-          const SizedBox(height: 16),
-        ];
-      } else {
-        return <Widget>[];
-      }
-    }
-
-    Widget buildSnsAccounts() {
-      if (!isFullScreen) return const SizedBox.shrink();
-      const double iconSize = 32;
-      return Row(
-        children: <Widget>[
-          userProfile.user.links['x']?.isNotEmpty == true
-              ? Expanded(
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () => launchUrl(
-                      Uri.parse(
-                        context.l10n.sns_scheme_x(userProfile.user.links['x']!),
-                      ),
-                    ),
-                    child: Assets.icons.x.svg(
-                      width: iconSize,
-                      height: iconSize,
-                      colorFilter:
-                          const ColorFilter.mode(Colors.black, BlendMode.srcIn),
-                    ),
-                  ),
-                )
-              : const SizedBox.shrink(),
-          userProfile.user.links['instagram']?.isNotEmpty == true
-              ? Expanded(
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () => launchUrl(
-                      Uri.parse(
-                        context.l10n.sns_scheme_instagram(
-                            userProfile.user.links['instagram']!),
-                      ),
-                    ),
-                    child: Assets.icons.instagram.svg(
-                      width: iconSize,
-                      height: iconSize,
-                      colorFilter: const ColorFilter.mode(
-                          Color(0xFFFF0069), BlendMode.srcIn),
-                    ),
-                  ),
-                )
-              : const SizedBox.shrink(),
-          userProfile.user.links['bluesky']?.isNotEmpty == true
-              ? Expanded(
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () => launchUrl(
-                        Uri.parse(
-                          context.l10n.sns_scheme_bluesky(
-                              userProfile.user.links['bluesky']!),
-                        ),
-                        mode: LaunchMode.externalApplication),
-                    child: Assets.icons.bluesky.svg(
-                      width: iconSize,
-                      height: iconSize,
-                      colorFilter: const ColorFilter.mode(
-                          Color(0xFF0285FF), BlendMode.srcIn),
-                    ),
-                  ),
-                )
-              : const SizedBox.shrink(),
-        ],
-      );
-    }
 
     Widget buildCard() {
       const double badgeSize = 50;
@@ -226,22 +117,27 @@ class LincaVertical extends HookConsumerWidget {
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 0, horizontal: 16),
-                          child: Text(
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: Text(
                             userProfile.user.bio,
-                            style: Theme.of(context).textTheme.titleMedium,
+                            style: Theme.of(context).textTheme.bodyMedium,
                             maxLines: isFullScreen ? null : 2,
                             overflow:
-                                isFullScreen ? null : TextOverflow.ellipsis,
+                            isFullScreen ? null : TextOverflow.ellipsis,
                             textAlign: TextAlign.start,
-                          ),
+                          ),),
                         ),
                       ],
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 16),
 
-                      ...buildUpcomingEvent(),
+                      ..._buildUpcomingEvent(
+                        context: context,
+                        upcomingEvent: upcomingEvent,
+                      ),
 
                       // Xアカウント、Instagramアカウント、Blueskyアカウント
-                      buildSnsAccounts(),
+                      _buildSnsAccounts(context),
                     ],
                   ),
                 ],
@@ -278,7 +174,6 @@ class LincaVertical extends HookConsumerWidget {
               ),
             ),
 
-            /// TODO: バッジ機能の実装
             Positioned(
               top: 8,
               right: 8,
@@ -325,6 +220,103 @@ class LincaVertical extends HookConsumerWidget {
         color: Colors.transparent,
         child: buildBody(),
       ),
+    );
+  }
+
+  List<Widget> _buildUpcomingEvent({
+    required BuildContext context,
+    required LincaEvent? upcomingEvent,
+  }) {
+    if (!isFullScreen) return <Widget>[];
+
+    if (upcomingEvent != null) {
+      return <Widget>[
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              context.l10n.latest_participate_upcoming_event,
+              style: context.textTheme.titleMedium,
+            ),
+          ),
+        ),
+        const SizedBox(height: 4),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: EventCard(
+            lincaEvent: upcomingEvent,
+          ),
+        ),
+        const SizedBox(height: 16),
+      ];
+    } else {
+      return <Widget>[];
+    }
+  }
+
+  Widget _buildSnsAccounts(BuildContext context) {
+    if (!isFullScreen) return const SizedBox.shrink();
+    const double iconSize = 32;
+    return Row(
+      children: <Widget>[
+        userProfile.user.links['x']?.isNotEmpty == true
+            ? Expanded(
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () => launchUrl(
+                    Uri.parse(
+                      context.l10n.sns_scheme_x(userProfile.user.links['x']!),
+                    ),
+                  ),
+                  child: Assets.icons.x.svg(
+                    width: iconSize,
+                    height: iconSize,
+                    colorFilter:
+                        const ColorFilter.mode(Colors.black, BlendMode.srcIn),
+                  ),
+                ),
+              )
+            : const SizedBox.shrink(),
+        userProfile.user.links['instagram']?.isNotEmpty == true
+            ? Expanded(
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () => launchUrl(
+                    Uri.parse(
+                      context.l10n.sns_scheme_instagram(
+                          userProfile.user.links['instagram']!),
+                    ),
+                  ),
+                  child: Assets.icons.instagram.svg(
+                    width: iconSize,
+                    height: iconSize,
+                    colorFilter: const ColorFilter.mode(
+                        Color(0xFFFF0069), BlendMode.srcIn),
+                  ),
+                ),
+              )
+            : const SizedBox.shrink(),
+        userProfile.user.links['bluesky']?.isNotEmpty == true
+            ? Expanded(
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () => launchUrl(
+                      Uri.parse(
+                        context.l10n.sns_scheme_bluesky(
+                            userProfile.user.links['bluesky']!),
+                      ),
+                      mode: LaunchMode.externalApplication),
+                  child: Assets.icons.bluesky.svg(
+                    width: iconSize,
+                    height: iconSize,
+                    colorFilter: const ColorFilter.mode(
+                        Color(0xFF0285FF), BlendMode.srcIn),
+                  ),
+                ),
+              )
+            : const SizedBox.shrink(),
+      ],
     );
   }
 }

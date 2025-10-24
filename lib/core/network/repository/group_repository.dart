@@ -1,3 +1,4 @@
+import 'package:linca_otaku_support/core/env/env.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,7 +22,7 @@ class GroupRepository extends FirestoreRepository<Group> {
     List<Group> groups = await _getGroups();
 
     if (preferences.getString(AppConstants.groupVersionKey) != info.version ||
-        groups.isEmpty) {
+        groups.isEmpty || Env.flavor != 'prod') {
       groups = await _fetchGroups();
       await preferences.setString(AppConstants.groupVersionKey, info.version);
     }

@@ -8,17 +8,17 @@ admin.initializeApp();
  * =========================== */
 const groupBadges = {
   muse: [
-    { threshold: 1, id: "muse_lovelibuin" },
+    { threshold: 1, id: "muse_suki" },
     { threshold: 10, id: "muse_oshi" },
     { threshold: 30, id: "muse_geki_oshi" },
   ],
   aqours: [
-    { threshold: 1, id: "aqours_no_10" },
+    { threshold: 1, id: "aqours_like" },
     { threshold: 10, id: "aqours_oshi" },
     { threshold: 30, id: "aqours_geki_oshi" },
   ],
   nijigasaki: [
-    { threshold: 1, id: "nijigasaki_you" },
+    { threshold: 1, id: "nijigasaki_like" },
     { threshold: 10, id: "nijigasaki_oshi" },
     { threshold: 30, id: "nijigasaki_geki_oshi" },
   ],
@@ -33,7 +33,7 @@ const groupBadges = {
     { threshold: 30, id: "ikizulive_geki_oshi" },
   ],
   hasunosora: [
-    { threshold: 1, id: "hasunosora_sukisukiclub" },
+    { threshold: 1, id: "hasunosora_like" },
     { threshold: 10, id: "hasunosora_oshi" },
     { threshold: 30, id: "hasunosora_geki_oshi" },
   ],

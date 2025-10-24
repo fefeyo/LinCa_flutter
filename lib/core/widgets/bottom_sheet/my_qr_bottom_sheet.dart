@@ -17,56 +17,63 @@ class MyQRBottomSheet extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final String? uid = ref.watch(uidProvider);
     final FriendController friendController =
-        ref.read(friendControllerProvider);
+    ref.read(friendControllerProvider);
 
-    return Padding(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom, // ← キーボード重なり対策
-      ),
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(
-          minWidth: double.infinity,
-          maxHeight: 500,
+    return SafeArea(
+      child: Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom, // ← キーボード重なり対策
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: <Widget>[
-              QrImageView(
-                data: uid!.buildLinCaUri(),
-                version: QrVersions.auto,
-                size: 300,
-                gapless: true,
-                errorCorrectionLevel: QrErrorCorrectLevel.M,
-                dataModuleStyle: QrDataModuleStyle(
-                  dataModuleShape: QrDataModuleShape.square,
-                  color: context.colorScheme.onSurface,
-                ),
-                backgroundColor: Colors.white,
+        child: SafeArea(
+          bottom: true,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              minWidth: double.infinity,
+              maxHeight: 480,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: <Widget>[
+                  QrImageView(
+                    data: uid!.buildLinCaUri(),
+                    version: QrVersions.auto,
+                    size: 300,
+                    gapless: true,
+                    errorCorrectionLevel: QrErrorCorrectLevel.M,
+                    dataModuleStyle: QrDataModuleStyle(
+                      dataModuleShape: QrDataModuleShape.square,
+                      color: context.colorScheme.onSurface,
+                    ),
+                    backgroundColor: Colors.white,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    context.l10n.qr_share_message,
+                    style: context.textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton.icon(
+                    onPressed: () async {
+                      final String? result = await context.router
+                          .push<String>(const QrCodeReadRoute());
+                      if (result != null) {
+                        final String friendUid = result.userId;
+                        await friendController.registerFriend(friendUid);
+                        await friendController.fetchFriends();
+                      }
+                    },
+                    icon: const Icon(Icons.qr_code_scanner),
+                    label: Text(
+                      '読み取り画面に移動',
+                      style: context.textTheme.titleMedium?.copyWith(
+                        color: context.colorScheme.surface,
+                      ),
+                    ),
+                  )
+                ],
               ),
-              const SizedBox(height: 16),
-              Text(
-                context.l10n.qr_share_message,
-                style: context.textTheme.titleMedium,
-              ),
-              const SizedBox(height: 8),
-              ElevatedButton.icon(
-                onPressed: () async {
-                  final String? result = await context.router
-                      .push<String>(const QrCodeReadRoute());
-                  if (result != null) {
-                    final String friendUid = result.userId;
-                    await friendController.registerFriend(friendUid);
-                    await friendController.fetchFriends();
-                  }
-                },
-                icon: const Icon(Icons.qr_code_scanner),
-                label: Text(
-                  '読み取り画面に移動',
-                  style: context.textTheme.titleMedium,
-                ),
-              )
-            ],
+            ),
           ),
         ),
       ),
@@ -75,5 +82,7 @@ class MyQRBottomSheet extends HookConsumerWidget {
 
   static Future<void> show(BuildContext context) async => showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
       builder: (BuildContext context) => const MyQRBottomSheet());
 }

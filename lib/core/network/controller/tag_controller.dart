@@ -5,6 +5,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants/app_constants.dart';
+import '../../env/env.dart';
 import '../model/tag.dart';
 import '../providers.dart';
 import '../repository/tag_repository.dart';
@@ -17,19 +18,16 @@ class TagController extends AsyncNotifier<List<Tag>> {
     tagRepository = ref.read(tagRepositoryProvider);
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    List<Tag> tags = await fetchTags();
+    List<Tag> tags = await tagRepository.getTags();
     if (preferences.getString(AppConstants.tagVersionKey) !=
             packageInfo.version ||
-        tags.isEmpty) {
-      tags = await fetchTags();
+        tags.isEmpty ||
+        Env.flavor != 'prod') {
+      tags = await tagRepository.fetchTags();
       await preferences.setString(
           AppConstants.tagVersionKey, packageInfo.version);
     }
 
     return tags;
   }
-
-  Future<List<Tag>> fetchTags() => tagRepository.fetchTags();
-
-  Future<List<Tag>> getTags() => tagRepository.getTags();
 }

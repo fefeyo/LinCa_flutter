@@ -96,7 +96,10 @@ class EventDetailPage extends HookConsumerWidget {
               ),
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -105,34 +108,39 @@ class EventDetailPage extends HookConsumerWidget {
                           context: context, user: state.organizerUser),
                       Text(
                         lincaEvent.event.title,
-                        style: context.textTheme.headlineMedium,
+                        style: context.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         lincaEvent.event.date?.simpleDateFormat() ?? '',
-                        style: context.textTheme.headlineSmall,
+                        style: context.textTheme.titleMedium,
                       ),
-                      const SizedBox(height: 8),
-                      Row(
-                        children: <Widget>[
-                          IconButton(
-                            onPressed: () {
-                              final Uri url = Uri.parse(context.l10n
-                                  .map_launch_url(lincaEvent.venueName));
-                              launchUrl(url,
-                                  mode: LaunchMode.externalApplication);
-                            },
-                            icon: const Icon(Icons.pin_drop),
+                      InkWell(
+                        onTap: () {
+                          final Uri url = Uri.parse(context.l10n
+                              .map_launch_url(lincaEvent.venueName));
+                          launchUrl(url, mode: LaunchMode.externalApplication);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          child: Row(
+                            children: <Widget>[
+                              const Icon(Icons.pin_drop),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  lincaEvent.venueName,
+                                  style: context.textTheme.titleMedium,
+                                ),
+                              ),
+                            ],
                           ),
-                          Expanded(
-                            child: Text(
-                              lincaEvent.venueName,
-                              style: context.textTheme.headlineSmall,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                      const SizedBox(height: 8),
                       ..._buildUrlAreaIfNeeded(context: context),
                       ..._buildDescriptionAreaIfNeeded(context: context),
                       ..._buildEventCodeAreaIfNeeded(context: context),
@@ -176,7 +184,7 @@ class EventDetailPage extends HookConsumerWidget {
                         textInputAction: TextInputAction.newline,
                         decoration: InputDecoration(
                           hintText: context.l10n.event_detail_memo_hint,
-                          hintStyle: TextStyle(
+                          hintStyle: context.textTheme.bodyMedium?.copyWith(
                             color: context.colorScheme.onSurface
                                 .withValues(alpha: 0.5),
                           ),
@@ -189,7 +197,7 @@ class EventDetailPage extends HookConsumerWidget {
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide.none, // 枠線なし
+                            borderSide: BorderSide.none,
                           ),
                         ),
                       ),
@@ -226,6 +234,12 @@ class EventDetailPage extends HookConsumerWidget {
                 Icons.close,
                 color: Colors.white,
               ),
+              style: IconButton.styleFrom(
+                backgroundColor: Colors.black26,
+                shape: const CircleBorder(),
+                fixedSize: const Size(48, 48),
+                padding: EdgeInsets.zero,
+              ),
             ),
           ),
           Positioned(
@@ -253,6 +267,8 @@ class EventDetailPage extends HookConsumerWidget {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: context.colorScheme.primary,
+                foregroundColor: context.colorScheme.onPrimary,
+                elevation: 6,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 0),
                 shape: RoundedRectangleBorder(
@@ -286,7 +302,8 @@ class EventDetailPage extends HookConsumerWidget {
     final List<Widget> widgets = <Widget>[];
     if (participationInfo == null) return widgets;
 
-    if (lincaEvent.event.date?.isAfter(DateTime.now()) == true) {
+    if (lincaEvent.event.date?.isAfter(DateTime.now()) == true &&
+        participationInfo?.participationType != ParticipationType.absent) {
       widgets.add(
         ParticipationStatusBadge(
           text: context.l10n.participation_planned,
@@ -335,9 +352,9 @@ class EventDetailPage extends HookConsumerWidget {
       return <Widget>[
         Text(
           organizerName,
-          style: context.textTheme.titleMedium?.copyWith(color: Colors.grey),
+          style: context.textTheme.titleSmall?.copyWith(color: Colors.grey),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: 2),
       ];
     } else {
       return <Widget>[];
@@ -391,7 +408,7 @@ class EventDetailPage extends HookConsumerWidget {
           child: CustomParticipationButton(
             participationType: ParticipationType.liveViewing,
             selectedParticipationType: selectedParticipationType,
-            iconData: Icons.directions_bus,
+            iconData: Icons.connected_tv,
             onClick: () => onClickButton(ParticipationType.liveViewing),
           ),
         ),
@@ -403,24 +420,22 @@ class EventDetailPage extends HookConsumerWidget {
           child: CustomParticipationButton(
             participationType: ParticipationType.streaming,
             selectedParticipationType: selectedParticipationType,
-            iconData: Icons.bookmark,
+            iconData: Icons.ondemand_video,
             onClick: () => onClickButton(ParticipationType.streaming),
           ),
         ),
       );
     }
-    if (availableParticipationTypes.contains(ParticipationType.absent)) {
-      buttons.add(
-        Expanded(
-          child: CustomParticipationButton(
-            participationType: ParticipationType.absent,
-            selectedParticipationType: selectedParticipationType,
-            iconData: Icons.notifications_off,
-            onClick: () => onClickButton(ParticipationType.absent),
-          ),
+    buttons.add(
+      Expanded(
+        child: CustomParticipationButton(
+          participationType: ParticipationType.absent,
+          selectedParticipationType: selectedParticipationType,
+          iconData: Icons.cancel,
+          onClick: () => onClickButton(ParticipationType.absent),
         ),
-      );
-    }
+      ),
+    );
 
     return Row(children: buttons);
   }
@@ -435,7 +450,7 @@ class EventDetailPage extends HookConsumerWidget {
 
     return <Widget>[
       const SizedBox(
-        height: 60,
+        height: 40,
       ),
       Center(
         child: ElevatedButton(
@@ -467,14 +482,15 @@ class EventDetailPage extends HookConsumerWidget {
     return <Widget>[
       Text(
         context.l10n.text_unofficial_event_description,
-        style: context.textTheme.headlineSmall,
+        style: context.textTheme.titleMedium?.copyWith(
+          fontWeight: FontWeight.bold,
+        ),
       ),
       const SizedBox(height: 4),
       Text(
         userEvent.desrcription,
-        style: context.textTheme.titleMedium,
+        style: context.textTheme.titleSmall,
       ),
-      const SizedBox(height: 8),
     ];
   }
 
@@ -490,7 +506,7 @@ class EventDetailPage extends HookConsumerWidget {
           Expanded(
             child: Text(
               context.l10n.event_detail_text_event_code(userEvent.id),
-              style: context.textTheme.headlineSmall,
+              style: context.textTheme.titleMedium,
               overflow: TextOverflow.ellipsis,
             ),
           ),
@@ -514,7 +530,6 @@ class EventDetailPage extends HookConsumerWidget {
           ),
         ],
       ),
-      const SizedBox(height: 8),
     ];
   }
 }

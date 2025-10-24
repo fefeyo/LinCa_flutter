@@ -5,9 +5,10 @@ import '../../../core/network/model/group.dart';
 import '../../../core/network/model/linca_badge.dart';
 import '../data/linca_edit_state.dart';
 
-final StateNotifierProvider<LincaEditViewModel, LincaEditState>
+final AutoDisposeStateNotifierProvider<LincaEditViewModel, LincaEditState>
     lincaEditViewModelProvider =
-    StateNotifierProvider<LincaEditViewModel, LincaEditState>((Ref ref) {
+    StateNotifierProvider.autoDispose<LincaEditViewModel, LincaEditState>(
+        (Ref ref) {
   final List<LincaBadge> badges =
       ref.watch(badgeControllerProvider).value ?? <LincaBadge>[];
   return LincaEditViewModel(badges: badges);

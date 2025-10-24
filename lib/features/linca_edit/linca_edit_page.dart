@@ -182,11 +182,12 @@ class LincaEditPage extends HookConsumerWidget {
                 spacing: 4,
                 runSpacing: 8,
                 children: groups
+                    .where((Group group) => group.active)
                     .map(
                       (Group group) => ChoiceChip(
                         label: Text(
                           group.name,
-                          style: context.textTheme.titleMedium,
+                          style: context.textTheme.bodyMedium,
                         ),
                         selected:
                             state.userProfile?.favoriteGroups.contains(group) ==
@@ -208,7 +209,7 @@ class LincaEditPage extends HookConsumerWidget {
               const SizedBox(height: 16),
               TextField(
                 controller: bioController,
-                style: context.textTheme.titleMedium,
+                style: context.textTheme.bodyMedium,
                 maxLines: 10,
                 decoration: InputDecoration(
                   labelText: context.l10n.linca_edit_label_bio,
@@ -218,7 +219,7 @@ class LincaEditPage extends HookConsumerWidget {
               const SizedBox(height: 16),
               TextField(
                 controller: xController,
-                style: context.textTheme.titleMedium,
+                style: context.textTheme.bodyMedium,
                 decoration: InputDecoration(
                   labelText: context.l10n.linca_edit_label_user_id_x,
                   border: const OutlineInputBorder(),
@@ -227,7 +228,7 @@ class LincaEditPage extends HookConsumerWidget {
               const SizedBox(height: 16),
               TextField(
                 controller: instagramController,
-                style: context.textTheme.titleMedium,
+                style: context.textTheme.bodyMedium,
                 decoration: InputDecoration(
                   labelText: context.l10n.linca_edit_label_user_id_instagram,
                   border: const OutlineInputBorder(),
@@ -236,7 +237,7 @@ class LincaEditPage extends HookConsumerWidget {
               const SizedBox(height: 16),
               TextField(
                 controller: blueskyController,
-                style: context.textTheme.titleMedium,
+                style: context.textTheme.bodyMedium,
                 decoration: InputDecoration(
                   labelText: context.l10n.linca_edit_label_user_id_bluesky,
                   border: const OutlineInputBorder(),
@@ -266,47 +267,45 @@ class LincaEditPage extends HookConsumerWidget {
       final CachedNetworkImageProvider? imageProvider = lincaBadge != null
           ? CachedNetworkImageProvider(lincaBadge.iconUrl)
           : null;
-      return Expanded(
-        child: InkWell(
-          onTap: () async {
-            final LincaBadge? result = await context.router
-                .push<LincaBadge>(AcquiredBadgeRoute(selectable: true));
-            if (result != null) {
-              onTap(lincaBadge, result);
-            }
-          },
-          child: Container(
-            height: 160,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.grey,
-                width: 1,
+      return InkWell(
+        onTap: () async {
+          final LincaBadge? result = await context.router
+              .push<LincaBadge>(AcquiredBadgeRoute(selectable: true));
+          if (result != null) {
+            onTap(lincaBadge, result);
+          }
+        },
+        child: Container(
+          height: 150,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.grey,
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(
+                width: 100,
+                height: 100,
+                child: imageProvider != null
+                    ? Image(image: imageProvider)
+                    : const Icon(
+                        Icons.cancel,
+                        size: 40,
+                      ),
               ),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                  width: 100,
-                  height: 100,
-                  child: imageProvider != null
-                      ? Image(image: imageProvider)
-                      : const Icon(
-                          Icons.cancel,
-                          size: 40,
-                        ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Text(
+                  lincaBadge != null ? lincaBadge.name : '未選択',
+                  style: context.textTheme.bodySmall,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: Text(
-                    lincaBadge != null ? lincaBadge.name : '未選択',
-                    style: context.textTheme.bodyMedium,
-                  ),
-                ),
-                const SizedBox(height: 8),
-              ],
-            ),
+              ),
+              const SizedBox(height: 8),
+            ],
           ),
         ),
       );
@@ -328,16 +327,5 @@ class LincaEditPage extends HookConsumerWidget {
         }
       }),
     );
-
-    // return Row(
-    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //   children: <Widget>[
-    //     buildBadgeWidget(lincaBadge: displayBadges[0]),
-    //     const SizedBox(width: 8),
-    //     buildBadgeWidget(lincaBadge: displayBadges[1]),
-    //     const SizedBox(width: 8),
-    //     buildBadgeWidget(lincaBadge: displayBadges[2]),
-    //   ],
-    // );
   }
 }
