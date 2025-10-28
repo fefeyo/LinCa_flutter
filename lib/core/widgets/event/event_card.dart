@@ -1,8 +1,14 @@
+import 'dart:math' as math;
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:linca_otaku_support/core/constants/participation_type.dart';
+import 'package:linca_otaku_support/core/network/model/event_base.dart';
+import 'package:linca_otaku_support/core/utils/color_extension.dart';
+import 'package:linca_otaku_support/core/utils/context_extension.dart';
 import 'package:linca_otaku_support/core/utils/date_extension.dart';
 import 'package:linca_otaku_support/core/utils/group_extension.dart';
+import 'package:linca_otaku_support/core/utils/tag_extension.dart';
 
 import '../../../core/utils/participation_type_extension.dart';
 import '../../models/linca_event.dart';
@@ -23,49 +29,74 @@ class EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String? tagName = lincaEvent.event is OfficialEvent
+        ? lincaEvent.tags.priorityTypeTag?.name
+        : '有志イベント';
+
     return Card(
+      elevation: 4,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.zero,
+      ),
       child: Stack(
         clipBehavior: Clip.none,
         children: <Widget>[
-          ListTile(
-            contentPadding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-            title: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          IntrinsicHeight(
+            child: Row(
               children: <Widget>[
-                Text(
-                  lincaEvent.event.title,
-                  style: Theme.of(context).textTheme.titleSmall,
+                Container(
+                  width: 30,
+                  decoration: BoxDecoration(
+                    color: lincaEvent.group.getSeriesColor(context),
+                  ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  lincaEvent.event.date!.simpleDateFormat(),
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      flex: 2,
-                      child: Wrap(
-                        spacing: 4,
-                        children: lincaEvent.tags.map((Tag tag) {
-                          return Chip(
-                            label: Text(
-                              tag.name,
-                              style: Theme.of(context).textTheme.labelSmall,
-                            ),
-                            visualDensity: VisualDensity.compact,
-                          );
-                        }).toList(),
-                      ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          lincaEvent.event.title,
+                          style:
+                              Theme.of(context).textTheme.titleSmall?.copyWith(
+                                    color: context.colorScheme.textGrey,
+                                  ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          lincaEvent.event.date!.simpleDateFormat(),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: context.colorScheme.textGrey,
+                                  ),
+                        ),
+                        const SizedBox(height: 8),
+                        IntrinsicHeight(
+                          child: Row(
+                            children: <Widget>[
+                              Chip(
+                                label: Text(
+                                  '$tagName',
+                                  style: context.textTheme.labelSmall,
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Container(
+                                  padding: const EdgeInsets.only(bottom: 4),
+                                  child: Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: lincaEvent.group.getLogoWidget(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment.bottomRight,
-                        child: lincaEvent.group.getLogoWidget(),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ],
             ),
@@ -74,7 +105,6 @@ class EventCard extends StatelessWidget {
             child: Material(
               type: MaterialType.transparency,
               child: InkWell(
-                borderRadius: BorderRadius.circular(16),
                 onTap: () => context.router.push(
                   EventDetailRoute(
                     lincaEvent: lincaEvent,

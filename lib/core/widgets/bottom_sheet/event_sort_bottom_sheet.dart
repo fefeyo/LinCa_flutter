@@ -1,13 +1,15 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/models/filter_settings.dart';
-import 'package:linca_otaku_support/core/network/model/group.dart';
+import 'package:linca_otaku_support/core/network/providers.dart';
+import 'package:linca_otaku_support/core/utils/tag_extension.dart';
 
 import '../../../core/utils/context_extension.dart';
 import '../../constants/participation_type.dart';
-import '../../network/providers.dart';
+import '../../network/model/tag.dart';
 import '../../utils/sort_items_extension.dart';
 
 class EventSortBottomSheet extends HookConsumerWidget {
@@ -17,143 +19,28 @@ class EventSortBottomSheet extends HookConsumerWidget {
     this.needInputArea = false,
     this.needDisplayOrderArea = false,
     this.needParticipationArea = false,
-    this.needGroupArea = false,
+    this.needTagsArea = false,
   });
 
   final FilterSettings initialSettings;
   final bool needInputArea;
   final bool needDisplayOrderArea;
   final bool needParticipationArea;
-  final bool needGroupArea;
+  final bool needTagsArea;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ValueNotifier<String> keyword = useState(initialSettings.keyword);
+    final TextEditingController keywordController =
+        useTextEditingController(text: initialSettings.keyword);
     final ValueNotifier<DisplayOrder> currentDisplayOrder =
         useState(initialSettings.displayOrder);
     final ValueNotifier<List<ParticipationType>> currentParticipationTypes =
         useState(initialSettings.participationFilters);
-    final ValueNotifier<List<Group>> currentGroups =
-        useState(initialSettings.groups);
-    final List<Group> groups =
-        ref.watch(groupControllerProvider).value ?? <Group>[];
-
-    List<Widget> buildInputAreaIfNeeded() {
-      if (!needInputArea) return <Widget>[];
-
-      return <Widget>[
-        const SizedBox(height: 16),
-        SearchBar(
-          leading: const Icon(Icons.search),
-          hintText: context.l10n.filter_search_hint,
-          onChanged: (String value) {
-            keyword.value = value;
-          },
-        ),
-        const SizedBox(height: 16),
-        const Divider(),
-        const SizedBox(height: 8),
-      ];
-    }
-
-    List<Widget> buildDisplayOrderAreaIfNeeded() {
-      if (!needDisplayOrderArea) return <Widget>[];
-
-      return <Widget>[
-        Wrap(
-          spacing: 4,
-          runSpacing: 8,
-          children: DisplayOrder.values.map(
-            (DisplayOrder displayOrder) {
-              return ChoiceChip(
-                label: Text(
-                  displayOrder.label(context),
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                visualDensity: VisualDensity.comfortable,
-                selected: currentDisplayOrder.value == displayOrder,
-                onSelected: (bool selected) =>
-                    currentDisplayOrder.value = displayOrder,
-              );
-            },
-          ).toList(),
-        ),
-        const SizedBox(height: 8),
-        const Divider(),
-        const SizedBox(height: 8),
-      ];
-    }
-
-    List<Widget> buildParticipationAreaIfNeeded() {
-      if (!needParticipationArea) return <Widget>[];
-
-      return <Widget>[
-        Wrap(
-          spacing: 4,
-          runSpacing: 8,
-          children: ParticipationType.values.map(
-            (ParticipationType participationType) {
-              return ChoiceChip(
-                label: Text(
-                  participationType.label(context),
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                visualDensity: VisualDensity.comfortable,
-                selected:
-                    currentParticipationTypes.value.contains(participationType),
-                onSelected: (bool selected) {
-                  final List<ParticipationType> current =
-                      List<ParticipationType>.of(
-                          currentParticipationTypes.value);
-                  if (selected) {
-                    current.add(participationType);
-                  } else {
-                    current.remove(participationType);
-                  }
-                  currentParticipationTypes.value = current;
-                },
-              );
-            },
-          ).toList(),
-        ),
-        const SizedBox(height: 8),
-        const Divider(),
-        const SizedBox(height: 8),
-      ];
-    }
-
-    List<Widget> buildSeriesTagAreaIfNeeded() {
-      if (!needGroupArea) return <Widget>[];
-
-      return <Widget>[
-        Wrap(
-          spacing: 4,
-          runSpacing: 8,
-          children: groups.map(
-            (Group group) {
-              return ChoiceChip(
-                label: Text(
-                  group.name,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                visualDensity: VisualDensity.comfortable,
-                selected: currentGroups.value.contains(group),
-                onSelected: (bool selected) {
-                  final List<Group> current =
-                      List<Group>.of(currentGroups.value);
-                  if (selected) {
-                    current.add(group);
-                  } else {
-                    current.remove(group);
-                  }
-                  currentGroups.value = current;
-                },
-              );
-            },
-          ).toList(),
-        ),
-      ];
-    }
+    final ValueNotifier<List<Tag>> currentTypeTags =
+        useState(initialSettings.typeTags);
+    final ValueNotifier<List<Tag>> currentSeriesTags =
+        useState(initialSettings.seriesTags);
+    final List<Tag> tags = ref.watch(tagControllerProvider).value ?? <Tag>[];
 
     return SafeArea(
       child: Padding(
@@ -170,10 +57,36 @@ class EventSortBottomSheet extends HookConsumerWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  ...buildInputAreaIfNeeded(),
-                  ...buildDisplayOrderAreaIfNeeded(),
-                  ...buildParticipationAreaIfNeeded(),
-                  ...buildSeriesTagAreaIfNeeded(),
+                  ..._buildInputAreaIfNeeded(
+                    context: context,
+                    keywordController: keywordController,
+                  ),
+                  ..._buildDisplayOrderAreaIfNeeded(
+                    context: context,
+                    currentDisplayOrder: currentDisplayOrder.value,
+                    onChanged: (DisplayOrder displayOrder) =>
+                        currentDisplayOrder.value = displayOrder,
+                  ),
+                  ..._buildParticipationAreaIfNeeded(
+                    context: context,
+                    currentParticipationTypes: currentParticipationTypes.value,
+                    onChanged: (List<ParticipationType> types) {
+                      currentParticipationTypes.value = types;
+                    },
+                  ),
+                  ..._buildTypeTagsAreaIfNeeded(
+                    context: context,
+                    tags: tags.typeTags,
+                    currentTags: currentTypeTags.value,
+                    onChanged: (List<Tag> tags) => currentTypeTags.value = tags,
+                  ),
+                  ..._buildSeriesTagsAreaIfNeeded(
+                    context: context,
+                    tags: tags.seriesTags,
+                    currentTags: currentSeriesTags.value,
+                    onChanged: (List<Tag> tags) =>
+                        currentSeriesTags.value = tags,
+                  ),
                   const SizedBox(height: 32),
                   SizedBox(
                     width: double.infinity, // 横幅いっぱい
@@ -188,21 +101,21 @@ class EventSortBottomSheet extends HookConsumerWidget {
                       onPressed: () {
                         context.router.pop(
                           FilterSettings(
-                            keyword: keyword.value,
+                            keyword: keywordController.text,
                             displayOrder: currentDisplayOrder.value,
                             participationFilters:
                                 currentParticipationTypes.value,
-                            groups: currentGroups.value,
+                            seriesTags: currentSeriesTags.value,
+                            typeTags: currentTypeTags.value,
                           ),
                         );
                       },
                       child: Text(
                         context.l10n.filter_apply_button,
-                        style:
-                            Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  color: Colors.white, // 適用ボタンは白文字が定番
-                                  fontWeight: FontWeight.bold,
-                                ),
+                        style: context.textTheme.titleMedium?.copyWith(
+                          color: Colors.white, // 適用ボタンは白文字が定番
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
@@ -215,13 +128,183 @@ class EventSortBottomSheet extends HookConsumerWidget {
     );
   }
 
+  List<Widget> _buildInputAreaIfNeeded({
+    required BuildContext context,
+    required TextEditingController keywordController,
+  }) {
+    if (!needInputArea) return <Widget>[];
+
+    return <Widget>[
+      const SizedBox(height: 16),
+      SearchBar(
+        controller: keywordController,
+        leading: const Icon(Icons.search),
+        hintText: context.l10n.filter_search_hint,
+      ),
+      const SizedBox(height: 16),
+      const Divider(),
+      const SizedBox(height: 8),
+    ];
+  }
+
+  List<Widget> _buildDisplayOrderAreaIfNeeded({
+    required BuildContext context,
+    required DisplayOrder currentDisplayOrder,
+    required Function(DisplayOrder displayOrder) onChanged,
+  }) {
+    if (!needDisplayOrderArea) return <Widget>[];
+
+    return <Widget>[
+      Wrap(
+        spacing: 4,
+        runSpacing: 8,
+        children: DisplayOrder.values.map(
+          (DisplayOrder displayOrder) {
+            return ChoiceChip(
+              showCheckmark: false,
+              label: Text(
+                displayOrder.label(context),
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              visualDensity: VisualDensity.comfortable,
+              selected: currentDisplayOrder == displayOrder,
+              onSelected: (_) => onChanged(displayOrder),
+            );
+          },
+        ).toList(),
+      ),
+      const SizedBox(height: 8),
+      const Divider(),
+      const SizedBox(height: 8),
+    ];
+  }
+
+  List<Widget> _buildParticipationAreaIfNeeded({
+    required BuildContext context,
+    required List<ParticipationType> currentParticipationTypes,
+    required Function(List<ParticipationType> types) onChanged,
+  }) {
+    if (!needParticipationArea) return <Widget>[];
+
+    return <Widget>[
+      Wrap(
+        spacing: 4,
+        runSpacing: 8,
+        children: ParticipationType.values.map(
+          (ParticipationType participationType) {
+            return ChoiceChip(
+              label: Text(
+                participationType.label(context),
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              visualDensity: VisualDensity.comfortable,
+              selected: currentParticipationTypes.contains(participationType),
+              onSelected: (bool selected) {
+                final List<ParticipationType> current =
+                    List<ParticipationType>.of(currentParticipationTypes);
+                if (selected) {
+                  current.add(participationType);
+                } else {
+                  current.remove(participationType);
+                }
+                onChanged(current);
+              },
+            );
+          },
+        ).toList(),
+      ),
+      const SizedBox(height: 8),
+      const Divider(),
+      const SizedBox(height: 8),
+    ];
+  }
+
+  List<Widget> _buildTypeTagsAreaIfNeeded({
+    required BuildContext context,
+    required List<Tag> tags,
+    required List<Tag> currentTags,
+    required Function(List<Tag> tags) onChanged,
+  }) {
+    if (!needTagsArea) return <Widget>[];
+
+    return <Widget>[
+      Wrap(
+        spacing: 4,
+        runSpacing: 8,
+        children: tags.map(
+          (Tag tag) {
+            return ChoiceChip(
+              showCheckmark: false,
+              label: Text(
+                tag.name,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              visualDensity: VisualDensity.comfortable,
+              selected: currentTags.contains(tag),
+              onSelected: (bool selected) {
+                final List<Tag> current = List<Tag>.of(currentTags);
+                if (selected) {
+                  current.add(tag);
+                } else {
+                  current.remove(tag);
+                }
+                onChanged(current);
+              },
+            );
+          },
+        ).toList(),
+      ),
+      const SizedBox(height: 8),
+      const Divider(),
+      const SizedBox(height: 8),
+    ];
+  }
+
+  List<Widget> _buildSeriesTagsAreaIfNeeded({
+    required BuildContext context,
+    required List<Tag> tags,
+    required List<Tag> currentTags,
+    required Function(List<Tag> tags) onChanged,
+  }) {
+    if (!needTagsArea) return <Widget>[];
+
+    return <Widget>[
+      Wrap(
+        spacing: 4,
+        runSpacing: 8,
+        children: tags.map(
+          (Tag tag) {
+            return ChoiceChip(
+              showCheckmark: false,
+              label: Text(
+                tag.name,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              visualDensity: VisualDensity.comfortable,
+              selected: currentTags.contains(tag),
+              onSelected: (bool selected) {
+                final List<Tag> current = List<Tag>.of(currentTags);
+                if (selected) {
+                  current.add(tag);
+                } else {
+                  current.remove(tag);
+                }
+                onChanged(current);
+              },
+            );
+          },
+        ).toList(),
+      ),
+    ];
+  }
+
   static Future<FilterSettings?> show(
     BuildContext context,
     FilterSettings initialSettings, {
     bool needInputArea = false,
     bool needDisplayOrderArea = false,
     bool needParticipationArea = false,
-    bool needSeriesTagArea = false,
+    bool needTagsArea = false,
   }) async =>
       showModalBottomSheet<FilterSettings?>(
         context: context,
@@ -233,7 +316,7 @@ class EventSortBottomSheet extends HookConsumerWidget {
           needInputArea: needInputArea,
           needDisplayOrderArea: needDisplayOrderArea,
           needParticipationArea: needParticipationArea,
-          needGroupArea: needSeriesTagArea,
+          needTagsArea: needTagsArea,
         ),
       );
 }

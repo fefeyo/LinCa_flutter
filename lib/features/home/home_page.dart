@@ -4,7 +4,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/models/filter_settings.dart';
 import 'package:linca_otaku_support/core/models/linca_user.dart';
 import 'package:linca_otaku_support/core/network/providers.dart';
-import 'package:linca_otaku_support/core/utils/linca_user_extension.dart';
 import 'package:linca_otaku_support/features/my_event/data/my_event_state.dart';
 
 import '../../../core/utils/context_extension.dart';
@@ -52,7 +51,7 @@ class HomePage extends HookConsumerWidget {
                       needInputArea: true,
                       needDisplayOrderArea: true,
                       needParticipationArea: true,
-                      needSeriesTagArea: true,
+                      needTagsArea: true,
                     );
                     if (result != null) {
                       myEventViewModel.setFilterSettings(result);
@@ -63,7 +62,7 @@ class HomePage extends HookConsumerWidget {
             ],
           ),
           drawer: HomeDrawer(
-            userProfile: lincaUser.userProfile,
+            lincaUser: lincaUser,
           ),
           body: FadeTransition(opacity: animation, child: child),
           bottomNavigationBar: BottomNavigationBar(

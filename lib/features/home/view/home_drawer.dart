@@ -1,7 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:linca_otaku_support/core/models/user_profile.dart';
+import 'package:linca_otaku_support/core/models/linca_user.dart';
+import 'package:linca_otaku_support/core/utils/linca_user_extension.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../../core/utils/context_extension.dart';
@@ -12,10 +13,10 @@ import '../../../core/widgets/bottom_sheet/my_qr_bottom_sheet.dart';
 class HomeDrawer extends StatelessWidget {
   const HomeDrawer({
     super.key,
-    required this.userProfile,
+    required this.lincaUser,
   });
 
-  final UserProfile userProfile;
+  final LincaUser lincaUser;
 
   @override
   Widget build(BuildContext context) {
@@ -60,15 +61,14 @@ class HomeDrawer extends StatelessWidget {
                     ],
                   ),
                   child: CircleAvatar(
-                    backgroundImage: userProfile.user.photoUrl.isNotEmpty ==
-                            true
-                        ? CachedNetworkImageProvider(userProfile.user.photoUrl)
+                    backgroundImage: lincaUser.user.photoUrl.isNotEmpty == true
+                        ? CachedNetworkImageProvider(lincaUser.user.photoUrl)
                         : AssetImage(Assets.images.userIcon.path),
                   ),
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  userProfile.user.displayName,
+                  lincaUser.user.displayName,
                   style: context.textTheme.titleLarge?.copyWith(
                     color: Colors.white,
                   ),
@@ -133,7 +133,7 @@ class HomeDrawer extends StatelessWidget {
               style: context.textTheme.bodyMedium,
             ),
             onTap: () => transitPage(
-              LincaEditRoute(userProfile: userProfile),
+              LincaEditRoute(userProfile: lincaUser.userProfile),
             ),
           ),
           ListTile(

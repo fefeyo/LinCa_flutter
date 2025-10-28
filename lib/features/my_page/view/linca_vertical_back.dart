@@ -1,31 +1,77 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/models/linca_event.dart';
+import 'package:linca_otaku_support/core/network/model/group.dart';
+import 'package:linca_otaku_support/core/utils/group_extension.dart';
+import 'package:linca_otaku_support/core/widgets/common/common_close_button.dart';
+import 'package:linca_otaku_support/features/linca_detail/data/participation_graph_threshold.dart';
 import '../../../core/utils/context_extension.dart';
 
-class LincaVerticalBack extends StatelessWidget {
+class LincaVerticalBack extends HookConsumerWidget {
   const LincaVerticalBack({
     super.key,
+    required this.participationEvents,
     this.animationTag = '',
+    this.onClickFlip,
+    this.onClickClose,
   });
 
+  final List<LincaEvent> participationEvents;
   final String animationTag;
-  static final List<String> days = <String>['月', '火', '水', '木', '金', '土', '日'];
+  final Function()? onClickFlip;
+  final Function()? onClickClose;
 
-  static final List<double> weeklyData = <double>[30, 45, 28, 60, 90, 55, 40];
+  static const List<String> _groupNames = <String>[
+    "μ's",
+    'Aqours',
+    '虹ヶ咲',
+    'Lialla!',
+    '蓮ノ空',
+    'いきづ\nらい部！',
+  ];
+
+  static const List<Group> _groups = <Group>[
+    Group(slug: 'muse'),
+    Group(slug: 'aqours'),
+    Group(slug: 'nijigasaki'),
+    Group(slug: 'liella'),
+    Group(slug: 'hasunosora'),
+    Group(slug: 'ikizulive'),
+  ];
+
+  Map<Group, int> getEventParticipationData(List<LincaEvent> events) {
+    final Map<Group, int> counts = <Group, int>{
+      for (final Group group in _groups) group: 0,
+    };
+
+    for (final LincaEvent event in events) {
+      for (final Group group in _groups) {
+        if (event.group.slug == group.slug) {
+          counts[group] = counts[group]! + 1;
+        }
+      }
+    }
+
+    return counts;
+  }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final Color backgroundColor = context.theme.brightness == Brightness.light
         ? context.colorScheme.surface
         : context.colorScheme.surfaceContainer;
+    final ValueNotifier<ParticipationGraphThreshold> graphThreshold =
+        useState(ParticipationGraphThreshold.ten());
 
     Widget getBottomTitle(double value, TitleMeta meta) {
-      final String day = days[value.toInt()];
+      final String day = _groupNames[value.toInt()];
       return SideTitleWidget(
         meta: meta,
         child: Text(
           day,
-          style: context.textTheme.bodyMedium,
+          style: context.textTheme.labelSmall,
         ),
       );
     }
@@ -35,76 +81,159 @@ class LincaVerticalBack extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: SizedBox.expand(
-          child: _buildCard(context, backgroundColor, getBottomTitle),
+          child: _buildCard(
+            context: context,
+            backgroundColor: backgroundColor,
+            getBottomTitle: getBottomTitle,
+            graphThreshold: graphThreshold.value,
+            onChangeThreshold: (ParticipationGraphThreshold newValue) {
+              graphThreshold.value = newValue;
+            },
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildCard(
-    BuildContext context,
-    Color backgroundColor,
-    GetTitleWidgetFunction getBottomTitle,
-  ) =>
+  Widget _buildCard({
+    required BuildContext context,
+    required Color backgroundColor,
+    required GetTitleWidgetFunction getBottomTitle,
+    required ParticipationGraphThreshold graphThreshold,
+    required Function(ParticipationGraphThreshold newValue) onChangeThreshold,
+  }) =>
       Card(
         color: backgroundColor,
         elevation: 10,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         clipBehavior: Clip.antiAlias,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(8, 72, 8, 16),
-          child: BarChart(
-            BarChartData(
-              alignment: BarChartAlignment.spaceAround,
-              maxY: 100,
-              barTouchData: BarTouchData(
-                enabled: true,
-                touchTooltipData: BarTouchTooltipData(getTooltipItem: (
-                  BarChartGroupData group,
-                  int groupIndex,
-                  BarChartRodData rod,
-                  int rodIndex,
-                ) {
-                  return BarTooltipItem(
-                    '${days[group.x]}: ${rod.toY.toInt()}万円',
-                    const TextStyle(color: Colors.white, fontSize: 10),
-                  );
-                }),
+        child: Stack(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  const SizedBox(height: 8),
+                  Center(
+                    child: Text(
+                      'グループ別イベント参加数',
+                      style: context.textTheme.titleMedium,
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16),
+                    child: Text(
+                      '表示範囲の選択',
+                      style: context.textTheme.labelMedium,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Center(
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: SegmentedButton<ParticipationGraphThreshold>(
+                        showSelectedIcon: false,
+                        segments: <ButtonSegment<ParticipationGraphThreshold>>[
+                          for (final ParticipationGraphThreshold threshold
+                              in ParticipationGraphThreshold
+                                  .participationGraphThresholdList)
+                            ButtonSegment<ParticipationGraphThreshold>(
+                              value: threshold,
+                              label: Text(threshold.label),
+                            )
+                        ],
+                        selected: <ParticipationGraphThreshold>{graphThreshold},
+                        onSelectionChanged:
+                            (Set<ParticipationGraphThreshold> newSelection) {
+                          if (newSelection.isNotEmpty) {
+                            onChangeThreshold(newSelection.first);
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Expanded(
+                    child: BarChart(
+                      BarChartData(
+                        alignment: BarChartAlignment.spaceAround,
+                        maxY: graphThreshold.maxY,
+                        titlesData: FlTitlesData(
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              reservedSize: 90,
+                              showTitles: true,
+                              getTitlesWidget: getBottomTitle,
+                            ),
+                          ),
+                          leftTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 35,
+                              interval: graphThreshold.interval,
+                            ),
+                          ),
+                          rightTitles: const AxisTitles(),
+                          topTitles: const AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: false,
+                            ),
+                          ),
+                        ),
+                        borderData: FlBorderData(show: false),
+                        barGroups:
+                            getEventParticipationData(participationEvents)
+                                .entries
+                                .map((MapEntry<Group, int> entry) {
+                          final int index = _groups.indexOf(entry.key);
+                          final double count = entry.value.toDouble();
+                          final LinearGradient gradient = entry.key
+                              .getSeriesGradientForGraph(context);
+                          return BarChartGroupData(
+                            x: index,
+                            barRods: <BarChartRodData>[
+                              BarChartRodData(
+                                toY: count
+                                    .clamp(0, graphThreshold.maxY)
+                                    .toDouble(),
+                                width: 20,
+                                gradient: gradient,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                            ],
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              titlesData: FlTitlesData(
-                bottomTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    reservedSize: 30,
-                    showTitles: true,
-                    getTitlesWidget: getBottomTitle,
-                  ),
-                ),
-                leftTitles: const AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    reservedSize: 30,
-                  ),
-                ),
-                rightTitles: const AxisTitles(),
-                topTitles: const AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: false,
-                    reservedSize: 30,
-                  ),
-                ),
-              ),
-              borderData: FlBorderData(show: false),
-              barGroups:
-                  weeklyData.asMap().entries.map((MapEntry<int, double> entry) {
-                final int index = entry.key;
-                final double value = entry.value;
-                return BarChartGroupData(x: index, barRods: <BarChartRodData>[
-                  BarChartRodData(
-                      toY: value, width: 20, color: Colors.blueAccent),
-                ]);
-              }).toList(),
             ),
-          ),
+            Positioned(
+              top: 16,
+              left: 16,
+              child: CommonCloseButton(
+                onClose: () => onClickClose?.call(),
+              ),
+            ),
+            Positioned(
+              bottom: 16,
+              right: 16,
+              child: IconButton(
+                icon: const Icon(Icons.sync, color: Colors.white),
+                style: IconButton.styleFrom(
+                  backgroundColor: Colors.black26,
+                  shape: const CircleBorder(),
+                  fixedSize: const Size(48, 48),
+                  padding: EdgeInsets.zero,
+                ),
+                onPressed: onClickFlip,
+              ),
+            ),
+          ],
         ),
       );
 }

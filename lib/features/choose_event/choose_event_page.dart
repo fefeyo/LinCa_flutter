@@ -66,7 +66,7 @@ class ChooseEventPage extends HookConsumerWidget {
                 context,
                 state.filterSettings,
                 needDisplayOrderArea: true,
-                needSeriesTagArea: true,
+                needTagsArea: true,
               );
               if (result != null) {
                 viewModel.setFilterSettings(result);
@@ -87,7 +87,7 @@ class ChooseEventPage extends HookConsumerWidget {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
         child: state.sortedEvents.isNotEmpty
             ? ListView.separated(
                 clipBehavior: Clip.none,

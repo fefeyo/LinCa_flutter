@@ -1,9 +1,10 @@
 import 'package:linca_otaku_support/core/models/linca_event.dart';
 import 'package:linca_otaku_support/core/network/model/event_base.dart';
-import 'package:linca_otaku_support/core/network/model/group.dart';
 import 'package:linca_otaku_support/core/network/model/participation_info.dart';
 import 'package:linca_otaku_support/core/utils/event_base_extension.dart';
 import 'package:linca_otaku_support/core/utils/sort_items_extension.dart';
+
+import '../network/model/tag.dart';
 
 extension LincaEventExtension on LincaEvent {
   String get venueName => event is OfficialEvent
@@ -65,12 +66,12 @@ extension LincaEventsExtension on List<LincaEvent> {
     return sortedEvents;
   }
 
-  // グループフィルタリング
-  List<LincaEvent> filterWithGroup(List<Group> groups) {
+  // タグフィルタリング
+  List<LincaEvent> filterWithTag(List<Tag> tags) {
     List<LincaEvent> sortedEvents = this;
-    if (groups.isNotEmpty) {
+    if (tags.isNotEmpty) {
       sortedEvents = where((LincaEvent event) {
-        return groups.contains(event.group);
+        return tags.any((Tag tag) => event.tags.contains(tag));
       }).toList();
     }
 

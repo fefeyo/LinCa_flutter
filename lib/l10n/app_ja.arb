@@ -34,7 +34,7 @@
   "my_page_title": "マイページ",
   "traded_linca_list_title": "交換済みLinCaカード一覧",
   "my_qr_code_title": "マイQRコード表示",
-  "edit_my_linca_title": "マイLinCa編集",
+  "edit_my_linca_title": "マイLinCaカード編集",
   "acquired_badges_title": "獲得済みバッジ一覧",
   "created_events_title": "作成したイベント一覧",
   "app_settings_title": "アプリ設定",
@@ -179,5 +179,7 @@
   "acquired_badges_list_title": "獲得済みバッジ一覧画面",
   "acquired_badges_list_unselect": "未選択",
   "common_cancel": "キャンセル",
-  "common_ok": "OK"
+  "common_ok": "OK",
+  "my_qr_code_transit_scan": "読み取り画面に移動",
+  "my_qr_code_success_linca_trade": "LinCaカード交換に成功しました！"
 }

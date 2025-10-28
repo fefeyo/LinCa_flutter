@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/auth/providers.dart';
 import 'package:linca_otaku_support/core/network/controller/friend_controller.dart';
+import 'package:linca_otaku_support/core/network/controller/user_controller.dart';
 import 'package:linca_otaku_support/core/network/providers.dart';
 import 'package:linca_otaku_support/core/router/app_router.gr.dart';
 
@@ -17,7 +18,7 @@ class MyQRBottomSheet extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final String? uid = ref.watch(uidProvider);
     final FriendController friendController =
-    ref.read(friendControllerProvider);
+        ref.read(friendControllerProvider);
 
     return SafeArea(
       child: Padding(
@@ -60,12 +61,21 @@ class MyQRBottomSheet extends HookConsumerWidget {
                       if (result != null) {
                         final String friendUid = result.userId;
                         await friendController.registerFriend(friendUid);
-                        await friendController.fetchFriends();
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  context.l10n.my_qr_code_success_linca_trade),
+                              backgroundColor: Colors.green,
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                        }
                       }
                     },
                     icon: const Icon(Icons.qr_code_scanner),
                     label: Text(
-                      '読み取り画面に移動',
+                      context.l10n.my_qr_code_transit_scan,
                       style: context.textTheme.titleMedium?.copyWith(
                         color: context.colorScheme.surface,
                       ),

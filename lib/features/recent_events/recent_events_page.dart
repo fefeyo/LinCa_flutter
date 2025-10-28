@@ -68,7 +68,7 @@ class RecentEventsPage extends HookConsumerWidget {
                 pinned: true,
                 delegate: FixedHeaderDelegate(
                   child: OnTheDayEvent(events: participationEventMap),
-                  height: 240,
+                  height: 250,
                 ),
               ),
 
@@ -82,9 +82,9 @@ class RecentEventsPage extends HookConsumerWidget {
                   return Padding(
                     padding:
                         EdgeInsets.fromLTRB(
-                          16,
+                          8,
                           index == 0 ? 8 : 6, // ← 最初の要素だけ上に多めの余白を取る
-                          16,
+                          8,
                           6,
                         ),
                     child: EventCard(

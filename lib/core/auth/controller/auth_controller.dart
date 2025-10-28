@@ -126,6 +126,21 @@ class AuthController extends AsyncNotifier<AuthState> {
     });
   }
 
+  Future<void> unLinkGoogle() async {
+    await authRepository.unlinkGoogle();
+  }
+
+  Future<void> unLinkTwitter() async {
+    await authRepository.unlinkTwitter();
+  }
+
+  bool isTwitterLinked() => authRepository.isTwitterLinked();
+
+  bool isGoogleLinked() => authRepository.isGoogleLinked();
+
+  bool isBothProviderLinked() =>
+      authRepository.isGoogleLinked() && authRepository.isTwitterLinked();
+
   Future<void> deleteMyAccount() async {
     state = const AsyncLoading<AuthState>();
     state = await AsyncValue.guard(() async {

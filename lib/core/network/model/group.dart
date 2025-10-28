@@ -12,6 +12,7 @@ abstract class Group with _$Group {
     @Default('') String slug,
     @Default('') String color,
     @Default(false) bool active,
+    @Default('') String seriesTag,
     @Default(0) int order,
   }) = _Group;
 

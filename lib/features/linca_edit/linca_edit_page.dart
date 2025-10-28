@@ -4,12 +4,14 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/auth/providers.dart';
+import 'package:linca_otaku_support/core/models/favorite_badges.dart';
 import 'package:linca_otaku_support/core/models/user_profile.dart';
 import 'package:linca_otaku_support/core/network/controller/user_controller.dart';
 import 'package:linca_otaku_support/core/network/model/group.dart';
 import 'package:linca_otaku_support/core/network/model/linca_badge.dart';
 import 'package:linca_otaku_support/core/network/providers.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
+import 'package:linca_otaku_support/core/utils/favorite_badges_extension.dart';
 import 'package:linca_otaku_support/core/utils/image_uploader.dart';
 
 import '../../core/asset_gen/assets.gen.dart';
@@ -67,10 +69,11 @@ class LincaEditPage extends HookConsumerWidget {
                     .map((Group group) => group.slug)
                     .toList() ??
                 <String>[],
-            favoriteBadges: state.userProfile?.favoriteBadges
-                    .map((LincaBadge badge) => badge.slug)
-                    .toList() ??
-                <String>[],
+            favoriteBadges: <String>[
+              state.userProfile?.favoriteBadges.badge01?.slug ?? '',
+              state.userProfile?.favoriteBadges.badge02?.slug ?? '',
+              state.userProfile?.favoriteBadges.badge03?.slug ?? '',
+            ],
           ) ??
           const User();
       await userController.updateUserData(user);
@@ -164,12 +167,17 @@ class LincaEditPage extends HookConsumerWidget {
               const SizedBox(height: 8),
               _buildSelectFavoriteBadgeWidget(
                   context: context,
-                  favoriteBadges:
-                      state.userProfile?.favoriteBadges ?? <LincaBadge>[],
-                  onTap: (LincaBadge? changeBadge, LincaBadge selectedBadge) {
+                  favoriteBadges: state.userProfile?.favoriteBadges ??
+                      const FavoriteBadges(),
+                  onTap: (
+                    LincaBadge? changeBadge,
+                    LincaBadge selectedBadge,
+                    int index,
+                  ) {
                     viewModel.updateFavoriteBadges(
                       changeBadge: changeBadge,
                       selectedBadge: selectedBadge,
+                      index: index,
                     );
                   }),
               const SizedBox(height: 16),
@@ -185,6 +193,7 @@ class LincaEditPage extends HookConsumerWidget {
                     .where((Group group) => group.active)
                     .map(
                       (Group group) => ChoiceChip(
+                        showCheckmark: false,
                         label: Text(
                           group.name,
                           style: context.textTheme.bodyMedium,
@@ -253,16 +262,16 @@ class LincaEditPage extends HookConsumerWidget {
 
   Widget _buildSelectFavoriteBadgeWidget({
     required BuildContext context,
-    required List<LincaBadge> favoriteBadges,
-    required Function(LincaBadge? changeBadge, LincaBadge selectedBadge) onTap,
+    required FavoriteBadges favoriteBadges,
+    required Function(
+      LincaBadge? changeBadge,
+      LincaBadge selectedBadge,
+      int index,
+    ) onTap,
   }) {
-    final List<LincaBadge?> displayBadges = <LincaBadge?>[
-      ...favoriteBadges,
-      if (favoriteBadges.length < 3) null,
-    ].take(3).toList();
-
     Widget buildBadgeWidget({
       required LincaBadge? lincaBadge,
+      required int index,
     }) {
       final CachedNetworkImageProvider? imageProvider = lincaBadge != null
           ? CachedNetworkImageProvider(lincaBadge.iconUrl)
@@ -272,7 +281,7 @@ class LincaEditPage extends HookConsumerWidget {
           final LincaBadge? result = await context.router
               .push<LincaBadge>(AcquiredBadgeRoute(selectable: true));
           if (result != null) {
-            onTap(lincaBadge, result);
+            onTap(lincaBadge, result, index);
           }
         },
         child: Container(
@@ -293,14 +302,15 @@ class LincaEditPage extends HookConsumerWidget {
                 child: imageProvider != null
                     ? Image(image: imageProvider)
                     : const Icon(
-                        Icons.cancel,
+                        Icons.add_circle_outline,
                         size: 40,
+                        color: Colors.grey,
                       ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: Text(
-                  lincaBadge != null ? lincaBadge.name : '未選択',
+                  lincaBadge?.name ?? 'バッジ未選択',
                   style: context.textTheme.bodySmall,
                 ),
               ),
@@ -314,17 +324,15 @@ class LincaEditPage extends HookConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: List<Widget>.generate(3, (int index) {
-        if (index < displayBadges.length) {
-          return Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(left: index > 0 ? 8 : 0),
-              child: buildBadgeWidget(lincaBadge: displayBadges[index]),
+        return Expanded(
+          child: Padding(
+            padding: EdgeInsets.only(left: index > 0 ? 8 : 0),
+            child: buildBadgeWidget(
+              lincaBadge: favoriteBadges.toList[index],
+              index: index,
             ),
-          );
-        } else {
-          // 空きスロットを表示しないように
-          return const Expanded(child: SizedBox.shrink());
-        }
+          ),
+        );
       }),
     );
   }
