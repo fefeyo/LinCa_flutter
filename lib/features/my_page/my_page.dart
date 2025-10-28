@@ -51,7 +51,7 @@ class MyPage extends HookConsumerWidget {
               const SizedBox(height: 32),
               Text(
                 context.l10n.common_linca_card,
-                style: context.textTheme.titleMedium,
+                style: context.textTheme.titleSmall,
               ),
               const SizedBox(height: 16),
               MyPageItem(
@@ -78,7 +78,7 @@ class MyPage extends HookConsumerWidget {
               const SizedBox(height: 16),
               Text(
                 context.l10n.common_event,
-                style: context.textTheme.titleMedium,
+                style: context.textTheme.titleSmall,
               ),
               const SizedBox(height: 16),
               MyPageItem(
@@ -89,7 +89,7 @@ class MyPage extends HookConsumerWidget {
               const SizedBox(height: 16),
               Text(
                 context.l10n.common_setting,
-                style: context.textTheme.titleMedium,
+                style: context.textTheme.titleSmall,
               ),
               const SizedBox(height: 16),
               MyPageItem(
@@ -103,8 +103,15 @@ class MyPage extends HookConsumerWidget {
                     : context.l10n.not_linked,
                 trailing: authState.value?.isGoogleLinked == true
                     ? ElevatedButton(
-                        onPressed: () {},
-                        child: Text(context.l10n.release_link),
+                        onPressed: () {
+                          authController.linkTwitter();
+                        },
+                        child: Text(
+                          context.l10n.release_link,
+                          style: context.textTheme.bodyMedium?.copyWith(
+                            color: Colors.white,
+                          ),
+                        ),
                       )
                     : null,
                 onClickItem: authState.value?.isGoogleLinked == true
@@ -167,7 +174,7 @@ class MyPage extends HookConsumerWidget {
                 onClickItem: () async {
                   final bool? comfirmed = await CommonSimpleDialog.show(
                       context: context,
-                      title: 'アカウントを削除してもよろ   しいですか？',
+                      title: 'アカウントを削除してもよろしいですか？',
                       content: 'アカウントを削除すると、すべてのデータが失われ、元に戻すことはできません。'
                           '\n本当に削除してもよろしいですか？');
                   if (comfirmed == true && context.mounted) {

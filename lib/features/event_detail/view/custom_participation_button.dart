@@ -41,12 +41,12 @@ class CustomParticipationButton extends StatelessWidget {
                 color: Colors.black87,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             SizedBox(
               height: 50,
               child: Text(
                 participationType.label(context),
-                style: context.textTheme.titleMedium,
+                style: context.textTheme.bodyMedium,
                 softWrap: true,
                 textAlign: TextAlign.center,
               ),

@@ -1,4 +1,3 @@
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -69,7 +68,7 @@ class EventSortBottomSheet extends HookConsumerWidget {
               return ChoiceChip(
                 label: Text(
                   displayOrder.label(context),
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 visualDensity: VisualDensity.comfortable,
                 selected: currentDisplayOrder.value == displayOrder,
@@ -97,7 +96,7 @@ class EventSortBottomSheet extends HookConsumerWidget {
               return ChoiceChip(
                 label: Text(
                   participationType.label(context),
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 visualDensity: VisualDensity.comfortable,
                 selected:
@@ -135,7 +134,7 @@ class EventSortBottomSheet extends HookConsumerWidget {
               return ChoiceChip(
                 label: Text(
                   group.name,
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 visualDensity: VisualDensity.comfortable,
                 selected: currentGroups.value.contains(group),
@@ -156,55 +155,59 @@ class EventSortBottomSheet extends HookConsumerWidget {
       ];
     }
 
-    return Padding(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom, // ← キーボード重なり対策
-      ),
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          minWidth: double.infinity,
-          maxHeight: MediaQuery.of(context).size.height * 0.8,
+    return SafeArea(
+      child: Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom, // ← キーボード重なり対策
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                ...buildInputAreaIfNeeded(),
-                ...buildDisplayOrderAreaIfNeeded(),
-                ...buildParticipationAreaIfNeeded(),
-                ...buildSeriesTagAreaIfNeeded(),
-                const SizedBox(height: 32),
-                SizedBox(
-                  width: double.infinity, // 横幅いっぱい
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: context.colorScheme.primary,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minWidth: double.infinity,
+            maxHeight: MediaQuery.of(context).size.height * 0.8,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  ...buildInputAreaIfNeeded(),
+                  ...buildDisplayOrderAreaIfNeeded(),
+                  ...buildParticipationAreaIfNeeded(),
+                  ...buildSeriesTagAreaIfNeeded(),
+                  const SizedBox(height: 32),
+                  SizedBox(
+                    width: double.infinity, // 横幅いっぱい
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: context.colorScheme.primary,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      onPressed: () {
+                        context.router.pop(
+                          FilterSettings(
+                            keyword: keyword.value,
+                            displayOrder: currentDisplayOrder.value,
+                            participationFilters:
+                                currentParticipationTypes.value,
+                            groups: currentGroups.value,
+                          ),
+                        );
+                      },
+                      child: Text(
+                        context.l10n.filter_apply_button,
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  color: Colors.white, // 適用ボタンは白文字が定番
+                                  fontWeight: FontWeight.bold,
+                                ),
                       ),
                     ),
-                    onPressed: () {
-                      context.router.pop(
-                        FilterSettings(
-                          keyword: keyword.value,
-                          displayOrder: currentDisplayOrder.value,
-                          participationFilters: currentParticipationTypes.value,
-                          groups: currentGroups.value,
-                        ),
-                      );
-                    },
-                    child: Text(
-                      context.l10n.filter_apply_button,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: Colors.white, // 適用ボタンは白文字が定番
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -224,6 +227,7 @@ class EventSortBottomSheet extends HookConsumerWidget {
         context: context,
         enableDrag: false,
         isScrollControlled: true,
+        useSafeArea: true,
         builder: (BuildContext context) => EventSortBottomSheet(
           initialSettings: initialSettings,
           needInputArea: needInputArea,

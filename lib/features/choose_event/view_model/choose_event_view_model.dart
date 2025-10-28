@@ -8,9 +8,10 @@ import '../../../core/network/model/event_base.dart';
 import '../../../core/network/providers.dart';
 import '../data/choose_event_state.dart';
 
-final StateNotifierProvider<ChooseEventViewModel, ChooseEventState>
+final AutoDisposeStateNotifierProvider<ChooseEventViewModel, ChooseEventState>
     chooseEventViewModelProvider =
-    StateNotifierProvider<ChooseEventViewModel, ChooseEventState>((Ref ref) {
+    StateNotifierProvider.autoDispose<ChooseEventViewModel, ChooseEventState>(
+        (Ref ref) {
   final List<LincaEvent> events =
       ref.watch(eventControllerProvider).value ?? <LincaEvent>[];
   final List<LincaEvent> userEvents =

@@ -40,7 +40,7 @@ class UserRepository {
     final Map<String, dynamic>? data = result.data();
     if (data == null) return const User();
 
-    return User.fromJson(data);
+    return User.fromJson(data).copyWith(id: uid);
   }
 
   Future<void> updateDisplayName(String uid, String displayName) async {

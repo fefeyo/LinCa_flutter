@@ -64,7 +64,6 @@ class UserEventController extends AsyncNotifier<List<LincaEvent>> {
         createdBy: uid!,
         availableParticipationTypes: <ParticipationType>[
           ParticipationType.onSite,
-          ParticipationType.absent,
         ],
       );
       await userEventRepository.registerEvent(

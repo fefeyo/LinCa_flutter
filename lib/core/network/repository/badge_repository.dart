@@ -3,6 +3,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants/app_constants.dart';
+import '../../env/env.dart';
 import '../model/linca_badge.dart';
 import 'firestore_repository.dart';
 
@@ -23,7 +24,6 @@ class BadgeRepository extends FirestoreRepository<LincaBadge> {
   Future<List<LincaBadge>> _getBadges() => fetchAllFromCache(
       'badges', (Map<String, dynamic> json) => LincaBadge.fromJson(json));
 
-
   Future<List<LincaBadge>> loadBadges() async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final PackageInfo info = await PackageInfo.fromPlatform();
@@ -31,10 +31,10 @@ class BadgeRepository extends FirestoreRepository<LincaBadge> {
     List<LincaBadge> badges = await _getBadges();
 
     if (preferences.getString(AppConstants.badgeVersionKey) != info.version ||
-        badges.isEmpty) {
+        badges.isEmpty ||
+        Env.flavor != 'prod') {
       badges = await _fetchBadges();
-      await preferences.setString(
-          AppConstants.badgeVersionKey, info.version);
+      await preferences.setString(AppConstants.badgeVersionKey, info.version);
     }
 
     return badges;

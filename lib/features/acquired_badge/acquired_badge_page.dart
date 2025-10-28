@@ -72,7 +72,7 @@ class AcquiredBadgePage extends HookConsumerWidget {
                               const SizedBox(height: 8),
                               Text(
                                 '未選択',
-                                style: context.textTheme.bodyMedium,
+                                style: context.textTheme.bodySmall,
                               ),
                             ],
                           ),
@@ -98,9 +98,13 @@ class AcquiredBadgePage extends HookConsumerWidget {
                                         ),
                                 ),
                                 const SizedBox(height: 8),
-                                Text(
-                                  item.name,
-                                  style: context.textTheme.bodyMedium,
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  child: Text(
+                                    item.name,
+                                    style: context.textTheme.bodySmall,
+                                  ),
                                 ),
                               ],
                             ),

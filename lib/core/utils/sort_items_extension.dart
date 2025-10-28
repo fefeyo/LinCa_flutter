@@ -6,7 +6,6 @@ import '../constants/participation_type.dart';
 enum DisplayOrder {
   newest, // 最新順
   oldest, // 古い順
-  title, // イベント名順
 }
 
 enum SeriesTag {
@@ -23,7 +22,6 @@ extension DisplayOrderExtension on DisplayOrder {
   String label(BuildContext context) => switch (this) {
         DisplayOrder.newest => context.l10n.displayOrder_newest,
         DisplayOrder.oldest => context.l10n.displayOrder_oldest,
-        DisplayOrder.title => context.l10n.displayOrder_title,
       };
 }
 

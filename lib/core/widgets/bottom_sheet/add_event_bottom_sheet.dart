@@ -29,7 +29,7 @@ class AddEventBottomSheet extends StatelessWidget {
           children: <Widget>[
             Text(
               context.l10n.add_event_title,
-              style: context.textTheme.headlineMedium,
+              style: context.textTheme.titleLarge,
             ),
             Padding(
               padding: const EdgeInsets.all(32),
@@ -37,10 +37,10 @@ class AddEventBottomSheet extends StatelessWidget {
                 children: <Widget>[
                   ListTile(
                     tileColor: context.colorScheme.surface,
-                    leading: const Icon(Icons.event),
+                    leading: const Icon(Icons.calendar_month),
                     title: Text(
                       context.l10n.add_official_event_select_from_list,
-                      style: context.textTheme.titleMedium,
+                      style: context.textTheme.bodyMedium,
                     ),
                     onTap: () => transitPage(
                       ChooseEventRoute(
@@ -48,13 +48,13 @@ class AddEventBottomSheet extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 12),
                   ListTile(
                     tileColor: context.colorScheme.surface,
-                    leading: const Icon(Icons.event),
+                    leading: const Icon(Icons.diversity_3),
                     title: Text(
                       context.l10n.add_unofficial_event_select_from_list,
-                      style: context.textTheme.titleMedium,
+                      style: context.textTheme.bodyMedium,
                     ),
                     onTap: () => transitPage(
                       ChooseEventRoute(
@@ -62,24 +62,24 @@ class AddEventBottomSheet extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 12),
                   ListTile(
                     tileColor: context.colorScheme.surface,
                     leading: const Icon(Icons.public),
                     title: Text(
                       context.l10n.add_event_create_public,
-                      style: context.textTheme.titleMedium,
+                      style: context.textTheme.bodyMedium,
                     ),
                     onTap: () => transitPage(CreateEventRoute(
                         createEventType: CreateEventType.public)),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 12),
                   ListTile(
                     tileColor: context.colorScheme.surface,
                     leading: const Icon(Icons.lock),
                     title: Text(
                       context.l10n.add_event_create_private,
-                      style: context.textTheme.titleMedium,
+                      style: context.textTheme.bodyMedium,
                     ),
                     onTap: () => transitPage(CreateEventRoute(
                         createEventType: CreateEventType.private)),

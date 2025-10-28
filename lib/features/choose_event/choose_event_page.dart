@@ -90,6 +90,7 @@ class ChooseEventPage extends HookConsumerWidget {
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         child: state.sortedEvents.isNotEmpty
             ? ListView.separated(
+                clipBehavior: Clip.none,
                 itemCount: state.sortedEvents.length,
                 itemBuilder: (BuildContext context, int index) {
                   final LincaEvent event = state.sortedEvents[index];

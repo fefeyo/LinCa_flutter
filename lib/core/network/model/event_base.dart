@@ -24,7 +24,7 @@ sealed class EventBase with _$EventBase {
     @Default(<String>[]) List<String> tagIds,
     @Default(<ParticipationType>[])
     @JsonKey(
-      name: 'available_participation_types',
+      name: 'participationTypes',
       fromJson: participationTypesFromJson,
       toJson: participationTypesToJson,
     )
@@ -46,7 +46,7 @@ sealed class EventBase with _$EventBase {
     @Default(false) bool visibility,
     @Default(<ParticipationType>[])
     @JsonKey(
-      name: 'available_participation_types',
+      name: 'participationTypes',
       fromJson: participationTypesFromJson,
       toJson: participationTypesToJson,
     )

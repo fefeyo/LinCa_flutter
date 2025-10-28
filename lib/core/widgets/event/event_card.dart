@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:linca_otaku_support/core/constants/participation_type.dart';
 import 'package:linca_otaku_support/core/utils/date_extension.dart';
 import 'package:linca_otaku_support/core/utils/group_extension.dart';
 
@@ -22,38 +23,6 @@ class EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> getScheduledBadgeIfNeeded() {
-      if (lincaEvent.event.date?.isAfter(DateTime.now()) == false) {
-        return <Widget>[const SizedBox.shrink()];
-      }
-
-      return <Widget>[
-        const ParticipationStatusBadge(
-          text: '参加予定',
-          color: Colors.green,
-        ),
-        const SizedBox(
-          width: 4,
-        ),
-      ];
-    }
-
-    List<Widget> getTodayBadgeIfNeeded() {
-      if (lincaEvent.event.date?.isToday == false) {
-        return <Widget>[const SizedBox.shrink()];
-      }
-
-      return <Widget>[
-        const ParticipationStatusBadge(
-          text: 'イベント当日',
-          color: Colors.red,
-        ),
-        const SizedBox(
-          width: 4,
-        ),
-      ];
-    }
-
     return Card(
       child: Stack(
         clipBehavior: Clip.none,
@@ -65,12 +34,12 @@ class EventCard extends StatelessWidget {
               children: <Widget>[
                 Text(
                   lincaEvent.event.title,
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: Theme.of(context).textTheme.titleSmall,
                 ),
                 const SizedBox(height: 4),
                 Text(
                   lincaEvent.event.date!.simpleDateFormat(),
-                  style: Theme.of(context).textTheme.titleSmall,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 8),
                 Row(
@@ -121,8 +90,8 @@ class EventCard extends StatelessWidget {
               top: -12,
               child: Row(
                 children: <Widget>[
-                  ...getScheduledBadgeIfNeeded(),
-                  ...getTodayBadgeIfNeeded(),
+                  ..._getScheduledBadgeIfNeeded(participationInfo!),
+                  ..._getTodayBadgeIfNeeded(),
                   ParticipationStatusBadge(
                     text: participationInfo!.participationType!.label(context),
                     color: participationInfo!.participationType!
@@ -134,5 +103,38 @@ class EventCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  List<Widget> _getScheduledBadgeIfNeeded(ParticipationInfo participationInfo) {
+    if (lincaEvent.event.date?.isAfter(DateTime.now()) == false ||
+        participationInfo.participationType == ParticipationType.absent) {
+      return <Widget>[const SizedBox.shrink()];
+    }
+
+    return <Widget>[
+      const ParticipationStatusBadge(
+        text: '参加予定',
+        color: Colors.green,
+      ),
+      const SizedBox(
+        width: 4,
+      ),
+    ];
+  }
+
+  List<Widget> _getTodayBadgeIfNeeded() {
+    if (lincaEvent.event.date?.isToday == false) {
+      return <Widget>[const SizedBox.shrink()];
+    }
+
+    return <Widget>[
+      const ParticipationStatusBadge(
+        text: 'イベント当日',
+        color: Colors.red,
+      ),
+      const SizedBox(
+        width: 4,
+      ),
+    ];
   }
 }

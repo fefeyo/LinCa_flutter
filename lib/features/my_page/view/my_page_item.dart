@@ -21,12 +21,12 @@ class MyPageItem extends StatelessWidget {
       tileColor: context.colorScheme.surfaceContainer,
       title: Text(
         title,
-        style: context.textTheme.titleMedium,
+        style: context.textTheme.bodyMedium,
       ),
       subtitle: subtitle != null
           ? Text(
               subtitle!,
-              style: context.textTheme.bodyMedium,
+              style: context.textTheme.bodySmall,
             )
           : null,
       trailing: trailing,
