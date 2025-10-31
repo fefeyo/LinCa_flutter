@@ -3,6 +3,7 @@ import 'app_typography.dart';
 
 ThemeData buildAppTheme(ColorScheme scheme) {
   return ThemeData(
+    dividerColor: Colors.transparent,
     useMaterial3: true,
     colorScheme: scheme,
     // 角丸・影など M3 の推奨に寄せる

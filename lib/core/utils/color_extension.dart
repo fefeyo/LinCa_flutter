@@ -12,17 +12,21 @@ const double _middleOpacity = 0.2;
 const double _endOpacity = 0.0;
 
 extension ColorSchemeExtension on ColorScheme {
-  Color get colorMuse => colorFromHex('#E4007F');
+  Color get colorLovelive => colorFromHex('#FF1493');
 
-  Color get colorAqours => colorFromHex('#00BFFF');
+  Color get colorSunshine => colorFromHex('#00BFFF');
 
-  Color get colorNijigasaki => colorFromHex('#FCC800');
+  Color get colorNijigasaki => colorFromHex('#FFD010');
 
-  Color get colorLiella => colorFromHex('#9932CC');
+  Color get colorSuperstar => colorFromHex('#9932CC');
 
-  Color get colorHasunosora => colorFromHex('#FFC0CB');
+  Color get colorHasunosora => colorFromHex('#F7B2BE');
 
-  Color get colorIkizulive => colorFromHex('#87CEEB');
+  Color get colorIkizulive => colorFromHex('#F5A027');
+
+  Color get colorYohane => colorFromHex('#008B8B');
+
+  Color get colorMusical => colorFromHex('#D70035');
 
   Color get textGrey => colorFromHex('#333333');
 
@@ -32,9 +36,9 @@ extension ColorSchemeExtension on ColorScheme {
   }) =>
       LinearGradient(
         colors: <Color>[
-          colorMuse.withValues(alpha: _startOpacity),
-          colorMuse.withValues(alpha: _middleOpacity),
-          colorMuse.withValues(alpha: _endOpacity),
+          colorLovelive.withValues(alpha: _startOpacity),
+          colorLovelive.withValues(alpha: _middleOpacity),
+          colorLovelive.withValues(alpha: _endOpacity),
         ],
         begin: begin,
         end: end,
@@ -46,9 +50,9 @@ extension ColorSchemeExtension on ColorScheme {
   }) =>
       LinearGradient(
         colors: <Color>[
-          colorAqours.withValues(alpha: _startOpacity),
-          colorAqours.withValues(alpha: _middleOpacity),
-          colorAqours.withValues(alpha: _endOpacity),
+          colorSunshine.withValues(alpha: _startOpacity),
+          colorSunshine.withValues(alpha: _middleOpacity),
+          colorSunshine.withValues(alpha: _endOpacity),
         ],
         begin: begin,
         end: end,
@@ -74,9 +78,9 @@ extension ColorSchemeExtension on ColorScheme {
   }) =>
       LinearGradient(
         colors: <Color>[
-          colorLiella.withValues(alpha: _startOpacity),
-          colorLiella.withValues(alpha: _middleOpacity),
-          colorLiella.withValues(alpha: _endOpacity),
+          colorSuperstar.withValues(alpha: _startOpacity),
+          colorSuperstar.withValues(alpha: _middleOpacity),
+          colorSuperstar.withValues(alpha: _endOpacity),
         ],
         begin: begin,
         end: end,
@@ -112,8 +116,8 @@ extension ColorSchemeExtension on ColorScheme {
 
   LinearGradient get gradientMuseForGraph => LinearGradient(
         colors: <Color>[
-          colorMuse,
-          colorMuse.withValues(alpha: 0.5),
+          colorLovelive,
+          colorLovelive.withValues(alpha: 0.5),
         ],
         begin: Alignment.bottomCenter,
         end: Alignment.topCenter,
@@ -121,8 +125,8 @@ extension ColorSchemeExtension on ColorScheme {
 
   LinearGradient get gradientAqoursForGraph => LinearGradient(
         colors: <Color>[
-          colorAqours,
-          colorAqours.withValues(alpha: 0.5),
+          colorSunshine,
+          colorSunshine.withValues(alpha: 0.5),
         ],
         begin: Alignment.bottomCenter,
         end: Alignment.topCenter,
@@ -139,8 +143,8 @@ extension ColorSchemeExtension on ColorScheme {
 
   LinearGradient get gradientLiellaForGraph => LinearGradient(
         colors: <Color>[
-          colorLiella,
-          colorLiella.withValues(alpha: 0.5),
+          colorSuperstar,
+          colorSuperstar.withValues(alpha: 0.5),
         ],
         begin: Alignment.bottomCenter,
         end: Alignment.topCenter,

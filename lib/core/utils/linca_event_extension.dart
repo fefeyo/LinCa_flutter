@@ -23,7 +23,7 @@ extension LincaEventsExtension on List<LincaEvent> {
     sortedEvents = where((LincaEvent event) {
       return keywords.any((String keyword) =>
               event.event.title.contains(keyword) ||
-              event.event.kanaIfOfficial.contains(keyword)) ||
+              event.event.displayKana.contains(keyword)) ||
           event.event.id == keyword;
     }).toList();
 

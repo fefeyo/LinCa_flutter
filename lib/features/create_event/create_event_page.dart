@@ -42,6 +42,8 @@ class CreateEventPage extends HookConsumerWidget {
         ref.read(userEventControllerProvider.notifier);
     final ParticipationController participationController =
         ref.read(participationControllerProvider.notifier);
+    final ObjectRef<GlobalKey<FormState>> formKey =
+        useRef(GlobalKey<FormState>());
 
     return Scaffold(
       appBar: AppBar(
@@ -50,21 +52,7 @@ class CreateEventPage extends HookConsumerWidget {
           IconButton(
             icon: const Icon(Icons.save),
             onPressed: () async {
-              if (titleController.text.trim().isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      'タイトルを入力してください',
-                      style: context.textTheme.titleMedium?.copyWith(
-                        color: Colors.white,
-                      ),
-                    ),
-                    backgroundColor: Colors.red,
-                    duration: const Duration(seconds: 1),
-                  ),
-                );
-                return;
-              }
+              if (formKey.value.currentState?.validate() == false) return;
               if (selectedDate.value == null) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
@@ -123,105 +111,138 @@ class CreateEventPage extends HookConsumerWidget {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            // タイトル
-            TextField(
-              controller: titleController,
-              decoration: InputDecoration(
-                labelText: context.l10n.input_create_event_title,
-                border: const OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // イベント概要
-            TextField(
-              controller: descriptionController,
-              maxLines: 5,
-              decoration: InputDecoration(
-                labelText: context.l10n.input_create_event_description,
-                border: const OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // 開催日
-            Row(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Form(
+            key: formKey.value,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                // イベント名
                 Text(
-                  selectedDate.value != null
-                      ? '${selectedDate.value!.year}/${selectedDate.value!.month}/${selectedDate.value!.day}'
-                      : context.l10n.text_create_event_choose_date,
+                  context.l10n.input_create_event_title,
+                  style: context.textTheme.titleMedium,
+                ),
+                const SizedBox(height: 4),
+                TextFormField(
+                  controller: titleController,
+                  decoration: InputDecoration(
+                    labelText: context.l10n.create_event_title_hint,
+                    border: const OutlineInputBorder(),
+                  ),
+                  validator: (String? value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'イベント名を入力してください';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+
+                // イベント概要
+                Text(
+                  context.l10n.input_create_event_description,
+                  style: context.textTheme.titleMedium,
+                ),
+                const SizedBox(height: 4),
+                TextFormField(
+                  controller: descriptionController,
+                  maxLines: 5,
+                  decoration: InputDecoration(
+                    labelText: context.l10n.create_event_description_hint,
+                    border: const OutlineInputBorder(),
+                    alignLabelWithHint: true,
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // 開催日
+                Row(
+                  children: <Widget>[
+                    Text(
+                      selectedDate.value != null
+                          ? '${selectedDate.value!.year}/${selectedDate.value!.month}/${selectedDate.value!.day}'
+                          : context.l10n.text_create_event_choose_date,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const Spacer(),
+                    TextButton(
+                      onPressed: () async {
+                        final DateTime? picked = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2010),
+                          lastDate: DateTime(2030),
+                        );
+                        if (picked != null) selectedDate.value = picked;
+                      },
+                      child: Text(context.l10n.input_create_event_choose_date),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+
+                // 開催場所
+                Text(
+                  context.l10n.input_create_event_venue,
+                  style: context.textTheme.titleMedium,
+                ),
+                const SizedBox(height: 4),
+                TextFormField(
+                  controller: venueConroller,
+                  decoration: InputDecoration(
+                    labelText: context.l10n.create_event_venue_hint,
+                    border: const OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // イベントURL
+                Text(
+                  context.l10n.input_create_event_event_url,
+                  style: context.textTheme.titleMedium,
+                ),
+                const SizedBox(height: 4),
+                TextFormField(
+                  controller: eventUrlController,
+                  decoration: InputDecoration(
+                    labelText: context.l10n.input_create_event_event_url_hint,
+                    border: const OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // タグ選択
+                Text(
+                  context.l10n.input_create_event_tag,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
-                const Spacer(),
-                TextButton(
-                  onPressed: () async {
-                    final DateTime? picked = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(2010),
-                      lastDate: DateTime(2030),
+                Wrap(
+                  spacing: 4,
+                  runSpacing: 8,
+                  children: tags
+                      .where((Tag tag) => tag.category == 'series')
+                      .map((Tag tag) {
+                    return FilterChip(
+                      label: Text(tag.name),
+                      selected: selectedTags.value.contains(tag),
+                      onSelected: (bool selected) {
+                        final Set<Tag> updated =
+                            Set<Tag>.of(selectedTags.value);
+                        if (selected) {
+                          updated.add(tag);
+                        } else {
+                          updated.remove(tag);
+                        }
+                        selectedTags.value = updated;
+                      },
                     );
-                    if (picked != null) selectedDate.value = picked;
-                  },
-                  child: Text(context.l10n.input_create_event_choose_date),
+                  }).toList(),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-
-            // 開催場所
-            TextField(
-              controller: venueConroller,
-              decoration: InputDecoration(
-                labelText: context.l10n.input_create_event_venue,
-                border: const OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // イベントURL
-            TextField(
-              controller: eventUrlController,
-              decoration: InputDecoration(
-                labelText: context.l10n.input_create_event_event_url,
-                border: const OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // タグ選択
-            Text(
-              context.l10n.input_create_event_tag,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            Wrap(
-              spacing: 4,
-              runSpacing: 8,
-              children: tags
-                  .where((Tag tag) => tag.category == 'series')
-                  .map((Tag tag) {
-                return FilterChip(
-                  label: Text(tag.name),
-                  selected: selectedTags.value.contains(tag),
-                  onSelected: (bool selected) {
-                    final Set<Tag> updated = Set<Tag>.of(selectedTags.value);
-                    if (selected) {
-                      updated.add(tag);
-                    } else {
-                      updated.remove(tag);
-                    }
-                    selectedTags.value = updated;
-                  },
-                );
-              }).toList(),
-            ),
-          ],
+          ),
         ),
       ),
     );

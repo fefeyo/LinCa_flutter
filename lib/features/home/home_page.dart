@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/models/filter_settings.dart';
 import 'package:linca_otaku_support/core/models/linca_user.dart';
@@ -27,6 +28,8 @@ class HomePage extends HookConsumerWidget {
     final MyEventViewModel myEventViewModel =
         ref.read(myEventViewModelProvider.notifier);
     final LincaUser lincaUser = ref.watch(userControllerProvider).value!;
+    final ValueNotifier<bool> isSearching = useState(false);
+    final TextEditingController searchController = useTextEditingController();
 
     return AutoTabsRouter(
       routes: const <PageRouteInfo<Object?>>[
@@ -39,27 +42,51 @@ class HomePage extends HookConsumerWidget {
         final TabsRouter tabs = AutoTabsRouter.of(context);
         return Scaffold(
           appBar: AppBar(
-            title: Text(titles[tabs.activeIndex]),
-            actions: <Widget>[
-              if (tabs.activeIndex == 0)
-                IconButton(
-                  onPressed: () async {
-                    final FilterSettings? result =
-                        await EventSortBottomSheet.show(
-                      context,
-                      myEventState.filterSettings,
-                      needInputArea: true,
-                      needDisplayOrderArea: true,
-                      needParticipationArea: true,
-                      needTagsArea: true,
-                    );
-                    if (result != null) {
-                      myEventViewModel.setFilterSettings(result);
-                    }
-                  },
-                  icon: const Icon(Icons.sort),
-                ),
-            ],
+            title: isSearching.value
+                ? TextField(
+                    controller: searchController,
+                    autofocus: true,
+                    decoration: InputDecoration(
+                      hintText: context.l10n.hint_choose_official_event_keyword,
+                      border: InputBorder.none,
+                    ),
+                    onChanged: (String value) {
+                      myEventViewModel.setKeyword(value);
+                    },
+                  )
+                : Text(titles[tabs.activeIndex]),
+            actions: tabs.activeIndex == 0
+                ? <Widget>[
+                    IconButton(
+                      onPressed: () async {
+                        final FilterSettings? result =
+                            await EventSortBottomSheet.show(
+                          context,
+                          myEventState.filterSettings,
+                          needInputArea: true,
+                          needDisplayOrderArea: true,
+                          needParticipationArea: true,
+                          needTagsArea: true,
+                        );
+                        if (result != null) {
+                          myEventViewModel.setFilterSettings(result);
+                        }
+                      },
+                      icon: const Icon(Icons.sort),
+                    ),
+                    IconButton(
+                      icon:
+                          Icon(isSearching.value ? Icons.close : Icons.search),
+                      onPressed: () {
+                        isSearching.value = !isSearching.value;
+                        if (!isSearching.value) {
+                          searchController.clear();
+                          myEventViewModel.setKeyword('');
+                        }
+                      },
+                    ),
+                  ]
+                : null,
           ),
           drawer: HomeDrawer(
             lincaUser: lincaUser,

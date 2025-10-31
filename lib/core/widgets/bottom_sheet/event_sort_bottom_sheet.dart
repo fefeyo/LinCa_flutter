@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -41,6 +40,7 @@ class EventSortBottomSheet extends HookConsumerWidget {
     final ValueNotifier<List<Tag>> currentSeriesTags =
         useState(initialSettings.seriesTags);
     final List<Tag> tags = ref.watch(tagControllerProvider).value ?? <Tag>[];
+    final ValueNotifier<bool> isShowParticipationEvent = useState(false);
 
     return SafeArea(
       child: Padding(
@@ -50,101 +50,131 @@ class EventSortBottomSheet extends HookConsumerWidget {
         child: ConstrainedBox(
           constraints: BoxConstraints(
             minWidth: double.infinity,
-            maxHeight: MediaQuery.of(context).size.height * 0.8,
+            maxHeight: MediaQuery.of(context).size.height * 0.87,
           ),
           child: Padding(
             padding: const EdgeInsets.all(16),
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  ..._buildInputAreaIfNeeded(
-                    context: context,
-                    keywordController: keywordController,
-                  ),
-                  ..._buildDisplayOrderAreaIfNeeded(
-                    context: context,
-                    currentDisplayOrder: currentDisplayOrder.value,
-                    onChanged: (DisplayOrder displayOrder) =>
-                        currentDisplayOrder.value = displayOrder,
-                  ),
-                  ..._buildParticipationAreaIfNeeded(
-                    context: context,
-                    currentParticipationTypes: currentParticipationTypes.value,
-                    onChanged: (List<ParticipationType> types) {
-                      currentParticipationTypes.value = types;
-                    },
-                  ),
-                  ..._buildTypeTagsAreaIfNeeded(
-                    context: context,
-                    tags: tags.typeTags,
-                    currentTags: currentTypeTags.value,
-                    onChanged: (List<Tag> tags) => currentTypeTags.value = tags,
-                  ),
-                  ..._buildSeriesTagsAreaIfNeeded(
-                    context: context,
-                    tags: tags.seriesTags,
-                    currentTags: currentSeriesTags.value,
-                    onChanged: (List<Tag> tags) =>
-                        currentSeriesTags.value = tags,
-                  ),
-                  const SizedBox(height: 32),
-                  SizedBox(
-                    width: double.infinity, // 横幅いっぱい
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: context.colorScheme.primary,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.all(16),
+                    children: <Widget>[
+                      Center(
+                        child: Text(
+                          'イベントを絞り込む',
+                          style: context.textTheme.headlineSmall,
                         ),
                       ),
-                      onPressed: () {
-                        context.router.pop(
-                          FilterSettings(
-                            keyword: keywordController.text,
-                            displayOrder: currentDisplayOrder.value,
-                            participationFilters:
-                                currentParticipationTypes.value,
-                            seriesTags: currentSeriesTags.value,
-                            typeTags: currentTypeTags.value,
+                      const SizedBox(height: 24),
+                      ..._buildDisplayOrderAreaIfNeeded(
+                        context: context,
+                        currentDisplayOrder: currentDisplayOrder.value,
+                        onChanged: (DisplayOrder displayOrder) =>
+                            currentDisplayOrder.value = displayOrder,
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Checkbox(
+                            value: isShowParticipationEvent.value,
+                            onChanged: (bool? selected) {
+                              isShowParticipationEvent.value =
+                                  selected ?? false;
+                            },
                           ),
-                        );
-                      },
-                      child: Text(
-                        context.l10n.filter_apply_button,
-                        style: context.textTheme.titleMedium?.copyWith(
-                          color: Colors.white, // 適用ボタンは白文字が定番
-                          fontWeight: FontWeight.bold,
+                          Text(
+                            '参加予定のイベントのみ表示',
+                            style: context.textTheme.titleMedium,
+                          ),
+                        ],
+                      ),
+                      ..._buildParticipationAreaIfNeeded(
+                        context: context,
+                        currentParticipationTypes:
+                            currentParticipationTypes.value,
+                        onChanged: (List<ParticipationType> types) {
+                          currentParticipationTypes.value = types;
+                        },
+                      ),
+                      ..._buildTypeTagsAreaIfNeeded(
+                        context: context,
+                        tags: tags.typeTags,
+                        currentTags: currentTypeTags.value,
+                        onChanged: (List<Tag> tags) =>
+                            currentTypeTags.value = tags,
+                      ),
+                      ..._buildSeriesTagsAreaIfNeeded(
+                        context: context,
+                        tags: tags.seriesTags,
+                        currentTags: currentSeriesTags.value,
+                        onChanged: (List<Tag> tags) =>
+                            currentSeriesTags.value = tags,
+                      ),
+                    ],
+                  ),
+                ),
+                // ボタンは下固定
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.grey,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        onPressed: () => context.router.pop(),
+                        child: Text(
+                          context.l10n.common_cancel,
+                          style: context.textTheme.titleMedium?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: context.colorScheme.primary,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        onPressed: () {
+                          context.router.pop(
+                            FilterSettings(
+                              keyword: keywordController.text,
+                              displayOrder: currentDisplayOrder.value,
+                              participationFilters:
+                                  currentParticipationTypes.value,
+                              seriesTags: currentSeriesTags.value,
+                              typeTags: currentTypeTags.value,
+                            ),
+                          );
+                        },
+                        child: Text(
+                          '決定',
+                          // context.l10n.filter_apply_button,
+                          style: context.textTheme.titleMedium?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
             ),
           ),
         ),
       ),
     );
-  }
-
-  List<Widget> _buildInputAreaIfNeeded({
-    required BuildContext context,
-    required TextEditingController keywordController,
-  }) {
-    if (!needInputArea) return <Widget>[];
-
-    return <Widget>[
-      const SizedBox(height: 16),
-      SearchBar(
-        controller: keywordController,
-        leading: const Icon(Icons.search),
-        hintText: context.l10n.filter_search_hint,
-      ),
-      const SizedBox(height: 16),
-      const Divider(),
-      const SizedBox(height: 8),
-    ];
   }
 
   List<Widget> _buildDisplayOrderAreaIfNeeded({
@@ -155,23 +185,24 @@ class EventSortBottomSheet extends HookConsumerWidget {
     if (!needDisplayOrderArea) return <Widget>[];
 
     return <Widget>[
-      Wrap(
-        spacing: 4,
-        runSpacing: 8,
-        children: DisplayOrder.values.map(
-          (DisplayOrder displayOrder) {
-            return ChoiceChip(
-              showCheckmark: false,
-              label: Text(
-                displayOrder.label(context),
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-              visualDensity: VisualDensity.comfortable,
-              selected: currentDisplayOrder == displayOrder,
-              onSelected: (_) => onChanged(displayOrder),
-            );
-          },
-        ).toList(),
+      Center(
+        child: Wrap(
+          spacing: 12,
+          children: DisplayOrder.values.map(
+            (DisplayOrder displayOrder) {
+              return ChoiceChip(
+                showCheckmark: false,
+                label: Text(
+                  displayOrder.label(context),
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                visualDensity: VisualDensity.comfortable,
+                selected: currentDisplayOrder == displayOrder,
+                onSelected: (_) => onChanged(displayOrder),
+              );
+            },
+          ).toList(),
+        ),
       ),
       const SizedBox(height: 8),
       const Divider(),
@@ -187,6 +218,11 @@ class EventSortBottomSheet extends HookConsumerWidget {
     if (!needParticipationArea) return <Widget>[];
 
     return <Widget>[
+      Text(
+        '参加形態',
+        style: context.textTheme.bodyMedium,
+      ),
+      const SizedBox(height: 8),
       Wrap(
         spacing: 4,
         runSpacing: 8,
@@ -228,6 +264,11 @@ class EventSortBottomSheet extends HookConsumerWidget {
     if (!needTagsArea) return <Widget>[];
 
     return <Widget>[
+      Text(
+        'イベント形態',
+        style: context.textTheme.bodyMedium,
+      ),
+      const SizedBox(height: 8),
       Wrap(
         spacing: 4,
         runSpacing: 8,
@@ -269,6 +310,11 @@ class EventSortBottomSheet extends HookConsumerWidget {
     if (!needTagsArea) return <Widget>[];
 
     return <Widget>[
+      Text(
+        'シリーズ',
+        style: context.textTheme.bodyMedium,
+      ),
+      const SizedBox(height: 8),
       Wrap(
         spacing: 4,
         runSpacing: 8,

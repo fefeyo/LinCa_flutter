@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:linca_otaku_support/core/constants/app_constants.dart';
 import 'package:linca_otaku_support/core/network/model/group.dart';
 import 'package:linca_otaku_support/core/utils/color_extension.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
@@ -8,46 +9,58 @@ import '../asset_gen/assets.gen.dart';
 
 extension GroupExtension on Group {
   Widget getLogoWidget() {
-    switch (slug) {
-      case 'muse':
-        return SvgPicture.asset(
-          Assets.images.muse.path,
+    switch (seriesTag) {
+      case AppConstants.seriesTagLovelive:
+        return Image.asset(
+          Assets.images.lovelive.path,
           height: 32,
           fit: BoxFit.contain,
         );
-      case 'aqours':
-        return SvgPicture.asset(
-          Assets.images.aqours.path,
+      case AppConstants.seriesTagSunshine:
+        return Image.asset(
+          Assets.images.sunshine.path,
           height: 32,
           fit: BoxFit.contain,
         );
-      case 'nijigasaki':
-        return SvgPicture.asset(
+      case AppConstants.seriesTagNijigasaki:
+        return Image.asset(
           Assets.images.nijigasaki.path,
           height: 32,
           fit: BoxFit.contain,
         );
-      case 'liella':
-        return SvgPicture.asset(
-          Assets.images.liella.path,
+      case AppConstants.seriesTagSuperstar:
+        return Image.asset(
+          Assets.images.superstar.path,
           height: 32,
           fit: BoxFit.contain,
         );
-      case 'hasunosora':
+      case AppConstants.seriesTagHasunosora:
         return SvgPicture.asset(
           Assets.images.hasunosora.path,
           height: 32,
           fit: BoxFit.contain,
         );
-      case 'ikizulive':
+      case AppConstants.seriesTagIkizulive:
         return Image.asset(
           Assets.images.ikizulive.path,
           height: 32,
           fit: BoxFit.contain,
         );
-      case 'collaborative':
+      case AppConstants.seriesTagCollaborative:
         return SvgPicture.asset(
           Assets.images.loveliveSeries.path,
+          height: 32,
+          fit: BoxFit.contain,
+        );
+      case AppConstants.seriesTagMusical:
+        return Image.asset(
+          Assets.images.musical.path,
+          height: 32,
+          fit: BoxFit.contain,
+        );
+      case AppConstants.seriesTagYohane:
+        return Image.asset(
+          Assets.images.yohane.path,
           height: 32,
           fit: BoxFit.contain,
         );
@@ -57,84 +70,50 @@ extension GroupExtension on Group {
   }
 
   Color getSeriesColor(BuildContext context) {
-    switch (slug) {
-      case 'muse':
-        return context.colorScheme.colorMuse;
-      case 'aqours':
-        return context.colorScheme.colorAqours;
-      case 'nijigasaki':
+    if (seriesTag.isEmpty) return Colors.grey;
+    switch (seriesTag) {
+      case AppConstants.seriesTagLovelive:
+        return context.colorScheme.colorLovelive;
+      case AppConstants.seriesTagSunshine:
+        return context.colorScheme.colorSunshine;
+      case AppConstants.seriesTagNijigasaki:
         return context.colorScheme.colorNijigasaki;
-      case 'liella':
-        return context.colorScheme.colorLiella;
-      case 'hasunosora':
+      case AppConstants.seriesTagSuperstar:
+        return context.colorScheme.colorSuperstar;
+      case AppConstants.seriesTagHasunosora:
         return context.colorScheme.colorHasunosora;
-      case 'ikizulive':
+      case AppConstants.seriesTagIkizulive:
         return context.colorScheme.colorIkizulive;
+      case AppConstants.seriesTagMusical:
+        return context.colorScheme.colorMusical;
+      case AppConstants.seriesTagYohane:
+        return context.colorScheme.colorYohane;
       default:
-        return context.colorScheme.colorMuse;
-    }
-  }
-
-  LinearGradient getSeriesGradient({
-    required BuildContext context,
-    required Alignment begin,
-    required Alignment end,
-  }) {
-    switch (slug) {
-      case 'muse':
-        return context.colorScheme.gradientMuse(
-          begin: begin,
-          end: end,
-        );
-      case 'aqours':
-        return context.colorScheme.gradientAqours(
-          begin: begin,
-          end: end,
-        );
-      case 'nijigasaki':
-        return context.colorScheme.gradientNijigasaki(
-          begin: begin,
-          end: end,
-        );
-      case 'liella':
-        return context.colorScheme.gradientLiella(
-          begin: begin,
-          end: end,
-        );
-      case 'hasunosora':
-        return context.colorScheme.gradientHasunosora(
-          begin: begin,
-          end: end,
-        );
-      case 'ikizulive':
-        return context.colorScheme.gradientIkizulive(
-          begin: begin,
-          end: end,
-        );
-      default:
-        return context.colorScheme.gradientMuse(
-          begin: begin,
-          end: end,
-        );
+        return context.colorScheme.colorLovelive;
     }
   }
 
   LinearGradient getSeriesGradientForGraph(BuildContext context) {
-    switch (slug) {
-      case 'muse':
+    switch (seriesTag) {
+      case AppConstants.seriesTagLovelive:
         return context.colorScheme.gradientMuseForGraph;
-      case 'aqours':
+      case AppConstants.seriesTagSunshine:
         return context.colorScheme.gradientAqoursForGraph;
-      case 'nijigasaki':
+      case AppConstants.seriesTagNijigasaki:
         return context.colorScheme.gradientNijigasakiForGraph;
-      case 'liella':
+      case AppConstants.seriesTagSuperstar:
         return context.colorScheme.gradientLiellaForGraph;
-      case 'hasunosora':
+      case AppConstants.seriesTagHasunosora:
         return context.colorScheme.gradientHasunosoraForGraph;
-      case 'ikizulive':
+      case AppConstants.seriesTagIkizulive:
         return context.colorScheme.gradientIkizuliveForGraph;
       default:
         return context.colorScheme.gradientMuseForGraph;
     }
   }
+}
+
+extension GroupsExtension on List<Group> {
+  Color getFavoriteColor(BuildContext context) =>
+      isNotEmpty ? colorFromHex(first.color) : context.colorScheme.primary;
 }

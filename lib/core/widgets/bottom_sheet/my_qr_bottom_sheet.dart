@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/auth/providers.dart';
 import 'package:linca_otaku_support/core/network/controller/friend_controller.dart';
-import 'package:linca_otaku_support/core/network/controller/user_controller.dart';
 import 'package:linca_otaku_support/core/network/providers.dart';
 import 'package:linca_otaku_support/core/router/app_router.gr.dart';
 

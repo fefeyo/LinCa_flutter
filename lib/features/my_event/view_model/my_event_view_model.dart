@@ -28,6 +28,15 @@ class MyEventViewModel extends StateNotifier<MyEventState> {
     );
   }
 
+  void setKeyword(String keyword) {
+    final FilterSettings filterSettings =
+        state.filterSettings.copyWith(keyword: keyword);
+    state = state.copyWith(
+      filterSettings: filterSettings,
+      sortedEvents: sortEvents(filterSettings),
+    );
+  }
+
   Map<LincaEvent, ParticipationInfo> sortEvents(FilterSettings filterSettings) {
     List<LincaEvent> events = myEvents.keys.toList();
 

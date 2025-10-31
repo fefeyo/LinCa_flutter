@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/auth/providers.dart';
+import 'package:linca_otaku_support/core/constants/app_constants.dart';
 import 'package:linca_otaku_support/core/models/favorite_badges.dart';
 import 'package:linca_otaku_support/core/models/user_profile.dart';
 import 'package:linca_otaku_support/core/network/controller/user_controller.dart';
@@ -13,6 +14,7 @@ import 'package:linca_otaku_support/core/network/providers.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
 import 'package:linca_otaku_support/core/utils/favorite_badges_extension.dart';
 import 'package:linca_otaku_support/core/utils/image_uploader.dart';
+import 'package:reorderables/reorderables.dart';
 
 import '../../core/asset_gen/assets.gen.dart';
 import '../../core/network/model/user.dart';
@@ -94,166 +96,226 @@ class LincaEditPage extends HookConsumerWidget {
           IconButton(onPressed: updateUserData, icon: const Icon(Icons.save))
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: () async {
-                      if (uid == null) return;
-                      // ローディング表示
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (_) => const Center(
-                          child: CircularProgressIndicator(),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () async {
+                        if (uid == null) return;
+                        // ローディング表示
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (_) => const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                        final String? photoUrl =
+                            await pickCompressAndUploadImage(uid);
+                        if (context.mounted) context.router.pop();
+                        if (photoUrl == null) return;
+                        userController.updateUserPhoto(photoUrl);
+                        viewModel.updateUserPhoto(photoUrl);
+                      },
+                      child: Container(
+                        width: 92,
+                        height: 92,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: context.colorScheme.surfaceContainer,
+                            width: 3,
+                          ),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.06),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                            )
+                          ],
                         ),
+                        child: CircleAvatar(
+                          backgroundImage:
+                              state.userProfile?.user.photoUrl.isNotEmpty ==
+                                      true
+                                  ? CachedNetworkImageProvider(
+                                      state.userProfile!.user.photoUrl)
+                                  : AssetImage(Assets.images.userIcon.path),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: TextField(
+                        controller: displayNameController,
+                        style: context.textTheme.titleMedium,
+                        decoration: InputDecoration(
+                          labelText: context.l10n.linca_edit_label_nickname,
+                          border: const OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  context.l10n.linca_edit_favorite_badge_title,
+                  style: context.textTheme.titleMedium,
+                ),
+                const SizedBox(height: 8),
+                _buildSelectFavoriteBadgeWidget(
+                    context: context,
+                    favoriteBadges: state.userProfile?.favoriteBadges ??
+                        const FavoriteBadges(),
+                    onTap: (
+                      LincaBadge? changeBadge,
+                      LincaBadge selectedBadge,
+                      int index,
+                    ) {
+                      viewModel.updateFavoriteBadges(
+                        changeBadge: changeBadge,
+                        selectedBadge: selectedBadge,
+                        index: index,
                       );
-                      final String? photoUrl =
-                          await pickCompressAndUploadImage(uid);
-                      if (context.mounted) context.router.pop();
-                      if (photoUrl == null) return;
-                      userController.updateUserPhoto(photoUrl);
-                      viewModel.updateUserPhoto(photoUrl);
-                    },
-                    child: Container(
-                      width: 92,
-                      height: 92,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: context.colorScheme.surfaceContainer,
-                          width: 3,
-                        ),
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.06),
-                            blurRadius: 8,
-                            offset: const Offset(0, 4),
-                          )
-                        ],
-                      ),
-                      child: CircleAvatar(
-                        backgroundImage:
-                            state.userProfile?.user.photoUrl.isNotEmpty == true
-                                ? CachedNetworkImageProvider(
-                                    state.userProfile!.user.photoUrl)
-                                : AssetImage(Assets.images.userIcon.path),
-                      ),
+                    }),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: bioController,
+                  style: context.textTheme.bodyMedium,
+                  maxLines: 10,
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    labelText: context.l10n.linca_edit_label_bio,
+                    alignLabelWithHint: true,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: xController,
+                  style: context.textTheme.bodyMedium,
+                  decoration: InputDecoration(
+                    labelText: context.l10n.linca_edit_label_user_id_x,
+                    border: const OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: instagramController,
+                  style: context.textTheme.bodyMedium,
+                  decoration: InputDecoration(
+                    labelText: context.l10n.linca_edit_label_user_id_instagram,
+                    border: const OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: blueskyController,
+                  style: context.textTheme.bodyMedium,
+                  decoration: InputDecoration(
+                    labelText: context.l10n.linca_edit_label_user_id_bluesky,
+                    border: const OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  context.l10n.linca_edit_label_favorite_tag,
+                  style: context.textTheme.titleMedium,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  context.l10n.linca_edit_label_favorite_tag_description(
+                    AppConstants.maxProfileTagCount,
+                    AppConstants.maxSimpleProfileTagCount,
+                  ),
+                  style: context.textTheme.bodyMedium,
+                ),
+                const SizedBox(height: 12),
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.edit),
+                  label: Text(
+                    'タグを編集',
+                    style: context.textTheme.bodySmall?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: TextField(
-                      controller: displayNameController,
-                      style: context.textTheme.titleMedium,
-                      decoration: InputDecoration(
-                        labelText: context.l10n.linca_edit_label_nickname,
-                        border: const OutlineInputBorder(),
-                      ),
-                    ),
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: const Size(double.infinity, 30),
                   ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'お気に入りバッジ',
-                style: context.textTheme.titleMedium,
-              ),
-              const SizedBox(height: 8),
-              _buildSelectFavoriteBadgeWidget(
-                  context: context,
-                  favoriteBadges: state.userProfile?.favoriteBadges ??
-                      const FavoriteBadges(),
-                  onTap: (
-                    LincaBadge? changeBadge,
-                    LincaBadge selectedBadge,
-                    int index,
-                  ) {
-                    viewModel.updateFavoriteBadges(
-                      changeBadge: changeBadge,
-                      selectedBadge: selectedBadge,
-                      index: index,
+                  onPressed: () async {
+                    final List<Group>? result =
+                        await context.router.push<List<Group>>(
+                      SelectFavoriteTagRoute(
+                        groups: groups,
+                        favoriteTags:
+                            state.userProfile?.favoriteGroups ?? <Group>[],
+                        maxTagCount: AppConstants.maxProfileTagCount,
+                      ),
                     );
-                  }),
-              const SizedBox(height: 16),
-              Text(
-                context.l10n.linca_edit_label_favorite_group,
-                style: context.textTheme.titleMedium,
-              ),
-              const SizedBox(height: 4),
-              Wrap(
-                spacing: 4,
-                runSpacing: 8,
-                children: groups
-                    .where((Group group) => group.active)
-                    .map(
-                      (Group group) => ChoiceChip(
-                        showCheckmark: false,
-                        label: Text(
-                          group.name,
-                          style: context.textTheme.bodyMedium,
-                        ),
-                        selected:
-                            state.userProfile?.favoriteGroups.contains(group) ==
-                                true,
-                        onSelected: (bool selected) {
-                          final List<Group> current = List<Group>.of(
-                              state.userProfile?.favoriteGroups ?? <Group>[]);
-                          if (selected) {
-                            current.add(group);
-                          } else {
-                            current.remove(group);
-                          }
-                          viewModel.updateFavoriteGroups(current);
-                        },
-                      ),
-                    )
-                    .toList(),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: bioController,
-                style: context.textTheme.bodyMedium,
-                maxLines: 10,
-                decoration: InputDecoration(
-                  labelText: context.l10n.linca_edit_label_bio,
-                  border: const OutlineInputBorder(),
+                    if (result != null) {
+                      viewModel.updateFavoriteGroups(result);
+                    }
+                  },
                 ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: xController,
-                style: context.textTheme.bodyMedium,
-                decoration: InputDecoration(
-                  labelText: context.l10n.linca_edit_label_user_id_x,
-                  border: const OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: instagramController,
-                style: context.textTheme.bodyMedium,
-                decoration: InputDecoration(
-                  labelText: context.l10n.linca_edit_label_user_id_instagram,
-                  border: const OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: blueskyController,
-                style: context.textTheme.bodyMedium,
-                decoration: InputDecoration(
-                  labelText: context.l10n.linca_edit_label_user_id_bluesky,
-                  border: const OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 32),
-            ],
+                const SizedBox(height: 4),
+                if (state.userProfile?.favoriteGroups.isNotEmpty == true)
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            width: 2.0, color: Colors.grey.shade300)),
+                    child: ReorderableWrap(
+                      spacing: 8.0,
+                      runSpacing: 4.0,
+                      needsLongPressDraggable: true,
+                      onReorder: (int oldIndex, int newIndex) {
+                        final List<Group> current = List<Group>.of(
+                            state.userProfile?.favoriteGroups ?? <Group>[]);
+                        final Group group = current.removeAt(oldIndex);
+                        current.insert(newIndex, group);
+                        viewModel.updateFavoriteGroups(current);
+                      },
+                      children: state.userProfile?.favoriteGroups
+                              .asMap()
+                              .entries
+                              .map((MapEntry<int, Group> entry) {
+                            final int index = entry.key;
+                            final Group group = entry.value;
+
+                            return Chip(
+                              key: ValueKey<String>(group.id),
+                              label: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Text(group.name),
+                                  const SizedBox(width: 4),
+                                  const Icon(
+                                    Icons.drag_indicator,
+                                    size: 16,
+                                    color: Colors.grey,
+                                  ),
+                                ],
+                              ),
+                              backgroundColor:
+                                  index < AppConstants.maxSimpleProfileTagCount
+                                      ? context.colorScheme.primaryContainer
+                                      : context.colorScheme.primaryContainer
+                                          .withValues(alpha: 0.3),
+                            );
+                          }).toList() ??
+                          <Widget>[],
+                    ),
+                  ),
+                const SizedBox(height: 32),
+              ],
+            ),
           ),
         ),
       ),
@@ -310,7 +372,8 @@ class LincaEditPage extends HookConsumerWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: Text(
-                  lincaBadge?.name ?? 'バッジ未選択',
+                  lincaBadge?.name ??
+                      context.l10n.acquired_badges_list_unselect,
                   style: context.textTheme.bodySmall,
                 ),
               ),

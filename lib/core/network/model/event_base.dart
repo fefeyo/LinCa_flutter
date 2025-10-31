@@ -18,7 +18,7 @@ sealed class EventBase with _$EventBase {
     @Default('') String organizer,
     @Default('') String venueId,
     @JsonKey(fromJson: fromJsonDate, toJson: toJsonDate) DateTime? date,
-    @Default('') String status,
+    @Default(false) bool cancelFlg,
     @Default('') String url,
     @Default('') String imageUrl,
     @Default(<String>[]) List<String> tagIds,
@@ -30,6 +30,7 @@ sealed class EventBase with _$EventBase {
     )
     List<ParticipationType> availableParticipationTypes,
     @Default(true) bool visibility,
+    @Default('') String checkInId,
     @JsonKey(fromJson: fromJsonDate, toJson: toJsonDate) DateTime? updatedAt,
   }) = OfficialEvent;
 

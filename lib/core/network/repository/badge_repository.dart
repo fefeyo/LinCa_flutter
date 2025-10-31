@@ -39,4 +39,15 @@ class BadgeRepository extends FirestoreRepository<LincaBadge> {
 
     return badges;
   }
+
+  Future<void> acquireBadge(String uid, String badgeId) async {
+    final DocumentReference<Map<String, dynamic>> document = fireStore
+        .collection('users')
+        .doc(uid)
+        .collection('badges')
+        .doc(badgeId);
+    document.set(<String, dynamic>{
+      'achievedAt': FieldValue.serverTimestamp(),
+    });
+  }
 }

@@ -14,8 +14,10 @@ class ParticipationStatusBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration:
-          BoxDecoration(color: color, borderRadius: BorderRadius.circular(16)),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(16),
+      ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
         child: Text(
