@@ -8,7 +8,7 @@ admin.initializeApp();
  * =========================== */
 const groupBadges = {
   muse: [
-    { threshold: 1, id: "muse_suki" },
+    { threshold: 1, id: "muse_like" },
     { threshold: 10, id: "muse_oshi" },
     { threshold: 30, id: "muse_geki_oshi" },
   ],

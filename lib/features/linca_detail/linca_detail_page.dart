@@ -3,7 +3,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:linca_otaku_support/core/models/user_profile.dart';
+import 'package:linca_otaku_support/core/models/linca_user.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
 import 'package:linca_otaku_support/features/linca_detail/data/linca_detail_state.dart';
 import 'package:linca_otaku_support/features/linca_detail/view_model/linca_detail_view_model.dart';
@@ -16,11 +16,11 @@ import '../my_page/view/linca_vertical_back.dart';
 class LincaDetailPage extends HookConsumerWidget {
   const LincaDetailPage({
     super.key,
-    required this.userProfile,
+    required this.lincaUser,
     this.animationTag = '',
   });
 
-  final UserProfile userProfile;
+  final LincaUser lincaUser;
   final String animationTag;
 
   @override
@@ -29,10 +29,11 @@ class LincaDetailPage extends HookConsumerWidget {
     final LincaDetailState state = ref.watch(lincaDetailViewModelProvider);
     final LincaDetailViewModel viewModel =
         ref.read(lincaDetailViewModelProvider.notifier);
+    final ValueNotifier<bool> isFront = useState(true);
 
     useEffect(() {
       Future<void>.microtask(() {
-        viewModel.setUpcomingEvent(userProfile.user.id);
+        viewModel.setUpcomingEvent(lincaUser.user.id);
       });
 
       return null;
@@ -46,34 +47,30 @@ class LincaDetailPage extends HookConsumerWidget {
             children: <Widget>[
               FlipCard(
                 front: LincaVertical(
-                  userProfile: userProfile,
+                  lincaUser: lincaUser,
                   upcomingEvent: state.upcomingEvent,
                   tintColor: context.colorScheme.primary,
                   isFullScreen: true,
                   animationTag: animationTag,
+                  onClickFlip: () => isFront.value = !isFront.value,
+                  onClickClose: () {
+                        SystemChrome.setEnabledSystemUIMode(
+                          SystemUiMode.edgeToEdge);
+                      context.router.pop();
+                    },
                 ),
                 back: LincaVerticalBack(
+                  participationEvents: state.participationEvents,
                   animationTag: animationTag,
-                ),
-              ),
-              Positioned(
-                top: 16,
-                left: 16,
-                child: IconButton(
-                  icon: const Icon(Icons.close, color: Colors.white),
-                  style: IconButton.styleFrom(
-                    backgroundColor: Colors.black26,
-                    shape: const CircleBorder(),
-                    fixedSize: const Size(48, 48),
-                    padding: EdgeInsets.zero,
-                  ),
-                  onPressed: () {
+                  onClickFlip: () => isFront.value = !isFront.value,
+                  onClickClose: () {
                     SystemChrome.setEnabledSystemUIMode(
                         SystemUiMode.edgeToEdge);
                     context.router.pop();
                   },
                 ),
-              )
+                isFront: isFront.value,
+              ),
             ],
           ),
         ),

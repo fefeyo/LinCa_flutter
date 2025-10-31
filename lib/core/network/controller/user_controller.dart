@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/models/favorite_badges.dart';
 import 'package:linca_otaku_support/core/models/linca_user.dart';
 import 'package:linca_otaku_support/core/network/model/group.dart';
 import 'package:linca_otaku_support/core/network/repository/friend_repository.dart';
@@ -38,23 +40,24 @@ class UserController extends AsyncNotifier<LincaUser> {
     final List<String> acquiredBadgeIds =
         await badgeRepository.acuqiredBadgeIds(uid!);
     final List<User> friends = await friendRepository.fetchFriends(uid!);
+    final FavoriteBadges favoriteBadges = FavoriteBadges(
+      badge01: badges.firstWhereOrNull(
+          (LincaBadge badge) => badge.slug == user.favoriteBadges[0]),
+      badge02: badges.firstWhereOrNull(
+          (LincaBadge badge) => badge.slug == user.favoriteBadges[1]),
+      badge03: badges.firstWhereOrNull(
+          (LincaBadge badge) => badge.slug == user.favoriteBadges[2]),
+    );
 
     return LincaUser(
       user: user,
       favoriteGroups: groups
-          .where(
-            (Group group) => user.favoriteGroups.contains(group.slug),
-          )
+          .where((Group group) => user.favoriteGroups.contains(group.slug))
           .toList(),
-      favoriteBadges: badges
-          .where(
-            (LincaBadge badge) => user.favoriteBadges.contains(badge.slug),
-          )
-          .toList(),
+      favoriteBadges: favoriteBadges,
       acquiredBadges: badges
-          .where(
-            (LincaBadge badge) => acquiredBadgeIds.contains(badge.slug),
-          )
+          .where((LincaBadge badge) => acquiredBadgeIds.contains(badge.slug))
+          .sorted((LincaBadge a, LincaBadge b) => a.order.compareTo(b.order))
           .toList(),
       friends: friends,
     );
@@ -87,11 +90,14 @@ class UserController extends AsyncNotifier<LincaUser> {
     if (uid == null) return Future<void>.value();
     await userRepository.updateUserData(uid!, user);
     final List<LincaBadge> badges = await badgeRepository.loadBadges();
-    final List<LincaBadge> favoriteBadges = badges
-        .where(
-          (LincaBadge badge) => user.favoriteBadges.contains(badge.slug),
-        )
-        .toList();
+    final FavoriteBadges favoriteBadges = FavoriteBadges(
+      badge01: badges.firstWhereOrNull(
+          (LincaBadge badge) => badge.slug == user.favoriteBadges[0]),
+      badge02: badges.firstWhereOrNull(
+          (LincaBadge badge) => badge.slug == user.favoriteBadges[1]),
+      badge03: badges.firstWhereOrNull(
+          (LincaBadge badge) => badge.slug == user.favoriteBadges[2]),
+    );
     final List<Group> groups = await groupRepository.loadGroups();
     final List<Group> favoriteGroups = groups
         .where(
@@ -117,6 +123,7 @@ class UserController extends AsyncNotifier<LincaUser> {
     // 取得済みバッジを抽出
     final List<LincaBadge> acquiredBadges = allBadges
         .where((LincaBadge badge) => acquiredBadgeIds.contains(badge.slug))
+        .sorted((LincaBadge a, LincaBadge b) => a.order.compareTo(b.order))
         .toList();
 
     // 現在の状態が null の場合は何もしない
@@ -125,6 +132,14 @@ class UserController extends AsyncNotifier<LincaUser> {
     // 状態を更新
     state = AsyncValue<LincaUser>.data(
       state.value!.copyWith(acquiredBadges: acquiredBadges),
+    );
+  }
+
+  Future<void> updateFriends() async {
+    if (uid == null) return;
+    final List<User> friends = await friendRepository.fetchFriends(uid!);
+    state = AsyncValue<LincaUser>.data(
+      state.value!.copyWith(friends: friends),
     );
   }
 }

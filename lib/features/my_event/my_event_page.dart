@@ -20,7 +20,7 @@ class MyEventPage extends HookConsumerWidget {
 
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
         child: state.sortedEvents.isEmpty
             ? Center(
                 child: Text(
@@ -40,6 +40,9 @@ class MyEventPage extends HookConsumerWidget {
                     lincaEvent: lincaEvent,
                     participationInfo: participationInfo,
                   );
+                  // return TicketEventCard(
+                  //   lincaEvent: lincaEvent,
+                  // );
                 },
                 separatorBuilder: (BuildContext context, int index) {
                   return const SizedBox(

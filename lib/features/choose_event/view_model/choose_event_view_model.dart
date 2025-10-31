@@ -81,7 +81,8 @@ class ChooseEventViewModel extends StateNotifier<ChooseEventState> {
     sortedEvents = sortedEvents
         .filterWithKeyword(filterSettings.keyword)
         .sortWithDisplayOrder(filterSettings.displayOrder)
-        .filterWithGroup(filterSettings.groups);
+        .filterWithTag(filterSettings.typeTags)
+        .filterWithTag(filterSettings.seriesTags);
 
     return sortedEvents;
   }

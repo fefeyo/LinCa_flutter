@@ -34,7 +34,8 @@ class MyEventViewModel extends StateNotifier<MyEventState> {
     events = events
         .filterWithKeyword(filterSettings.keyword)
         .sortWithDisplayOrder(filterSettings.displayOrder)
-        .filterWithGroup(filterSettings.groups);
+        .filterWithTag(filterSettings.typeTags)
+        .filterWithTag(filterSettings.seriesTags);
 
     final Map<LincaEvent, ParticipationInfo> sortedMap =
         <LincaEvent, ParticipationInfo>{};

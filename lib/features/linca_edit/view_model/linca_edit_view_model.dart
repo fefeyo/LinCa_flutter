@@ -1,5 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/models/favorite_badges.dart';
 import 'package:linca_otaku_support/core/network/providers.dart';
+import 'package:linca_otaku_support/core/utils/favorite_badges_extension.dart';
 import '../../../core/models/user_profile.dart';
 import '../../../core/network/model/group.dart';
 import '../../../core/network/model/linca_badge.dart';
@@ -53,34 +55,28 @@ class LincaEditViewModel extends StateNotifier<LincaEditState> {
   void updateFavoriteBadges({
     required LincaBadge? changeBadge,
     required LincaBadge selectedBadge,
+    required int index,
   }) {
     // 変更がない場合はスキップ
     if (changeBadge?.slug == selectedBadge.slug) return;
 
-    final List<String> favoriteBadges =
-        List<String>.from(state.userProfile?.user.favoriteBadges ?? <String>[]);
+    FavoriteBadges favoriteBadges =
+        state.userProfile?.favoriteBadges ?? const FavoriteBadges();
 
     if (selectedBadge.slug.isEmpty) {
-      if (changeBadge != null) {
-        // バッジの削除（選択を解除）
-        favoriteBadges.remove(changeBadge.slug);
-      }
+      favoriteBadges = favoriteBadges.setBadge(index: index);
     } else {
-      // バッジの追加または差し替え
-      if (changeBadge != null) {
-        favoriteBadges.remove(changeBadge.slug);
-      }
-      if (!favoriteBadges.contains(selectedBadge.slug)) {
-        favoriteBadges.add(selectedBadge.slug);
-      }
+      favoriteBadges =
+          favoriteBadges.setBadge(index: index, badge: selectedBadge);
     }
 
+    // Stateを更新
     state = state.copyWith(
       userProfile: state.userProfile?.copyWith(
-        user: state.userProfile!.user.copyWith(favoriteBadges: favoriteBadges),
-        favoriteBadges: badges
-            .where((LincaBadge badge) => favoriteBadges.contains(badge.slug))
-            .toList(),
+        user: state.userProfile!.user.copyWith(
+          favoriteBadges: favoriteBadges.toSlugList,
+        ),
+        favoriteBadges: favoriteBadges,
       ),
     );
   }

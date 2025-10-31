@@ -22,7 +22,7 @@ class UserRepository {
           'photoUrl': '',
           'bio': '',
           'favoriteGroups': <String>[],
-          'favoriteBadges': <String>[],
+          'favoriteBadges': <String>['', '', ''],
           'links': <String, String>{'x': '', 'instagram': '', 'bluesky': ''},
           'createdAt': FieldValue.serverTimestamp(),
           'updatedAt': FieldValue.serverTimestamp(),

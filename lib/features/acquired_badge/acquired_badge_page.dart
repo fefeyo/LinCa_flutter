@@ -29,7 +29,9 @@ class AcquiredBadgePage extends HookConsumerWidget {
     ];
 
     useEffect(() {
-      userController.updateAcquiredBadges();
+      Future<void>.microtask(() {
+        userController.updateAcquiredBadges();
+      });
 
       return null;
     }, const <Object?>[]);
@@ -50,7 +52,11 @@ class AcquiredBadgePage extends HookConsumerWidget {
             final LincaBadge? item = acquiredBadges[index];
 
             return GestureDetector(
-              onTap: () {},
+              onTap: selectable
+                  ? item != null
+                      ? () => context.router.pop(item)
+                      : () => context.router.pop(LincaBadge.unselected)
+                  : null,
               child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(
@@ -61,53 +67,42 @@ class AcquiredBadgePage extends HookConsumerWidget {
                 ),
                 child: Center(
                   child: item == null
-                      ? InkWell(
-                          onTap: selectable
-                              ? () => context.router.pop(LincaBadge.unselected)
-                              : null,
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            const Icon(Icons.cancel, size: 40),
+                            const SizedBox(height: 8),
+                            Text(
+                              '未選択',
+                              style: context.textTheme.bodySmall,
+                            ),
+                          ],
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.all(8),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              const Icon(Icons.cancel, size: 40),
+                              SizedBox(
+                                width: 120,
+                                height: 120,
+                                child: item.iconUrl.isNotEmpty
+                                    ? CachedNetworkImage(imageUrl: item.iconUrl)
+                                    : const Icon(
+                                        Icons.device_unknown,
+                                        size: 40,
+                                      ),
+                              ),
                               const SizedBox(height: 8),
-                              Text(
-                                '未選択',
-                                style: context.textTheme.bodySmall,
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
+                                child: Text(
+                                  item.name,
+                                  style: context.textTheme.bodySmall,
+                                ),
                               ),
                             ],
-                          ),
-                        )
-                      : InkWell(
-                          onTap: selectable
-                              ? () => context.router.pop(item)
-                              : null,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                SizedBox(
-                                  width: 120,
-                                  height: 120,
-                                  child: item.iconUrl.isNotEmpty
-                                      ? CachedNetworkImage(
-                                          imageUrl: item.iconUrl)
-                                      : const Icon(
-                                          Icons.device_unknown,
-                                          size: 40,
-                                        ),
-                                ),
-                                const SizedBox(height: 8),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 8),
-                                  child: Text(
-                                    item.name,
-                                    style: context.textTheme.bodySmall,
-                                  ),
-                                ),
-                              ],
-                            ),
                           ),
                         ),
                 ),

@@ -84,13 +84,15 @@ class EventDetailPage extends HookConsumerWidget {
                 backgroundColor: Colors.transparent,
                 pinned: true,
                 flexibleSpace: FlexibleSpaceBar(
-                  background: Image(
-                    image: lincaEvent.event.imageUrlIfOfficial.isNotEmpty
-                        ? CachedNetworkImageProvider(
-                            lincaEvent.event.imageUrlIfOfficial)
-                        : AssetImage(Assets.images.defaultLiveBackground.path),
-                    fit: BoxFit.cover,
-                  ),
+                  background: lincaEvent.event.imageUrlIfOfficial.isNotEmpty
+                      ? CachedNetworkImage(
+                          imageUrl: lincaEvent.event.imageUrlIfOfficial,
+                          fit: BoxFit.fitWidth,
+                        )
+                      : Image.asset(
+                          Assets.images.defaultLiveBackground.path,
+                          fit: BoxFit.cover,
+                        ),
                   collapseMode: CollapseMode.parallax,
                 ),
               ),
@@ -105,7 +107,9 @@ class EventDetailPage extends HookConsumerWidget {
                     children: <Widget>[
                       ..._buildBadgeAreaIfNeeded(context: context),
                       ..._buildOrganizerArea(
-                          context: context, user: state.organizerUser),
+                        context: context,
+                        user: state.organizerUser,
+                      ),
                       Text(
                         lincaEvent.event.title,
                         style: context.textTheme.titleLarge?.copyWith(
@@ -162,7 +166,6 @@ class EventDetailPage extends HookConsumerWidget {
                       const SizedBox(height: 8),
                       Wrap(
                         spacing: 4,
-                        runSpacing: 8,
                         children: <Widget>[
                           ...lincaEvent.tags.map((Tag tag) {
                             return Chip(

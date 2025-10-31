@@ -31,7 +31,8 @@ class UserEventController extends AsyncNotifier<List<LincaEvent>> {
     user = ref.read(userControllerProvider).value;
     if (uid == null) return <LincaEvent>[];
 
-    final List<UnOfficialEvent> events = await fetchEvents();
+    final List<UnOfficialEvent> events =
+        await userEventRepository.fetchEvents(uid!);
     final List<LincaEvent> lincaEvents =
         await Future.wait(events.map((UnOfficialEvent event) async {
       // タグ一覧を取得
@@ -47,12 +48,6 @@ class UserEventController extends AsyncNotifier<List<LincaEvent>> {
 
     return lincaEvents.sortWithDisplayOrder(DisplayOrder.newest);
   }
-
-  Future<List<UnOfficialEvent>> fetchEvents() =>
-      userEventRepository.fetchEvents(uid!);
-
-  Future<List<UnOfficialEvent>> getEvents() =>
-      userEventRepository.getEvents(uid!);
 
   Future<void> registerEvent({
     required UnOfficialEvent event,

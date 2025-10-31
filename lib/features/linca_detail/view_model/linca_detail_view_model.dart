@@ -50,6 +50,9 @@ class LincaDetailViewModel extends StateNotifier<LincaDetailState> {
         (LincaEvent a, LincaEvent b) => a.event.date!.compareTo(b.event.date!),
       );
 
-    state = state.copyWith(upcomingEvent: upcomingEvent.firstOrNull);
+    state = state.copyWith(
+      participationEvents: participationEvents,
+      upcomingEvent: upcomingEvent.firstOrNull,
+    );
   }
 }

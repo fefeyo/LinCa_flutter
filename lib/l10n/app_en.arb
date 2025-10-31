@@ -179,5 +179,7 @@
   "acquired_badges_list_title": "acquired_badges_list_title",
   "acquired_badges_list_unselect": "acquired_badges_list_unselect",
   "common_cancel": "common_cancel",
-  "common_ok": "common_ok"
+  "common_ok": "common_ok",
+  "my_qr_code_transit_scan": "my_qr_code_transit_scan",
+  "my_qr_code_success_linca_trade": "my_qr_code_success_linca_trade"
 }

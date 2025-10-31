@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:linca_otaku_support/core/models/user_profile.dart';
+import 'package:linca_otaku_support/core/models/linca_user.dart';
 import 'package:linca_otaku_support/core/utils/linca_user_extension.dart';
 import 'package:linca_otaku_support/core/widgets/common/common_simple_dialog.dart';
 import 'package:linca_otaku_support/features/my_page/data/my_page_state.dart';
@@ -37,13 +37,13 @@ class MyPage extends HookConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               LincaVertical(
-                userProfile: state.lincaUser.userProfile,
+                lincaUser: state.lincaUser,
                 tintColor: context.colorScheme.primary,
                 animationTag: AppConstants.heroTagLincaCardMyPage,
-                onTap: (UserProfile userProfile, String animationTag) =>
+                onTap: (LincaUser lincaUser, String animationTag) =>
                     context.router.push(
                   LincaDetailRoute(
-                    userProfile: userProfile,
+                    lincaUser: lincaUser,
                     animationTag: animationTag,
                   ),
                 ),
@@ -98,14 +98,12 @@ class MyPage extends HookConsumerWidget {
               ),
               MyPageItem(
                 title: context.l10n.link_to_google_account,
-                subtitle: authState.value?.isGoogleLinked == true
+                subtitle: authController.isGoogleLinked()
                     ? context.l10n.already_linked
                     : context.l10n.not_linked,
-                trailing: authState.value?.isGoogleLinked == true
+                trailing: authController.isBothProviderLinked()
                     ? ElevatedButton(
-                        onPressed: () {
-                          authController.linkTwitter();
-                        },
+                        onPressed: () => authController.unLinkGoogle(),
                         child: Text(
                           context.l10n.release_link,
                           style: context.textTheme.bodyMedium?.copyWith(
@@ -114,7 +112,7 @@ class MyPage extends HookConsumerWidget {
                         ),
                       )
                     : null,
-                onClickItem: authState.value?.isGoogleLinked == true
+                onClickItem: authController.isGoogleLinked()
                     ? () {}
                     : () async {
                         await authController.linkGoogle();
@@ -130,16 +128,16 @@ class MyPage extends HookConsumerWidget {
               ),
               MyPageItem(
                 title: context.l10n.link_to_x_account,
-                subtitle: authState.value?.isTwitterLinked == true
+                subtitle: authController.isTwitterLinked()
                     ? context.l10n.already_linked
                     : context.l10n.not_linked,
-                trailing: authState.value?.isTwitterLinked == true
+                trailing: authController.isBothProviderLinked()
                     ? ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () => authController.unLinkTwitter(),
                         child: Text(context.l10n.release_link),
                       )
                     : null,
-                onClickItem: authState.value?.isTwitterLinked == true
+                onClickItem: authController.isTwitterLinked()
                     ? () {}
                     : () async {
                         await authController.linkTwitter();
