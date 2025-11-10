@@ -1,43 +1,24 @@
-import 'package:linca_otaku_support/core/env/env.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../constants/app_constants.dart';
 import '../model/group.dart';
 import 'firestore_repository.dart';
 
 class GroupRepository extends FirestoreRepository<Group> {
-  GroupRepository(super.fireStore);
+  GroupRepository({
+    required super.uid,
+    required super.fireStore,
+    required super.preferences,
+  });
 
-  Future<List<Group>> _fetchGroups() =>
-      fetchAll('groups', (Map<String, dynamic> json) => Group.fromJson(json));
+  @override
+  Future<List<Group>> fetch() => fetchAll(
+        collectionPath: AppConstants.groupCollectionPath,
+        lastUpdatedAtKey: AppConstants.groupLastUpdatedAtKey,
+        fromJson: (Map<String, dynamic> json) => Group.fromJson(json),
+      );
 
-  Future<List<Group>> _getGroups() => fetchAllFromCache(
-      'groups', (Map<String, dynamic> json) => Group.fromJson(json));
-
-  Future<List<Group>> loadGroups() async {
-    final SharedPreferences preferences = await SharedPreferences.getInstance();
-    final PackageInfo info = await PackageInfo.fromPlatform();
-
-    List<Group> groups = await _getGroups();
-
-    if (preferences.getString(AppConstants.groupVersionKey) != info.version ||
-        groups.isEmpty || Env.flavor != 'prod') {
-      groups = await _fetchGroups();
-      await preferences.setString(AppConstants.groupVersionKey, info.version);
-    }
-    groups.sort((Group a, Group b) => a.order.compareTo(b.order));
-
-    return groups;
-  }
-
-  Future<Group> getGroupById(String id) async {
-    final List<Group> groups = await _getGroups();
-    return groups.firstWhere((Group group) => group.id == id);
-  }
-
-  Future<Group> getGroupBySlug(String slug) async {
-    final List<Group> groups = await _getGroups();
-    return groups.firstWhere((Group group) => group.slug == slug);
-  }
+  @override
+  Future<List<Group>> get() => fetchAllFromCache(
+        collectionPath: AppConstants.groupCollectionPath,
+        fromJson: (Map<String, dynamic> json) => Group.fromJson(json),
+      );
 }

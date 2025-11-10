@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/utils/color_extension.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_button/sign_in_button.dart';
 
 import '../../../core/utils/context_extension.dart';
+import '../../core/asset_gen/assets.gen.dart';
 import '../../core/auth/controller/auth_controller.dart';
 import '../../core/auth/providers.dart';
 import '../../core/constants/app_constants.dart';
@@ -45,29 +47,30 @@ class LoginPage extends HookConsumerWidget {
 
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: <Color>[
-              Color(0xFFFF9800),
-              Color(0xFFFFEB3B), // 仮背景
+              context.colorScheme.loginBackground,
+              context.colorScheme.loginBackground.withValues(alpha: 0.6),
             ],
           ),
         ),
-        child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              Image.asset(Assets.images.lincaLogo.path),
+              const SizedBox(height: 16),
               Text(
-                context.l10n.app_name,
-                style: context.textTheme.displayLarge?.copyWith(
+                context.l10n.app_catchphrase,
+                style: context.textTheme.titleMedium?.copyWith(
                   color: context.colorScheme.surface,
                 ),
               ),
-              const SizedBox(
-                height: 32,
-              ),
+              const SizedBox(height: 32),
               SignInButton(
                 text: context.l10n.signin_with_guest,
                 Buttons.anonymous,

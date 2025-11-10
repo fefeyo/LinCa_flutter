@@ -28,6 +28,7 @@
     }
   },
   "app_name": "LinCa",
+  "app_catchphrase": "LinCa with your OTAKU Life.",
   "menu_title": "Menu",
   "my_event_title": "MyEvent",
   "recent_event_title": "RecentEvent",
@@ -216,5 +217,6 @@
   "check_in_location_permission_denied_forever": "check_in_location_permission_denied_forever",
   "check_in_in_range": "check_in_in_range",
   "check_in_already_checked_in": "check_in_already_checked_in",
-  "check_in_out_range": "check_in_out_range"
+  "check_in_out_range": "check_in_out_range",
+  "common_determination": "common_determination"
 }

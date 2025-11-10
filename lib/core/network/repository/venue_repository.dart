@@ -1,20 +1,25 @@
-import 'package:collection/collection.dart';
+import 'package:linca_otaku_support/core/constants/app_constants.dart';
 
 import '../model/venue.dart';
 import 'firestore_repository.dart';
 
 class VenueRepository extends FirestoreRepository<Venue> {
-  VenueRepository(super.fireStore);
+  VenueRepository({
+    required super.uid,
+    required super.fireStore,
+    required super.preferences,
+  });
 
-  Future<List<Venue>> fetchVenues() =>
-      fetchAll('venues', (Map<String, dynamic> json) => Venue.fromJson(json));
+  @override
+  Future<List<Venue>> fetch() => fetchAll(
+        collectionPath: AppConstants.venuePath,
+        lastUpdatedAtKey: AppConstants.venueLastUpdatedAtKey,
+        fromJson: (Map<String, dynamic> json) => Venue.fromJson(json),
+      );
 
-  Future<List<Venue>> getVenues() => fetchAllFromCache(
-      'venues', (Map<String, dynamic> json) => Venue.fromJson(json));
-
-  Future<Venue> getVenueById(String id) async {
-    final List<Venue> venues = await getVenues();
-    return venues.firstWhereOrNull((Venue venue) => venue.id == id) ??
-        const Venue();
-  }
+  @override
+  Future<List<Venue>> get() => fetchAllFromCache(
+        collectionPath: AppConstants.venuePath,
+        fromJson: (Map<String, dynamic> json) => Venue.fromJson(json),
+      );
 }

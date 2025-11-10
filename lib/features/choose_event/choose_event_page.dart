@@ -8,7 +8,6 @@ import 'package:linca_otaku_support/core/utils/context_extension.dart';
 import '../../core/constants/event_type.dart';
 import '../../core/models/filter_settings.dart';
 import '../../core/models/linca_event.dart';
-import '../../core/network/providers.dart';
 import '../../core/widgets/bottom_sheet/event_sort_bottom_sheet.dart';
 import '../../core/widgets/event/event_card.dart';
 import 'data/choose_event_state.dart';
@@ -30,9 +29,6 @@ class ChooseEventPage extends HookConsumerWidget {
         ref.read(chooseEventViewModelProvider.notifier);
     final ValueNotifier<bool> isSearching = useState(false);
     final TextEditingController searchController = useTextEditingController();
-    final Map<LincaEvent, ParticipationInfo> participations =
-        ref.watch(participationControllerProvider).value ??
-            <LincaEvent, ParticipationInfo>{};
 
     useEffect(() {
       Future<void>.microtask(() {
@@ -66,6 +62,7 @@ class ChooseEventPage extends HookConsumerWidget {
                 context,
                 state.filterSettings,
                 needDisplayOrderArea: true,
+                needHiddenParticipationArea: true,
                 needTagsArea: true,
               );
               if (result != null) {
@@ -95,7 +92,7 @@ class ChooseEventPage extends HookConsumerWidget {
                 itemBuilder: (BuildContext context, int index) {
                   final LincaEvent event = state.sortedEvents[index];
                   final ParticipationInfo? participationInfo =
-                      participations[event];
+                      state.participations[event];
                   return EventCard(
                     lincaEvent: event,
                     participationInfo: participationInfo,

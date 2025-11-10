@@ -16,6 +16,7 @@ class EventSortBottomSheet extends HookConsumerWidget {
     super.key,
     required this.initialSettings,
     this.needInputArea = false,
+    this.needHiddenParticipationArea = false,
     this.needDisplayOrderArea = false,
     this.needParticipationArea = false,
     this.needTagsArea = false,
@@ -23,6 +24,7 @@ class EventSortBottomSheet extends HookConsumerWidget {
 
   final FilterSettings initialSettings;
   final bool needInputArea;
+  final bool needHiddenParticipationArea;
   final bool needDisplayOrderArea;
   final bool needParticipationArea;
   final bool needTagsArea;
@@ -40,7 +42,8 @@ class EventSortBottomSheet extends HookConsumerWidget {
     final ValueNotifier<List<Tag>> currentSeriesTags =
         useState(initialSettings.seriesTags);
     final List<Tag> tags = ref.watch(tagControllerProvider).value ?? <Tag>[];
-    final ValueNotifier<bool> isShowParticipationEvent = useState(false);
+    final ValueNotifier<bool> isHiddenParticipationEvent =
+        useState(initialSettings.isHiddenParticipationEvent);
 
     return SafeArea(
       child: Padding(
@@ -73,20 +76,13 @@ class EventSortBottomSheet extends HookConsumerWidget {
                         onChanged: (DisplayOrder displayOrder) =>
                             currentDisplayOrder.value = displayOrder,
                       ),
-                      Row(
-                        children: <Widget>[
-                          Checkbox(
-                            value: isShowParticipationEvent.value,
-                            onChanged: (bool? selected) {
-                              isShowParticipationEvent.value =
-                                  selected ?? false;
-                            },
-                          ),
-                          Text(
-                            '参加予定のイベントのみ表示',
-                            style: context.textTheme.titleMedium,
-                          ),
-                        ],
+                      _buildParticipationEnabled(
+                        context: context,
+                        isHiddenParticipationEvent:
+                            isHiddenParticipationEvent.value,
+                        onChanged: (bool? selected) =>
+                            isHiddenParticipationEvent.value =
+                                selected ?? false,
                       ),
                       ..._buildParticipationAreaIfNeeded(
                         context: context,
@@ -154,6 +150,8 @@ class EventSortBottomSheet extends HookConsumerWidget {
                                   currentParticipationTypes.value,
                               seriesTags: currentSeriesTags.value,
                               typeTags: currentTypeTags.value,
+                              isHiddenParticipationEvent:
+                                  isHiddenParticipationEvent.value,
                             ),
                           );
                         },
@@ -208,6 +206,27 @@ class EventSortBottomSheet extends HookConsumerWidget {
       const Divider(),
       const SizedBox(height: 8),
     ];
+  }
+
+  Widget _buildParticipationEnabled({
+    required BuildContext context,
+    required bool isHiddenParticipationEvent,
+    required Function(bool? selected) onChanged,
+  }) {
+    if (!needHiddenParticipationArea) return const SizedBox.shrink();
+
+    return Row(
+      children: <Widget>[
+        Checkbox(
+          value: isHiddenParticipationEvent,
+          onChanged: onChanged,
+        ),
+        Text(
+          '参加予定のイベントを非表示',
+          style: context.textTheme.titleMedium,
+        ),
+      ],
+    );
   }
 
   List<Widget> _buildParticipationAreaIfNeeded({
@@ -311,7 +330,7 @@ class EventSortBottomSheet extends HookConsumerWidget {
 
     return <Widget>[
       Text(
-        'シリーズ',
+        'シリーズタグ',
         style: context.textTheme.bodyMedium,
       ),
       const SizedBox(height: 8),
@@ -348,6 +367,7 @@ class EventSortBottomSheet extends HookConsumerWidget {
     BuildContext context,
     FilterSettings initialSettings, {
     bool needInputArea = false,
+    bool needHiddenParticipationArea = false,
     bool needDisplayOrderArea = false,
     bool needParticipationArea = false,
     bool needTagsArea = false,
@@ -360,6 +380,7 @@ class EventSortBottomSheet extends HookConsumerWidget {
         builder: (BuildContext context) => EventSortBottomSheet(
           initialSettings: initialSettings,
           needInputArea: needInputArea,
+          needHiddenParticipationArea: needHiddenParticipationArea,
           needDisplayOrderArea: needDisplayOrderArea,
           needParticipationArea: needParticipationArea,
           needTagsArea: needTagsArea,

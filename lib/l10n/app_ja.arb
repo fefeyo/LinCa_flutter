@@ -28,6 +28,7 @@
     }
   },
   "app_name": "LinCa",
+  "app_catchphrase": "イベントの記録が、あなたの軌跡になる。",
   "menu_title": "メニュー",
   "my_event_title": "マイイベント",
   "recent_event_title": "直近のイベント",
@@ -216,5 +217,6 @@
   "check_in_location_permission_denied_forever": "位置情報の許可が必要です\nアプリ設定から位置情報サービスを有効にしてください",
   "check_in_in_range": "チェックイン完了です！\nバッジ一覧から獲得バッジを確認してください",
   "check_in_already_checked_in": "既にチェックイン済みです",
-  "check_in_out_range": "チェックイン範囲外です"
+  "check_in_out_range": "チェックイン範囲外です",
+  "common_determination": "決定"
 }

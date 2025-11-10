@@ -1,39 +1,45 @@
+import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/models/linca_event.dart';
+import 'package:linca_otaku_support/core/network/controller/linca_controller.dart';
 import 'package:linca_otaku_support/core/network/model/participation_info.dart';
 import 'package:linca_otaku_support/core/utils/linca_event_extension.dart';
 
-import '../../auth/providers.dart';
 import '../providers.dart';
 import '../repository/participation_repository.dart';
 
 class ParticipationController
-    extends AsyncNotifier<Map<LincaEvent, ParticipationInfo>> {
-  late String? uid;
+    extends LincaController<Map<LincaEvent, ParticipationInfo>> {
   late ParticipationRepository participationRepository;
 
   @override
-  Future<Map<LincaEvent, ParticipationInfo>> build() async {
-    uid = ref.watch(uidProvider);
+  Future<Map<LincaEvent, ParticipationInfo>> buildImpl() async {
     participationRepository = ref.read(participationRepositoryProvider);
     final List<LincaEvent> events =
         ref.watch(eventControllerProvider).value ?? <LincaEvent>[];
     final List<LincaEvent> userEvents =
         ref.watch(userEventControllerProvider).value ?? <LincaEvent>[];
-    final List<ParticipationInfo> participationInfos =
-        await fetchParticipations();
-    final Map<LincaEvent, ParticipationInfo> myEvents =
-        <LincaEvent, ParticipationInfo>{};
-    for (final ParticipationInfo participation in participationInfos) {
-      LincaEvent? event = events.firstWhereOrNull(
-          (LincaEvent event) => event.event.id == participation.eventId);
-      event ??= userEvents.firstWhereOrNull(
-          (LincaEvent event) => event.event.id == participation.eventId);
 
-      if (event != null) {
-        myEvents[event] = participation;
-      }
+    List<ParticipationInfo> participationInfos =
+        await participationRepository.get();
+
+    Map<LincaEvent, ParticipationInfo> myEvents = _generateLincaEvent(
+      participationInfos: participationInfos,
+      events: events,
+      userEvents: userEvents,
+    );
+
+    if (participationInfos.isNotEmpty) {
+      unawaited(_refreshInBackground());
+    } else {
+      participationInfos = await participationRepository.fetch();
+      myEvents = _generateLincaEvent(
+        participationInfos: participationInfos,
+        events: events,
+        userEvents: userEvents,
+      );
     }
 
     return myEvents.sort();
@@ -43,8 +49,7 @@ class ParticipationController
     required LincaEvent lincaEvent,
     required ParticipationInfo participation,
   }) async {
-    if (uid == null) return;
-    await participationRepository.create(uid!, participation);
+    await participationRepository.create(participation);
 
     // 現在のstateが読み込み済みなら更新
     final AsyncValue<Map<LincaEvent, ParticipationInfo>> currentState = state;
@@ -62,8 +67,7 @@ class ParticipationController
 
   Future<void> deleteParticipation(
       LincaEvent lincaEvent, ParticipationInfo participationInfo) async {
-    if (uid == null) return;
-    await participationRepository.delete(uid!, participationInfo.eventId);
+    await participationRepository.delete(participationInfo.eventId);
 
     // 現在のstateが読み込み済みなら更新
     final AsyncValue<Map<LincaEvent, ParticipationInfo>> currentState = state;
@@ -79,19 +83,52 @@ class ParticipationController
     }
   }
 
-  Future<List<ParticipationInfo>> fetchParticipations() {
-    if (uid == null) {
-      return Future<List<ParticipationInfo>>.value(<ParticipationInfo>[]);
-    }
+  Future<void> _refreshInBackground() async {
+    final Map<LincaEvent, ParticipationInfo> lincaEvents =
+        state.value ?? <LincaEvent, ParticipationInfo>{};
 
-    return participationRepository.fetchParticipations(uid!);
+    try {
+      final List<ParticipationInfo> updated =
+          await participationRepository.fetch();
+
+      if (updated.isNotEmpty) {
+        final List<LincaEvent> events =
+            ref.watch(eventControllerProvider).value ?? <LincaEvent>[];
+        final List<LincaEvent> userEvents =
+            ref.watch(userEventControllerProvider).value ?? <LincaEvent>[];
+
+        lincaEvents.addAll(
+          _generateLincaEvent(
+            participationInfos: updated,
+            events: events,
+            userEvents: userEvents,
+          ),
+        );
+        state =
+            AsyncValue<Map<LincaEvent, ParticipationInfo>>.data(lincaEvents);
+      }
+    } catch (_) {
+      state = AsyncValue<Map<LincaEvent, ParticipationInfo>>.data(lincaEvents);
+    }
   }
 
-  Future<List<ParticipationInfo>> getParticipations() {
-    if (uid == null) {
-      return Future<List<ParticipationInfo>>.value(<ParticipationInfo>[]);
+  Map<LincaEvent, ParticipationInfo> _generateLincaEvent({
+    required List<ParticipationInfo> participationInfos,
+    required List<LincaEvent> events,
+    required List<LincaEvent> userEvents,
+  }) {
+    final Map<LincaEvent, ParticipationInfo> lincaEvents =
+        <LincaEvent, ParticipationInfo>{};
+    for (ParticipationInfo participationInfo in participationInfos) {
+      LincaEvent? event = events.firstWhereOrNull(
+          (LincaEvent event) => event.event.id == participationInfo.eventId);
+      event ??= userEvents.firstWhereOrNull(
+          (LincaEvent event) => event.event.id == participationInfo.eventId);
+      if (event != null) {
+        lincaEvents[event] = participationInfo;
+      }
     }
 
-    return participationRepository.getParticipations(uid!);
+    return lincaEvents;
   }
 }

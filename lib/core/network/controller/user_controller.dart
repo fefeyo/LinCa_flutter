@@ -4,10 +4,10 @@ import 'package:collection/collection.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/models/favorite_badges.dart';
 import 'package:linca_otaku_support/core/models/linca_user.dart';
+import 'package:linca_otaku_support/core/network/controller/linca_controller.dart';
 import 'package:linca_otaku_support/core/network/model/group.dart';
 import 'package:linca_otaku_support/core/network/repository/friend_repository.dart';
 import 'package:linca_otaku_support/core/network/repository/group_repository.dart';
-import 'package:linca_otaku_support/core/network/repository/participation_repository.dart';
 
 import '../../auth/providers.dart';
 import '../model/linca_badge.dart';
@@ -16,30 +16,30 @@ import '../providers.dart';
 import '../repository/badge_repository.dart';
 import '../repository/user_repository.dart';
 
-class UserController extends AsyncNotifier<LincaUser> {
+class UserController extends LincaController<LincaUser> {
   late String? uid;
   late UserRepository userRepository;
   late BadgeRepository badgeRepository;
   late FriendRepository friendRepository;
-  late ParticipationRepository participationRepository;
   late GroupRepository groupRepository;
 
   @override
-  FutureOr<LincaUser> build() async {
+  FutureOr<LincaUser> buildImpl() async {
     uid = ref.watch(uidProvider);
     if (uid == null) return const LincaUser();
     userRepository = ref.read(userRepositoryProvider);
     badgeRepository = ref.read(badgeRepositoryProvider);
     friendRepository = ref.read(friendRepositoryProvider);
-    participationRepository = ref.read(participationRepositoryProvider);
     groupRepository = ref.read(groupRepositoryProvider);
 
     final User user = await userRepository.fetchUserData(uid!);
-    final List<Group> groups = await groupRepository.loadGroups();
-    final List<LincaBadge> badges = await badgeRepository.loadBadges();
+    final List<Group> groups =
+        ref.watch(groupControllerProvider).value ?? <Group>[];
+    final List<LincaBadge> badges =
+        ref.watch(badgeControllerProvider).value ?? <LincaBadge>[];
     final List<String> acquiredBadgeIds =
-        await badgeRepository.acuqiredBadgeIds(uid!);
-    final List<User> friends = await friendRepository.fetchFriends(uid!);
+        await badgeRepository.acuqiredBadgeIds();
+    final List<User> friends = await friendRepository.fetch();
     final FavoriteBadges favoriteBadges = FavoriteBadges(
       badge01: badges.firstWhereOrNull(
           (LincaBadge badge) => badge.slug == user.favoriteBadges[0]),
@@ -53,7 +53,7 @@ class UserController extends AsyncNotifier<LincaUser> {
       user: user,
       favoriteGroups: user.favoriteGroups
           .map((String tagId) =>
-          groups.firstWhereOrNull((Group group) => group.slug == tagId))
+              groups.firstWhereOrNull((Group group) => group.slug == tagId))
           .whereType<Group>()
           .toList(),
       favoriteBadges: favoriteBadges,
@@ -72,7 +72,7 @@ class UserController extends AsyncNotifier<LincaUser> {
   Future<void> updateDisplayName(String displayName) async {
     displayName = displayName.isNotEmpty ? displayName : '幻の学院生';
     if (uid == null) return;
-    await userRepository.updateDisplayName(uid!, displayName);
+    await userRepository.updateDisplayName(displayName);
     final User user = state.value?.user ?? const User();
     state = AsyncValue<LincaUser>.data(
         state.value?.copyWith(user: user.copyWith(displayName: displayName)) ??
@@ -81,7 +81,7 @@ class UserController extends AsyncNotifier<LincaUser> {
 
   Future<void> updateUserPhoto(String photoUrl) async {
     if (uid == null) return;
-    await userRepository.updateUserPhoto(uid!, photoUrl);
+    await userRepository.updateUserPhoto(photoUrl);
     final User user = state.value?.user ?? const User();
     state = AsyncValue<LincaUser>.data(
         state.value?.copyWith(user: user.copyWith(photoUrl: photoUrl)) ??
@@ -90,8 +90,8 @@ class UserController extends AsyncNotifier<LincaUser> {
 
   Future<void> updateUserData(User user) async {
     if (uid == null) return Future<void>.value();
-    await userRepository.updateUserData(uid!, user);
-    final List<LincaBadge> badges = await badgeRepository.loadBadges();
+    await userRepository.updateUserData(user);
+    final List<LincaBadge> badges = await badgeRepository.get();
     final FavoriteBadges favoriteBadges = FavoriteBadges(
       badge01: badges.firstWhereOrNull(
           (LincaBadge badge) => badge.slug == user.favoriteBadges[0]),
@@ -100,7 +100,7 @@ class UserController extends AsyncNotifier<LincaUser> {
       badge03: badges.firstWhereOrNull(
           (LincaBadge badge) => badge.slug == user.favoriteBadges[2]),
     );
-    final List<Group> groups = await groupRepository.loadGroups();
+    final List<Group> groups = await groupRepository.get();
     final List<Group> favoriteGroups =
         user.favoriteGroups.map((String groupSlug) {
       return groups.firstWhere((Group group) => group.slug == groupSlug);
@@ -114,12 +114,10 @@ class UserController extends AsyncNotifier<LincaUser> {
   }
 
   Future<void> updateAcquiredBadges() async {
-    if (uid == null) return;
-
     // バッジ一覧と取得済みバッジIDを取得
-    final List<LincaBadge> allBadges = await badgeRepository.loadBadges();
+    final List<LincaBadge> allBadges = await badgeRepository.get();
     final List<String> acquiredBadgeIds =
-        await badgeRepository.acuqiredBadgeIds(uid!);
+        await badgeRepository.acuqiredBadgeIds();
 
     // 取得済みバッジを抽出
     final List<LincaBadge> acquiredBadges = allBadges
@@ -137,19 +135,17 @@ class UserController extends AsyncNotifier<LincaUser> {
   }
 
   Future<void> updateFriends() async {
-    if (uid == null) return;
-    final List<User> friends = await friendRepository.fetchFriends(uid!);
+    final List<User> friends = await friendRepository.fetch();
     state = AsyncValue<LincaUser>.data(
       state.value!.copyWith(friends: friends),
     );
   }
 
   Future<void> acquireBadge(String badgeId) async {
-    if (uid == null) return;
-    await badgeRepository.acquireBadge(uid!, badgeId);
+    await badgeRepository.acquireBadge(badgeId);
     final List<LincaBadge> acquiredBadges =
         List<LincaBadge>.of(state.value?.acquiredBadges ?? <LincaBadge>[]);
-    final List<LincaBadge> badges = await badgeRepository.loadBadges();
+    final List<LincaBadge> badges = await badgeRepository.get();
     final LincaBadge? addedBadge =
         badges.firstWhereOrNull((LincaBadge badge) => badge.id == badgeId);
     if (addedBadge != null) {

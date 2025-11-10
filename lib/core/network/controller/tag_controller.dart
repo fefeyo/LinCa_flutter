@@ -1,33 +1,39 @@
 import 'dart:async';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../constants/app_constants.dart';
-import '../../env/env.dart';
+import 'package:linca_otaku_support/core/network/controller/linca_controller.dart';
 import '../model/tag.dart';
 import '../providers.dart';
 import '../repository/tag_repository.dart';
 
-class TagController extends AsyncNotifier<List<Tag>> {
+class TagController extends LincaController<List<Tag>> {
   late TagRepository tagRepository;
 
   @override
-  FutureOr<List<Tag>> build() async {
+  FutureOr<List<Tag>> buildImpl() async {
     tagRepository = ref.read(tagRepositoryProvider);
-    final SharedPreferences preferences = await SharedPreferences.getInstance();
-    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    List<Tag> tags = await tagRepository.getTags();
-    if (preferences.getString(AppConstants.tagVersionKey) !=
-            packageInfo.version ||
-        tags.isEmpty ||
-        Env.flavor != 'prod') {
-      tags = await tagRepository.fetchTags();
-      await preferences.setString(
-          AppConstants.tagVersionKey, packageInfo.version);
+    final List<Tag> tags = await tagRepository.get();
+
+    if (tags.isNotEmpty) {
+      _refreshInBackground();
+    } else {
+      tags.addAll(await tagRepository.fetch());
     }
 
     return tags;
+  }
+
+  Future<void> _refreshInBackground() async {
+    try {
+      final List<Tag> updated = await tagRepository.fetch();
+
+      // 🔄 差分がある場合のみ state 更新
+      if (updated.isNotEmpty) {
+        final List<Tag> current = state.value ?? <Tag>[];
+        state = AsyncValue<List<Tag>>.data(<Tag>[...current, ...updated]);
+      }
+    } catch (error, stacktrace) {
+      state = AsyncValue<List<Tag>>.error(error, stacktrace);
+    }
   }
 }
