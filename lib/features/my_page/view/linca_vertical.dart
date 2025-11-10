@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/constants/app_constants.dart';
 import 'package:linca_otaku_support/core/models/linca_event.dart';
 import 'package:linca_otaku_support/core/models/linca_user.dart';
 import 'package:linca_otaku_support/core/network/model/group.dart';
 import 'package:linca_otaku_support/core/network/model/linca_badge.dart';
 import 'package:linca_otaku_support/core/utils/color_extension.dart';
 import 'package:linca_otaku_support/core/utils/favorite_badges_extension.dart';
+import 'package:linca_otaku_support/core/utils/group_extension.dart';
 import 'package:linca_otaku_support/core/widgets/common/common_close_button.dart';
 import 'package:linca_otaku_support/core/widgets/event/event_card.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -19,7 +21,6 @@ class LincaVertical extends HookConsumerWidget {
     super.key,
     required this.lincaUser,
     this.upcomingEvent,
-    this.tintColor,
     this.isFullScreen = false,
     this.animationTag = '',
     this.onTap,
@@ -29,7 +30,6 @@ class LincaVertical extends HookConsumerWidget {
 
   final LincaUser lincaUser;
   final LincaEvent? upcomingEvent;
-  final Color? tintColor;
   final bool isFullScreen;
   final String animationTag;
   final Function(LincaUser lincaUser, String animationTag)? onTap;
@@ -68,7 +68,7 @@ class LincaVertical extends HookConsumerWidget {
                         children: lincaUser.favoriteGroups
                             .take(isFullScreen
                                 ? lincaUser.favoriteGroups.length
-                                : 6)
+                                : AppConstants.maxSimpleProfileTagCount)
                             .map((Group group) => Chip(
                                   label: Text(
                                     group.name,
@@ -115,8 +115,7 @@ class LincaVertical extends HookConsumerWidget {
                     // Xアカウント、Instagramアカウント、Blueskyアカウント
                     _buildSnsAccounts(context),
 
-                    if (isFullScreen)
-                      const SizedBox(height: 32),
+                    if (isFullScreen) const SizedBox(height: 32),
                   ],
                 ),
               ),
@@ -133,9 +132,9 @@ class LincaVertical extends HookConsumerWidget {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: <Color>[
-                      (tintColor ?? context.colorScheme.primary)
-                          .withValues(alpha: .95),
-                      (tintColor ?? context.colorScheme.primary)
+                      lincaUser.favoriteGroups.getFavoriteColor(context),
+                      lincaUser.favoriteGroups
+                          .getFavoriteColor(context)
                           .withValues(alpha: .70),
                     ],
                   ),

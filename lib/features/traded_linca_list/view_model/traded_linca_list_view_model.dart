@@ -30,8 +30,10 @@ final StateNotifierProvider<TradedLincaListViewModel, TradedLincaListState>
 
     return LincaUser(
       user: user,
-      favoriteGroups: groups
-          .where((Group group) => user.favoriteGroups.contains(group.slug))
+      favoriteGroups: user.favoriteGroups
+          .map((String tagId) =>
+          groups.firstWhereOrNull((Group group) => group.slug == tagId))
+          .whereType<Group>()
           .toList(),
       favoriteBadges: favoriteBadges,
     );

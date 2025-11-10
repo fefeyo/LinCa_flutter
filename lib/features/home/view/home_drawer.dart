@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:linca_otaku_support/core/models/linca_user.dart';
+import 'package:linca_otaku_support/core/utils/group_extension.dart';
 import 'package:linca_otaku_support/core/utils/linca_user_extension.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -37,7 +38,16 @@ class HomeDrawer extends StatelessWidget {
           DrawerHeader(
             margin: EdgeInsets.zero,
             decoration: BoxDecoration(
-              color: context.colorScheme.primary,
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: <Color>[
+                  lincaUser.favoriteGroups.getFavoriteColor(context),
+                  lincaUser.favoriteGroups
+                      .getFavoriteColor(context)
+                      .withValues(alpha: .70),
+                ],
+              ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

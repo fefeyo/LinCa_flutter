@@ -25,8 +25,16 @@ class CommonSimpleDialog extends StatelessWidget {
     final String displayOkText = okText ?? context.l10n.common_ok;
 
     return AlertDialog(
-      title: Text(title),
-      content: content != null ? Text(content!) : null,
+      title: Text(
+        title,
+        style: context.textTheme.titleMedium,
+      ),
+      content: content != null
+          ? Text(
+              content!,
+              style: context.textTheme.bodyMedium,
+            )
+          : null,
       actions: <Widget>[
         if (onClickCancel != null)
           TextButton(
@@ -36,14 +44,13 @@ class CommonSimpleDialog extends StatelessWidget {
             },
             child: Text(displayCancelText),
           ),
-        if (onClickOk != null)
-          TextButton(
-            onPressed: () {
-              onClickOk?.call();
-              Navigator.of(context).pop(true);
-            },
-            child: Text(displayOkText),
-          ),
+        TextButton(
+          onPressed: () {
+            onClickOk?.call();
+            Navigator.of(context).pop(true);
+          },
+          child: Text(displayOkText),
+        ),
       ],
     );
   }
@@ -59,6 +66,7 @@ class CommonSimpleDialog extends StatelessWidget {
   }) {
     return showDialog<bool>(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) => CommonSimpleDialog(
           title: title,
           content: content,

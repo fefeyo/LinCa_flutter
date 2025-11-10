@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/models/linca_user.dart';
-import 'package:linca_otaku_support/core/utils/context_extension.dart';
 import 'package:linca_otaku_support/features/linca_detail/data/linca_detail_state.dart';
 import 'package:linca_otaku_support/features/linca_detail/view_model/linca_detail_view_model.dart';
 
@@ -49,15 +48,14 @@ class LincaDetailPage extends HookConsumerWidget {
                 front: LincaVertical(
                   lincaUser: lincaUser,
                   upcomingEvent: state.upcomingEvent,
-                  tintColor: context.colorScheme.primary,
                   isFullScreen: true,
                   animationTag: animationTag,
                   onClickFlip: () => isFront.value = !isFront.value,
                   onClickClose: () {
-                        SystemChrome.setEnabledSystemUIMode(
-                          SystemUiMode.edgeToEdge);
-                      context.router.pop();
-                    },
+                    SystemChrome.setEnabledSystemUIMode(
+                        SystemUiMode.edgeToEdge);
+                    context.router.pop();
+                  },
                 ),
                 back: LincaVerticalBack(
                   participationEvents: state.participationEvents,

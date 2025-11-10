@@ -49,9 +49,9 @@
   "participation_planned": "参加予定",
   "add_event_title": "イベントを追加する",
   "add_official_event_select_from_list": "公式イベント一覧から選択",
-  "add_unofficial_event_select_from_list": "非公式イベント一覧から選択",
-  "add_event_create_public": "非公式の公開イベントを作成",
-  "add_event_create_private": "非公式の非公開イベントを作成",
+  "add_unofficial_event_select_from_list": "オリジナルイベント一覧から選択",
+  "add_event_create_public": "公開オリジナルイベントを作成",
+  "add_event_create_private": "非公開オリジナルイベントを作成",
   "filter_search_hint": "キーワードを入力",
   "filter_apply_button": "適用",
   "qr_share_message": "このQRコードをスキャンすると\nあなたのプロフィールが交換されるよ！",
@@ -137,24 +137,43 @@
     }
   },
   "linca_edit_success_save": "保存に成功しました",
-  "linca_edit_label_nickname": "ニックネームを設定しよう",
-  "linca_edit_label_favorite_group": "推しグループ",
+  "linca_edit_label_nickname": "ニックネーム",
+  "linca_edit_label_favorite_tag": "推しタグ",
+  "linca_edit_label_favorite_tag_description": "最大{maxCount}個の推しタグが設定できます\n先頭の{count}個のタグが簡易プロフィールに表示されます\n長押しで並び替えることができます",
+  "@linca_edit_label_favorite_tag_description": {
+    "placeholders": {
+      "maxCount": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "common_edit": "編集",
   "linca_edit_label_bio": "自己紹介",
-  "linca_edit_label_user_id_x": "xアカウント名",
-  "linca_edit_label_user_id_instagram": "instagramアカウント名",
-  "linca_edit_label_user_id_bluesky": "blueskyアカウント名",
+  "linca_edit_favorite_badge_title": "マイバッジ",
+  "linca_edit_label_user_id_x": "Xアカウント名",
+  "linca_edit_label_user_id_instagram": "Instagramアカウント名",
+  "linca_edit_label_user_id_bluesky": "Blueskyアカウント名",
   "create_public_event_title": "公開イベント作成",
   "create_private_event_title": "非公開イベント作成",
   "hint_choose_official_event_keyword": "キーワードを入力",
   "hint_choose_unofficial_event_keyword": "キーワードまたはイベントコードを入力",
   "title_choose_event": "イベント一覧",
-  "input_create_event_title": "イベントタイトル",
+  "input_create_event_title": "イベント名",
+  "input_create_event_title_alert": "イベント名を入力してください",
   "input_create_event_description": "イベント概要",
   "text_create_event_choose_date": "開催日を選択",
   "input_create_event_choose_date": "日付選択",
   "input_create_event_venue": "開催場所",
   "input_create_event_event_url": "イベントURL",
+  "input_create_event_event_url_hint": "https://example.com",
   "input_create_event_tag": "タグ",
+  "create_event_created": "イベントを作成しました",
+  "create_event_title_hint": "例：ライブ打ち上げ in 新宿",
+  "create_event_description_hint": "例：イベント後の打ち上げです！\nゆるっとご飯食べながら語りましょう🍻",
+  "create_event_venue_hint": "例：新宿〇〇居酒屋",
   "text_unofficial_event_organizer": "主催者：{organizer}",
   "@text_unofficial_event_organizer": {
     "placeholders": {
@@ -181,5 +200,21 @@
   "common_cancel": "キャンセル",
   "common_ok": "OK",
   "my_qr_code_transit_scan": "読み取り画面に移動",
-  "my_qr_code_success_linca_trade": "LinCaカード交換に成功しました！"
+  "my_qr_code_success_linca_trade": "LinCaカード交換に成功しました！",
+  "select_favorite_tags_title": "推しタグ選択",
+  "select_favorite_tags_alert_title": "上限に達しています",
+  "select_favorite_tags_alert_description": "推しタグは最大{maxCount}個までしか選択できません",
+  "@select_favorite_tags_alert_description": {
+    "placeholders": {
+      "maxCount": {
+        "type": "int"
+      }
+    }
+  },
+  "check_in_location_permission_disabled": "位置情報サービスが無効です\nアプリ設定から位置情報サービスを有効にしてください",
+  "check_in_location_permission_denied": "位置情報の許可が必要です",
+  "check_in_location_permission_denied_forever": "位置情報の許可が必要です\nアプリ設定から位置情報サービスを有効にしてください",
+  "check_in_in_range": "チェックイン完了です！\nバッジ一覧から獲得バッジを確認してください",
+  "check_in_already_checked_in": "既にチェックイン済みです",
+  "check_in_out_range": "チェックイン範囲外です"
 }

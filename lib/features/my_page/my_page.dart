@@ -38,7 +38,6 @@ class MyPage extends HookConsumerWidget {
             children: <Widget>[
               LincaVertical(
                 lincaUser: state.lincaUser,
-                tintColor: context.colorScheme.primary,
                 animationTag: AppConstants.heroTagLincaCardMyPage,
                 onTap: (LincaUser lincaUser, String animationTag) =>
                     context.router.push(
@@ -158,6 +157,7 @@ class MyPage extends HookConsumerWidget {
                   final bool? comfirmed = await CommonSimpleDialog.show(
                     context: context,
                     title: 'ログアウトしてもよろしいですか？',
+                    onClickCancel: () {},
                   );
                   if (comfirmed == true && context.mounted) {
                     authController.signOut();

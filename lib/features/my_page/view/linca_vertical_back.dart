@@ -7,6 +7,7 @@ import 'package:linca_otaku_support/core/network/model/group.dart';
 import 'package:linca_otaku_support/core/utils/group_extension.dart';
 import 'package:linca_otaku_support/core/widgets/common/common_close_button.dart';
 import 'package:linca_otaku_support/features/linca_detail/data/participation_graph_threshold.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/utils/context_extension.dart';
 
 class LincaVerticalBack extends HookConsumerWidget {
@@ -32,13 +33,13 @@ class LincaVerticalBack extends HookConsumerWidget {
     'いきづ\nらい部！',
   ];
 
-  static const List<Group> _groups = <Group>[
-    Group(slug: 'muse'),
-    Group(slug: 'aqours'),
-    Group(slug: 'nijigasaki'),
-    Group(slug: 'liella'),
-    Group(slug: 'hasunosora'),
-    Group(slug: 'ikizulive'),
+  static final List<Group> _groups = <Group>[
+    const Group(seriesTag: AppConstants.seriesTagLovelive),
+    const Group(seriesTag: AppConstants.seriesTagSunshine),
+    const Group(seriesTag: AppConstants.seriesTagNijigasaki),
+    const Group(seriesTag: AppConstants.seriesTagSuperstar),
+    const Group(seriesTag: AppConstants.seriesTagHasunosora),
+    const Group(seriesTag: AppConstants.seriesTagIkizulive),
   ];
 
   Map<Group, int> getEventParticipationData(List<LincaEvent> events) {
@@ -48,7 +49,7 @@ class LincaVerticalBack extends HookConsumerWidget {
 
     for (final LincaEvent event in events) {
       for (final Group group in _groups) {
-        if (event.group.slug == group.slug) {
+        if (event.group.seriesTag == group.seriesTag) {
           counts[group] = counts[group]! + 1;
         }
       }
@@ -190,8 +191,8 @@ class LincaVerticalBack extends HookConsumerWidget {
                                 .map((MapEntry<Group, int> entry) {
                           final int index = _groups.indexOf(entry.key);
                           final double count = entry.value.toDouble();
-                          final LinearGradient gradient = entry.key
-                              .getSeriesGradientForGraph(context);
+                          final LinearGradient gradient =
+                              entry.key.getSeriesGradientForGraph(context);
                           return BarChartGroupData(
                             x: index,
                             barRods: <BarChartRodData>[

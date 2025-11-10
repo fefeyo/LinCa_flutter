@@ -61,5 +61,7 @@
       </array>
     </dict>
   </array>
+  <key>NSLocationWhenInUseUsageDescription</key>
+  <string>現在地を表示するために位置情報を使用します</string>
 </dict>
 </plist>

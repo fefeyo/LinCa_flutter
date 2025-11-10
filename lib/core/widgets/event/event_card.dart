@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:linca_otaku_support/core/constants/participation_type.dart';
@@ -7,13 +5,13 @@ import 'package:linca_otaku_support/core/network/model/event_base.dart';
 import 'package:linca_otaku_support/core/utils/color_extension.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
 import 'package:linca_otaku_support/core/utils/date_extension.dart';
+import 'package:linca_otaku_support/core/utils/event_base_extension.dart';
 import 'package:linca_otaku_support/core/utils/group_extension.dart';
 import 'package:linca_otaku_support/core/utils/tag_extension.dart';
 
 import '../../../core/utils/participation_type_extension.dart';
 import '../../models/linca_event.dart';
 import '../../network/model/participation_info.dart';
-import '../../network/model/tag.dart';
 import '../../router/app_router.gr.dart';
 import 'participation_status_badge.dart';
 
@@ -120,13 +118,22 @@ class EventCard extends StatelessWidget {
               top: -12,
               child: Row(
                 children: <Widget>[
-                  ..._getScheduledBadgeIfNeeded(participationInfo!),
-                  ..._getTodayBadgeIfNeeded(),
-                  ParticipationStatusBadge(
-                    text: participationInfo!.participationType!.label(context),
-                    color: participationInfo!.participationType!
-                        .badgeColor(context),
+                  ..._getCanceledBadgeIfNeeded(
+                    context: context,
+                    participationInfo: participationInfo!,
                   ),
+                  ..._getScheduledBadgeIfNeeded(
+                    context: context,
+                    participationInfo: participationInfo!,
+                  ),
+                  ..._getTodayBadgeIfNeeded(context: context),
+                  if (!lincaEvent.event.isCanceled)
+                    ParticipationStatusBadge(
+                      text:
+                          participationInfo!.participationType!.label(context),
+                      color: participationInfo!.participationType!
+                          .badgeColor(context),
+                    ),
                 ],
               ),
             ),
@@ -135,7 +142,40 @@ class EventCard extends StatelessWidget {
     );
   }
 
-  List<Widget> _getScheduledBadgeIfNeeded(ParticipationInfo participationInfo) {
+  List<Widget> _getCanceledBadgeIfNeeded({
+    required BuildContext context,
+    required ParticipationInfo participationInfo,
+  }) {
+    if (!lincaEvent.event.isCanceled) {
+      return <Widget>[const SizedBox.shrink()];
+    }
+
+    return <Widget>[
+      Container(
+        decoration: BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
+          child: Text(
+            '中止',
+            style: context.textTheme.labelMedium?.copyWith(
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+      const SizedBox(
+        width: 4,
+      ),
+    ];
+  }
+
+  List<Widget> _getScheduledBadgeIfNeeded({
+    required BuildContext context,
+    required ParticipationInfo participationInfo,
+  }) {
     if (lincaEvent.event.date?.isAfter(DateTime.now()) == false ||
         participationInfo.participationType == ParticipationType.absent) {
       return <Widget>[const SizedBox.shrink()];
@@ -152,7 +192,9 @@ class EventCard extends StatelessWidget {
     ];
   }
 
-  List<Widget> _getTodayBadgeIfNeeded() {
+  List<Widget> _getTodayBadgeIfNeeded({
+    required BuildContext context,
+  }) {
     if (lincaEvent.event.date?.isToday == false) {
       return <Widget>[const SizedBox.shrink()];
     }

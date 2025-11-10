@@ -45,6 +45,10 @@ dependencies:
   collection: ^1.19.1
   uuid: ^4.5.1
   flutter_launcher_icons: ^0.14.4
+  reorderables: ^0.6.0
+  flutter_speed_dial: ^7.0.0
+  geolocator: ^14.0.2
+  latlong2: ^0.9.1
 
   # Network / Serialization
   dio: ^5.8.0+1

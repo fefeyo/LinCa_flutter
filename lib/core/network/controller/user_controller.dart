@@ -51,8 +51,10 @@ class UserController extends AsyncNotifier<LincaUser> {
 
     return LincaUser(
       user: user,
-      favoriteGroups: groups
-          .where((Group group) => user.favoriteGroups.contains(group.slug))
+      favoriteGroups: user.favoriteGroups
+          .map((String tagId) =>
+          groups.firstWhereOrNull((Group group) => group.slug == tagId))
+          .whereType<Group>()
           .toList(),
       favoriteBadges: favoriteBadges,
       acquiredBadges: badges
@@ -99,11 +101,10 @@ class UserController extends AsyncNotifier<LincaUser> {
           (LincaBadge badge) => badge.slug == user.favoriteBadges[2]),
     );
     final List<Group> groups = await groupRepository.loadGroups();
-    final List<Group> favoriteGroups = groups
-        .where(
-          (Group group) => user.favoriteGroups.contains(group.slug),
-        )
-        .toList();
+    final List<Group> favoriteGroups =
+        user.favoriteGroups.map((String groupSlug) {
+      return groups.firstWhere((Group group) => group.slug == groupSlug);
+    }).toList();
     state = AsyncValue<LincaUser>.data(state.value?.copyWith(
           user: user,
           favoriteBadges: favoriteBadges,
@@ -141,5 +142,21 @@ class UserController extends AsyncNotifier<LincaUser> {
     state = AsyncValue<LincaUser>.data(
       state.value!.copyWith(friends: friends),
     );
+  }
+
+  Future<void> acquireBadge(String badgeId) async {
+    if (uid == null) return;
+    await badgeRepository.acquireBadge(uid!, badgeId);
+    final List<LincaBadge> acquiredBadges =
+        List<LincaBadge>.of(state.value?.acquiredBadges ?? <LincaBadge>[]);
+    final List<LincaBadge> badges = await badgeRepository.loadBadges();
+    final LincaBadge? addedBadge =
+        badges.firstWhereOrNull((LincaBadge badge) => badge.id == badgeId);
+    if (addedBadge != null) {
+      acquiredBadges.add(addedBadge);
+      state = AsyncValue<LincaUser>.data(
+        state.value!.copyWith(acquiredBadges: acquiredBadges),
+      );
+    }
   }
 }
