@@ -1,45 +1,66 @@
+import 'package:linca_otaku_support/core/constants/app_constants.dart';
+
 import '../model/participation_info.dart';
 import 'firestore_repository.dart';
 
 class ParticipationRepository extends FirestoreRepository<ParticipationInfo> {
-  ParticipationRepository(super.fireStore);
+  ParticipationRepository({
+    required super.uid,
+    required super.fireStore,
+    required super.preferences,
+  });
 
-  Future<List<ParticipationInfo>> fetchParticipations(String userId) {
+  @override
+  Future<List<ParticipationInfo>> fetch() async {
+    if (uid == null) return <ParticipationInfo>[];
+
     final String path = fireStore
-        .collection('users')
-        .doc(userId)
-        .collection('participations')
+        .collection(AppConstants.userCollectionPath)
+        .doc(uid)
+        .collection(AppConstants.participationsPath)
         .path;
 
     return fetchAll(
-        path, (Map<String, dynamic> json) => ParticipationInfo.fromJson(json));
+      collectionPath: path,
+      lastUpdatedAtKey: AppConstants.participationLastUpdatedAtKey,
+      fromJson: (Map<String, dynamic> json) => ParticipationInfo.fromJson(json),
+    );
   }
 
-  Future<List<ParticipationInfo>> getParticipations(String userId) {
+  @override
+  Future<List<ParticipationInfo>> get() async {
+    if (uid == null) return <ParticipationInfo>[];
+
     final String path = fireStore
-        .collection('users')
-        .doc(userId)
-        .collection('participations')
+        .collection(AppConstants.userCollectionPath)
+        .doc(uid)
+        .collection(AppConstants.participationsPath)
         .path;
 
     return fetchAllFromCache(
-        path, (Map<String, dynamic> json) => ParticipationInfo.fromJson(json));
+      collectionPath: path,
+      fromJson: (Map<String, dynamic> json) => ParticipationInfo.fromJson(json),
+    );
   }
 
-  Future<void> create(String userId, ParticipationInfo participation) async {
+  Future<void> create(ParticipationInfo participation) async {
+    if (uid == null) return;
+
     await fireStore
-        .collection('users')
-        .doc(userId)
-        .collection('participations')
+        .collection(AppConstants.userCollectionPath)
+        .doc(uid)
+        .collection(AppConstants.participationsPath)
         .doc(participation.eventId)
         .set(participation.toJson());
   }
 
-  Future<void> delete(String userId, String eventId) async {
+  Future<void> delete(String eventId) async {
+    if (uid == null) return;
+
     await fireStore
-        .collection('users')
-        .doc(userId)
-        .collection('participations')
+        .collection(AppConstants.userCollectionPath)
+        .doc(uid)
+        .collection(AppConstants.participationsPath)
         .doc(eventId)
         .delete();
   }

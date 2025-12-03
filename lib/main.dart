@@ -1,10 +1,16 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/models/linca_event.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'core/network/providers.dart';
 import 'core/theme/app_schemes.dart';
 import 'core/theme/app_theme.dart';
+import 'core/utils/providers.dart';
 import 'firebase_options.dart';
 import 'l10n/app_localizations.dart';
 
@@ -13,31 +19,41 @@ import 'core/router/app_router.dart';
 final AppRouter appRouter = AppRouter();
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  await GoogleSignIn.instance.initialize(
-      serverClientId:
-          '630270810691-cavclpg0rs7vr4kgojc93fv0'
-              '8ovrssgl.apps.googleusercontent.com');
-
-  final ProviderContainer container = ProviderContainer();
-  await container.read(badgeControllerProvider.future);
-  await container.read(groupControllerProvider.future);
-  await container.read(tagControllerProvider.future);
-  await container.read(venueControllerProvider.future);
-  await container.read(eventControllerProvider.future);
-  await container.read(userEventControllerProvider.future);
-  await container.read(participationControllerProvider.future);
-  await container.read(userControllerProvider.future);
-
-  runApp(
-    UncontrolledProviderScope(
-      container: container,
-      child: const MyApp(),
-    ),
-  );
+  runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    GoogleSignIn.instance.initialize(
+        serverClientId: '630270810691-cavclpg0rs7vr4kgojc93fv0'
+            '8ovrssgl.apps.googleusercontent.com');
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    final ProviderContainer container = ProviderContainer(overrides: <Override>[
+      sharedPreferencesProvider.overrideWithValue(preferences),
+    ]);
+    await Future.wait(<Future<List<Object>>>[
+      container.read(badgeControllerProvider.future),
+      container.read(groupControllerProvider.future),
+      container.read(tagControllerProvider.future),
+      container.read(venueControllerProvider.future),
+    ]);
+    await Future.wait(<Future<List<LincaEvent>>>[
+      container.read(eventControllerProvider.future),
+      container.read(userEventControllerProvider.future),
+    ]);
+    await Future.wait(<Future<Object>>[
+      container.read(participationControllerProvider.future),
+      container.read(userControllerProvider.future),
+    ]);
+    runApp(
+      UncontrolledProviderScope(
+        container: container,
+        child: const MyApp(),
+      ),
+    );
+  }, (Object error, StackTrace stacktrace) {
+    FirebaseCrashlytics.instance.recordError(error, stacktrace, fatal: true);
+  });
 }
 
 class MyApp extends StatelessWidget {

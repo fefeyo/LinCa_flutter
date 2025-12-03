@@ -40,9 +40,6 @@ class MyEventPage extends HookConsumerWidget {
                     lincaEvent: lincaEvent,
                     participationInfo: participationInfo,
                   );
-                  // return TicketEventCard(
-                  //   lincaEvent: lincaEvent,
-                  // );
                 },
                 separatorBuilder: (BuildContext context, int index) {
                   return const SizedBox(

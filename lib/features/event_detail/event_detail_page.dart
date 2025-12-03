@@ -332,6 +332,16 @@ class EventDetailPage extends HookConsumerWidget {
       widgets.add(const SizedBox(width: 4));
     }
 
+    if (lincaEvent.event.date?.isToday == true) {
+      widgets.add(
+        const ParticipationStatusBadge(
+          text: 'イベント当日',
+          color: Colors.red,
+        ),
+      );
+      widgets.add(const SizedBox(width: 4));
+    }
+
     widgets.add(
       ParticipationStatusBadge(
         text: participationInfo!.participationType!.label(context),

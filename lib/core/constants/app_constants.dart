@@ -4,14 +4,26 @@ class AppConstants {
   static const String instagramScheme = 'https://instagram.com/';
   static const String blueskyScheme = 'https://bsky.app/profile/';
 
+  // Firebase CollectionPath
+  static const String groupCollectionPath = 'groups';
+  static const String badgeCollectionPath = 'badges';
+  static const String userCollectionPath = 'users';
+  static const String eventCollectionPath = 'events';
+  static const String friendCollectionPath = 'friends';
+  static const String participationsPath = 'participations';
+  static const String tagPath = 'tags';
+  static const String venuePath = 'venues';
+  static const String userEventPath = 'user_events';
+
   // SharedPreferences
-  static const String badgeVersionKey = 'badge_version_key';
-  static const String eventVersionKey = 'event_version_key';
-  static const String groupVersionKey = 'group_version_key';
-  static const String tagVersionKey = 'tag_version_key';
-  static const String venueVersionKey = 'venue_version_key';
+  static const String badgeLastUpdatedAtKey = 'badge_last_updated_at_key';
+  static const String eventLastUpdatedAtKey = 'event_last_updated_at_key';
+  static const String groupLastUpdatedAtKey = 'group_last_updated_at_key';
+  static const String tagLastUpdatedAtKey = 'tag_last_updated_at_key';
+  static const String venueLastUpdatedAtKey = 'venue_last_updated_at_key';
   static const String hasSeenOnboarding = 'has_seen_onboarding';
-  static const String participationVersionKey = 'participation_version_key';
+  static const String participationLastUpdatedAtKey =
+      'participation_last_updated_at_key';
 
   static const String eventLastFetchedAtKey = 'event_last_fetched_at_key';
   static const String userEventLastFetchedAtKey =
@@ -19,7 +31,6 @@ class AppConstants {
   static const String participationLastFetchedAtKey =
       'participation_last_fetched_at_key';
   static const String friendLastFetchedAtKey = 'event_last_fetched_at_key';
-
 
   // Hero Animation Tag
   static const String heroTagLincaCardMyPage = 'LinCaCardMyPage';
@@ -41,6 +52,6 @@ class AppConstants {
   // 最大タグ設定数
   static const int maxProfileTagCount = 20;
 
-  // チェックイン範囲
-  static const int checkInRadius = 100;
+  // チェックイン範囲(m)
+  static const int checkInRadius = 150;
 }

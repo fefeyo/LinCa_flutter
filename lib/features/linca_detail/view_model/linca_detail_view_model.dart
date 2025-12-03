@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/models/linca_event.dart';
 import 'package:linca_otaku_support/core/network/model/participation_info.dart';
 import 'package:linca_otaku_support/core/network/providers.dart';
+import 'package:linca_otaku_support/core/utils/date_extension.dart';
 import '../../../core/network/repository/participation_repository.dart';
 import '../data/linca_detail_state.dart';
 
@@ -31,7 +32,7 @@ class LincaDetailViewModel extends StateNotifier<LincaDetailState> {
   Future<void> setUpcomingEvent(String? uid) async {
     if (uid?.isEmpty == true) return;
     final List<ParticipationInfo> participations =
-        await participationRepository.fetchParticipations(uid!);
+        await participationRepository.fetch();
     final List<LincaEvent> participationEvents = participations
         .map((ParticipationInfo participation) {
           return events.firstWhereOrNull(
@@ -41,10 +42,13 @@ class LincaDetailViewModel extends StateNotifier<LincaDetailState> {
         .toList();
 
     // 未来のイベントだけを抽出し、開催日時でソートして最も近いものを取得
+    // イベント開催日であれば開催中のイベントを表示
     final List<LincaEvent> upcomingEvent = participationEvents
-        .where((LincaEvent event) =>
-            event.event.date != null &&
-            event.event.date!.isAfter(DateTime.now()))
+        .where(
+          (LincaEvent event) =>
+              event.event.date?.isAfter(DateTime.now()) == true ||
+              event.event.date?.isToday == true,
+        )
         .toList()
       ..sort(
         (LincaEvent a, LincaEvent b) => a.event.date!.compareTo(b.event.date!),

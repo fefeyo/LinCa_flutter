@@ -48,10 +48,9 @@ class AuthController extends AsyncNotifier<AuthState> {
       final OAuthCredential credential =
           GoogleAuthProvider.credential(idToken: googleAuth.idToken);
 
-      final UserCredential result =
-          await authRepository.signInWithCredential(credential);
+      await authRepository.signInWithCredential(credential);
 
-      await userRepository.ensureUserDoc(result.user!.uid);
+      await userRepository.ensureUserDoc();
 
       return _buildAuthState();
     });
@@ -62,9 +61,8 @@ class AuthController extends AsyncNotifier<AuthState> {
     state = const AsyncLoading<AuthState>();
     state = await AsyncValue.guard(() async {
       final TwitterAuthProvider provider = TwitterAuthProvider();
-      final UserCredential result =
-          await authRepository.signInWithProvider(provider);
-      await userRepository.ensureUserDoc(result.user!.uid);
+      await authRepository.signInWithProvider(provider);
+      await userRepository.ensureUserDoc();
 
       return _buildAuthState();
     });
@@ -74,8 +72,8 @@ class AuthController extends AsyncNotifier<AuthState> {
   Future<void> signInAnonymously() async {
     state = const AsyncLoading<AuthState>();
     state = await AsyncValue.guard(() async {
-      final UserCredential result = await authRepository.signInAnonymously();
-      await userRepository.ensureUserDoc(result.user!.uid);
+      await authRepository.signInAnonymously();
+      await userRepository.ensureUserDoc();
 
       return _buildAuthState();
     });
@@ -105,9 +103,8 @@ class AuthController extends AsyncNotifier<AuthState> {
       final OAuthCredential credential = GoogleAuthProvider.credential(
         idToken: googleAuth.idToken,
       );
-      final UserCredential result =
-          await authRepository.linkWithCredential(credential);
-      await userRepository.ensureUserDoc(result.user!.uid);
+      await authRepository.linkWithCredential(credential);
+      await userRepository.ensureUserDoc();
 
       return _buildAuthState();
     });
@@ -118,9 +115,8 @@ class AuthController extends AsyncNotifier<AuthState> {
     state = const AsyncLoading<AuthState>();
     state = await AsyncValue.guard(() async {
       final TwitterAuthProvider provider = TwitterAuthProvider();
-      final UserCredential result =
-          await authRepository.linkWithProvider(provider);
-      await userRepository.ensureUserDoc(result.user!.uid);
+      await authRepository.linkWithProvider(provider);
+      await userRepository.ensureUserDoc();
 
       return _buildAuthState();
     });

@@ -225,6 +225,7 @@ class CreateEventPage extends HookConsumerWidget {
                       .where((Tag tag) => tag.category == 'series')
                       .map((Tag tag) {
                     return FilterChip(
+                      showCheckmark: false,
                       label: Text(tag.name),
                       selected: selectedTags.value.contains(tag),
                       onSelected: (bool selected) {

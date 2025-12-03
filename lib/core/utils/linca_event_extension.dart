@@ -77,6 +77,18 @@ extension LincaEventsExtension on List<LincaEvent> {
 
     return sortedEvents;
   }
+
+  List<LincaEvent> filterOnlyNotPaticipationEvent(
+      Map<LincaEvent, ParticipationInfo> participations) {
+    List<LincaEvent> sortedEvents = this;
+    if (participations.isNotEmpty) {
+      sortedEvents =
+          where((LincaEvent event) => !participations.containsKey(event))
+              .toList();
+    }
+
+    return sortedEvents;
+  }
 }
 
 extension LincaParticipationEventExtension

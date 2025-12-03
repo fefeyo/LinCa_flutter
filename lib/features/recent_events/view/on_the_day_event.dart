@@ -16,17 +16,17 @@ class OnTheDayEvent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 0),
       child: Container(
         padding: const EdgeInsets.all(16),
-        margin: const EdgeInsets.symmetric(vertical: 8),
+        margin: const EdgeInsets.only(bottom: 8),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: <Color>[Colors.orange.shade200, Colors.deepOrange.shade100],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          borderRadius: BorderRadius.circular(16),
+          // borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: Colors.deepOrangeAccent,
             width: 2,
@@ -38,12 +38,21 @@ class OnTheDayEvent extends StatelessWidget {
               '🎉🎉🎉 本日開催のイベント！ 🎉🎉🎉',
               style: context.textTheme.titleMedium,
             ),
-            const SizedBox(height: 12),
-            for (final LincaEvent event in events.keys)
-              EventCard(
-                lincaEvent: event,
-                participationInfo: events[event],
+            const SizedBox(height: 16),
+            Expanded(child: PageView.builder(
+              clipBehavior: Clip.none,
+              controller: PageController(
+                viewportFraction: 0.9,
               ),
+              itemCount: events.length,
+              itemBuilder: (BuildContext context, int index) {
+                final LincaEvent event = events.keys.elementAt(index);
+                return EventCard(
+                  lincaEvent: event,
+                  participationInfo: events[event],
+                );
+              },
+            ),),
           ],
         ),
       ),

@@ -5,6 +5,7 @@ import 'package:linca_otaku_support/core/network/controller/user_event_controlle
 import 'package:linca_otaku_support/core/network/model/participation_info.dart';
 import 'package:linca_otaku_support/core/network/repository/participation_repository.dart';
 import 'package:linca_otaku_support/core/network/repository/user_event_repository.dart';
+import 'package:linca_otaku_support/core/utils/providers.dart';
 
 import '../auth/providers.dart';
 import '../models/linca_event.dart';
@@ -29,7 +30,10 @@ import 'repository/venue_repository.dart';
 
 final Provider<UserRepository> userRepositoryProvider =
     Provider<UserRepository>(
-  (Ref ref) => UserRepository(ref.watch(fireStoreProvider)),
+  (Ref ref) => UserRepository(
+    uid: ref.watch(uidProvider),
+    fireStore: ref.watch(fireStoreProvider),
+  ),
 );
 
 final AsyncNotifierProvider<UserController, LincaUser> userControllerProvider =
@@ -37,7 +41,11 @@ final AsyncNotifierProvider<UserController, LincaUser> userControllerProvider =
 
 final Provider<BadgeRepository> badgeRepositoryProvider =
     Provider<BadgeRepository>(
-  (Ref ref) => BadgeRepository(ref.watch(fireStoreProvider)),
+  (Ref ref) => BadgeRepository(
+    uid: ref.watch(uidProvider),
+    fireStore: ref.watch(fireStoreProvider),
+    preferences: ref.watch(preferencesServiceProvider),
+  ),
 );
 
 final AsyncNotifierProvider<BadgeController, List<LincaBadge>>
@@ -47,7 +55,11 @@ final AsyncNotifierProvider<BadgeController, List<LincaBadge>>
 
 final Provider<EventRepository> eventRepositoryProvider =
     Provider<EventRepository>(
-  (Ref ref) => EventRepository(ref.watch(fireStoreProvider)),
+  (Ref ref) => EventRepository(
+    uid: ref.watch(uidProvider),
+    fireStore: ref.watch(fireStoreProvider),
+    preferences: ref.watch(preferencesServiceProvider),
+  ),
 );
 
 final AsyncNotifierProvider<EventController, List<LincaEvent>>
@@ -57,7 +69,11 @@ final AsyncNotifierProvider<EventController, List<LincaEvent>>
 
 final Provider<GroupRepository> groupRepositoryProvider =
     Provider<GroupRepository>(
-  (Ref ref) => GroupRepository(ref.watch(fireStoreProvider)),
+  (Ref ref) => GroupRepository(
+    uid: ref.watch(uidProvider),
+    fireStore: ref.watch(fireStoreProvider),
+    preferences: ref.watch(preferencesServiceProvider),
+  ),
 );
 
 final AsyncNotifierProvider<GroupController, List<Group>>
@@ -65,7 +81,11 @@ final AsyncNotifierProvider<GroupController, List<Group>>
     AsyncNotifierProvider<GroupController, List<Group>>(GroupController.new);
 
 final Provider<TagRepository> tagRepositoryProvider = Provider<TagRepository>(
-  (Ref ref) => TagRepository(ref.watch(fireStoreProvider)),
+  (Ref ref) => TagRepository(
+    uid: ref.watch(uidProvider),
+    fireStore: ref.watch(fireStoreProvider),
+    preferences: ref.watch(preferencesServiceProvider),
+  ),
 );
 
 final AsyncNotifierProvider<TagController, List<Tag>> tagControllerProvider =
@@ -73,7 +93,11 @@ final AsyncNotifierProvider<TagController, List<Tag>> tagControllerProvider =
 
 final Provider<VenueRepository> venueRepositoryProvider =
     Provider<VenueRepository>(
-  (Ref ref) => VenueRepository(ref.watch(fireStoreProvider)),
+  (Ref ref) => VenueRepository(
+    uid: ref.watch(uidProvider),
+    fireStore: ref.watch(fireStoreProvider),
+    preferences: ref.watch(preferencesServiceProvider),
+  ),
 );
 
 final AsyncNotifierProvider<VenueController, List<Venue>>
@@ -82,7 +106,12 @@ final AsyncNotifierProvider<VenueController, List<Venue>>
 
 final Provider<ParticipationRepository> participationRepositoryProvider =
     Provider<ParticipationRepository>(
-        (Ref ref) => ParticipationRepository(ref.watch(fireStoreProvider)));
+  (Ref ref) => ParticipationRepository(
+    uid: ref.watch(uidProvider),
+    fireStore: ref.watch(fireStoreProvider),
+    preferences: ref.watch(preferencesServiceProvider),
+  ),
+);
 
 final AsyncNotifierProvider<ParticipationController,
         Map<LincaEvent, ParticipationInfo>> participationControllerProvider =
@@ -91,21 +120,29 @@ final AsyncNotifierProvider<ParticipationController,
 
 final Provider<FriendRepository> friendRepositoryProvider =
     Provider<FriendRepository>(
-        (Ref ref) => FriendRepository(ref.watch(fireStoreProvider)));
+  (Ref ref) => FriendRepository(
+    uid: ref.watch(uidProvider),
+    fireStore: ref.watch(fireStoreProvider),
+    preferences: ref.watch(preferencesServiceProvider),
+  ),
+);
 
 final Provider<FriendController> friendControllerProvider =
     Provider<FriendController>((Ref ref) {
-  final String? uid = ref.watch(uidProvider);
   final FriendRepository friendRepository = ref.read(friendRepositoryProvider);
   return FriendController(
-    uid: uid,
     friendRepository: friendRepository,
   );
 });
 
 final Provider<UserEventRepository> userEventRepositoryProvider =
     Provider<UserEventRepository>(
-        (Ref ref) => UserEventRepository(ref.watch(fireStoreProvider)));
+  (Ref ref) => UserEventRepository(
+    uid: ref.watch(uidProvider),
+    fireStore: ref.watch(fireStoreProvider),
+    preferences: ref.watch(preferencesServiceProvider),
+  ),
+);
 
 final AsyncNotifierProvider<UserEventController, List<LincaEvent>>
     userEventControllerProvider =

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/models/linca_user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -32,6 +33,7 @@ class OnboardingPage extends HookConsumerWidget {
         nicknameKey.currentState?.validate() == false;
     final UserController userController =
         ref.read(userControllerProvider.notifier);
+    final LincaUser? user = ref.watch(userControllerProvider).value;
     final List<Widget> pages = <Widget>[
       TutorialStepPage(
         animation: Assets.lottie.tutorial1,
@@ -79,41 +81,43 @@ class OnboardingPage extends HookConsumerWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: PageView.builder(
+      body: SafeArea(
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: PageView.builder(
+                controller: controller,
+                itemCount: pages.length,
+                physics: cannotMoveNextPage
+                    ? const NeverScrollableScrollPhysics()
+                    : const ClampingScrollPhysics(),
+                onPageChanged: (int index) {
+                  isLastPage.value = index == pages.length - 1;
+                },
+                itemBuilder: (_, int index) => pages[index],
+              ),
+            ),
+            SmoothPageIndicator(
               controller: controller,
-              itemCount: pages.length,
-              physics: cannotMoveNextPage
-                  ? const NeverScrollableScrollPhysics()
-                  : const ClampingScrollPhysics(),
-              onPageChanged: (int index) {
-                isLastPage.value = index == pages.length - 1;
-              },
-              itemBuilder: (_, int index) => pages[index],
+              count: pages.length,
+              effect: WormEffect(
+                dotHeight: 8,
+                dotWidth: 8,
+                spacing: 12,
+                activeDotColor: context.colorScheme.primary,
+              ),
             ),
-          ),
-          SmoothPageIndicator(
-            controller: controller,
-            count: pages.length,
-            effect: WormEffect(
-              dotHeight: 8,
-              dotWidth: 8,
-              spacing: 12,
-              activeDotColor: context.colorScheme.primary,
+            const SizedBox(height: 16),
+            SizedBox(
+              width: 200,
+              child: ElevatedButton(
+                onPressed: goToNextPage,
+                child: Text(isLastPage.value ? 'はじめる' : '次へ'),
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-          SizedBox(
-            width: 200,
-            child: ElevatedButton(
-              onPressed: goToNextPage,
-              child: Text(isLastPage.value ? 'はじめる' : '次へ'),
-            ),
-          ),
-          const SizedBox(height: 32),
-        ],
+            const SizedBox(height: 32),
+          ],
+        ),
       ),
     );
   }

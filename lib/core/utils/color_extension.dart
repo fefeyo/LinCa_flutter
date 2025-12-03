@@ -30,6 +30,8 @@ extension ColorSchemeExtension on ColorScheme {
 
   Color get textGrey => colorFromHex('#333333');
 
+  Color get loginBackground => colorFromHex('#FD4377');
+
   LinearGradient gradientMuse({
     required Alignment begin,
     required Alignment end,
