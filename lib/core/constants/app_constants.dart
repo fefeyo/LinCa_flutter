@@ -24,6 +24,7 @@ class AppConstants {
   static const String hasSeenOnboarding = 'has_seen_onboarding';
   static const String participationLastUpdatedAtKey =
       'participation_last_updated_at_key';
+  static const String hasSeenTutorial = 'has_seen_tutorial';
 
   static const String eventLastFetchedAtKey = 'event_last_fetched_at_key';
   static const String userEventLastFetchedAtKey =
@@ -54,4 +55,9 @@ class AppConstants {
 
   // チェックイン範囲(m)
   static const int checkInRadius = 150;
+
+  static const int userNameMaxLength = 30;
+  static const int bioMaxLength = 300;
+  static const int eventMemoMaxLength = 500;
+
 }

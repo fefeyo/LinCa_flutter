@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/network/controller/linca_controller.dart';
 import 'package:linca_otaku_support/core/utils/linca_event_extension.dart';
-import 'package:linca_otaku_support/core/utils/sort_items_extension.dart';
 
 import '../../models/linca_event.dart';
 import '../model/event_base.dart';
@@ -63,7 +62,7 @@ class EventController extends LincaController<List<LincaEvent>> {
       );
     }).toList());
 
-    return lincaEvents.sortWithDisplayOrder(DisplayOrder.newest);
+    return lincaEvents.sortWithDisplayOrder();
   }
 
   Future<void> _refreshInBackground() async {
@@ -72,7 +71,7 @@ class EventController extends LincaController<List<LincaEvent>> {
 
       final Map<String, Venue> venuesMap = <String, Venue>{
         for (final Venue venue
-        in ref.read(venueControllerProvider).value ?? <Venue>[])
+            in ref.read(venueControllerProvider).value ?? <Venue>[])
           venue.id: venue
       };
       final Map<String, Tag> tagsMap = <String, Tag>{
@@ -81,25 +80,42 @@ class EventController extends LincaController<List<LincaEvent>> {
       };
       final Map<String, Group> groupsMap = <String, Group>{
         for (final Group group
-        in ref.read(groupControllerProvider).value ?? <Group>[])
+            in ref.read(groupControllerProvider).value ?? <Group>[])
           group.slug: group
       };
 
-      final List<LincaEvent> lincaEvents =
-          await Future.wait(updated.map((OfficialEvent event) async {
-        return LincaEvent(
-          event: event,
-          tags: event.tagIds
-              .map((String id) => tagsMap[id])
-              .whereType<Tag>()
-              .toList(),
-          venue: venuesMap[event.venueId] ?? const Venue(),
-          group: groupsMap[event.organizer] ?? const Group(),
-        );
-      }).toList());
-
       // 🔄 差分がある場合のみ state 更新
       if (updated.isNotEmpty) {
+        final List<LincaEvent> lincaEvents =
+            await Future.wait(updated.map((OfficialEvent event) async {
+          return LincaEvent(
+            event: event,
+            tags: event.tagIds
+                .map((String id) => tagsMap[id])
+                .whereType<Tag>()
+                .toList(),
+            venue: venuesMap[event.venueId] ?? const Venue(),
+            group: groupsMap[event.organizer] ?? const Group(),
+          );
+        }).toList());
+
+        // 🔄 差分がある場合のみ state 更新
+        if (updated.isNotEmpty) {
+          final List<LincaEvent> current = state.value ?? <LincaEvent>[];
+
+          // 1. 既存イベントを Map にする（key: event.id）
+          final Map<String, LincaEvent> map = <String, LincaEvent>{
+            for (final LincaEvent ev in current) ev.event.id: ev,
+          };
+
+          // 2. updated のイベントで上書き（同じ id は置き換わる）
+          for (final LincaEvent ev in lincaEvents) {
+            map[ev.event.id] = ev;
+          }
+
+          // 3. List に戻して state 更新
+          state = AsyncValue<List<LincaEvent>>.data(map.values.toList());
+        }
         final List<LincaEvent> current = state.value ?? <LincaEvent>[];
         state = AsyncValue<List<LincaEvent>>.data(
             <LincaEvent>[...current, ...lincaEvents]);

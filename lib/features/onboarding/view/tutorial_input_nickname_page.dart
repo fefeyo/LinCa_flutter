@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../core/models/linca_user.dart';
 import '../../../core/utils/context_extension.dart';
 import '../data/onboarding_state.dart';
 import '../view_model/onboarding_view_model.dart';
@@ -10,18 +11,31 @@ class TutorialInputNicknamePage extends HookConsumerWidget {
   const TutorialInputNicknamePage({
     super.key,
     required this.nicknameKey,
+    this.lincaUser,
   });
 
   final GlobalKey<FormState> nicknameKey;
+  final LincaUser? lincaUser;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final OnboardingState onboardingState =
-        ref.watch(onboardingViewModelProvider);
-    final OnboardingViewModel onboardingViewModel =
+    final OnboardingState state = ref.watch(onboardingViewModelProvider);
+    final OnboardingViewModel viewModel =
         ref.read(onboardingViewModelProvider.notifier);
     final TextEditingController controller =
-        useTextEditingController(text: onboardingState.nickname);
+        useTextEditingController(text: state.nickname);
+
+    useEffect(() {
+      final String? name = lincaUser?.user.displayName;
+      if (name != null) {
+        controller.text = name;
+        Future<void>.microtask(() {
+          viewModel.setNickName(name);
+        });
+      }
+
+      return null;
+    }, const <Object?>[]);
 
     String? validate(String? input) {
       final List<String> forbiddenChars = <String>[
@@ -63,7 +77,7 @@ class TutorialInputNicknamePage extends HookConsumerWidget {
                       border: OutlineInputBorder(),
                     ),
                     maxLength: 20,
-                    onChanged: onboardingViewModel.setNickName,
+                    onChanged: viewModel.setNickName,
                   ),
                   const SizedBox(height: 32),
                 ],

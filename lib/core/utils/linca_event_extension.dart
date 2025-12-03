@@ -31,7 +31,9 @@ extension LincaEventsExtension on List<LincaEvent> {
   }
 
   // 表示順ソート
-  List<LincaEvent> sortWithDisplayOrder(DisplayOrder displayOrder) {
+  List<LincaEvent> sortWithDisplayOrder({
+    DisplayOrder displayOrder = DisplayOrder.newest,
+  }) {
     final List<LincaEvent> sortedEvents = this;
     switch (displayOrder) {
       case DisplayOrder.newest:
@@ -42,6 +44,11 @@ extension LincaEventsExtension on List<LincaEvent> {
           if (dateA == null && dateB == null) return 0;
           if (dateA == null) return 1; // null は後ろ
           if (dateB == null) return -1;
+
+          if (dateA.day == dateB.day) {
+            return b.event.id.compareTo(a.event.id);
+          }
+
           return dateB.compareTo(dateA); // 新しい順
         });
         break;
@@ -66,7 +73,7 @@ extension LincaEventsExtension on List<LincaEvent> {
     return sortedEvents;
   }
 
-  // タグフィルタリング
+// タグフィルタリング
   List<LincaEvent> filterWithTag(List<Tag> tags) {
     List<LincaEvent> sortedEvents = this;
     if (tags.isNotEmpty) {
@@ -89,13 +96,27 @@ extension LincaEventsExtension on List<LincaEvent> {
 
     return sortedEvents;
   }
+
+  List<LincaEvent> getTodayEvents() {
+    final DateTime now = DateTime.now();
+    // final DateTime today = DateTime(now.year, now.month, now.day);
+    // final DateTime today = DateTime(2025, 10, 4); // 横長
+    final DateTime today = DateTime(2025, 11, 1); // 縦長
+    return where((LincaEvent event) {
+      final DateTime? date = event.event.date;
+      if (date == null) return false;
+
+      final DateTime eventDate = DateTime(date.year, date.month, date.day);
+      return eventDate == today;
+    }).toList().sortWithDisplayOrder();
+  }
 }
 
 extension LincaParticipationEventExtension
     on Map<LincaEvent, ParticipationInfo> {
   Map<LincaEvent, ParticipationInfo> sort() {
     List<LincaEvent> events = keys.toList();
-    events = events.sortWithDisplayOrder(DisplayOrder.newest);
+    events = events.sortWithDisplayOrder();
 
     return <LincaEvent, ParticipationInfo>{
       for (final LincaEvent event in events) event: this[event]!,

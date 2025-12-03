@@ -57,7 +57,7 @@ class CreateEventPage extends HookConsumerWidget {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      '開催日を選択してください',
+                      context.l10n.create_event_event_date_required,
                       style: context.textTheme.titleMedium?.copyWith(
                         color: Colors.white,
                       ),
@@ -98,7 +98,7 @@ class CreateEventPage extends HookConsumerWidget {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      'イベントを作成しました',
+                      context.l10n.create_event_event_created,
                       style: context.textTheme.titleMedium?.copyWith(
                         color: Colors.white,
                       ),
@@ -120,9 +120,20 @@ class CreateEventPage extends HookConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 // イベント名
-                Text(
-                  context.l10n.input_create_event_title,
-                  style: context.textTheme.titleMedium,
+                Row(
+                  children: <Widget>[
+                    Text(
+                      context.l10n.input_create_event_title,
+                      style: context.textTheme.titleMedium,
+                    ),
+                    const SizedBox(width: 8,),
+                    Text(
+                      context.l10n.common_required,
+                      style: context.textTheme.titleMedium?.copyWith(
+                        color: Colors.red,
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 4),
                 TextFormField(
@@ -133,7 +144,7 @@ class CreateEventPage extends HookConsumerWidget {
                   ),
                   validator: (String? value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'イベント名を入力してください';
+                      return context.l10n.create_event_event_name_required;
                     }
                     return null;
                   },
@@ -160,11 +171,23 @@ class CreateEventPage extends HookConsumerWidget {
                 // 開催日
                 Row(
                   children: <Widget>[
-                    Text(
-                      selectedDate.value != null
-                          ? '${selectedDate.value!.year}/${selectedDate.value!.month}/${selectedDate.value!.day}'
-                          : context.l10n.text_create_event_choose_date,
-                      style: Theme.of(context).textTheme.titleMedium,
+                    Row(
+                      children: <Widget>[
+                        Text(
+                          selectedDate.value != null
+                              ? '${selectedDate.value!.year}/${selectedDate.value!.month}/${selectedDate.value!.day}'
+                              : context.l10n.text_create_event_choose_date,
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        const SizedBox(width: 8,),
+                        if (selectedDate.value == null)
+                          Text(
+                            context.l10n.common_required,
+                            style: context.textTheme.titleMedium?.copyWith(
+                              color: Colors.red,
+                            ),
+                          ),
+                      ],
                     ),
                     const Spacer(),
                     TextButton(

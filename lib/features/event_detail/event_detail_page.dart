@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/constants/app_constants.dart';
 import 'package:linca_otaku_support/core/constants/participation_type.dart';
 import 'package:linca_otaku_support/core/models/linca_user.dart';
 import 'package:linca_otaku_support/core/network/controller/participation_controller.dart';
@@ -231,86 +231,93 @@ class EventDetailPage extends HookConsumerWidget {
           ),
           Positioned(
             top: 16,
-            right: 8,
-            child: ElevatedButton.icon(
-              onPressed: () async {
-                await participationController.createParticipation(
-                  lincaEvent: lincaEvent,
-                  participation: ParticipationInfo(
-                    eventId: lincaEvent.event.id,
-                    participationType: selectedParticipationType.value,
-                    participationMemo: participationMemoController.text,
-                    groupSlug: lincaEvent.organizerName,
-                  ),
-                );
-                if (context.mounted) {
-                  context.router.pop();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(context.l10n.snackbar_title_saved),
-                      backgroundColor: Colors.green,
-                    ),
+            right: 16,
+            child: PopupMenuButton<String>(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              itemBuilder: (_) => <PopupMenuEntry<String>>[
+                PopupMenuItem<String>(
+                  value: 'edit',
+                  child: Row(
+                    children: <Widget>[
+                      const Icon(Icons.edit),
+                      const SizedBox(width: 8),
+                      Text(
+                        '編集',
+                        style: context.textTheme.titleMedium,
+                      ),
+                    ],
+                  )
+                ),
+                PopupMenuItem<String>(
+                  value: 'delete',
+                  child: Row(
+                    children: <Widget>[
+                      const Icon(Icons.delete, color: Colors.red),
+                      const SizedBox(width: 8),
+                      Text(
+                        '削除',
+                        style: context.textTheme.titleMedium?.copyWith(
+                          color: Colors.red,
+                        ),
+                      ),
+                    ],
+                  )
+                ),
+              ],
+              onSelected: (String value) {
+                if (value == 'delete') {
+                  participationController.deleteParticipation(
+                    lincaEvent,
+                    participationInfo!,
                   );
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(context.l10n.snackbar_title_deleted),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                    context.router.pop();
+                  }
                 }
               },
-              style: ElevatedButton.styleFrom(
-                elevation: 6,
-                padding: const EdgeInsets.symmetric(horizontal: 32),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.black26,
+                  shape: BoxShape.circle,
                 ),
+                padding: const EdgeInsets.all(12),
+                child: const Icon(Icons.more_vert, color: Colors.white),
               ),
-              label: Text(
-                context.l10n.common_save,
-                style: context.textTheme.bodyMedium?.copyWith(
-                  color: context.colorScheme.surface,
-                ),
-              ),
-              icon: const Icon(Icons.save),
             ),
           ),
         ],
       ),
-      floatingActionButton: SpeedDial(
-        icon: Icons.add,
-        activeIcon: Icons.close,
-        backgroundColor: context.colorScheme.primary,
-        foregroundColor: Colors.white,
-        spacing: 10,
-        spaceBetweenChildren: 8,
-        children: <SpeedDialChild>[
-          SpeedDialChild(
-            child: const Icon(Icons.save),
-            label: context.l10n.common_save,
-            onTap: () => debugPrint('編集 tapped'),
-          ),
-          SpeedDialChild(
-            child: const Icon(Icons.edit),
-            label: '編集',
-            onTap: () => debugPrint('共有 tapped'),
-          ),
-          if (participationInfo != null)
-            SpeedDialChild(
-              child: const Icon(Icons.delete, color: Colors.red),
-              label: '削除',
-              labelStyle: const TextStyle(color: Colors.red),
-              onTap: () {
-                participationController.deleteParticipation(
-                  lincaEvent,
-                  participationInfo!,
-                );
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(context.l10n.snackbar_title_deleted),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                  context.router.pop();
-                }
-              },
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () async {
+          await participationController.createParticipation(
+            lincaEvent: lincaEvent,
+            participation: ParticipationInfo(
+              eventId: lincaEvent.event.id,
+              participationType: selectedParticipationType.value,
+              participationMemo: participationMemoController.text,
+              groupSlug: lincaEvent.organizerName,
             ),
-        ],
+          );
+          if (context.mounted) {
+            context.router.pop();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(context.l10n.snackbar_title_saved),
+                backgroundColor: Colors.green,
+              ),
+            );
+          }
+        },
+        icon: const Icon(Icons.save),
+        label: const Text('保存'),
       ),
     );
   }
@@ -542,8 +549,9 @@ class EventDetailPage extends HookConsumerWidget {
       <Widget>[
         TextField(
           controller: participationMemoController,
-          maxLines: null,
           // 自動で高さが伸びる
+          maxLines: null,
+          maxLength: AppConstants.eventMemoMaxLength,
           keyboardType: TextInputType.multiline,
           style: Theme.of(context).textTheme.bodyLarge,
           textInputAction: TextInputAction.newline,

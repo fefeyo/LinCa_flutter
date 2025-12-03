@@ -97,19 +97,49 @@ class ParticipationController
         final List<LincaEvent> userEvents =
             ref.watch(userEventControllerProvider).value ?? <LincaEvent>[];
 
-        lincaEvents.addAll(
-          _generateLincaEvent(
-            participationInfos: updated,
-            events: events,
-            userEvents: userEvents,
-          ),
+        final Map<LincaEvent, ParticipationInfo> current =
+            state.value ?? <LincaEvent, ParticipationInfo>{};
+
+        final Map<LincaEvent, ParticipationInfo> merged =
+            _mergeParticipationMap(
+          current: current,
+          updated: updated,
+          events: events,
+          userEvents: userEvents,
         );
-        state =
-            AsyncValue<Map<LincaEvent, ParticipationInfo>>.data(lincaEvents);
+
+        state = AsyncValue<Map<LincaEvent, ParticipationInfo>>.data(merged);
       }
     } catch (_) {
       state = AsyncValue<Map<LincaEvent, ParticipationInfo>>.data(lincaEvents);
     }
+  }
+
+  Map<LincaEvent, ParticipationInfo> _mergeParticipationMap({
+    required Map<LincaEvent, ParticipationInfo> current,
+    required List<ParticipationInfo> updated,
+    required List<LincaEvent> events,
+    required List<LincaEvent> userEvents,
+  }) {
+    // eventId → ParticipationInfo の形に変換
+    final Map<String, ParticipationInfo> updatedMap =
+        <String, ParticipationInfo>{
+      for (final ParticipationInfo participation in updated)
+        participation.eventId: participation,
+    };
+
+    final Map<LincaEvent, ParticipationInfo> newMap =
+        <LincaEvent, ParticipationInfo>{};
+
+    for (final LincaEvent event in <LincaEvent>[...events, ...userEvents]) {
+      if (updatedMap.containsKey(event.event.id)) {
+        newMap[event] = updatedMap[event.event.id]!;
+      } else if (current.containsKey(event)) {
+        newMap[event] = current[event]!;
+      }
+    }
+
+    return newMap;
   }
 
   Map<LincaEvent, ParticipationInfo> _generateLincaEvent({

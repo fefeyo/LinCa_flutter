@@ -49,6 +49,7 @@ dependencies:
   flutter_speed_dial: ^7.0.0
   geolocator: ^14.0.2
   latlong2: ^0.9.1
+  flutter_tutorial_overlay: ^1.0.4
 
   # Network / Serialization
   dio: ^5.8.0+1

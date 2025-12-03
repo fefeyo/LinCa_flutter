@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/models/filter_settings.dart';
+import 'package:linca_otaku_support/core/models/linca_event.dart';
 import 'package:linca_otaku_support/core/models/linca_user.dart';
 import 'package:linca_otaku_support/core/network/providers.dart';
+import 'package:linca_otaku_support/core/utils/linca_event_extension.dart';
+import 'package:linca_otaku_support/core/widgets/dialog/on_the_day_event_dialog.dart';
 import 'package:linca_otaku_support/features/my_event/data/my_event_state.dart';
 
 import '../../../core/utils/context_extension.dart';
@@ -30,6 +33,18 @@ class HomePage extends HookConsumerWidget {
     final LincaUser lincaUser = ref.watch(userControllerProvider).value!;
     final ValueNotifier<bool> isSearching = useState(false);
     final TextEditingController searchController = useTextEditingController();
+    final List<LincaEvent> events =
+        ref.watch(eventControllerProvider).value ?? <LincaEvent>[];
+
+    useEffect(() {
+      final List<LincaEvent> todayEvents = events.getTodayEvents();
+      // if (todayEvents.isNotEmpty) {
+      //   WidgetsBinding.instance.addPostFrameCallback((_) {
+      //     OnTheDayEventDialog.show(context: context, events: todayEvents);
+      //   });
+      // }
+      return null;
+    }, const <Object?>[]);
 
     return AutoTabsRouter(
       routes: const <PageRouteInfo<Object?>>[
