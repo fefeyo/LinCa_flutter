@@ -8,6 +8,7 @@ import 'package:linca_otaku_support/core/utils/context_extension.dart';
 import '../../core/constants/event_type.dart';
 import '../../core/models/filter_settings.dart';
 import '../../core/models/linca_event.dart';
+import '../../core/router/app_router.gr.dart';
 import '../../core/widgets/bottom_sheet/event_sort_bottom_sheet.dart';
 import '../../core/widgets/event/event_card.dart';
 import 'data/choose_event_state.dart';
@@ -56,21 +57,22 @@ class ChooseEventPage extends HookConsumerWidget {
               )
             : Text(context.l10n.title_choose_event),
         actions: <Widget>[
-          IconButton(
-            onPressed: () async {
-              final FilterSettings? result = await EventSortBottomSheet.show(
-                context,
-                state.filterSettings,
-                needDisplayOrderArea: true,
-                needHiddenParticipationArea: true,
-                needTagsArea: true,
-              );
-              if (result != null) {
-                viewModel.setFilterSettings(result);
-              }
-            },
-            icon: const Icon(Icons.sort),
-          ),
+          if (eventType == EventType.official)
+            IconButton(
+              onPressed: () async {
+                final FilterSettings? result = await EventSortBottomSheet.show(
+                  context,
+                  state.filterSettings,
+                  needDisplayOrderArea: true,
+                  needHiddenParticipationArea: true,
+                  needTagsArea: true,
+                );
+                if (result != null) {
+                  viewModel.setFilterSettings(result);
+                }
+              },
+              icon: const Icon(Icons.sort),
+            ),
           IconButton(
             icon: Icon(isSearching.value ? Icons.close : Icons.search),
             onPressed: () {
@@ -90,11 +92,17 @@ class ChooseEventPage extends HookConsumerWidget {
                 clipBehavior: Clip.none,
                 itemCount: state.sortedEvents.length,
                 itemBuilder: (BuildContext context, int index) {
-                  final LincaEvent event = state.sortedEvents[index];
+                  final LincaEvent lincaEvent = state.sortedEvents[index];
                   final ParticipationInfo? participationInfo =
-                      state.participations[event];
+                      state.participations[lincaEvent];
                   return EventCard(
-                    lincaEvent: event,
+                    lincaEvent: lincaEvent,
+                    onClick: () => context.router.push(
+                      EventDetailRoute(
+                        lincaEvent: lincaEvent,
+                        participationInfo: participationInfo,
+                      ),
+                    ),
                     participationInfo: participationInfo,
                   );
                 },

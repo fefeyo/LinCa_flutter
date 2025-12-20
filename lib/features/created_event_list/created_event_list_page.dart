@@ -7,7 +7,10 @@ import 'package:linca_otaku_support/core/utils/context_extension.dart';
 import 'package:linca_otaku_support/core/widgets/common/common_simple_dialog.dart';
 
 import '../../core/models/linca_event.dart';
+import '../../core/network/model/event_base.dart';
+import '../../core/router/app_router.gr.dart';
 import '../../core/widgets/event/event_card.dart';
+import '../create_event/data/create_event_type.dart';
 import 'data/created_event_list_state.dart';
 import 'view_model/created_event_list_view_model.dart';
 
@@ -58,7 +61,21 @@ class CreatedEventListPage extends HookConsumerWidget {
   }) {
     return Stack(
       children: <Widget>[
-        EventCard(lincaEvent: event),
+        EventCard(
+            lincaEvent: event,
+            onClick: () {
+              final UnOfficialEvent unOfficialEvent =
+                  event.event as UnOfficialEvent;
+              context.router.push(
+                CreateEventRoute(
+                  createEventType: unOfficialEvent.visibility
+                      ? CreateEventType.public
+                      : CreateEventType.private,
+                  isEditMode: true,
+                  unOfficialEvent: unOfficialEvent,
+                ),
+              );
+            }),
         Positioned(
           bottom: 8,
           right: 8,
@@ -71,6 +88,7 @@ class CreatedEventListPage extends HookConsumerWidget {
                 title: '削除の確認',
                 content: 'このイベントを削除しますか？',
                 cancelText: context.l10n.common_cancel,
+                onClickCancel: () => <dynamic, dynamic>{},
                 okText: '削除する',
               );
 

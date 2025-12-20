@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/constants/app_constants.dart';
@@ -13,6 +14,7 @@ import 'package:linca_otaku_support/core/widgets/event/event_card.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
+import '../../../core/router/app_router.gr.dart';
 import '../../../core/utils/context_extension.dart';
 import '../../../core/asset_gen/assets.gen.dart';
 
@@ -41,6 +43,8 @@ class LincaVertical extends HookConsumerWidget {
     final Color backgroundColor = context.theme.brightness == Brightness.light
         ? context.colorScheme.surface
         : context.colorScheme.surfaceContainer;
+    final Color favoriteColor =
+        lincaUser.favoriteGroups.getFavoriteColor(context);
 
     Widget buildCard() {
       return Card(
@@ -132,10 +136,8 @@ class LincaVertical extends HookConsumerWidget {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: <Color>[
-                      lincaUser.favoriteGroups.getFavoriteColor(context),
-                      lincaUser.favoriteGroups
-                          .getFavoriteColor(context)
-                          .withValues(alpha: .70),
+                      favoriteColor,
+                      favoriteColor.withValues(alpha: .70),
                     ],
                   ),
                 ),
@@ -285,6 +287,11 @@ class LincaVertical extends HookConsumerWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: EventCard(
             lincaEvent: upcomingEvent,
+            onClick: () => context.router.push(
+              EventDetailRoute(
+                lincaEvent: upcomingEvent,
+              ),
+            ),
           ),
         ),
         const SizedBox(height: 16),

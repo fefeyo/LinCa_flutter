@@ -1,35 +1,34 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:linca_otaku_support/core/constants/participation_type.dart';
 import 'package:linca_otaku_support/core/network/model/event_base.dart';
 import 'package:linca_otaku_support/core/utils/color_extension.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
 import 'package:linca_otaku_support/core/utils/date_extension.dart';
-import 'package:linca_otaku_support/core/utils/event_base_extension.dart';
 import 'package:linca_otaku_support/core/utils/group_extension.dart';
 import 'package:linca_otaku_support/core/utils/tag_extension.dart';
+import 'package:linca_otaku_support/core/widgets/common/event_status_badges.dart';
 
-import '../../../core/utils/participation_type_extension.dart';
 import '../../models/linca_event.dart';
 import '../../network/model/participation_info.dart';
-import '../../router/app_router.gr.dart';
-import 'participation_status_badge.dart';
 
 class EventCard extends StatelessWidget {
   const EventCard({
     super.key,
     required this.lincaEvent,
+    required this.onClick,
     this.participationInfo,
   });
 
   final LincaEvent lincaEvent;
+  final VoidCallback onClick;
   final ParticipationInfo? participationInfo;
 
   @override
   Widget build(BuildContext context) {
     final String? tagName = lincaEvent.event is OfficialEvent
         ? lincaEvent.tags.priorityTypeTag?.name
-        : '有志イベント';
+        : (lincaEvent.event as UnOfficialEvent).visibility
+            ? '公開イベント'
+            : '非公開イベント';
 
     return Card(
       elevation: 4,
@@ -103,110 +102,20 @@ class EventCard extends StatelessWidget {
             child: Material(
               type: MaterialType.transparency,
               child: InkWell(
-                onTap: () => context.router.push(
-                  EventDetailRoute(
-                    lincaEvent: lincaEvent,
-                    participationInfo: participationInfo,
-                  ),
-                ),
+                onTap: onClick,
               ),
             ),
           ),
-          if (participationInfo != null)
-            Positioned(
-              right: 0,
-              top: -12,
-              child: Row(
-                children: <Widget>[
-                  ..._getCanceledBadgeIfNeeded(
-                    context: context,
-                    participationInfo: participationInfo!,
-                  ),
-                  ..._getScheduledBadgeIfNeeded(
-                    context: context,
-                    participationInfo: participationInfo!,
-                  ),
-                  ..._getTodayBadgeIfNeeded(context: context),
-                  if (!lincaEvent.event.isCanceled)
-                    ParticipationStatusBadge(
-                      text:
-                          participationInfo!.participationType!.label(context),
-                      color: participationInfo!.participationType!
-                          .badgeColor(context),
-                    ),
-                ],
-              ),
+          Positioned(
+            right: 0,
+            top: -12,
+            child: EventStatusBadges(
+              lincaEvent: lincaEvent,
+              participationInfo: participationInfo,
             ),
+          ),
         ],
       ),
     );
-  }
-
-  List<Widget> _getCanceledBadgeIfNeeded({
-    required BuildContext context,
-    required ParticipationInfo participationInfo,
-  }) {
-    if (!lincaEvent.event.isCanceled) {
-      return <Widget>[const SizedBox.shrink()];
-    }
-
-    return <Widget>[
-      Container(
-        decoration: BoxDecoration(
-          color: Colors.black,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
-          child: Text(
-            '中止',
-            style: context.textTheme.labelMedium?.copyWith(
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ),
-      const SizedBox(
-        width: 4,
-      ),
-    ];
-  }
-
-  List<Widget> _getScheduledBadgeIfNeeded({
-    required BuildContext context,
-    required ParticipationInfo participationInfo,
-  }) {
-    if (lincaEvent.event.date?.isAfter(DateTime.now()) == false ||
-        participationInfo.participationType == ParticipationType.absent) {
-      return <Widget>[const SizedBox.shrink()];
-    }
-
-    return <Widget>[
-      const ParticipationStatusBadge(
-        text: '参加予定',
-        color: Colors.green,
-      ),
-      const SizedBox(
-        width: 4,
-      ),
-    ];
-  }
-
-  List<Widget> _getTodayBadgeIfNeeded({
-    required BuildContext context,
-  }) {
-    if (lincaEvent.event.date?.isToday == false) {
-      return <Widget>[const SizedBox.shrink()];
-    }
-
-    return <Widget>[
-      const ParticipationStatusBadge(
-        text: 'イベント当日',
-        color: Colors.red,
-      ),
-      const SizedBox(
-        width: 4,
-      ),
-    ];
   }
 }

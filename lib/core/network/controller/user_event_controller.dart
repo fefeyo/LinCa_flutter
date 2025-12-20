@@ -32,7 +32,7 @@ class UserEventController extends LincaController<List<LincaEvent>> {
     participationRepository = ref.read(participationRepositoryProvider);
     tagRepository = ref.read(tagRepositoryProvider);
     user = ref.read(userControllerProvider).value;
-    final List<Tag> allTags = ref.watch(tagControllerProvider).value ?? <Tag>[];
+    final List<Tag> allTags = ref.read(tagControllerProvider).value ?? <Tag>[];
 
     final List<UnOfficialEvent> events = await userEventRepository.get();
     if (events.isNotEmpty) {
@@ -97,7 +97,6 @@ class UserEventController extends LincaController<List<LincaEvent>> {
         user: user!.user,
         documentId: eventId,
       );
-      final List<LincaEvent> events = state.value ?? <LincaEvent>[];
       final List<Tag> allTags =
           ref.read(tagControllerProvider).value ?? <Tag>[];
       // タグ一覧を取得
@@ -105,13 +104,17 @@ class UserEventController extends LincaController<List<LincaEvent>> {
           .map((String tagId) =>
               allTags.firstWhere((Tag tag) => tag.id == tagId))
           .toList();
-      state = AsyncData<List<LincaEvent>>(<LincaEvent>[
-        ...events,
-        LincaEvent(
-          event: createdEvent,
-          tags: tags,
-        ),
-      ]);
+      final List<LincaEvent> current = (state.value ?? <LincaEvent>[])
+          .where((LincaEvent e) => e.event.id != createdEvent.id)
+          .toList()
+        ..add(
+          LincaEvent(
+            event: createdEvent,
+            tags: tags,
+          ),
+        );
+
+      state = AsyncData<List<LincaEvent>>(current);
     }
   }
 
