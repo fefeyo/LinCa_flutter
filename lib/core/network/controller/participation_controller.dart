@@ -47,8 +47,23 @@ class ParticipationController
   Future<void> createParticipation({
     required LincaEvent lincaEvent,
     required ParticipationInfo participation,
+    bool needsRefresh = false,
   }) async {
     await participationRepository.create(participation);
+
+    if (needsRefresh) {
+      final AsyncValue<Map<LincaEvent, ParticipationInfo>> currentState = state;
+      if (currentState is AsyncData<Map<LincaEvent, ParticipationInfo>>) {
+        final Map<LincaEvent, ParticipationInfo> updated =
+        Map<LincaEvent, ParticipationInfo>.of(currentState.value);
+        updated[lincaEvent] = participation;
+
+        state = AsyncValue<Map<LincaEvent, ParticipationInfo>>.data(updated);
+      } else {
+        // fallback：強制再読み込み
+        ref.invalidateSelf();
+      }
+    }
   }
 
   Future<void> deleteParticipation(

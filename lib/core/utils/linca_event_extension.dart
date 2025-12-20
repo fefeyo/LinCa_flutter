@@ -1,9 +1,11 @@
+import 'package:collection/collection.dart';
 import 'package:linca_otaku_support/core/models/linca_event.dart';
 import 'package:linca_otaku_support/core/network/model/event_base.dart';
 import 'package:linca_otaku_support/core/network/model/participation_info.dart';
 import 'package:linca_otaku_support/core/utils/date_extension.dart';
 import 'package:linca_otaku_support/core/utils/event_base_extension.dart';
 import 'package:linca_otaku_support/core/utils/sort_items_extension.dart';
+import 'package:linca_otaku_support/core/utils/tag_extension.dart';
 
 import '../network/model/tag.dart';
 
@@ -14,6 +16,23 @@ extension LincaEventExtension on LincaEvent {
 
   String get organizerName =>
       event is OfficialEvent ? (event as OfficialEvent).organizer : '';
+
+  String? get displayTagLabel {
+    if (event is OfficialEvent) {
+      final Tag? tag = tags.typeTags
+          .where((Tag tag) => tag.slug != 'type_other')
+          .sorted((Tag a, Tag b) => b.order.compareTo(a.order))
+          .firstOrNull;
+      return tag?.name;
+    }
+
+    if (event is UnOfficialEvent) {
+      final UnOfficialEvent unOfficialEvent = event as UnOfficialEvent;
+      return unOfficialEvent.visibility ? '公開イベント' : '非公開イベント';
+    }
+
+    return null;
+  }
 }
 
 extension LincaEventsExtension on List<LincaEvent> {

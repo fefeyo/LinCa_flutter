@@ -335,6 +335,7 @@ class EventDetailPage extends HookConsumerWidget {
               participationMemo: participationMemoController.text,
               groupSlug: lincaEvent.organizerName,
             ),
+            needsRefresh: true,
           );
           if (context.mounted) {
             context.router.pop();

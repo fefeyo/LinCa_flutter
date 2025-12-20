@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:linca_otaku_support/core/network/model/event_base.dart';
 import 'package:linca_otaku_support/core/utils/color_extension.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
 import 'package:linca_otaku_support/core/utils/date_extension.dart';
 import 'package:linca_otaku_support/core/utils/group_extension.dart';
-import 'package:linca_otaku_support/core/utils/tag_extension.dart';
+import 'package:linca_otaku_support/core/utils/linca_event_extension.dart';
 import 'package:linca_otaku_support/core/widgets/common/event_status_badges.dart';
 
 import '../../models/linca_event.dart';
@@ -24,11 +23,7 @@ class EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String? tagName = lincaEvent.event is OfficialEvent
-        ? lincaEvent.tags.priorityTypeTag?.name
-        : (lincaEvent.event as UnOfficialEvent).visibility
-            ? '公開イベント'
-            : '非公開イベント';
+    final String? tagName = lincaEvent.displayTagLabel;
 
     return Card(
       elevation: 4,
@@ -72,12 +67,14 @@ class EventCard extends StatelessWidget {
                         IntrinsicHeight(
                           child: Row(
                             children: <Widget>[
-                              Chip(
-                                label: Text(
-                                  '$tagName',
-                                  style: context.textTheme.labelSmall,
+                              if (tagName != null)
+                                Chip(
+                                  label: Text(
+                                    tagName,
+                                    style: context.textTheme.labelSmall,
+                                  ),
                                 ),
-                              ),
+                              if (tagName == null) const SizedBox.shrink(),
                               const SizedBox(width: 12),
                               Expanded(
                                 child: Container(
