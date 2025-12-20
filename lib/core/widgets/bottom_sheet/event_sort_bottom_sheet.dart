@@ -84,6 +84,9 @@ class EventSortBottomSheet extends HookConsumerWidget {
                             isHiddenParticipationEvent.value =
                                 selected ?? false,
                       ),
+                      const SizedBox(height: 8),
+                      const Divider(),
+                      const SizedBox(height: 8),
                       ..._buildParticipationAreaIfNeeded(
                         context: context,
                         currentParticipationTypes:
@@ -202,9 +205,6 @@ class EventSortBottomSheet extends HookConsumerWidget {
           ).toList(),
         ),
       ),
-      const SizedBox(height: 8),
-      const Divider(),
-      const SizedBox(height: 8),
     ];
   }
 
@@ -215,17 +215,24 @@ class EventSortBottomSheet extends HookConsumerWidget {
   }) {
     if (!needHiddenParticipationArea) return const SizedBox.shrink();
 
-    return Row(
-      children: <Widget>[
-        Checkbox(
-          value: isHiddenParticipationEvent,
-          onChanged: onChanged,
-        ),
-        Text(
-          '参加予定のイベントを非表示',
-          style: context.textTheme.titleMedium,
-        ),
-      ],
+    return GestureDetector(
+      onTap: () => onChanged(!isHiddenParticipationEvent),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Checkbox(
+            value: isHiddenParticipationEvent,
+            onChanged: onChanged,
+          ),
+          Text(
+            '参加予定のイベントを非表示',
+            style: context.textTheme.titleMedium?.copyWith(
+              color: Colors.black54,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -252,6 +259,7 @@ class EventSortBottomSheet extends HookConsumerWidget {
                 participationType.label(context),
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
+              showCheckmark: false,
               visualDensity: VisualDensity.comfortable,
               selected: currentParticipationTypes.contains(participationType),
               onSelected: (bool selected) {

@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/constants/participation_type.dart';
 import 'package:linca_otaku_support/core/models/linca_event.dart';
 import 'package:linca_otaku_support/core/network/model/participation_info.dart';
 import 'package:linca_otaku_support/core/network/providers.dart';
@@ -32,9 +33,12 @@ class LincaDetailViewModel extends StateNotifier<LincaDetailState> {
   Future<void> setUpcomingEvent(String? uid) async {
     if (uid?.isEmpty == true) return;
     final List<ParticipationInfo> participations =
-        await participationRepository.fetch();
+        await participationRepository.get();
     final List<LincaEvent> participationEvents = participations
         .map((ParticipationInfo participation) {
+          if (participation.participationType == ParticipationType.absent) {
+            return null;
+          }
           return events.firstWhereOrNull(
               (LincaEvent event) => event.event.id == participation.eventId);
         })

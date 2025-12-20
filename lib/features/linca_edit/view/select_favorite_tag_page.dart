@@ -32,183 +32,184 @@ class SelectFavoriteTagPage extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.select_favorite_tags_title),
-        actions: <Widget>[
-          IconButton(
-            onPressed: () => context.router.pop(changedFavoriteTags.value),
-            icon: const Icon(
-              Icons.check,
-              color: Colors.green,
+      ),
+      body: PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (bool didPop, _) async {
+          if (didPop) return;
+
+          context.router.pop(changedFavoriteTags.value);
+        },
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                ExpansionTile(
+                  title: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: titlePadding),
+                    child: Image.asset(
+                      Assets.images.lovelive.path,
+                      height: imageHeight,
+                    ),
+                  ),
+                  children: <Widget>[
+                    _buildSeriesTagChips(
+                      context: context,
+                      targetSeriesTag: AppConstants.seriesTagLovelive,
+                      selectedTags: changedFavoriteTags.value,
+                      onChanged: (List<Group> changed) =>
+                          changedFavoriteTags.value = changed,
+                    ),
+                  ],
+                ),
+                ExpansionTile(
+                  title: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: titlePadding),
+                    child: Image.asset(
+                      Assets.images.sunshine.path,
+                      height: imageHeight,
+                    ),
+                  ),
+                  children: <Widget>[
+                    _buildSeriesTagChips(
+                      context: context,
+                      targetSeriesTag: AppConstants.seriesTagSunshine,
+                      selectedTags: changedFavoriteTags.value,
+                      onChanged: (List<Group> changed) =>
+                          changedFavoriteTags.value = changed,
+                    ),
+                  ],
+                ),
+                ExpansionTile(
+                  title: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: titlePadding),
+                    child: Image.asset(
+                      Assets.images.nijigasaki.path,
+                      height: imageHeight,
+                    ),
+                  ),
+                  children: <Widget>[
+                    _buildSeriesTagChips(
+                      context: context,
+                      targetSeriesTag: AppConstants.seriesTagNijigasaki,
+                      selectedTags: changedFavoriteTags.value,
+                      onChanged: (List<Group> changed) =>
+                          changedFavoriteTags.value = changed,
+                    ),
+                  ],
+                ),
+                ExpansionTile(
+                  title: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: titlePadding),
+                    child: Image.asset(
+                      Assets.images.superstar.path,
+                      height: imageHeight,
+                    ),
+                  ),
+                  children: <Widget>[
+                    _buildSeriesTagChips(
+                      context: context,
+                      targetSeriesTag: AppConstants.seriesTagSuperstar,
+                      selectedTags: changedFavoriteTags.value,
+                      onChanged: (List<Group> changed) =>
+                          changedFavoriteTags.value = changed,
+                    ),
+                  ],
+                ),
+                ExpansionTile(
+                  title: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: titlePadding),
+                    child: SvgPicture.asset(
+                      Assets.images.hasunosora.path,
+                      height: imageHeight,
+                    ),
+                  ),
+                  children: <Widget>[
+                    _buildSeriesTagChips(
+                      context: context,
+                      targetSeriesTag: AppConstants.seriesTagHasunosora,
+                      selectedTags: changedFavoriteTags.value,
+                      onChanged: (List<Group> changed) =>
+                          changedFavoriteTags.value = changed,
+                    ),
+                  ],
+                ),
+                ExpansionTile(
+                  title: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: titlePadding),
+                    child: Image.asset(
+                      Assets.images.ikizulive.path,
+                      height: imageHeight,
+                    ),
+                  ),
+                  children: <Widget>[
+                    _buildSeriesTagChips(
+                      context: context,
+                      targetSeriesTag: AppConstants.seriesTagIkizulive,
+                      selectedTags: changedFavoriteTags.value,
+                      onChanged: (List<Group> changed) =>
+                          changedFavoriteTags.value = changed,
+                    ),
+                  ],
+                ),
+                ExpansionTile(
+                  title: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: titlePadding),
+                    child: Image.asset(
+                      Assets.images.yohane.path,
+                      height: imageHeight,
+                    ),
+                  ),
+                  children: <Widget>[
+                    _buildSeriesTagChips(
+                      context: context,
+                      targetSeriesTag: AppConstants.seriesTagYohane,
+                      selectedTags: changedFavoriteTags.value,
+                      onChanged: (List<Group> changed) =>
+                          changedFavoriteTags.value = changed,
+                    ),
+                  ],
+                ),
+                ExpansionTile(
+                  title: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: titlePadding),
+                    child: Image.asset(
+                      Assets.images.musical.path,
+                      height: imageHeight,
+                    ),
+                  ),
+                  children: <Widget>[
+                    _buildSeriesTagChips(
+                      context: context,
+                      targetSeriesTag: AppConstants.seriesTagMusical,
+                      selectedTags: changedFavoriteTags.value,
+                      onChanged: (List<Group> changed) =>
+                          changedFavoriteTags.value = changed,
+                    ),
+                  ],
+                ),
+                ExpansionTile(
+                  title: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: titlePadding),
+                    child: SvgPicture.asset(
+                      Assets.images.loveliveSeries.path,
+                      height: imageHeight,
+                    ),
+                  ),
+                  children: <Widget>[
+                    _buildSeriesTagChips(
+                      context: context,
+                      targetSeriesTag: AppConstants.seriesTagCollaborative,
+                      selectedTags: changedFavoriteTags.value,
+                      onChanged: (List<Group> changed) =>
+                          changedFavoriteTags.value = changed,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 32),
+              ],
             ),
           ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            ExpansionTile(
-              title: Padding(
-                padding: const EdgeInsets.symmetric(vertical: titlePadding),
-                child: Image.asset(
-                  Assets.images.lovelive.path,
-                  height: imageHeight,
-                ),
-              ),
-              children: <Widget>[
-                _buildSeriesTagChips(
-                  context: context,
-                  targetSeriesTag: AppConstants.seriesTagLovelive,
-                  selectedTags: changedFavoriteTags.value,
-                  onChanged: (List<Group> changed) =>
-                      changedFavoriteTags.value = changed,
-                ),
-              ],
-            ),
-            ExpansionTile(
-              title: Padding(
-                padding: const EdgeInsets.symmetric(vertical: titlePadding),
-                child: Image.asset(
-                  Assets.images.sunshine.path,
-                  height: imageHeight,
-                ),
-              ),
-              children: <Widget>[
-                _buildSeriesTagChips(
-                  context: context,
-                  targetSeriesTag: AppConstants.seriesTagSunshine,
-                  selectedTags: changedFavoriteTags.value,
-                  onChanged: (List<Group> changed) =>
-                      changedFavoriteTags.value = changed,
-                ),
-              ],
-            ),
-            ExpansionTile(
-              title: Padding(
-                padding: const EdgeInsets.symmetric(vertical: titlePadding),
-                child: Image.asset(
-                  Assets.images.nijigasaki.path,
-                  height: imageHeight,
-                ),
-              ),
-              children: <Widget>[
-                _buildSeriesTagChips(
-                  context: context,
-                  targetSeriesTag: AppConstants.seriesTagNijigasaki,
-                  selectedTags: changedFavoriteTags.value,
-                  onChanged: (List<Group> changed) =>
-                      changedFavoriteTags.value = changed,
-                ),
-              ],
-            ),
-            ExpansionTile(
-              title: Padding(
-                padding: const EdgeInsets.symmetric(vertical: titlePadding),
-                child: Image.asset(
-                  Assets.images.superstar.path,
-                  height: imageHeight,
-                ),
-              ),
-              children: <Widget>[
-                _buildSeriesTagChips(
-                  context: context,
-                  targetSeriesTag: AppConstants.seriesTagSuperstar,
-                  selectedTags: changedFavoriteTags.value,
-                  onChanged: (List<Group> changed) =>
-                      changedFavoriteTags.value = changed,
-                ),
-              ],
-            ),
-            ExpansionTile(
-              title: Padding(
-                padding: const EdgeInsets.symmetric(vertical: titlePadding),
-                child: SvgPicture.asset(
-                  Assets.images.hasunosora.path,
-                  height: imageHeight,
-                ),
-              ),
-              children: <Widget>[
-                _buildSeriesTagChips(
-                  context: context,
-                  targetSeriesTag: AppConstants.seriesTagHasunosora,
-                  selectedTags: changedFavoriteTags.value,
-                  onChanged: (List<Group> changed) =>
-                      changedFavoriteTags.value = changed,
-                ),
-              ],
-            ),
-            ExpansionTile(
-              title: Padding(
-                padding: const EdgeInsets.symmetric(vertical: titlePadding),
-                child: Image.asset(
-                  Assets.images.ikizulive.path,
-                  height: imageHeight,
-                ),
-              ),
-              children: <Widget>[
-                _buildSeriesTagChips(
-                  context: context,
-                  targetSeriesTag: AppConstants.seriesTagIkizulive,
-                  selectedTags: changedFavoriteTags.value,
-                  onChanged: (List<Group> changed) =>
-                      changedFavoriteTags.value = changed,
-                ),
-              ],
-            ),
-            ExpansionTile(
-              title: Padding(
-                padding: const EdgeInsets.symmetric(vertical: titlePadding),
-                child: Image.asset(
-                  Assets.images.yohane.path,
-                  height: imageHeight,
-                ),
-              ),
-              children: <Widget>[
-                _buildSeriesTagChips(
-                  context: context,
-                  targetSeriesTag: AppConstants.seriesTagYohane,
-                  selectedTags: changedFavoriteTags.value,
-                  onChanged: (List<Group> changed) =>
-                      changedFavoriteTags.value = changed,
-                ),
-              ],
-            ),
-            ExpansionTile(
-              title: Padding(
-                padding: const EdgeInsets.symmetric(vertical: titlePadding),
-                child: Image.asset(
-                  Assets.images.musical.path,
-                  height: imageHeight,
-                ),
-              ),
-              children: <Widget>[
-                _buildSeriesTagChips(
-                  context: context,
-                  targetSeriesTag: AppConstants.seriesTagMusical,
-                  selectedTags: changedFavoriteTags.value,
-                  onChanged: (List<Group> changed) =>
-                      changedFavoriteTags.value = changed,
-                ),
-              ],
-            ),
-            ExpansionTile(
-              title: Padding(
-                padding: const EdgeInsets.symmetric(vertical: titlePadding),
-                child: SvgPicture.asset(
-                  Assets.images.loveliveSeries.path,
-                  height: imageHeight,
-                ),
-              ),
-              children: <Widget>[
-                _buildSeriesTagChips(
-                  context: context,
-                  targetSeriesTag: AppConstants.seriesTagCollaborative,
-                  selectedTags: changedFavoriteTags.value,
-                  onChanged: (List<Group> changed) =>
-                      changedFavoriteTags.value = changed,
-                ),
-              ],
-            ),
-            const SizedBox(height: 32),
-          ],
         ),
       ),
     );

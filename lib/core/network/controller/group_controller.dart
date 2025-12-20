@@ -21,7 +21,10 @@ class GroupController extends LincaController<List<Group>> {
       groups.addAll(await groupRepository.fetch());
     }
 
-    return groups;
+    groups.sort(
+        (Group groupA, Group groupB) => groupA.order.compareTo(groupB.order));
+
+    return groups.toSet().toList();
   }
 
   Future<void> _refreshInBackground() async {
@@ -31,8 +34,13 @@ class GroupController extends LincaController<List<Group>> {
       // 🔄 差分がある場合のみ state 更新
       if (updated.isNotEmpty) {
         final List<Group> current = state.value ?? <Group>[];
-        state = AsyncValue<List<Group>>.data(
-            <Group>[...current, ...updated]);
+
+        final Map<String, Group> merged = <String, Group>{
+          for (final Group group in current) group.id: group,
+          for (final Group group in updated) group.id: group,
+        };
+
+        state = AsyncValue<List<Group>>.data(merged.values.toList());
       }
     } catch (error, stacktrace) {
       state = AsyncValue<List<Group>>.error(error, stacktrace);

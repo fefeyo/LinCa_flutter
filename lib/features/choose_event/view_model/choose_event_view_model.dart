@@ -1,6 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/utils/linca_event_extension.dart';
-import 'package:linca_otaku_support/core/utils/sort_items_extension.dart';
 import '../../../core/constants/event_type.dart';
 import '../../../core/models/filter_settings.dart';
 import '../../../core/models/linca_event.dart';
@@ -14,36 +13,45 @@ final AutoDisposeStateNotifierProvider<ChooseEventViewModel, ChooseEventState>
     StateNotifierProvider.autoDispose<ChooseEventViewModel, ChooseEventState>(
         (Ref ref) {
   final List<LincaEvent> events =
-      ref.watch(eventControllerProvider).value ?? <LincaEvent>[];
+      ref.read(eventControllerProvider).value ?? <LincaEvent>[];
   final List<LincaEvent> userEvents =
-      ref.watch(userEventControllerProvider).value ?? <LincaEvent>[];
+      ref.read(userEventControllerProvider).value ?? <LincaEvent>[];
   final Map<LincaEvent, ParticipationInfo> participations =
-      ref.watch(participationControllerProvider).value ??
+      ref.read(participationControllerProvider).value ??
           <LincaEvent, ParticipationInfo>{};
 
-  return ChooseEventViewModel(
+  final ChooseEventViewModel viewModel = ChooseEventViewModel(
     <LincaEvent>[
       ...events,
       ...userEvents,
     ],
     participations,
   );
+
+  ref.listen(participationControllerProvider,
+      (_, AsyncValue<Map<LincaEvent, ParticipationInfo>> next) {
+    final Map<LincaEvent, ParticipationInfo>? newParticipations = next.value;
+    if (newParticipations != null) {
+      viewModel.updateParticipations(newParticipations);
+    }
+  });
+
+  return viewModel;
 });
 
 class ChooseEventViewModel extends StateNotifier<ChooseEventState> {
   ChooseEventViewModel(
     this.initialEvents,
-    this.participations,
+    final Map<LincaEvent, ParticipationInfo> participations,
   ) : super(
           ChooseEventState(
             sortedEvents:
-                initialEvents.sortWithDisplayOrder(DisplayOrder.newest),
+                initialEvents.sortWithDisplayOrder(),
             participations: participations,
           ),
         );
 
   final List<LincaEvent> initialEvents;
-  final Map<LincaEvent, ParticipationInfo> participations;
 
   void setEventType(EventType eventType) {
     final List<LincaEvent> events = initialEvents.where((LincaEvent event) {
@@ -96,10 +104,24 @@ class ChooseEventViewModel extends StateNotifier<ChooseEventState> {
 
     sortedEvents = sortedEvents
         .filterWithKeyword(filterSettings.keyword)
-        .sortWithDisplayOrder(filterSettings.displayOrder)
+        .sortWithDisplayOrder(displayOrder: filterSettings.displayOrder)
         .filterWithTag(filterSettings.typeTags)
         .filterWithTag(filterSettings.seriesTags);
 
     return sortedEvents;
+  }
+
+  void updateParticipations(
+    Map<LincaEvent, ParticipationInfo> newParticipations,
+  ) {
+    List<LincaEvent> sortedEvents = state.sortedEvents;
+    if (state.filterSettings.isHiddenParticipationEvent) {
+      sortedEvents =
+          sortedEvents.filterOnlyNotPaticipationEvent(newParticipations);
+    }
+    state = state.copyWith(
+      participations: newParticipations,
+      sortedEvents: sortedEvents,
+    );
   }
 }

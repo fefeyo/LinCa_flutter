@@ -52,6 +52,7 @@ class OnboardingPage extends HookConsumerWidget {
       ),
       TutorialInputNicknamePage(
         nicknameKey: nicknameKey,
+        lincaUser: user,
       ),
       TutorialStepPage(
         animation: Assets.lottie.tutorialComplete,

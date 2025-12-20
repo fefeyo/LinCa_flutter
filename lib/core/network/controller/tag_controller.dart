@@ -20,7 +20,9 @@ class TagController extends LincaController<List<Tag>> {
       tags.addAll(await tagRepository.fetch());
     }
 
-    return tags;
+    tags.sort((Tag tagA, Tag tabB) => tagA.order.compareTo(tabB.order));
+
+    return tags.toSet().toList();
   }
 
   Future<void> _refreshInBackground() async {
@@ -30,7 +32,16 @@ class TagController extends LincaController<List<Tag>> {
       // 🔄 差分がある場合のみ state 更新
       if (updated.isNotEmpty) {
         final List<Tag> current = state.value ?? <Tag>[];
-        state = AsyncValue<List<Tag>>.data(<Tag>[...current, ...updated]);
+
+        final Map<String, Tag> map = <String, Tag>{
+          for (final Tag tag in current) tag.id: tag,
+        };
+
+        for (final Tag tag in updated) {
+          map[tag.id] = tag;
+        }
+
+        state = AsyncValue<List<Tag>>.data(map.values.toList());
       }
     } catch (error, stacktrace) {
       state = AsyncValue<List<Tag>>.error(error, stacktrace);

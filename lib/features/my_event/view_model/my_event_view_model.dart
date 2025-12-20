@@ -42,7 +42,7 @@ class MyEventViewModel extends StateNotifier<MyEventState> {
 
     events = events
         .filterWithKeyword(filterSettings.keyword)
-        .sortWithDisplayOrder(filterSettings.displayOrder)
+        .sortWithDisplayOrder(displayOrder: filterSettings.displayOrder)
         .filterWithTag(filterSettings.typeTags)
         .filterWithTag(filterSettings.seriesTags);
 

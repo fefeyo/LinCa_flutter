@@ -2,6 +2,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/models/favorite_badges.dart';
 import 'package:linca_otaku_support/core/network/providers.dart';
 import 'package:linca_otaku_support/core/utils/favorite_badges_extension.dart';
+import 'package:linca_otaku_support/features/linca_edit/data/sns_type.dart';
 import '../../../core/models/user_profile.dart';
 import '../../../core/network/model/group.dart';
 import '../../../core/network/model/linca_badge.dart';
@@ -35,6 +36,42 @@ class LincaEditViewModel extends StateNotifier<LincaEditState> {
     state = state.copyWith(
       userProfile: state.userProfile?.copyWith(
           user: state.userProfile!.user.copyWith(photoUrl: photoUrl)),
+    );
+  }
+
+  void updateDisplayName(String name) {
+    state = state.copyWith(
+      userProfile: state.userProfile
+          ?.copyWith(user: state.userProfile!.user.copyWith(displayName: name)),
+    );
+  }
+
+  void updateBio(String bio) {
+    state = state.copyWith(
+      userProfile: state.userProfile
+          ?.copyWith(user: state.userProfile!.user.copyWith(bio: bio)),
+    );
+  }
+
+  void updateSnsLink(SnsType type, String value) {
+    final UserProfile? userProfile = state.userProfile;
+    if (userProfile == null) return;
+
+    final Map<String, String> updatedLinks = Map<String, String>.from(
+      userProfile.user.links,
+    );
+
+    final String key = switch (type) {
+      SnsType.x => 'x',
+      SnsType.instagram => 'instagram',
+      SnsType.bluesky => 'bluesky',
+    };
+    updatedLinks[key] = value;
+
+    state = state.copyWith(
+      userProfile: userProfile.copyWith(
+        user: userProfile.user.copyWith(links: updatedLinks),
+      ),
     );
   }
 

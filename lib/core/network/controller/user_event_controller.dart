@@ -9,7 +9,6 @@ import 'package:linca_otaku_support/core/network/repository/participation_reposi
 
 import '../../auth/providers.dart';
 import '../../models/linca_event.dart';
-import '../../utils/sort_items_extension.dart';
 import '../model/event_base.dart';
 import '../model/tag.dart';
 import '../providers.dart';
@@ -78,7 +77,7 @@ class UserEventController extends LincaController<List<LincaEvent>> {
       );
     }).toList());
 
-    return lincaEvents.sortWithDisplayOrder(DisplayOrder.newest);
+    return lincaEvents.sortWithDisplayOrder();
   }
 
   Future<void> registerEvent({
