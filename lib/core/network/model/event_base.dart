@@ -44,6 +44,7 @@ sealed class EventBase with _$EventBase {
     @Default('') String url,
     @Default(<String>[]) List<String> tagIds,
     @Default('') String createdBy,
+    @Default('') String organizerName,
     @Default(false) bool visibility,
     @Default(false) bool deleted,
     @Default(<ParticipationType>[])

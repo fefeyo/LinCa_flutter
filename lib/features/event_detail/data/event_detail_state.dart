@@ -8,7 +8,6 @@ part 'event_detail_state.freezed.dart';
 @freezed
 abstract class EventDetailState with _$EventDetailState {
   const factory EventDetailState({
-    User? organizerUser,
     CheckInCondition? checkInCondition,
     required bool isLoading,
   }) = _EventDetailState;

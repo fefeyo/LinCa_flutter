@@ -5,6 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/constants/app_constants.dart';
 import 'package:linca_otaku_support/core/network/model/participation_info.dart';
+import 'package:linca_otaku_support/core/utils/color_extension.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
 import 'package:linca_otaku_support/core/utils/date_extension.dart';
 import 'package:linca_otaku_support/core/utils/event_base_extension.dart';
@@ -43,8 +44,8 @@ class OnTheDayEventDialog extends HookConsumerWidget {
           borderRadius: BorderRadius.circular(20),
           gradient: LinearGradient(
             colors: <Color>[
-              Colors.orange.shade200.withValues(alpha: 0.9),
-              Colors.deepOrange.shade200.withValues(alpha: 0.95),
+              Colors.pink.shade300,
+              Colors.pink.shade200,
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -128,17 +129,6 @@ class OnTheDayEventDialog extends HookConsumerWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
-                                  if (event.event.date != null)
-                                    Text(
-                                      event.event.date!.simpleDateFormat(),
-                                      style:
-                                          context.textTheme.bodySmall?.copyWith(
-                                        color:
-                                            Colors.white.withValues(alpha: 0.9),
-                                      ),
-                                    ),
-                                  if (event.event.date != null)
-                                    const SizedBox(height: 4),
                                   Text(
                                     event.event.title,
                                     maxLines: 2,
@@ -196,7 +186,7 @@ class OnTheDayEventDialog extends HookConsumerWidget {
                     value: dontShowToday.value,
                     onChanged: (bool? v) => dontShowToday.value = v ?? false,
                     activeColor: Colors.white,
-                    checkColor: Colors.deepOrange.shade400,
+                    checkColor: Colors.pink.shade400,
                     side: const BorderSide(color: Colors.white, width: 2),
                   ),
                   Text(
@@ -246,29 +236,18 @@ class OnTheDayEventDialog extends HookConsumerWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: Colors.orange.withValues(alpha: 0.4),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Icon(Icons.celebration, color: Colors.deepOrange.shade400, size: 22),
-          const SizedBox(width: 6),
           Text(
-            '本日開催のイベント',
+            '本日開催の公式イベント',
             style: context.textTheme.titleMedium?.copyWith(
-              color: Colors.deepOrange.shade600,
+              color: Colors.pink.shade600,
               fontWeight: FontWeight.w900,
               letterSpacing: 1.2,
             ),
           ),
-          const SizedBox(width: 6),
-          Icon(Icons.celebration, color: Colors.deepOrange.shade400, size: 22),
         ],
       ),
     );

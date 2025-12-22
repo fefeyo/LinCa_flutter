@@ -237,7 +237,7 @@ class EventSortBottomSheet extends HookConsumerWidget {
             onChanged: onChanged,
           ),
           Text(
-            'マイイベントに登録済みのイベントを非表示',
+            '追加済みのイベントを非表示',
             style: context.textTheme.titleMedium?.copyWith(
               color: Colors.black54,
             ),
