@@ -45,6 +45,7 @@ sealed class EventBase with _$EventBase {
     @Default(<String>[]) List<String> tagIds,
     @Default('') String createdBy,
     @Default(false) bool visibility,
+    @Default(false) bool deleted,
     @Default(<ParticipationType>[])
     @JsonKey(
       name: 'participationTypes',

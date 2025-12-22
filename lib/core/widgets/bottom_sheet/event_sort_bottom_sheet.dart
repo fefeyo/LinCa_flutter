@@ -17,6 +17,7 @@ class EventSortBottomSheet extends HookConsumerWidget {
     required this.initialSettings,
     this.needInputArea = false,
     this.needHiddenParticipationArea = false,
+    this.needHiddenOriginalEventArea = false,
     this.needDisplayOrderArea = false,
     this.needParticipationArea = false,
     this.needTagsArea = false,
@@ -25,6 +26,7 @@ class EventSortBottomSheet extends HookConsumerWidget {
   final FilterSettings initialSettings;
   final bool needInputArea;
   final bool needHiddenParticipationArea;
+  final bool needHiddenOriginalEventArea;
   final bool needDisplayOrderArea;
   final bool needParticipationArea;
   final bool needTagsArea;
@@ -44,6 +46,8 @@ class EventSortBottomSheet extends HookConsumerWidget {
     final List<Tag> tags = ref.watch(tagControllerProvider).value ?? <Tag>[];
     final ValueNotifier<bool> isHiddenParticipationEvent =
         useState(initialSettings.isHiddenParticipationEvent);
+    final ValueNotifier<bool> isHiddenOriginalEvent =
+        useState(initialSettings.isHiddenOriginalEvent);
 
     return SafeArea(
       child: Padding(
@@ -84,6 +88,11 @@ class EventSortBottomSheet extends HookConsumerWidget {
                             isHiddenParticipationEvent.value =
                                 selected ?? false,
                       ),
+                      _buildOriginalEventEnabled(
+                          context: context,
+                          isHiddenOriginalEvent: isHiddenOriginalEvent.value,
+                          onChanged: (bool? selected) =>
+                              isHiddenOriginalEvent.value = selected ?? false),
                       const SizedBox(height: 8),
                       const Divider(),
                       const SizedBox(height: 8),
@@ -155,6 +164,8 @@ class EventSortBottomSheet extends HookConsumerWidget {
                               typeTags: currentTypeTags.value,
                               isHiddenParticipationEvent:
                                   isHiddenParticipationEvent.value,
+                              isHiddenOriginalEvent:
+                                  isHiddenOriginalEvent.value,
                             ),
                           );
                         },
@@ -226,7 +237,35 @@ class EventSortBottomSheet extends HookConsumerWidget {
             onChanged: onChanged,
           ),
           Text(
-            '参加予定のイベントを非表示',
+            'マイイベントに登録済みのイベントを非表示',
+            style: context.textTheme.titleMedium?.copyWith(
+              color: Colors.black54,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildOriginalEventEnabled({
+    required BuildContext context,
+    required bool isHiddenOriginalEvent,
+    required Function(bool? selected) onChanged,
+  }) {
+    if (!needHiddenOriginalEventArea) return const SizedBox.shrink();
+
+    return GestureDetector(
+      onTap: () => onChanged(!isHiddenOriginalEvent),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Checkbox(
+            value: isHiddenOriginalEvent,
+            onChanged: onChanged,
+          ),
+          Text(
+            'オリジナルイベントを非表示',
             style: context.textTheme.titleMedium?.copyWith(
               color: Colors.black54,
             ),
@@ -376,6 +415,7 @@ class EventSortBottomSheet extends HookConsumerWidget {
     FilterSettings initialSettings, {
     bool needInputArea = false,
     bool needHiddenParticipationArea = false,
+    bool needHiddenOriginalEventArea = false,
     bool needDisplayOrderArea = false,
     bool needParticipationArea = false,
     bool needTagsArea = false,
@@ -389,6 +429,7 @@ class EventSortBottomSheet extends HookConsumerWidget {
           initialSettings: initialSettings,
           needInputArea: needInputArea,
           needHiddenParticipationArea: needHiddenParticipationArea,
+          needHiddenOriginalEventArea: needHiddenOriginalEventArea,
           needDisplayOrderArea: needDisplayOrderArea,
           needParticipationArea: needParticipationArea,
           needTagsArea: needTagsArea,

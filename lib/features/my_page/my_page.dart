@@ -54,6 +54,14 @@ class MyPage extends HookConsumerWidget {
               ),
               const SizedBox(height: 16),
               MyPageItem(
+                title: context.l10n.edit_my_linca_title,
+                onClickItem: () => context.router.push(
+                  LincaEditRoute(
+                    userProfile: state.lincaUser.userProfile,
+                  ),
+                ),
+              ),
+              MyPageItem(
                 title: context.l10n.traded_linca_list_title,
                 onClickItem: () =>
                     context.router.push(const TradedLincaListRoute()),
@@ -61,14 +69,6 @@ class MyPage extends HookConsumerWidget {
               MyPageItem(
                 title: context.l10n.my_qr_code_title,
                 onClickItem: () => MyQRBottomSheet.show(context),
-              ),
-              MyPageItem(
-                title: context.l10n.edit_my_linca_title,
-                onClickItem: () => context.router.push(
-                  LincaEditRoute(
-                    userProfile: state.lincaUser.userProfile,
-                  ),
-                ),
               ),
               MyPageItem(
                 title: context.l10n.acquired_badges_title,

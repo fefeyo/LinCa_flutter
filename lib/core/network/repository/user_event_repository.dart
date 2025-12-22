@@ -16,43 +16,82 @@ class UserEventRepository extends FirestoreRepository<UnOfficialEvent> {
   Future<List<UnOfficialEvent>> fetch() async {
     if (uid == null) return <UnOfficialEvent>[];
 
-    final DateTime? lastUpdatedAt =
-        await preferences.getLastUpdatedAt(AppConstants.friendLastFetchedAtKey);
-    final Query<Map<String, dynamic>> userEventsQuery =
-        fireStore.collection(AppConstants.userEventPath).where(
-              Filter.or(
-                Filter('visibility', isEqualTo: true),
-                Filter.and(
-                  Filter('visibility', isEqualTo: false),
-                  Filter('createdBy', isEqualTo: uid),
-                ),
-              ),
-            );
-    final QuerySnapshot<Map<String, dynamic>> cacheSnapshot =
-        await userEventsQuery.get(const GetOptions(source: Source.cache));
-    final List<UnOfficialEvent> cacheResult = cacheSnapshot.docs
-        .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) =>
-            UnOfficialEvent.fromJson(
-                <String, dynamic>{...doc.data(), 'id': doc.id}))
-        .toList();
-    final List<UnOfficialEvent> result = <UnOfficialEvent>[...cacheResult];
+    final DateTime? lastUpdatedAt = await preferences
+        .getLastUpdatedAt(AppConstants.userEventLastFetchedAtKey);
+
+    final CollectionReference<Map<String, dynamic>> col =
+        fireStore.collection(AppConstants.userEventPath);
+
+    // -----------------------------
+    // ① キャッシュフェッチ（public + private）
+    // -----------------------------
+    final QuerySnapshot<Map<String, dynamic>> publicCacheSnapshot = await col
+        .where('visibility', isEqualTo: true)
+        .get(const GetOptions(source: Source.cache));
+
+    final QuerySnapshot<Map<String, dynamic>> privateCacheSnapshot = await col
+        .where('visibility', isEqualTo: false)
+        .where('createdBy', isEqualTo: uid)
+        .get(const GetOptions(source: Source.cache));
+
+    final List<UnOfficialEvent> cacheResult = <UnOfficialEvent>[
+      ...publicCacheSnapshot.docs.map(toEvent),
+      ...privateCacheSnapshot.docs.map(toEvent),
+    ];
+
+    // -----------------------------
+    // ② サーバーフェッチ（差分 only）
+    // -----------------------------
+    List<UnOfficialEvent> serverResult = <UnOfficialEvent>[];
+
     try {
-      final QuerySnapshot<Map<String, dynamic>> serverSnapshot =
-          await userEventsQuery
+      // 公開イベントの差分
+      final QuerySnapshot<Map<String, dynamic>> publicServerSnapshot = await col
+          .where('visibility', isEqualTo: true)
+          .where('updatedAt', isGreaterThan: lastUpdatedAt)
+          .get();
+
+      // 自分の非公開イベントの差分
+      final QuerySnapshot<Map<String, dynamic>> privateServerSnapshot =
+          await col
+              .where('visibility', isEqualTo: false)
+              .where('createdBy', isEqualTo: uid)
               .where('updatedAt', isGreaterThan: lastUpdatedAt)
               .get();
-      final List<UnOfficialEvent> serverResult = serverSnapshot.docs
-          .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) =>
-              UnOfficialEvent.fromJson(
-                  <String, dynamic>{...doc.data(), 'id': doc.id}))
-          .toList();
-      result.addAll(serverResult);
+
+      serverResult = <UnOfficialEvent>[
+        ...publicServerSnapshot.docs.map(toEvent),
+        ...privateServerSnapshot.docs.map(toEvent),
+      ];
+
+      // 最後に同期時間を更新
       preferences.updateLastUpdatedAt(AppConstants.friendLastFetchedAtKey);
     } catch (e) {
       return <UnOfficialEvent>[];
     }
 
-    return result;
+    // -----------------------------
+    // ③ 統合 + 重複排除（ID による）
+    // -----------------------------
+    final Map<String, UnOfficialEvent> merged = <String, UnOfficialEvent>{
+      for (final UnOfficialEvent e in <UnOfficialEvent>[
+        ...cacheResult,
+        ...serverResult
+      ])
+        e.id: e
+    };
+
+    return merged.values
+        .where((UnOfficialEvent event) => !event.deleted)
+        .toList();
+  }
+
+  UnOfficialEvent toEvent(
+    QueryDocumentSnapshot<Map<String, dynamic>> doc,
+  ) {
+    return UnOfficialEvent.fromJson(
+      <String, dynamic>{...doc.data(), 'id': doc.id},
+    );
   }
 
   @override
@@ -65,6 +104,7 @@ class UserEventRepository extends FirestoreRepository<UnOfficialEvent> {
         .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) =>
             UnOfficialEvent.fromJson(
                 <String, dynamic>{...doc.data(), 'id': doc.id}))
+        .where((UnOfficialEvent event) => !event.deleted)
         .toList();
   }
 
@@ -86,6 +126,10 @@ class UserEventRepository extends FirestoreRepository<UnOfficialEvent> {
   }) async {
     final DocumentReference<Map<String, dynamic>> document =
         fireStore.collection(AppConstants.userEventPath).doc(event.id);
-    await document.delete();
+    await document.set(<String, dynamic>{
+      ...event.toJson(),
+      'deleted': true,
+      'updatedAt': FieldValue.serverTimestamp()
+    });
   }
 }

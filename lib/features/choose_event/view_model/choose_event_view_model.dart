@@ -15,7 +15,15 @@ final AutoDisposeStateNotifierProvider<ChooseEventViewModel, ChooseEventState>
   final List<LincaEvent> events =
       ref.read(eventControllerProvider).value ?? <LincaEvent>[];
   final List<LincaEvent> userEvents =
-      ref.read(userEventControllerProvider).value ?? <LincaEvent>[];
+      ref.read(userEventControllerProvider).value?.where((LincaEvent event) {
+        final EventBase eventBase = event.event;
+
+        // 公式イベントは常に表示
+        if (eventBase is OfficialEvent) return true;
+
+        // 有志イベント → 公開のみ表示
+        return (eventBase as UnOfficialEvent).visibility == true;
+      }).toList() ?? <LincaEvent>[];
   final Map<LincaEvent, ParticipationInfo> participations =
       ref.read(participationControllerProvider).value ??
           <LincaEvent, ParticipationInfo>{};
@@ -45,8 +53,7 @@ class ChooseEventViewModel extends StateNotifier<ChooseEventState> {
     final Map<LincaEvent, ParticipationInfo> participations,
   ) : super(
           ChooseEventState(
-            sortedEvents:
-                initialEvents.sortWithDisplayOrder(),
+            sortedEvents: initialEvents.sortWithDisplayOrder(),
             participations: participations,
           ),
         );
@@ -104,9 +111,9 @@ class ChooseEventViewModel extends StateNotifier<ChooseEventState> {
 
     sortedEvents = sortedEvents
         .filterWithKeyword(filterSettings.keyword)
-        .sortWithDisplayOrder(displayOrder: filterSettings.displayOrder)
         .filterWithTag(filterSettings.typeTags)
-        .filterWithTag(filterSettings.seriesTags);
+        .filterWithTag(filterSettings.seriesTags)
+        .sortWithDisplayOrder(displayOrder: filterSettings.displayOrder);
 
     return sortedEvents;
   }

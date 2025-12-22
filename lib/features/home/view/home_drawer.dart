@@ -121,6 +121,16 @@ class HomeDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
+            leading: const Icon(Icons.edit_note),
+            title: Text(
+              context.l10n.edit_my_linca_title,
+              style: context.textTheme.bodyMedium,
+            ),
+            onTap: () => transitPage(
+              LincaEditRoute(userProfile: lincaUser.userProfile),
+            ),
+          ),
+          ListTile(
             leading: const Icon(Icons.recent_actors),
             title: Text(
               context.l10n.traded_linca_list_title,
@@ -135,16 +145,6 @@ class HomeDrawer extends StatelessWidget {
               style: context.textTheme.bodyMedium,
             ),
             onTap: () => MyQRBottomSheet.show(context),
-          ),
-          ListTile(
-            leading: const Icon(Icons.edit_note),
-            title: Text(
-              context.l10n.edit_my_linca_title,
-              style: context.textTheme.bodyMedium,
-            ),
-            onTap: () => transitPage(
-              LincaEditRoute(userProfile: lincaUser.userProfile),
-            ),
           ),
           ListTile(
             leading: const Icon(Icons.emoji_events),

@@ -16,5 +16,6 @@ abstract class FilterSettings with _$FilterSettings {
     @Default(<Tag>[]) List<Tag> typeTags,
     @Default(<Tag>[]) List<Tag> seriesTags,
     @Default(false) bool isHiddenParticipationEvent,
+    @Default(false) bool isHiddenOriginalEvent,
   }) = _FilterSettings;
 }

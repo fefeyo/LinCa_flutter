@@ -20,24 +20,45 @@ class CreateEventPage extends HookConsumerWidget {
   const CreateEventPage({
     super.key,
     required this.createEventType,
+    this.isEditMode = false,
+    this.unOfficialEvent,
   });
 
   final CreateEventType createEventType;
+  final bool isEditMode;
+  final UnOfficialEvent? unOfficialEvent;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final String title = createEventType == CreateEventType.public
-        ? context.l10n.create_public_event_title
-        : context.l10n.create_private_event_title;
-    final TextEditingController titleController = useTextEditingController();
-    final ValueNotifier<DateTime?> selectedDate = useState<DateTime?>(null);
-    final TextEditingController venueConroller = useTextEditingController();
-    final TextEditingController eventUrlController = useTextEditingController();
-    useTextEditingController();
+    final String title = switch (createEventType) {
+      CreateEventType.public =>
+      isEditMode ? '公開イベント編集' : context.l10n.create_public_event_title,
+
+      CreateEventType.private =>
+      isEditMode ? '非公開イベント編集' : context.l10n.create_private_event_title,
+    };
+    final TextEditingController titleController =
+        useTextEditingController(text: unOfficialEvent?.title);
+    final ValueNotifier<DateTime?> selectedDate =
+        useState<DateTime?>(unOfficialEvent?.date);
+    final TextEditingController venueConroller =
+        useTextEditingController(text: unOfficialEvent?.venueName);
+    final TextEditingController eventUrlController =
+        useTextEditingController(text: unOfficialEvent?.url);
     final TextEditingController descriptionController =
-        useTextEditingController();
-    final ValueNotifier<Set<Tag>> selectedTags = useState<Set<Tag>>(<Tag>{});
+        useTextEditingController(
+      text: unOfficialEvent?.desrcription,
+    );
     final List<Tag> tags = ref.watch(tagControllerProvider).value ?? <Tag>[];
+    final ValueNotifier<Set<Tag>> selectedTags = useState<Set<Tag>>(
+      (unOfficialEvent?.tagIds ?? const <String>[])
+          .map(
+            (String id) =>
+                tags.where((Tag tag) => tag.id == id).cast<Tag?>().firstOrNull,
+          )
+          .whereType<Tag>()
+          .toSet(),
+    );
     final UserEventController userEventController =
         ref.read(userEventControllerProvider.notifier);
     final ParticipationController participationController =
@@ -69,7 +90,12 @@ class CreateEventPage extends HookConsumerWidget {
                 return;
               }
 
-              final String eventId = const Uuid().v4();
+              final String eventId;
+              if (isEditMode && unOfficialEvent != null) {
+                eventId = unOfficialEvent!.id;
+              } else {
+                eventId = const Uuid().v4();
+              }
               final UnOfficialEvent event = UnOfficialEvent(
                 title: titleController.text,
                 desrcription: descriptionController.text,
@@ -84,21 +110,26 @@ class CreateEventPage extends HookConsumerWidget {
                 eventId: eventId,
                 event: event,
               );
-              await participationController.createParticipation(
-                lincaEvent: LincaEvent(
-                  event: event,
-                ),
-                participation: ParticipationInfo(
-                  eventId: eventId,
-                  participationType: ParticipationType.onSite,
-                ),
-              );
+              if (!isEditMode) {
+                await participationController.createParticipation(
+                  lincaEvent: LincaEvent(
+                    event: event,
+                  ),
+                  participation: ParticipationInfo(
+                    eventId: eventId,
+                    participationType: ParticipationType.onSite,
+                  ),
+                );
+              }
 
               if (context.mounted) {
+                final String text = isEditMode
+                    ? context.l10n.create_event_event_updated
+                    : context.l10n.create_event_event_created;
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      context.l10n.create_event_event_created,
+                      text,
                       style: context.textTheme.titleMedium?.copyWith(
                         color: Colors.white,
                       ),
@@ -126,7 +157,9 @@ class CreateEventPage extends HookConsumerWidget {
                       context.l10n.input_create_event_title,
                       style: context.textTheme.titleMedium,
                     ),
-                    const SizedBox(width: 8,),
+                    const SizedBox(
+                      width: 8,
+                    ),
                     Text(
                       context.l10n.common_required,
                       style: context.textTheme.titleMedium?.copyWith(
@@ -140,6 +173,7 @@ class CreateEventPage extends HookConsumerWidget {
                   controller: titleController,
                   decoration: InputDecoration(
                     labelText: context.l10n.create_event_title_hint,
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
                     border: const OutlineInputBorder(),
                   ),
                   validator: (String? value) {
@@ -162,6 +196,7 @@ class CreateEventPage extends HookConsumerWidget {
                   maxLines: 5,
                   decoration: InputDecoration(
                     labelText: context.l10n.create_event_description_hint,
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
                     border: const OutlineInputBorder(),
                     alignLabelWithHint: true,
                   ),
@@ -179,7 +214,9 @@ class CreateEventPage extends HookConsumerWidget {
                               : context.l10n.text_create_event_choose_date,
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
-                        const SizedBox(width: 8,),
+                        const SizedBox(
+                          width: 8,
+                        ),
                         if (selectedDate.value == null)
                           Text(
                             context.l10n.common_required,
@@ -216,6 +253,7 @@ class CreateEventPage extends HookConsumerWidget {
                   controller: venueConroller,
                   decoration: InputDecoration(
                     labelText: context.l10n.create_event_venue_hint,
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
                     border: const OutlineInputBorder(),
                   ),
                 ),
@@ -231,6 +269,7 @@ class CreateEventPage extends HookConsumerWidget {
                   controller: eventUrlController,
                   decoration: InputDecoration(
                     labelText: context.l10n.input_create_event_event_url_hint,
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
                     border: const OutlineInputBorder(),
                   ),
                 ),

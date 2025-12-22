@@ -37,13 +37,13 @@ void main() async {
       container.read(tagControllerProvider.future),
       container.read(venueControllerProvider.future),
     ]);
+    await container.read(userControllerProvider.future);
     await Future.wait(<Future<List<LincaEvent>>>[
       container.read(eventControllerProvider.future),
       container.read(userEventControllerProvider.future),
     ]);
     await Future.wait(<Future<Object>>[
       container.read(participationControllerProvider.future),
-      container.read(userControllerProvider.future),
     ]);
     runApp(
       UncontrolledProviderScope(

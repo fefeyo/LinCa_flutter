@@ -24,7 +24,6 @@ class ParticipationController
 
     List<ParticipationInfo> participationInfos =
         await participationRepository.get();
-
     Map<LincaEvent, ParticipationInfo> myEvents = _generateLincaEvent(
       participationInfos: participationInfos,
       events: events,
@@ -48,20 +47,22 @@ class ParticipationController
   Future<void> createParticipation({
     required LincaEvent lincaEvent,
     required ParticipationInfo participation,
+    bool needsRefresh = false,
   }) async {
     await participationRepository.create(participation);
 
-    // 現在のstateが読み込み済みなら更新
-    final AsyncValue<Map<LincaEvent, ParticipationInfo>> currentState = state;
-    if (currentState is AsyncData<Map<LincaEvent, ParticipationInfo>>) {
-      final Map<LincaEvent, ParticipationInfo> updated =
-          Map<LincaEvent, ParticipationInfo>.of(currentState.value);
-      updated[lincaEvent] = participation;
+    if (needsRefresh) {
+      final AsyncValue<Map<LincaEvent, ParticipationInfo>> currentState = state;
+      if (currentState is AsyncData<Map<LincaEvent, ParticipationInfo>>) {
+        final Map<LincaEvent, ParticipationInfo> updated =
+        Map<LincaEvent, ParticipationInfo>.of(currentState.value);
+        updated[lincaEvent] = participation;
 
-      state = AsyncValue<Map<LincaEvent, ParticipationInfo>>.data(updated);
-    } else {
-      // fallback：強制再読み込み
-      ref.invalidateSelf();
+        state = AsyncValue<Map<LincaEvent, ParticipationInfo>>.data(updated);
+      } else {
+        // fallback：強制再読み込み
+        ref.invalidateSelf();
+      }
     }
   }
 

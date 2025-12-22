@@ -11,6 +11,7 @@ import 'package:linca_otaku_support/features/my_event/view_model/my_event_view_m
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/models/linca_event.dart';
+import '../../core/router/app_router.gr.dart';
 import '../../core/widgets/bottom_sheet/add_event_bottom_sheet.dart';
 import '../../core/widgets/event/event_card.dart';
 
@@ -88,6 +89,12 @@ class MyEventPage extends HookConsumerWidget {
                       state.sortedEvents.values.elementAt(index);
                   return EventCard(
                     lincaEvent: lincaEvent,
+                    onClick: () => context.router.push(
+                      EventDetailRoute(
+                        lincaEvent: lincaEvent,
+                        participationInfo: participationInfo,
+                      ),
+                    ),
                     participationInfo: participationInfo,
                   );
                 },

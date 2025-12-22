@@ -32,6 +32,7 @@ class AppConstants {
   static const String participationLastFetchedAtKey =
       'participation_last_fetched_at_key';
   static const String friendLastFetchedAtKey = 'event_last_fetched_at_key';
+  static const String hideOnTheDayDialog = 'hide_on_the_day_dialog';
 
   // Hero Animation Tag
   static const String heroTagLincaCardMyPage = 'LinCaCardMyPage';

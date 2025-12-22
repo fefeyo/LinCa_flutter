@@ -1,6 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/models/filter_settings.dart';
 import 'package:linca_otaku_support/core/models/linca_event.dart';
+import 'package:linca_otaku_support/core/network/model/event_base.dart';
 import 'package:linca_otaku_support/core/utils/linca_event_extension.dart';
 import '../../../core/network/model/participation_info.dart';
 import '../../../core/network/providers.dart';
@@ -40,11 +41,17 @@ class MyEventViewModel extends StateNotifier<MyEventState> {
   Map<LincaEvent, ParticipationInfo> sortEvents(FilterSettings filterSettings) {
     List<LincaEvent> events = myEvents.keys.toList();
 
+    if (filterSettings.isHiddenOriginalEvent) {
+      events = events
+          .where((LincaEvent event) => event.event is OfficialEvent)
+          .toList();
+    }
+
     events = events
         .filterWithKeyword(filterSettings.keyword)
-        .sortWithDisplayOrder(displayOrder: filterSettings.displayOrder)
         .filterWithTag(filterSettings.typeTags)
-        .filterWithTag(filterSettings.seriesTags);
+        .filterWithTag(filterSettings.seriesTags)
+        .sortWithDisplayOrder(displayOrder: filterSettings.displayOrder);
 
     final Map<LincaEvent, ParticipationInfo> sortedMap =
         <LincaEvent, ParticipationInfo>{};

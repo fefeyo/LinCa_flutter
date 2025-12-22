@@ -2,19 +2,20 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_tutorial_overlay/flutter_tutorial_overlay.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/constants/event_type.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:linca_otaku_support/core/utils/preferences_service.dart';
+import 'package:linca_otaku_support/core/utils/providers.dart';
 
 import '../../../core/router/app_router.gr.dart';
 import '../../../core/utils/context_extension.dart';
 import '../../../features/create_event/data/create_event_type.dart';
-import '../../constants/app_constants.dart';
 
-class AddEventBottomSheet extends HookWidget {
+class AddEventBottomSheet extends HookConsumerWidget {
   const AddEventBottomSheet({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final GlobalKey<State<StatefulWidget>> selectFromOfficialEventKey =
         useMemoized(() => GlobalKey());
     final GlobalKey<State<StatefulWidget>> selectFromOriginalEventKey =
@@ -53,10 +54,9 @@ class AddEventBottomSheet extends HookWidget {
 
     useEffect(() {
       Future<void>.microtask(() async {
-        final SharedPreferences sharedPreferences =
-            await SharedPreferences.getInstance();
-        final bool hasSeenTutorial =
-            sharedPreferences.getBool(AppConstants.hasSeenTutorial) ?? false;
+        final PreferencesService preferences =
+            ref.read(preferencesServiceProvider);
+        final bool hasSeenTutorial = await preferences.hasSeenTutorial();
         if (!hasSeenTutorial) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             Future<void>.delayed(const Duration(milliseconds: 200), () {
@@ -65,11 +65,9 @@ class AddEventBottomSheet extends HookWidget {
                   context: context,
                   steps: steps,
                   finshText: context.l10n.common_finish,
-                  onFinish: () => sharedPreferences.setBool(
-                      AppConstants.hasSeenTutorial, true),
+                  onFinish: () => preferences.markTutorialAsSeen(),
                   skipText: context.l10n.common_skip,
-                  onSkip: () => sharedPreferences.setBool(
-                      AppConstants.hasSeenTutorial, true),
+                  onSkip: () => preferences.markTutorialAsSeen(),
                   nextText: context.l10n.common_next,
                 ).show();
               }
