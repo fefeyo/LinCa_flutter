@@ -166,6 +166,14 @@ class HomeDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
+            leading: const Icon(Icons.auto_graph),
+            title: Text(
+              context.l10n.highlight_title,
+              style: context.textTheme.bodyMedium,
+            ),
+            onTap: () => transitPage(const HighlightRoute()),
+          ),
+          ListTile(
             leading: const Icon(Icons.edit_calendar),
             title: Text(
               context.l10n.created_events_title,
@@ -191,15 +199,25 @@ class HomeDrawer extends StatelessWidget {
             ),
             onTap: () => openAppSettings(),
           ),
+          const Divider(),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            child: Text(
+              context.l10n.etc_title,
+              style: context.textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
           ListTile(
             leading: const Icon(Icons.privacy_tip_outlined),
             title: Text(
-              'プライバシーポリシー',
+              context.l10n.privacy_policy_title,
               style: context.textTheme.bodyMedium,
             ),
             onTap: () {
               launchUrl(
-                Uri.parse('https://fefeyo.github.io/linca_privacy_policy/'),
+                Uri.parse(context.l10n.privacy_policy_url),
                 mode: LaunchMode.externalApplication,
               );
             },

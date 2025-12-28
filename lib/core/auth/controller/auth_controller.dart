@@ -117,7 +117,7 @@ class AuthController extends AsyncNotifier<AuthState> {
       return _buildAuthState();
     });
 
-    return state.value?.isSignedIn == true;
+    return state.value?.isGoogleLinked == true;
   }
 
   /// 既存ユーザーに Twitter を連携（任意）
@@ -130,7 +130,7 @@ class AuthController extends AsyncNotifier<AuthState> {
       return _buildAuthState();
     });
 
-    return state.value?.isSignedIn == true;
+    return state.value?.isTwitterLinked == true;
   }
 
   Future<void> unLinkGoogle() async {

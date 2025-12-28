@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/models/linca_user.dart';
+import 'package:linca_otaku_support/core/network/providers.dart';
 import 'package:linca_otaku_support/core/utils/linca_user_extension.dart';
 import 'package:linca_otaku_support/core/widgets/common/common_simple_dialog.dart';
 import 'package:linca_otaku_support/features/my_page/data/my_page_state.dart';
@@ -81,6 +82,10 @@ class MyPage extends HookConsumerWidget {
               ),
               const SizedBox(height: 16),
               MyPageItem(
+                title: context.l10n.highlight_title,
+                onClickItem: () => context.router.push(const HighlightRoute()),
+              ),
+              MyPageItem(
                 title: context.l10n.created_events_title,
                 onClickItem: () =>
                     context.router.push(const CreatedEventListRoute()),
@@ -107,8 +112,9 @@ class MyPage extends HookConsumerWidget {
                           ref.invalidate(authControllerProvider);
                           if (!context.mounted) return;
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('連携の解除に成功しました'),
+                            SnackBar(
+                              content:
+                                  Text(context.l10n.success_unlink_account),
                             ),
                           );
                         },
@@ -152,8 +158,9 @@ class MyPage extends HookConsumerWidget {
                           ref.invalidate(authControllerProvider);
                           if (!context.mounted) return;
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('連携の解除に成功しました'),
+                            SnackBar(
+                              content:
+                                  Text(context.l10n.success_unlink_account),
                             ),
                           );
                         },
@@ -196,6 +203,7 @@ class MyPage extends HookConsumerWidget {
                   );
                   if (comfirmed == true && context.mounted) {
                     authController.signOut();
+                    ref.invalidate(participationControllerProvider);
                     context.router.replace(const LoginRoute());
                   }
                 },

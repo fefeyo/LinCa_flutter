@@ -16,7 +16,6 @@ import '../../core/network/providers.dart';
 import '../../core/router/app_router.gr.dart';
 import 'data/onboarding_state.dart';
 import 'view/tutorial_input_nickname_page.dart';
-import 'view/tutorial_step_page.dart';
 import 'view_model/onboarding_view_model.dart';
 
 @RoutePage()
@@ -63,13 +62,20 @@ class OnboardingPage extends HookConsumerWidget {
         title: context.l10n.onboarding_step1_title,
         description: context.l10n.onboarding_step1_description,
       ),
-      TutorialStepPage(
-        animation: Assets.lottie.tutorial2,
+      TutorialCustomStepPage(
+        content: Image.asset(
+          Assets.images.onboardingStep2.path,
+          fit: BoxFit.contain,
+        ),
         title: context.l10n.onboarding_step2_title,
         description: context.l10n.onboarding_step2_description,
       ),
-      TutorialStepPage(
-        animation: Assets.lottie.tutorial3,
+      TutorialCustomStepPage(
+        content: Image.asset(
+          Assets.images.onboardingStep3.path,
+          width: 250,
+          fit: BoxFit.contain,
+        ),
         title: context.l10n.onboarding_step3_title,
         description: context.l10n.onboarding_step3_description,
       ),

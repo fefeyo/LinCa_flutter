@@ -42,7 +42,6 @@
   "common_event": "Event",
   "common_linca_card": "LinCaCard",
   "common_save_suceeded": "Event saved",
-  "app_catchphrase": "LinCa! with your OTAKU Life.",
   "menu_title": "Menu",
   "my_event_title": "MyEvent",
   "recent_event_title": "RecentEvent",
@@ -85,7 +84,6 @@
   },
   "link_to_google_account": "Link to Google account",
   "link_to_x_account": "Link to X account",
-  "success_link_account": "Success account link.",
   "already_linked": "Already linked.",
   "not_linked": "Not linked.",
   "release_link": "Release link.",
@@ -98,8 +96,6 @@
   "onboarding_step3_description": "Exchange your profile with people you meet at events and build lasting connections.",
   "onboarding_step4_title": "Set Your Nickname First",
   "onboarding_step4_description": "This name will appear on your LinCa card. You can change it anytime later.",
-  "onboarding_step5_title": "Let’s Get Started with LinCa!",
-  "onboarding_step5_description": "You’re all set!\nStart recording your event memories and connect with amazing people",
   "snackbar_title_deleted": "Event deleted",
   "map_launch_url": "https://www.google.com/maps/search/?api=1&query={query}",
   "@map_launch_url": {
@@ -241,5 +237,51 @@
   "account_delete_dialog_title": "account_delete_dialog_title",
   "account_delete_dialog_description": "account_delete_dialog_description",
   "account_logout_dialog_title": "account_logout_dialog_title",
-  "linca_edit_destruction_message": "linca_edit_destruction_message"
+  "linca_edit_destruction_message": "linca_edit_destruction_message",
+  "success_link_account": "Success account link.",
+  "success_unlink_account": "success_unlink_account",
+  "etc_title": "etc_title",
+  "privacy_policy_title": "privacy_policy_title",
+  "privacy_policy_url": "privacy_policy_url",
+  "highlight_title": "highlight_title",
+  "highlight_choose_year_description": "highlight_choose_year_message_top",
+  "highlight_choose_year_target": "highlight_choose_year_target",
+  "highlight_choose_year_message": "highlight_choose_year_message_bottom",
+  "highlight_total_title": "highlight_total_title",
+  "@highlight_total_title": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "common_official_event": "common_official_event",
+  "common_original_event": "common_original_event",
+  "common_year": "common_year",
+  "@common_year": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "common_count": "common_count",
+  "@common_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "highlight_series_breakdown_title": "highlight_series_breakdown_title",
+  "@highlight_series_breakdown_title": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "highlight_series_breakdown_subtitle": "highlight_series_breakdown_subtitle",
+  "highlight_end": "highlight_end",
+  "highlight_generated_sign": "highlight_print_sign"
 }

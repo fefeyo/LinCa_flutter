@@ -33,5 +33,6 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: CreatedEventListRoute.page),
         AutoRoute(page: AcquiredBadgeRoute.page),
         AutoRoute(page: SelectFavoriteTagRoute.page),
+        AutoRoute(page: HighlightRoute.page),
       ];
 }

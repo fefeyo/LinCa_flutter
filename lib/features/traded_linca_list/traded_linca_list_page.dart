@@ -48,7 +48,10 @@ class TradedLincaListPage extends HookConsumerWidget {
             )
           : state.friends.isNotEmpty
               ? Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 16,
+                  ),
                   child: ListView.separated(
                     itemCount: state.friends.length,
                     separatorBuilder: (BuildContext context, int index) {
