@@ -25,27 +25,32 @@ class AuthRepository {
   Future<UserCredential> linkWithProvider(AuthProvider provider) =>
       currentUser!.linkWithProvider(provider);
 
-  Future<void> deleteAccount() => currentUser!.delete();
+  Future<void> deleteAccount() async {
+    await currentUser!.delete();
+    await signOut();
+  }
 
   bool isGoogleLinked() =>
-      currentUser?.providerData
+      FirebaseAuth.instance.currentUser?.providerData
           .any((UserInfo info) => info.providerId == 'google.com') ??
       false;
 
   bool isTwitterLinked() =>
-      currentUser?.providerData
+      FirebaseAuth.instance.currentUser?.providerData
           .any((UserInfo info) => info.providerId == 'twitter.com') ??
       false;
 
   Future<void> unlinkGoogle() async {
     if (isGoogleLinked()) {
       await currentUser!.unlink('google.com');
+      await currentUser!.reload();
     }
   }
 
   Future<void> unlinkTwitter() async {
     if (isTwitterLinked()) {
       await currentUser!.unlink('twitter.com');
+      await currentUser!.reload();
     }
   }
 }

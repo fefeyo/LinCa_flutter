@@ -1,4 +1,4 @@
-# Makefile
+	# Makefile
 
 .PHONY: init format analyze build clean env pubget test
 

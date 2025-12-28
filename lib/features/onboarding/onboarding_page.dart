@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/models/linca_user.dart';
+import 'package:linca_otaku_support/features/onboarding/view/tutorial_custom_step_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -35,8 +37,29 @@ class OnboardingPage extends HookConsumerWidget {
         ref.read(userControllerProvider.notifier);
     final LincaUser? user = ref.watch(userControllerProvider).value;
     final List<Widget> pages = <Widget>[
-      TutorialStepPage(
-        animation: Assets.lottie.tutorial1,
+      TutorialCustomStepPage(
+        content: GridView(
+          padding: EdgeInsets.zero,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            mainAxisSpacing: 8,
+            crossAxisSpacing: 8,
+            childAspectRatio: 1.6,
+          ),
+          children: <Widget>[
+            Image.asset(Assets.images.lovelive.path, fit: BoxFit.contain),
+            Image.asset(Assets.images.sunshine.path, fit: BoxFit.contain),
+            Image.asset(Assets.images.nijigasaki.path, fit: BoxFit.contain),
+            Image.asset(Assets.images.superstar.path, fit: BoxFit.contain),
+            SvgPicture.asset(Assets.images.hasunosora.path,
+                fit: BoxFit.contain),
+            Image.asset(Assets.images.ikizulive.path, fit: BoxFit.contain),
+            Image.asset(Assets.images.yohane.path, fit: BoxFit.contain),
+            Image.asset(Assets.images.musical.path, fit: BoxFit.contain),
+          ],
+        ),
         title: context.l10n.onboarding_step1_title,
         description: context.l10n.onboarding_step1_description,
       ),
@@ -53,11 +76,6 @@ class OnboardingPage extends HookConsumerWidget {
       TutorialInputNicknamePage(
         nicknameKey: nicknameKey,
         lincaUser: user,
-      ),
-      TutorialStepPage(
-        animation: Assets.lottie.tutorialComplete,
-        title: context.l10n.onboarding_step5_title,
-        description: context.l10n.onboarding_step5_description,
       ),
     ];
 
@@ -113,7 +131,11 @@ class OnboardingPage extends HookConsumerWidget {
               width: 200,
               child: ElevatedButton(
                 onPressed: goToNextPage,
-                child: Text(isLastPage.value ? 'はじめる' : '次へ'),
+                child: Text(
+                  isLastPage.value
+                      ? context.l10n.common_start
+                      : context.l10n.common_next,
+                ),
               ),
             ),
             const SizedBox(height: 32),

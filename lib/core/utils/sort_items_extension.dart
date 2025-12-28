@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:linca_otaku_support/core/constants/event_type.dart';
 
 import '../../core/utils/context_extension.dart';
 import '../constants/participation_type.dart';
@@ -23,5 +24,12 @@ extension ParticipationFilterExtension on ParticipationType {
         ParticipationType.liveViewing =>
           context.l10n.participationFilter_liveViewing,
         ParticipationType.absent => context.l10n.participationFilter_absent,
+      };
+}
+
+extension EventTypeExtension on EventType {
+  String label(BuildContext context) => switch (this) {
+        EventType.official => '公式イベント',
+        EventType.unofficial => 'オリジナルイベント',
       };
 }

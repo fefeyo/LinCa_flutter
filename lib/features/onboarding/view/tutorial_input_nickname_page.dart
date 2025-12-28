@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/constants/app_constants.dart';
 
 import '../../../core/models/linca_user.dart';
 import '../../../core/utils/context_extension.dart';
@@ -76,7 +77,7 @@ class TutorialInputNicknamePage extends HookConsumerWidget {
                       hintText: '例：幻の学院生',
                       border: OutlineInputBorder(),
                     ),
-                    maxLength: 20,
+                    maxLength: AppConstants.userNameMaxLength,
                     onChanged: viewModel.setNickName,
                   ),
                   const SizedBox(height: 32),

@@ -226,6 +226,7 @@ class SelectFavoriteTagPage extends HookConsumerWidget {
       child: Wrap(
         spacing: 6,
         children: groups
+            .where((Group group) => group.active)
             .where((Group group) => group.seriesTag == targetSeriesTag)
             .map((Group group) {
           return ChoiceChip(

@@ -5,6 +5,7 @@ import 'package:linca_otaku_support/core/models/linca_user.dart';
 import 'package:linca_otaku_support/core/utils/group_extension.dart';
 import 'package:linca_otaku_support/core/utils/linca_user_extension.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/utils/context_extension.dart';
 import '../../../core/asset_gen/assets.gen.dart';
@@ -190,9 +191,22 @@ class HomeDrawer extends StatelessWidget {
             ),
             onTap: () => openAppSettings(),
           ),
+          ListTile(
+            leading: const Icon(Icons.privacy_tip_outlined),
+            title: Text(
+              'プライバシーポリシー',
+              style: context.textTheme.bodyMedium,
+            ),
+            onTap: () {
+              launchUrl(
+                Uri.parse('https://fefeyo.github.io/linca_privacy_policy/'),
+                mode: LaunchMode.externalApplication,
+              );
+            },
+          ),
           const SizedBox(
             height: 16,
-          )
+          ),
         ],
       ),
     );

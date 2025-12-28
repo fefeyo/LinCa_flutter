@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/auth/data/auth_state.dart';
 import 'package:linca_otaku_support/core/utils/color_extension.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_button/sign_in_button.dart';
@@ -18,12 +19,12 @@ class LoginPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<void> authState = ref.watch(authControllerProvider);
+    final AsyncValue<AuthState> authState = ref.watch(authControllerProvider);
     final AuthController authController =
         ref.read(authControllerProvider.notifier);
 
-    void actionAfterSignIn() async {
-      if (!context.mounted) return;
+    void actionAfterSignIn(bool isSignedIn) async {
+      if (!context.mounted || !isSignedIn) return;
       if (authState.hasError) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -52,8 +53,8 @@ class LoginPage extends HookConsumerWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: <Color>[
-              context.colorScheme.loginBackground,
               context.colorScheme.loginBackground.withValues(alpha: 0.6),
+              context.colorScheme.loginBackground.withValues(alpha: 0.3),
             ],
           ),
         ),
@@ -62,35 +63,30 @@ class LoginPage extends HookConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Image.asset(Assets.images.lincaLogo.path),
-              const SizedBox(height: 16),
-              Text(
-                context.l10n.app_catchphrase,
-                style: context.textTheme.titleMedium?.copyWith(
-                  color: context.colorScheme.surface,
-                ),
-              ),
-              const SizedBox(height: 32),
+              Image.asset(Assets.icons.lincaIconFront.path),
               SignInButton(
                 text: context.l10n.signin_with_guest,
                 Buttons.anonymous,
                 onPressed: () async {
-                  await authController.signInAnonymously();
-                  actionAfterSignIn();
+                  final bool isSignedIn =
+                      await authController.signInAnonymously();
+                  actionAfterSignIn(isSignedIn);
                 },
               ),
               SignInButton(
                 Buttons.google,
                 onPressed: () async {
-                  await authController.signInWithGoogle();
-                  actionAfterSignIn();
+                  final bool isSignedIn =
+                      await authController.signInWithGoogle();
+                  actionAfterSignIn(isSignedIn);
                 },
               ),
               SignInButton(
                 Buttons.twitter,
                 onPressed: () async {
-                  await authController.signInWithTwitter();
-                  actionAfterSignIn();
+                  final bool isSignedIn =
+                      await authController.signInWithTwitter();
+                  actionAfterSignIn(isSignedIn);
                 },
               ),
             ],

@@ -94,11 +94,15 @@ class HomePage extends HookConsumerWidget {
                       hintText: context.l10n.hint_choose_official_event_keyword,
                       border: InputBorder.none,
                     ),
+                    style: context.textTheme.bodyMedium,
                     onChanged: (String value) {
                       myEventViewModel.setKeyword(value);
                     },
                   )
-                : Text(appBarTitles[tabs.activeIndex]),
+                : Text(
+                    appBarTitles[tabs.activeIndex],
+                    style: context.textTheme.titleMedium,
+                  ),
             actions: tabs.activeIndex == 0
                 ? <Widget>[
                     IconButton(
@@ -111,6 +115,7 @@ class HomePage extends HookConsumerWidget {
                           needHiddenOriginalEventArea: true,
                           needDisplayOrderArea: true,
                           needParticipationArea: true,
+                          needEventTypeArea: true,
                           needTagsArea: true,
                         );
                         if (result != null) {

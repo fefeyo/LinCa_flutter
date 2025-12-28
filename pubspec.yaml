@@ -109,4 +109,4 @@ flutter_launcher_icons:
   ios: true
   image_path: "assets/icons/linca_icon.png"
   adaptive_icon_background: "assets/icons/linca_icon_back.png"
-  adaptive_icon_foreground: "assets/icons/linca_icon_front.png"
+  adaptive_icon_foreground: "assets/icons/linca_icon.png"

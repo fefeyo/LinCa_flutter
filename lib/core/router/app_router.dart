@@ -24,7 +24,6 @@ class AppRouter extends RootStackRouter {
           page: LoginRoute.page,
         ),
         AutoRoute(page: ChooseEventRoute.page),
-        AutoRoute(page: EventListRoute.page),
         AutoRoute(page: EventDetailRoute.page),
         AutoRoute(page: CreateEventRoute.page),
         AutoRoute(page: LincaDetailRoute.page),

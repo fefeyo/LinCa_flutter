@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/constants/app_constants.dart';
 import 'package:linca_otaku_support/core/models/linca_event.dart';
 import 'package:linca_otaku_support/core/network/controller/participation_controller.dart';
 import 'package:linca_otaku_support/core/network/controller/user_event_controller.dart';
 import 'package:linca_otaku_support/core/network/model/event_base.dart';
 import 'package:linca_otaku_support/core/network/model/tag.dart';
 import 'package:linca_otaku_support/core/network/providers.dart';
+import 'package:linca_otaku_support/core/router/app_router.gr.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
+import 'package:linca_otaku_support/core/widgets/common/required_rich_text.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../core/constants/participation_type.dart';
@@ -32,10 +35,9 @@ class CreateEventPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final String title = switch (createEventType) {
       CreateEventType.public =>
-      isEditMode ? '公開イベント編集' : context.l10n.create_public_event_title,
-
+        isEditMode ? '公開イベント編集' : context.l10n.create_public_event_title,
       CreateEventType.private =>
-      isEditMode ? '非公開イベント編集' : context.l10n.create_private_event_title,
+        isEditMode ? '非公開イベント編集' : context.l10n.create_private_event_title,
     };
     final TextEditingController titleController =
         useTextEditingController(text: unOfficialEvent?.title);
@@ -44,7 +46,7 @@ class CreateEventPage extends HookConsumerWidget {
     final TextEditingController venueConroller =
         useTextEditingController(text: unOfficialEvent?.venueName);
     final TextEditingController organizerNameController =
-    useTextEditingController(text: unOfficialEvent?.organizerName);
+        useTextEditingController(text: unOfficialEvent?.organizerName);
     final TextEditingController eventUrlController =
         useTextEditingController(text: unOfficialEvent?.url);
     final TextEditingController descriptionController =
@@ -67,20 +69,33 @@ class CreateEventPage extends HookConsumerWidget {
         ref.read(participationControllerProvider.notifier);
     final ObjectRef<GlobalKey<FormState>> formKey =
         useRef(GlobalKey<FormState>());
+    final FocusNode focusNode = useFocusNode();
+    final bool isEventNameFocused = useListenable(focusNode).hasFocus;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(
+          title,
+          style: context.textTheme.titleMedium,
+        ),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.save),
             onPressed: () async {
               if (formKey.value.currentState?.validate() == false) return;
-              if (selectedDate.value == null) {
+              final String errorMessage;
+              if (titleController.text.isEmpty) {
+                errorMessage = context.l10n.create_event_event_name_required;
+              } else if (selectedDate.value == null) {
+                errorMessage = context.l10n.create_event_event_date_required;
+              } else {
+                errorMessage = 'error';
+              }
+              if (titleController.text.isEmpty || selectedDate.value == null) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      context.l10n.create_event_event_date_required,
+                      errorMessage,
                       style: context.textTheme.titleMedium?.copyWith(
                         color: Colors.white,
                       ),
@@ -99,6 +114,7 @@ class CreateEventPage extends HookConsumerWidget {
                 eventId = const Uuid().v4();
               }
               final UnOfficialEvent event = UnOfficialEvent(
+                id: eventId,
                 title: titleController.text,
                 desrcription: descriptionController.text,
                 venueName: venueConroller.text,
@@ -108,20 +124,26 @@ class CreateEventPage extends HookConsumerWidget {
                 tagIds: selectedTags.value.map((Tag tag) => tag.id).toList(),
                 visibility:
                     createEventType == CreateEventType.public ? true : false,
+                availableParticipationTypes: <ParticipationType>[
+                  ParticipationType.onSite,
+                  ParticipationType.streaming,
+                  ParticipationType.liveViewing,
+                ],
               );
-              await userEventController.registerEvent(
+              final UnOfficialEvent? registeredEvent =
+                  await userEventController.registerEvent(event: event);
+              if (registeredEvent == null) return;
+              final LincaEvent lincaEvent = LincaEvent(
+                event: registeredEvent,
+              );
+              final ParticipationInfo participationInfo = ParticipationInfo(
                 eventId: eventId,
-                event: event,
+                participationType: ParticipationType.onSite,
               );
               if (!isEditMode) {
                 await participationController.createParticipation(
-                  lincaEvent: LincaEvent(
-                    event: event,
-                  ),
-                  participation: ParticipationInfo(
-                    eventId: eventId,
-                    participationType: ParticipationType.onSite,
-                  ),
+                  lincaEvent: lincaEvent,
+                  participation: participationInfo,
                 );
               }
 
@@ -140,6 +162,12 @@ class CreateEventPage extends HookConsumerWidget {
                   ),
                 );
                 context.router.pop();
+                context.router.push(
+                  EventDetailRoute(
+                    lincaEvent: lincaEvent,
+                    participationInfo: participationInfo,
+                  ),
+                );
               }
             },
           ),
@@ -154,52 +182,27 @@ class CreateEventPage extends HookConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 // イベント名
-                Row(
-                  children: <Widget>[
-                    Text(
-                      context.l10n.input_create_event_title,
-                      style: context.textTheme.titleMedium,
-                    ),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    Text(
-                      context.l10n.common_required,
-                      style: context.textTheme.titleMedium?.copyWith(
-                        color: Colors.red,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
                 TextFormField(
+                  focusNode: focusNode,
                   controller: titleController,
+                  maxLength: AppConstants.originalEventNameMaxLength,
                   decoration: InputDecoration(
-                    labelText: context.l10n.create_event_title_hint,
-                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    label: RequiredRichText(
+                      isFocused: isEventNameFocused,
+                      text: context.l10n.input_create_event_title,
+                    ),
                     border: const OutlineInputBorder(),
                   ),
-                  validator: (String? value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return context.l10n.create_event_event_name_required;
-                    }
-                    return null;
-                  },
                 ),
                 const SizedBox(height: 16),
 
                 // イベント概要
-                Text(
-                  context.l10n.input_create_event_description,
-                  style: context.textTheme.titleMedium,
-                ),
-                const SizedBox(height: 4),
                 TextFormField(
                   controller: descriptionController,
                   maxLines: 5,
+                  maxLength: AppConstants.originalEventDescriptionMaxLength,
                   decoration: InputDecoration(
-                    labelText: context.l10n.create_event_description_hint,
-                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    labelText: context.l10n.input_create_event_description,
                     border: const OutlineInputBorder(),
                     alignLabelWithHint: true,
                   ),
@@ -247,48 +250,33 @@ class CreateEventPage extends HookConsumerWidget {
                 const SizedBox(height: 16),
 
                 // 開催場所
-                Text(
-                  context.l10n.input_create_event_venue,
-                  style: context.textTheme.titleMedium,
-                ),
-                const SizedBox(height: 4),
                 TextFormField(
                   controller: venueConroller,
+                  maxLength: AppConstants.originalEventVenueMaxLength,
                   decoration: InputDecoration(
-                    labelText: context.l10n.create_event_venue_hint,
-                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    labelText: context.l10n.input_create_event_venue,
                     border: const OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 16),
 
                 // 主催者名
-                Text(
-                  context.l10n.create_event_organizer_title,
-                  style: context.textTheme.titleMedium,
-                ),
-                const SizedBox(height: 4),
                 TextFormField(
                   controller: organizerNameController,
+                  maxLength: AppConstants.originalEventOrganizerMaxLength,
                   decoration: InputDecoration(
-                    labelText: context.l10n.create_event_organizer_hint,
-                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    labelText: context.l10n.create_event_organizer_title,
                     border: const OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 16),
 
                 // イベントURL
-                Text(
-                  context.l10n.input_create_event_event_url,
-                  style: context.textTheme.titleMedium,
-                ),
-                const SizedBox(height: 4),
                 TextFormField(
                   controller: eventUrlController,
+                  maxLength: AppConstants.originalEventUrlMaxLength,
                   decoration: InputDecoration(
-                    labelText: context.l10n.input_create_event_event_url_hint,
-                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    labelText: context.l10n.input_create_event_event_url,
                     border: const OutlineInputBorder(),
                   ),
                 ),
