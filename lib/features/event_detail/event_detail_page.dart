@@ -13,10 +13,10 @@ import 'package:linca_otaku_support/core/network/controller/user_controller.dart
 import 'package:linca_otaku_support/core/network/model/event_base.dart';
 import 'package:linca_otaku_support/core/network/model/linca_badge.dart';
 import 'package:linca_otaku_support/core/network/model/participation_info.dart';
-import 'package:linca_otaku_support/core/network/model/user.dart';
 import 'package:linca_otaku_support/core/router/app_router.gr.dart';
 import 'package:linca_otaku_support/core/utils/event_base_extension.dart';
 import 'package:linca_otaku_support/core/utils/linca_event_extension.dart';
+import 'package:linca_otaku_support/core/utils/tag_extension.dart';
 import 'package:linca_otaku_support/core/widgets/common/common_simple_dialog.dart';
 import 'package:linca_otaku_support/core/widgets/common/common_simple_loading_dialog.dart';
 import 'package:linca_otaku_support/core/widgets/common/event_status_badges.dart';
@@ -48,7 +48,6 @@ class EventDetailPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final EventDetailState state = ref.read(eventDetailViewModelProvider);
     final EventDetailViewModel viewModel =
         ref.read(eventDetailViewModelProvider.notifier);
     final ParticipationController participationController =
@@ -69,16 +68,6 @@ class EventDetailPage extends HookConsumerWidget {
         (lincaEvent.event as UnOfficialEvent).createdBy == lincaUser?.user.id;
     useEffect(() {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-      if (lincaEvent.event is UnOfficialEvent) {
-        final UnOfficialEvent event = lincaEvent.event as UnOfficialEvent;
-        Future<void>.microtask(() async {
-          if (event.createdBy.isNotEmpty) {
-            final User organizerUser =
-                await userController.fetchUserData(userId: event.createdBy);
-            viewModel.updateOrganizerUser(organizerUser);
-          }
-        });
-      }
 
       return () {
         // 戻るときに元に戻す
@@ -181,7 +170,7 @@ class EventDetailPage extends HookConsumerWidget {
                       const SizedBox(height: 4),
                       ..._buildOrganizerArea(
                         context: context,
-                        user: state.organizerUser,
+                        organizerName: lincaEvent.organizerName,
                       ),
                       Text(
                         lincaEvent.event.title,
@@ -333,7 +322,7 @@ class EventDetailPage extends HookConsumerWidget {
               eventId: lincaEvent.event.id,
               participationType: selectedParticipationType.value,
               participationMemo: participationMemoController.text,
-              groupSlug: lincaEvent.organizerName,
+              groupSlug: lincaEvent.organizer,
             ),
             needsRefresh: true,
           );
@@ -355,9 +344,8 @@ class EventDetailPage extends HookConsumerWidget {
 
   List<Widget> _buildOrganizerArea({
     required BuildContext context,
-    required User? user,
+    required String organizerName,
   }) {
-    final String organizerName;
     switch (lincaEvent.event) {
       case OfficialEvent():
         {
@@ -366,9 +354,9 @@ class EventDetailPage extends HookConsumerWidget {
         }
       case UnOfficialEvent():
         {
-          if (user == null) return <Widget>[];
+          if (organizerName.isEmpty) return <Widget>[];
           organizerName =
-              context.l10n.text_unofficial_event_organizer(user.displayName);
+              context.l10n.text_unofficial_event_organizer(organizerName);
           break;
         }
     }
@@ -634,7 +622,7 @@ class EventDetailPage extends HookConsumerWidget {
       Wrap(
         spacing: 4,
         children: <Widget>[
-          ...lincaEvent.tags.map(
+          ...lincaEvent.tags.displayTags.map(
             (Tag tag) {
               return Chip(
                 label: Text(

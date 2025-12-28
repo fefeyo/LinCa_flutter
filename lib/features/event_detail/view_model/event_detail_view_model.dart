@@ -14,10 +14,6 @@ final StateNotifierProvider<EventDetailViewModel, EventDetailState>
 class EventDetailViewModel extends StateNotifier<EventDetailState> {
   EventDetailViewModel() : super(const EventDetailState(isLoading: false));
 
-  void updateOrganizerUser(User organizerUser) {
-    state = state.copyWith(organizerUser: organizerUser);
-  }
-
   Future<void> checkLocation(LincaEvent lincaEvent) async {
     if (state.isLoading) return;
     state = state.copyWith(isLoading: true);

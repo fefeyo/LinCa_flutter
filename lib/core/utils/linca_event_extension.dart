@@ -14,8 +14,11 @@ extension LincaEventExtension on LincaEvent {
       ? venue.name
       : (event as UnOfficialEvent).venueName;
 
-  String get organizerName =>
+  String get organizer =>
       event is OfficialEvent ? (event as OfficialEvent).organizer : '';
+
+  String get organizerName =>
+      event is UnOfficialEvent ? (event as UnOfficialEvent).organizerName : '';
 
   String? get displayTagLabel {
     if (event is OfficialEvent) {
@@ -118,10 +121,10 @@ extension LincaEventsExtension on List<LincaEvent> {
   }
 
   List<LincaEvent> getTodayEvents() {
-    // final DateTime now = DateTime.now();
-    // final DateTime today = DateTime(now.year, now.month, now.day);
+    final DateTime now = DateTime.now();
+    final DateTime today = DateTime(now.year, now.month, now.day);
     // final DateTime today = DateTime(2025, 10, 4); // 横長
-    final DateTime today = DateTime(2025, 11, 1); // 縦長
+    // final DateTime today = DateTime(2025, 11, 1); // 縦長
     return where((LincaEvent event) {
       final DateTime? date = event.event.date;
       if (date == null) return false;

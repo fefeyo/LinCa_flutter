@@ -43,6 +43,8 @@ class CreateEventPage extends HookConsumerWidget {
         useState<DateTime?>(unOfficialEvent?.date);
     final TextEditingController venueConroller =
         useTextEditingController(text: unOfficialEvent?.venueName);
+    final TextEditingController organizerNameController =
+    useTextEditingController(text: unOfficialEvent?.organizerName);
     final TextEditingController eventUrlController =
         useTextEditingController(text: unOfficialEvent?.url);
     final TextEditingController descriptionController =
@@ -100,6 +102,7 @@ class CreateEventPage extends HookConsumerWidget {
                 title: titleController.text,
                 desrcription: descriptionController.text,
                 venueName: venueConroller.text,
+                organizerName: organizerNameController.text,
                 date: selectedDate.value,
                 url: eventUrlController.text,
                 tagIds: selectedTags.value.map((Tag tag) => tag.id).toList(),
@@ -253,6 +256,22 @@ class CreateEventPage extends HookConsumerWidget {
                   controller: venueConroller,
                   decoration: InputDecoration(
                     labelText: context.l10n.create_event_venue_hint,
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    border: const OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // 主催者名
+                Text(
+                  context.l10n.create_event_organizer_title,
+                  style: context.textTheme.titleMedium,
+                ),
+                const SizedBox(height: 4),
+                TextFormField(
+                  controller: organizerNameController,
+                  decoration: InputDecoration(
+                    labelText: context.l10n.create_event_organizer_hint,
                     floatingLabelBehavior: FloatingLabelBehavior.never,
                     border: const OutlineInputBorder(),
                   ),

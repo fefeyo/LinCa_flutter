@@ -27,6 +27,11 @@ class HomePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final List<String> appBarTitles = <String>[
+      context.l10n.my_event_title,
+      context.l10n.recent_event_appbar_title,
+      context.l10n.my_page_title,
+    ];
     final List<String> titles = <String>[
       context.l10n.my_event_title,
       context.l10n.recent_event_title,
@@ -93,7 +98,7 @@ class HomePage extends HookConsumerWidget {
                       myEventViewModel.setKeyword(value);
                     },
                   )
-                : Text(titles[tabs.activeIndex]),
+                : Text(appBarTitles[tabs.activeIndex]),
             actions: tabs.activeIndex == 0
                 ? <Widget>[
                     IconButton(
