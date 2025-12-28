@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "630270810691-cg9col7rnjj5r6b28kobe3aam354etr1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fefeyo.linca",
+            "certificate_hash": "b1412041175067fd5b7cf153d808707be4694270"
+          }
+        },
+        {
           "client_id": "630270810691-cavclpg0rs7vr4kgojc93fv08ovrssgl.apps.googleusercontent.com",
           "client_type": 3
         }
