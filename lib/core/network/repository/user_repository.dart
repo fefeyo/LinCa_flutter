@@ -14,10 +14,8 @@ class UserRepository {
   DocumentReference<Map<String, dynamic>> doc(String uid) =>
       fireStore.collection('users').doc(uid);
 
-  Future<void> ensureUserDoc({String? displayName, String? photoUrl}) async {
-    if (uid == null) return;
-
-    final DocumentReference<Map<String, dynamic>> document = doc(uid!);
+  Future<void> ensureUserDoc({required String userId}) async {
+    final DocumentReference<Map<String, dynamic>> document = doc(userId);
     await fireStore.runTransaction((Transaction transaction) async {
       final DocumentSnapshot<Map<String, dynamic>> snap =
           await transaction.get(document);
@@ -76,5 +74,12 @@ class UserRepository {
       ...user.toJson(),
       'updatedAt': FieldValue.serverTimestamp(),
     });
+  }
+
+  Future<void> deleteMyUserData(String? userId) async {
+    if (userId == null) return;
+
+    final DocumentReference<Map<String, dynamic>> document = doc(userId);
+    await document.delete();
   }
 }

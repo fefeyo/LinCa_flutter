@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/constants/event_type.dart';
 import 'package:linca_otaku_support/core/models/filter_settings.dart';
 import 'package:linca_otaku_support/core/network/providers.dart';
 import 'package:linca_otaku_support/core/utils/tag_extension.dart';
@@ -20,6 +21,7 @@ class EventSortBottomSheet extends HookConsumerWidget {
     this.needHiddenOriginalEventArea = false,
     this.needDisplayOrderArea = false,
     this.needParticipationArea = false,
+    this.needEventTypeArea = false,
     this.needTagsArea = false,
   });
 
@@ -29,6 +31,7 @@ class EventSortBottomSheet extends HookConsumerWidget {
   final bool needHiddenOriginalEventArea;
   final bool needDisplayOrderArea;
   final bool needParticipationArea;
+  final bool needEventTypeArea;
   final bool needTagsArea;
 
   @override
@@ -39,6 +42,10 @@ class EventSortBottomSheet extends HookConsumerWidget {
         useState(initialSettings.displayOrder);
     final ValueNotifier<List<ParticipationType>> currentParticipationTypes =
         useState(initialSettings.participationFilters);
+    final ValueNotifier<bool> isShowOfficialEvent =
+        useState(initialSettings.isShowOfficialEvent);
+    final ValueNotifier<bool> isShowOriginalEvent =
+        useState(initialSettings.isShowOriginalEvent);
     final ValueNotifier<List<Tag>> currentTypeTags =
         useState(initialSettings.typeTags);
     final ValueNotifier<List<Tag>> currentSeriesTags =
@@ -69,7 +76,7 @@ class EventSortBottomSheet extends HookConsumerWidget {
                     children: <Widget>[
                       Center(
                         child: Text(
-                          'イベントを絞り込む',
+                          context.l10n.event_sort_title,
                           style: context.textTheme.headlineSmall,
                         ),
                       ),
@@ -88,11 +95,6 @@ class EventSortBottomSheet extends HookConsumerWidget {
                             isHiddenParticipationEvent.value =
                                 selected ?? false,
                       ),
-                      _buildOriginalEventEnabled(
-                          context: context,
-                          isHiddenOriginalEvent: isHiddenOriginalEvent.value,
-                          onChanged: (bool? selected) =>
-                              isHiddenOriginalEvent.value = selected ?? false),
                       const SizedBox(height: 8),
                       const Divider(),
                       const SizedBox(height: 8),
@@ -102,6 +104,21 @@ class EventSortBottomSheet extends HookConsumerWidget {
                             currentParticipationTypes.value,
                         onChanged: (List<ParticipationType> types) {
                           currentParticipationTypes.value = types;
+                        },
+                      ),
+                      ..._buildEventTypeAreaIfNeeded(
+                        context: context,
+                        isShowOfficialEvent: isShowOfficialEvent.value,
+                        isShowOriginalEvent: isShowOriginalEvent.value,
+                        onChanged: (EventType eventType) {
+                          switch (eventType) {
+                            case EventType.official:
+                              isShowOfficialEvent.value =
+                                  !isShowOfficialEvent.value;
+                            case EventType.unofficial:
+                              isShowOriginalEvent.value =
+                                  !isShowOriginalEvent.value;
+                          }
                         },
                       ),
                       ..._buildTypeTagsAreaIfNeeded(
@@ -166,12 +183,13 @@ class EventSortBottomSheet extends HookConsumerWidget {
                                   isHiddenParticipationEvent.value,
                               isHiddenOriginalEvent:
                                   isHiddenOriginalEvent.value,
+                              isShowOfficialEvent: isShowOfficialEvent.value,
+                              isShowOriginalEvent: isShowOriginalEvent.value,
                             ),
                           );
                         },
                         child: Text(
-                          '決定',
-                          // context.l10n.filter_apply_button,
+                          context.l10n.common_determination,
                           style: context.textTheme.titleMedium?.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -237,35 +255,7 @@ class EventSortBottomSheet extends HookConsumerWidget {
             onChanged: onChanged,
           ),
           Text(
-            '追加済みのイベントを非表示',
-            style: context.textTheme.titleMedium?.copyWith(
-              color: Colors.black54,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildOriginalEventEnabled({
-    required BuildContext context,
-    required bool isHiddenOriginalEvent,
-    required Function(bool? selected) onChanged,
-  }) {
-    if (!needHiddenOriginalEventArea) return const SizedBox.shrink();
-
-    return GestureDetector(
-      onTap: () => onChanged(!isHiddenOriginalEvent),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Checkbox(
-            value: isHiddenOriginalEvent,
-            onChanged: onChanged,
-          ),
-          Text(
-            'オリジナルイベントを非表示',
+            context.l10n.event_sort_section_title_hidden_already_added,
             style: context.textTheme.titleMedium?.copyWith(
               color: Colors.black54,
             ),
@@ -284,7 +274,7 @@ class EventSortBottomSheet extends HookConsumerWidget {
 
     return <Widget>[
       Text(
-        '参加形態',
+        context.l10n.event_sort_section_title_paricipation,
         style: context.textTheme.bodyMedium,
       ),
       const SizedBox(height: 8),
@@ -321,6 +311,48 @@ class EventSortBottomSheet extends HookConsumerWidget {
     ];
   }
 
+  List<Widget> _buildEventTypeAreaIfNeeded({
+    required BuildContext context,
+    required bool isShowOfficialEvent,
+    required bool isShowOriginalEvent,
+    required Function(EventType eventType) onChanged,
+  }) {
+    if (!needEventTypeArea) return <Widget>[];
+
+    return <Widget>[
+      Text(
+        context.l10n.event_sort_section_title_event_type,
+        style: context.textTheme.bodyMedium,
+      ),
+      const SizedBox(height: 8),
+      Wrap(
+        spacing: 4,
+        runSpacing: 8,
+        children: EventType.values.map(
+          (EventType eventType) {
+            return ChoiceChip(
+              label: Text(
+                eventType.label(context),
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              showCheckmark: false,
+              visualDensity: VisualDensity.comfortable,
+              selected: (eventType == EventType.official &&
+                      isShowOfficialEvent) ||
+                  (eventType == EventType.unofficial && isShowOriginalEvent),
+              onSelected: (bool selected) {
+                onChanged(eventType);
+              },
+            );
+          },
+        ).toList(),
+      ),
+      const SizedBox(height: 8),
+      const Divider(),
+      const SizedBox(height: 8),
+    ];
+  }
+
   List<Widget> _buildTypeTagsAreaIfNeeded({
     required BuildContext context,
     required List<Tag> tags,
@@ -331,7 +363,7 @@ class EventSortBottomSheet extends HookConsumerWidget {
 
     return <Widget>[
       Text(
-        'イベント形態',
+        context.l10n.event_sort_section_title_event_style,
         style: context.textTheme.bodyMedium,
       ),
       const SizedBox(height: 8),
@@ -377,7 +409,7 @@ class EventSortBottomSheet extends HookConsumerWidget {
 
     return <Widget>[
       Text(
-        'シリーズタグ',
+        context.l10n.event_sort_section_title_series_tag,
         style: context.textTheme.bodyMedium,
       ),
       const SizedBox(height: 8),
@@ -418,6 +450,7 @@ class EventSortBottomSheet extends HookConsumerWidget {
     bool needHiddenOriginalEventArea = false,
     bool needDisplayOrderArea = false,
     bool needParticipationArea = false,
+    bool needEventTypeArea = false,
     bool needTagsArea = false,
   }) async =>
       showModalBottomSheet<FilterSettings?>(
@@ -432,6 +465,7 @@ class EventSortBottomSheet extends HookConsumerWidget {
           needHiddenOriginalEventArea: needHiddenOriginalEventArea,
           needDisplayOrderArea: needDisplayOrderArea,
           needParticipationArea: needParticipationArea,
+          needEventTypeArea: needEventTypeArea,
           needTagsArea: needTagsArea,
         ),
       );

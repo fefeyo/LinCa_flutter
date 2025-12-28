@@ -27,8 +27,22 @@
       }
     }
   },
-  "app_name": "LinCa",
-  "app_catchphrase": "LinCa with your OTAKU Life.",
+  "common_save": "Save",
+  "common_edit": "common_edit",
+  "common_delete": "common_delete",
+  "common_setting": "Setting",
+  "common_cancel": "common_cancel",
+  "common_ok": "common_ok",
+  "common_next": "next",
+  "common_start": "start",
+  "common_finish": "Finish",
+  "common_skip": "Skip",
+  "common_determination": "common_determination",
+  "common_required": "common_required",
+  "common_event": "Event",
+  "common_linca_card": "LinCaCard",
+  "common_save_suceeded": "Event saved",
+  "app_catchphrase": "LinCa! with your OTAKU Life.",
   "menu_title": "Menu",
   "my_event_title": "MyEvent",
   "recent_event_title": "RecentEvent",
@@ -40,9 +54,6 @@
   "acquired_badges_title": "AcquiredBadges",
   "created_events_title": "CreatedEvents",
   "app_settings_title": "AppSettings",
-  "common_linca_card": "LinCaCard",
-  "common_event": "Event",
-  "common_setting": "Setting",
   "delete_account_title": "DeleteMyAccount",
   "participation_on_site": "On-site",
   "participation_streaming": "Streaming",
@@ -56,8 +67,6 @@
   "add_unofficial_event_select_from_list": "Choose from event list",
   "add_event_create_public": "Create public event",
   "add_event_create_private": "Create private event",
-  "filter_search_hint": "Search by keyword",
-  "filter_apply_button": "Apply",
   "qr_share_message": "Scan this QR code to exchange your profile!",
   "displayOrder_newest": "Newest",
   "displayOrder_oldest": "Oldest",
@@ -65,13 +74,6 @@
   "participationFilter_streaming": "Streaming",
   "participationFilter_liveViewing": "Live Viewing",
   "participationFilter_absent": "Absent",
-  "seriesTag_muse": "μ’s",
-  "seriesTag_aqours": "Aqours",
-  "seriesTag_nijigasaki": "Nijigasaki High School Idol Club",
-  "seriesTag_liella": "Liella!",
-  "seriesTag_hasunosora": "Hasunosora Girls’ High School Idol Club",
-  "seriesTag_ikizulive": "Ikizulive!",
-  "seriesTag_collaborative": "Collaborative",
   "signin_with_guest": "Sign in with GUEST",
   "signin_failure": "Sign in failure",
   "@signin_failure": {
@@ -98,11 +100,7 @@
   "onboarding_step4_description": "This name will appear on your LinCa card. You can change it anytime later.",
   "onboarding_step5_title": "Let’s Get Started with LinCa!",
   "onboarding_step5_description": "You’re all set!\nStart recording your event memories and connect with amazing people",
-  "common_next": "next",
-  "common_start": "start",
   "snackbar_title_deleted": "Event deleted",
-  "snackbar_title_saved": "Event saved",
-  "event_detail_delete": "Delete event",
   "map_launch_url": "https://www.google.com/maps/search/?api=1&query={query}",
   "@map_launch_url": {
     "placeholders": {
@@ -111,11 +109,12 @@
       }
     }
   },
-  "common_save": "Save",
   "event_detail_memo_hint": "Memo here",
   "traded_linca_list_empty_title": "Let's trade LinCa using QR!",
   "traded_linca_list_empty_button": "Show my QR code",
   "latest_participate_upcoming_event": "Latest participate upcoming event",
+  "sns_link_section_title": "sns_link_section_title",
+  "sns_title_x": "sns_title_x",
   "sns_scheme_x": "https://x.com/{user_id}",
   "@sns_scheme_x": {
     "placeholders": {
@@ -124,6 +123,7 @@
       }
     }
   },
+  "sns_title_instagram": "sns_title_instagram",
   "sns_scheme_instagram": "https://instagram.com/{user_id}",
   "@sns_scheme_instagram": {
     "placeholders": {
@@ -132,6 +132,7 @@
       }
     }
   },
+  "sns_title_bluesky": "sns_title_bluesky",
   "sns_scheme_bluesky": "https://bsky.app/profile/{user_id}",
   "@sns_scheme_bluesky": {
     "placeholders": {
@@ -140,7 +141,6 @@
       }
     }
   },
-  "linca_edit_success_save": "linca_edit_success_save",
   "linca_edit_label_nickname": "linca_edit_label_nickname",
   "linca_edit_label_favorite_tag": "linca_edit_label_favorite_tag",
   "linca_edit_label_favorite_tag_description": "linca_edit_label_favorite_tag_description",
@@ -154,12 +154,10 @@
       }
     }
   },
-  "common_edit": "common_edit",
   "linca_edit_label_bio": "linca_edit_label_bio",
+  "linca_edit_label_hint": "linca_edit_label_hint",
   "linca_edit_favorite_badge_title": "linca_edit_favorite_badge_title",
-  "linca_edit_label_user_id_x": "linca_edit_label_user_id_x",
-  "linca_edit_label_user_id_instagram": "linca_edit_label_user_id_instagram",
-  "linca_edit_label_user_id_bluesky": "linca_edit_label_user_id_bluesky",
+  "linca_edit_label_edit_tag": "linca_edit_label_edit_tag",
   "create_public_event_title": "create_public_event_title",
   "create_private_event_title": "create_private_event_title",
   "edit_public_event_title": "edit_public_event_title",
@@ -168,18 +166,13 @@
   "hint_choose_unofficial_event_keyword": "hint_search_keyword",
   "title_choose_event": "title_choose_event",
   "input_create_event_title": "input_create_event_title",
-  "input_create_event_title_alert": "input_create_event_title_alert",
   "input_create_event_description": "input_create_event_description",
   "text_create_event_choose_date": "text_create_event_choose_date",
   "input_create_event_choose_date": "input_create_event_choose_date",
   "input_create_event_venue": "input_create_event_venue",
   "input_create_event_event_url": "input_create_event_event_url",
-  "input_create_event_event_url_hint": "input_create_event_event_url_hint",
   "input_create_event_tag": "input_create_event_tag",
   "create_event_created": "create_event_created",
-  "create_event_title_hint": "create_event_title_hint",
-  "create_event_description_hint": "create_event_description_hint",
-  "create_event_venue_hint": "create_event_venue_hint",
   "text_unofficial_event_organizer": "text_unofficial_event_organizer",
   "@text_unofficial_event_organizer": {
     "placeholders": {
@@ -203,8 +196,6 @@
   "acquired_badges_select_title": "acquired_badges_select_title",
   "acquired_badges_list_title": "acquired_badges_list_title",
   "acquired_badges_list_unselect": "acquired_badges_list_unselect",
-  "common_cancel": "common_cancel",
-  "common_ok": "common_ok",
   "my_qr_code_transit_scan": "my_qr_code_transit_scan",
   "my_qr_code_success_linca_trade": "my_qr_code_success_linca_trade",
   "select_favorite_tags_title": "select_favorite_tags_title",
@@ -223,24 +214,32 @@
   "check_in_in_range": "check_in_in_range",
   "check_in_already_checked_in": "check_in_already_checked_in",
   "check_in_out_range": "check_in_out_range",
-  "common_determination": "common_determination",
-  "common_required": "common_required",
   "create_event_event_name_required": "create_event_event_name_required",
   "create_event_event_date_required": "create_event_event_date_required",
   "create_event_event_created": "create_event_event_created",
   "create_event_event_updated": "create_event_event_updated",
   "create_event_organizer_title": "create_event_organizer_title",
-  "create_event_organizer_hint": "create_event_organizer_hint",
-  "common_finish": "Finish",
-  "common_skip": "Skip",
-  "add_event_official_title": "Select Official Events",
-  "add_event_official_description": "Choose from official event list",
-  "add_event_original_title": "Select Fanmade Events",
-  "add_event_original_description": "Choose from fanmade events",
-  "add_event_create_public_title": "Create Public Event",
-  "add_event_create_public_description": "Create an event anyone can join",
-  "add_event_create_private_title": "Create Private Event",
-  "add_event_create_private_description": "Create a private event visible only to you",
-  "add_event_button_title": "add_event_button_title",
-  "add_event_button_description": "add_event_button_description"
+  "coach_step1_title": "Select Official Events",
+  "coach_step1_description": "Choose from official event list",
+  "coach_step2_title": "Select Fanmade Events",
+  "coach_step2_description": "Choose from fanmade events",
+  "coach_step3_title": "Create Public Event",
+  "coach_step3_description": "Create an event anyone can join",
+  "coach_step4_title": "Create Private Event",
+  "coach_step4_description": "Create a private event visible only to you",
+  "coach_step5_title": "add_event_button_title",
+  "coach_step5_description": "add_event_button_description",
+  "coach_step6_title": "add_event_button_title",
+  "coach_step6_description": "add_event_button_description",
+  "event_sort_section_title_paricipation": "event_sort_section_title_paricipation",
+  "event_sort_section_title_event_type": "event_sort_section_title_event_type",
+  "event_sort_section_title_event_style": "event_sort_section_title_event_style",
+  "event_sort_section_title_series_tag": "event_sort_section_title_series_tag",
+  "event_sort_title": "event_sort_title",
+  "event_sort_section_title_hidden_already_added": "event_sort_section_title_hidden_already_added",
+  "event_list_empty_title": "",
+  "account_delete_dialog_title": "account_delete_dialog_title",
+  "account_delete_dialog_description": "account_delete_dialog_description",
+  "account_logout_dialog_title": "account_logout_dialog_title",
+  "linca_edit_destruction_message": "linca_edit_destruction_message"
 }

@@ -47,6 +47,23 @@ class MyEventViewModel extends StateNotifier<MyEventState> {
           .toList();
     }
 
+    if (filterSettings.isShowOfficialEvent) {
+      events = events
+          .where((LincaEvent lincaEvent) => lincaEvent.event is OfficialEvent)
+          .toList();
+    }
+
+    if (filterSettings.isShowOriginalEvent) {
+      events = events
+          .where((LincaEvent lincaEvent) => lincaEvent.event is UnOfficialEvent)
+          .toList();
+    }
+
+    if (!filterSettings.isShowOfficialEvent &&
+        !filterSettings.isShowOriginalEvent) {
+      events = myEvents.keys.toList();
+    }
+
     events = events
         .filterWithKeyword(filterSettings.keyword)
         .filterWithTag(filterSettings.typeTags)

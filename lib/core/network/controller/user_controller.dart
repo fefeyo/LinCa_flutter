@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/models/favorite_badges.dart';
 import 'package:linca_otaku_support/core/models/linca_user.dart';
@@ -25,7 +26,8 @@ class UserController extends LincaController<LincaUser> {
 
   @override
   FutureOr<LincaUser> buildImpl() async {
-    uid = ref.watch(uidProvider);
+    final firebase.User? authUser = await ref.watch(authStateProvider.future);
+    uid = authUser?.uid;
     if (uid == null) return const LincaUser();
     userRepository = ref.read(userRepositoryProvider);
     badgeRepository = ref.read(badgeRepositoryProvider);

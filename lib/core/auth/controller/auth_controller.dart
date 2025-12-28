@@ -37,7 +37,7 @@ class AuthController extends AsyncNotifier<AuthState> {
   // ---------------------------
 
   /// Google ログイン
-  Future<void> signInWithGoogle() async {
+  Future<bool> signInWithGoogle() async {
     state = const AsyncLoading<AuthState>();
     state = await AsyncValue.guard(() async {
       final GoogleSignInAccount googleUser =
@@ -48,35 +48,44 @@ class AuthController extends AsyncNotifier<AuthState> {
       final OAuthCredential credential =
           GoogleAuthProvider.credential(idToken: googleAuth.idToken);
 
-      await authRepository.signInWithCredential(credential);
+      final UserCredential userCredential =
+          await authRepository.signInWithCredential(credential);
 
-      await userRepository.ensureUserDoc();
+      await userRepository.ensureUserDoc(userId: userCredential.user!.uid);
 
       return _buildAuthState();
     });
+
+    return state.value?.isSignedIn == true;
   }
 
   /// X(Twitter) ログイン
-  Future<void> signInWithTwitter() async {
+  Future<bool> signInWithTwitter() async {
     state = const AsyncLoading<AuthState>();
     state = await AsyncValue.guard(() async {
       final TwitterAuthProvider provider = TwitterAuthProvider();
-      await authRepository.signInWithProvider(provider);
-      await userRepository.ensureUserDoc();
+      final UserCredential userCredential =
+          await authRepository.signInWithProvider(provider);
+      await userRepository.ensureUserDoc(userId: userCredential.user!.uid);
 
       return _buildAuthState();
     });
+
+    return state.value?.isSignedIn == true;
   }
 
   /// ゲストログイン（匿名）
-  Future<void> signInAnonymously() async {
+  Future<bool> signInAnonymously() async {
     state = const AsyncLoading<AuthState>();
     state = await AsyncValue.guard(() async {
-      await authRepository.signInAnonymously();
-      await userRepository.ensureUserDoc();
+      final UserCredential userCredential =
+          await authRepository.signInAnonymously();
+      await userRepository.ensureUserDoc(userId: userCredential.user!.uid);
 
       return _buildAuthState();
     });
+
+    return state.value?.isSignedIn == true;
   }
 
   /// サインアウト（Google のセッションも明示的に切る）
@@ -93,7 +102,7 @@ class AuthController extends AsyncNotifier<AuthState> {
   }
 
   /// 既存ユーザーに Google を連携（任意）
-  Future<void> linkGoogle() async {
+  Future<bool> linkGoogle() async {
     state = const AsyncLoading<AuthState>();
     state = await AsyncValue.guard(() async {
       final GoogleSignInAccount googleUser =
@@ -104,22 +113,24 @@ class AuthController extends AsyncNotifier<AuthState> {
         idToken: googleAuth.idToken,
       );
       await authRepository.linkWithCredential(credential);
-      await userRepository.ensureUserDoc();
 
       return _buildAuthState();
     });
+
+    return state.value?.isSignedIn == true;
   }
 
   /// 既存ユーザーに Twitter を連携（任意）
-  Future<void> linkTwitter() async {
+  Future<bool> linkTwitter() async {
     state = const AsyncLoading<AuthState>();
     state = await AsyncValue.guard(() async {
       final TwitterAuthProvider provider = TwitterAuthProvider();
       await authRepository.linkWithProvider(provider);
-      await userRepository.ensureUserDoc();
 
       return _buildAuthState();
     });
+
+    return state.value?.isSignedIn == true;
   }
 
   Future<void> unLinkGoogle() async {
@@ -140,6 +151,7 @@ class AuthController extends AsyncNotifier<AuthState> {
   Future<void> deleteMyAccount() async {
     state = const AsyncLoading<AuthState>();
     state = await AsyncValue.guard(() async {
+      await userRepository.deleteMyUserData(authRepository.currentUser?.uid);
       await authRepository.deleteAccount();
 
       return _buildAuthState();

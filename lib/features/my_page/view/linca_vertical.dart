@@ -244,7 +244,10 @@ class LincaVertical extends HookConsumerWidget {
               ? SizedBox.expand(
                   child: buildCard(),
                 )
-              : buildCard(),
+              : SizedBox(
+            width: double.infinity,
+            child: buildCard(),
+          ),
         );
       } else {
         return isFullScreen

@@ -102,7 +102,16 @@ class MyPage extends HookConsumerWidget {
                     : context.l10n.not_linked,
                 trailing: authController.isBothProviderLinked()
                     ? ElevatedButton(
-                        onPressed: () => authController.unLinkGoogle(),
+                        onPressed: () async {
+                          await authController.unLinkGoogle();
+                          ref.invalidate(authControllerProvider);
+                          if (!context.mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('連携の解除に成功しました'),
+                            ),
+                          );
+                        },
                         child: Text(
                           context.l10n.release_link,
                           style: context.textTheme.bodyMedium?.copyWith(
@@ -114,15 +123,21 @@ class MyPage extends HookConsumerWidget {
                 onClickItem: authController.isGoogleLinked()
                     ? () {}
                     : () async {
-                        await authController.linkGoogle();
-                        if (!context.mounted) return;
+                        final bool isSignedIn =
+                            await authController.linkGoogle();
+                        if (!context.mounted || !isSignedIn) {
+                          return;
+                        }
                         final String message = authState.hasError == true
                             ? context.l10n
                                 .signin_failure(authState.error.toString())
                             : context.l10n.success_link_account;
 
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(SnackBar(content: Text(message)));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(message),
+                          ),
+                        );
                       },
               ),
               MyPageItem(
@@ -132,22 +147,42 @@ class MyPage extends HookConsumerWidget {
                     : context.l10n.not_linked,
                 trailing: authController.isBothProviderLinked()
                     ? ElevatedButton(
-                        onPressed: () => authController.unLinkTwitter(),
-                        child: Text(context.l10n.release_link),
+                        onPressed: () async {
+                          await authController.unLinkTwitter();
+                          ref.invalidate(authControllerProvider);
+                          if (!context.mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('連携の解除に成功しました'),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          context.l10n.release_link,
+                          style: context.textTheme.bodyMedium?.copyWith(
+                            color: Colors.white,
+                          ),
+                        ),
                       )
                     : null,
                 onClickItem: authController.isTwitterLinked()
                     ? () {}
                     : () async {
-                        await authController.linkTwitter();
-                        if (!context.mounted) return;
+                        final bool isSignedIn =
+                            await authController.linkTwitter();
+                        if (!context.mounted || !isSignedIn) {
+                          return;
+                        }
                         final String message = authState.hasError == true
                             ? context.l10n
                                 .signin_failure(authState.error.toString())
                             : context.l10n.success_link_account;
 
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(SnackBar(content: Text(message)));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(message),
+                          ),
+                        );
                       },
               ),
               MyPageItem(
@@ -156,7 +191,7 @@ class MyPage extends HookConsumerWidget {
                 onClickItem: () async {
                   final bool? comfirmed = await CommonSimpleDialog.show(
                     context: context,
-                    title: 'ログアウトしてもよろしいですか？',
+                    title: context.l10n.account_logout_dialog_title,
                     onClickCancel: () {},
                   );
                   if (comfirmed == true && context.mounted) {
@@ -171,10 +206,11 @@ class MyPage extends HookConsumerWidget {
                 trailing: null,
                 onClickItem: () async {
                   final bool? comfirmed = await CommonSimpleDialog.show(
-                      context: context,
-                      title: 'アカウントを削除してもよろしいですか？',
-                      content: 'アカウントを削除すると、すべてのデータが失われ、元に戻すことはできません。'
-                          '\n本当に削除してもよろしいですか？');
+                    context: context,
+                    title: context.l10n.account_delete_dialog_title,
+                    content: context.l10n.account_delete_dialog_description,
+                    onClickCancel: () {},
+                  );
                   if (comfirmed == true && context.mounted) {
                     authController.deleteMyAccount();
                     context.router.replace(const LoginRoute());

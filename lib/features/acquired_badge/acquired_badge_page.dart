@@ -37,7 +37,12 @@ class AcquiredBadgePage extends HookConsumerWidget {
     }, const <Object?>[]);
 
     return Scaffold(
-      appBar: AppBar(title: Text(selectable ? 'バッジ選択' : '獲得済みバッジ一覧')),
+      appBar: AppBar(
+        title: Text(
+          selectable ? 'バッジ選択' : '獲得済みバッジ一覧',
+          style: context.textTheme.titleMedium,
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: GridView.builder(

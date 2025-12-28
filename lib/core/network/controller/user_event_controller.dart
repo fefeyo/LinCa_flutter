@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:linca_otaku_support/core/constants/participation_type.dart';
 import 'package:linca_otaku_support/core/models/linca_user.dart';
 import 'package:linca_otaku_support/core/network/controller/linca_controller.dart';
 import 'package:linca_otaku_support/core/network/repository/participation_repository.dart';
@@ -25,7 +25,8 @@ class UserEventController extends LincaController<List<LincaEvent>> {
 
   @override
   FutureOr<List<LincaEvent>> buildImpl() async {
-    uid = ref.watch(uidProvider);
+    final User? authUser = await ref.watch(authStateProvider.future);
+    uid = authUser?.uid;
     if (uid == null) return <LincaEvent>[];
 
     userEventRepository = ref.read(userEventRepositoryProvider);
@@ -80,22 +81,15 @@ class UserEventController extends LincaController<List<LincaEvent>> {
     return lincaEvents.sortWithDisplayOrder();
   }
 
-  Future<void> registerEvent({
+  Future<UnOfficialEvent?> registerEvent({
     required UnOfficialEvent event,
-    required String eventId,
   }) async {
     if (uid != null && user != null) {
-      final UnOfficialEvent createdEvent = event.copyWith(
-        id: eventId,
-        createdBy: uid!,
-        availableParticipationTypes: <ParticipationType>[
-          ParticipationType.onSite,
-        ],
-      );
+      final UnOfficialEvent createdEvent = event.copyWith(createdBy: uid!);
       await userEventRepository.registerEvent(
         event: createdEvent,
         user: user!.user,
-        documentId: eventId,
+        documentId: event.id,
       );
       final List<Tag> allTags =
           ref.read(tagControllerProvider).value ?? <Tag>[];
@@ -115,7 +109,11 @@ class UserEventController extends LincaController<List<LincaEvent>> {
         );
 
       state = AsyncData<List<LincaEvent>>(current);
+
+      return createdEvent;
     }
+
+    return null;
   }
 
   Future<void> deleteEvent({

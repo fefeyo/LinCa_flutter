@@ -44,6 +44,16 @@ class LincaEditPage extends HookConsumerWidget {
     final UserController userController =
         ref.read(userControllerProvider.notifier);
     final String? uid = ref.watch(uidProvider);
+    final TextEditingController nickNameTextControlelr =
+        useTextEditingController(text: userProfile.user.displayName);
+    final TextEditingController bioTextController =
+        useTextEditingController(text: userProfile.user.bio);
+    final TextEditingController twitterTextController =
+        useTextEditingController(text: userProfile.user.links.x);
+    final TextEditingController instagramTextController =
+        useTextEditingController(text: userProfile.user.links.instagram);
+    final TextEditingController blueskyTextController =
+        useTextEditingController(text: userProfile.user.links.bluesky);
 
     useEffect(() {
       Future<void>.microtask(() => viewModel.initialize(userProfile));
@@ -68,7 +78,7 @@ class LincaEditPage extends HookConsumerWidget {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(context.l10n.linca_edit_success_save),
+            content: Text(context.l10n.common_save_suceeded),
             backgroundColor: Colors.green,
           ),
         );
@@ -78,12 +88,20 @@ class LincaEditPage extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l10n.edit_my_linca_title),
+        title: Text(
+          context.l10n.edit_my_linca_title,
+          style: context.textTheme.titleMedium,
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: updateUserData,
         icon: const Icon(Icons.save),
-        label: const Text('保存'),
+        label: Text(
+          context.l10n.common_save,
+          style: context.textTheme.bodyMedium?.copyWith(
+            color: Colors.white,
+          ),
+        ),
       ),
       body: PopScope(
         canPop: false,
@@ -92,7 +110,7 @@ class LincaEditPage extends HookConsumerWidget {
           if (userProfile != state.userProfile) {
             CommonSimpleDialog.show(
               context: context,
-              title: '保存していない項目があります。編集を破棄しますか？',
+              title: context.l10n.linca_edit_destruction_message,
               onClickOk: () => context.router.pop(),
               onClickCancel: () {},
             );
@@ -167,9 +185,7 @@ class LincaEditPage extends HookConsumerWidget {
                         const SizedBox(width: 16),
                         Expanded(
                           child: TextField(
-                            controller: TextEditingController(
-                              text: state.userProfile?.user.displayName,
-                            ),
+                            controller: nickNameTextControlelr,
                             maxLength: AppConstants.userNameMaxLength,
                             onChanged: viewModel.updateDisplayName,
                             style: context.textTheme.titleMedium,
@@ -215,9 +231,7 @@ class LincaEditPage extends HookConsumerWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(12),
                     child: TextField(
-                      controller: TextEditingController(
-                        text: state.userProfile?.user.bio,
-                      ),
+                      controller: bioTextController,
                       onChanged: viewModel.updateBio,
                       style: context.textTheme.bodyMedium,
                       maxLines: 10,
@@ -243,7 +257,7 @@ class LincaEditPage extends HookConsumerWidget {
                           context,
                           icon: Icons.alternate_email,
                           label: 'X（旧Twitter）',
-                          value: state.userProfile?.user.links.x,
+                          textController: twitterTextController,
                           onChanged: (String value) =>
                               viewModel.updateSnsLink(SnsType.x, value),
                         ),
@@ -252,7 +266,7 @@ class LincaEditPage extends HookConsumerWidget {
                           context,
                           icon: Icons.camera_alt_outlined,
                           label: 'Instagram',
-                          value: state.userProfile?.user.links.instagram,
+                          textController: instagramTextController,
                           onChanged: (String value) =>
                               viewModel.updateSnsLink(SnsType.instagram, value),
                         ),
@@ -261,7 +275,7 @@ class LincaEditPage extends HookConsumerWidget {
                           context,
                           icon: Icons.cloud_outlined,
                           label: 'Bluesky',
-                          value: state.userProfile?.user.links.bluesky,
+                          textController: blueskyTextController,
                           onChanged: (String value) =>
                               viewModel.updateSnsLink(SnsType.bluesky, value),
                         ),
@@ -286,7 +300,7 @@ class LincaEditPage extends HookConsumerWidget {
                 ElevatedButton.icon(
                   icon: const Icon(Icons.edit),
                   label: Text(
-                    'タグを編集',
+                    context.l10n.linca_edit_label_edit_tag,
                     style: context.textTheme.bodySmall?.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -312,48 +326,47 @@ class LincaEditPage extends HookConsumerWidget {
                 ),
                 const SizedBox(height: 8),
                 if (state.userProfile?.favoriteGroups.isNotEmpty == true)
-                  Card(
-                    margin: EdgeInsets.zero,
-                    child: Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: ReorderableWrap(
-                        spacing: 8.0,
-                        runSpacing: 4.0,
-                        needsLongPressDraggable: true,
-                        onReorder: (int oldIndex, int newIndex) {
-                          final List<Group> current = List<Group>.of(
-                              state.userProfile?.favoriteGroups ?? <Group>[]);
-                          final Group group = current.removeAt(oldIndex);
-                          current.insert(newIndex, group);
-                          viewModel.updateFavoriteGroups(current);
-                        },
-                        children: state.userProfile!.favoriteGroups
-                            .asMap()
-                            .entries
-                            .map((MapEntry<int, Group> entry) {
-                          final int index = entry.key;
-                          final Group group = entry.value;
-                          return Chip(
-                            key: ValueKey<String>(group.id),
-                            label: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                Text(group.name),
-                                const SizedBox(width: 4),
-                                const Icon(
-                                  Icons.drag_indicator,
-                                  size: 16,
-                                  color: Colors.grey,
-                                ),
-                              ],
-                            ),
-                            backgroundColor:
-                                index < AppConstants.maxSimpleProfileTagCount
-                                    ? context.colorScheme.primaryContainer
-                                    : context.colorScheme.primaryContainer
-                                        .withValues(alpha: 0.3),
-                          );
-                        }).toList(),
+                  SizedBox(
+                    width: double.infinity,
+                    child: Card(
+                      margin: EdgeInsets.zero,
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: ReorderableWrap(
+                          spacing: 8.0,
+                          runSpacing: 4.0,
+                          needsLongPressDraggable: true,
+                          onReorder: (int oldIndex, int newIndex) {
+                            final List<Group> current = List<Group>.of(
+                                state.userProfile?.favoriteGroups ?? <Group>[]);
+                            final Group group = current.removeAt(oldIndex);
+                            current.insert(newIndex, group);
+                            viewModel.updateFavoriteGroups(current);
+                          },
+                          children: state.userProfile!.favoriteGroups
+                              .asMap()
+                              .entries
+                              .map((MapEntry<int, Group> entry) {
+                            final Group group = entry.value;
+                            return Chip(
+                              key: ValueKey<String>(group.id),
+                              label: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Text(group.name),
+                                  const SizedBox(width: 4),
+                                  const Icon(
+                                    Icons.drag_indicator,
+                                    size: 16,
+                                    color: Colors.grey,
+                                  ),
+                                ],
+                              ),
+                              backgroundColor:
+                                  context.colorScheme.primaryContainer,
+                            );
+                          }).toList(),
+                        ),
                       ),
                     ),
                   ),
@@ -370,13 +383,14 @@ class LincaEditPage extends HookConsumerWidget {
     BuildContext context, {
     required IconData icon,
     required String label,
-    required String? value,
+    required TextEditingController textController,
     required ValueChanged<String> onChanged,
   }) {
     return TextField(
-      controller: TextEditingController(text: value ?? ''),
+      controller: textController,
       onChanged: onChanged,
       style: context.textTheme.bodyMedium,
+      maxLength: AppConstants.snsMaxLength,
       decoration: InputDecoration(
         prefixIcon: Icon(icon, color: context.colorScheme.primary),
         labelText: label,

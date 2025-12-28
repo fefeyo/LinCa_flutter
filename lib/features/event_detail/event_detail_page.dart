@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_tutorial_overlay/flutter_tutorial_overlay.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/constants/app_constants.dart';
 import 'package:linca_otaku_support/core/constants/participation_type.dart';
@@ -14,6 +15,7 @@ import 'package:linca_otaku_support/core/network/model/event_base.dart';
 import 'package:linca_otaku_support/core/network/model/linca_badge.dart';
 import 'package:linca_otaku_support/core/network/model/participation_info.dart';
 import 'package:linca_otaku_support/core/router/app_router.gr.dart';
+import 'package:linca_otaku_support/core/utils/coach_manager.dart';
 import 'package:linca_otaku_support/core/utils/event_base_extension.dart';
 import 'package:linca_otaku_support/core/utils/linca_event_extension.dart';
 import 'package:linca_otaku_support/core/utils/tag_extension.dart';
@@ -34,9 +36,11 @@ import '../../core/models/check_in_condition.dart';
 import '../../core/models/linca_event.dart';
 import '../../core/network/model/tag.dart';
 import '../../core/network/providers.dart';
+import '../../core/utils/preferences_service.dart';
+import '../../core/utils/providers.dart';
 
 @RoutePage()
-class EventDetailPage extends HookConsumerWidget {
+class EventDetailPage extends HookConsumerWidget with CoachManager {
   const EventDetailPage({
     super.key,
     required this.lincaEvent,
@@ -60,14 +64,48 @@ class EventDetailPage extends HookConsumerWidget {
     final UserController userController =
         ref.read(userControllerProvider.notifier);
     final bool isToday = lincaEvent.event.date?.isToday == true;
+    final bool isCheckInAvailable =
+        lincaEvent.event.displayCheckInId.isNotEmpty;
     final bool isAlreadyCheckedIn = lincaUser?.acquiredBadges.any(
             (LincaBadge badge) =>
                 badge.id == lincaEvent.event.displayCheckInId) ??
         false;
     final bool isMyEvent = lincaEvent.event is UnOfficialEvent &&
         (lincaEvent.event as UnOfficialEvent).createdBy == lincaUser?.user.id;
+    final GlobalKey<State<StatefulWidget>> participationAreaKey =
+        useMemoized(() => GlobalKey());
+    final GlobalKey<State<StatefulWidget>> saveButtonKey =
+        useMemoized(() => GlobalKey());
+
+    final List<TutorialStep> steps = <TutorialStep>[
+      TutorialStep(
+        targetKey: participationAreaKey,
+        title: context.l10n.coach_step5_title,
+        description: context.l10n.coach_step5_description,
+        tag: 'participation_area',
+      ),
+      TutorialStep(
+        targetKey: saveButtonKey,
+        title: context.l10n.coach_step6_title,
+        description: context.l10n.coach_step6_description,
+        tag: 'save_button',
+      ),
+    ];
+
     useEffect(() {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+      Future<void>.microtask(() async {
+        if (!context.mounted) return;
+        final PreferencesService preferences =
+            ref.read(preferencesServiceProvider);
+        showIfNeeded(
+          context: context,
+          preferences: preferences,
+          steps: steps,
+          isCompletable: true,
+          onComplete: () => preferences.markTutorialAsSeen(),
+        );
+      });
 
       return () {
         // 戻るときに元に戻す
@@ -184,7 +222,9 @@ class EventDetailPage extends HookConsumerWidget {
                         style: context.textTheme.titleMedium,
                       ),
                       _buildVenueAreaIfNeeded(context),
-                      if (isToday && lincaEvent.event is OfficialEvent)
+                      if (isToday &&
+                          lincaEvent.event is OfficialEvent &&
+                          isCheckInAvailable)
                         ..._buildCheckInButtonIfNeeded(
                             context: context,
                             onClick: () => viewModel.checkLocation(lincaEvent),
@@ -192,12 +232,13 @@ class EventDetailPage extends HookConsumerWidget {
                       ..._buildUrlAreaIfNeeded(context: context),
                       ..._buildDescriptionAreaIfNeeded(context: context),
                       ..._buildEventCodeAreaIfNeeded(context: context),
-                      ..._buildButtonArea(
+                      ..._buildParticipationToggleArea(
                         context: context,
                         selectedParticipationType:
                             selectedParticipationType.value,
                         availableParticipationTypes:
                             lincaEvent.event.availableParticipationTypes,
+                        participationAreaKey: participationAreaKey,
                         onClickButton: (ParticipationType participationType) {
                           selectedParticipationType.value = participationType;
                         },
@@ -315,6 +356,7 @@ class EventDetailPage extends HookConsumerWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
+        key: saveButtonKey,
         onPressed: () async {
           await participationController.createParticipation(
             lincaEvent: lincaEvent,
@@ -330,14 +372,19 @@ class EventDetailPage extends HookConsumerWidget {
             context.router.pop();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(context.l10n.snackbar_title_saved),
+                content: Text(context.l10n.common_save_suceeded),
                 backgroundColor: Colors.green,
               ),
             );
           }
         },
         icon: const Icon(Icons.save),
-        label: const Text('保存'),
+        label: Text(
+          context.l10n.common_save,
+          style: context.textTheme.labelMedium?.copyWith(
+            color: Colors.white,
+          ),
+        ),
       ),
     );
   }
@@ -453,10 +500,11 @@ class EventDetailPage extends HookConsumerWidget {
     ];
   }
 
-  List<Widget> _buildButtonArea({
+  List<Widget> _buildParticipationToggleArea({
     required BuildContext context,
     required ParticipationType selectedParticipationType,
     required List<ParticipationType> availableParticipationTypes,
+    required GlobalKey participationAreaKey,
     required Function(ParticipationType participationType) onClickButton,
   }) {
     final List<Widget> buttons = <Widget>[];
@@ -509,6 +557,7 @@ class EventDetailPage extends HookConsumerWidget {
 
     return <Widget>[
       Container(
+        key: participationAreaKey,
         decoration: BoxDecoration(
           color: context.colorScheme.secondaryContainer,
           borderRadius: BorderRadius.circular(24),

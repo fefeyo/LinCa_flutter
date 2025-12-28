@@ -36,7 +36,12 @@ class TradedLincaListPage extends HookConsumerWidget {
     }, const <Object?>[]);
 
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.traded_linca_list_title)),
+      appBar: AppBar(
+        title: Text(
+          context.l10n.traded_linca_list_title,
+          style: context.textTheme.titleMedium,
+        ),
+      ),
       body: isLoading.value
           ? const Center(
               child: CircularProgressIndicator(),

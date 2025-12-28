@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/network/controller/participation_controller.dart';
 import 'package:linca_otaku_support/core/network/controller/user_event_controller.dart';
+import 'package:linca_otaku_support/core/network/model/participation_info.dart';
 import 'package:linca_otaku_support/core/network/providers.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
 import 'package:linca_otaku_support/core/widgets/common/common_simple_dialog.dart';
@@ -24,9 +26,19 @@ class CreatedEventListPage extends HookConsumerWidget {
         ref.watch(createdEventListViewModelProvider);
     final UserEventController userEventController =
         ref.read(userEventControllerProvider.notifier);
+    final Map<LincaEvent, ParticipationInfo> participations =
+        ref.watch(participationControllerProvider).value ??
+            <LincaEvent, ParticipationInfo>{};
+    final ParticipationController participationController =
+        ref.read(participationControllerProvider.notifier);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('作成済みイベント一覧')),
+      appBar: AppBar(
+        title: Text(
+          '作成済みイベント一覧',
+          style: context.textTheme.titleMedium,
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         child: state.events.isNotEmpty
@@ -37,8 +49,15 @@ class CreatedEventListPage extends HookConsumerWidget {
                   return _buildEventCardWithDelete(
                     context: context,
                     event: event,
-                    onDelete: () =>
-                        userEventController.deleteEvent(event: event),
+                    onDelete: () {
+                      userEventController.deleteEvent(event: event);
+                      final ParticipationInfo? participation =
+                          participations[event];
+                      if (participation != null) {
+                        participationController.deleteParticipation(
+                            event, participation);
+                      }
+                    },
                   );
                 },
                 separatorBuilder: (BuildContext context, int index) =>

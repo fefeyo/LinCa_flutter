@@ -10,70 +10,41 @@ import 'package:linca_otaku_support/core/utils/providers.dart';
 import '../../../core/router/app_router.gr.dart';
 import '../../../core/utils/context_extension.dart';
 import '../../../features/create_event/data/create_event_type.dart';
+import '../../utils/coach_manager.dart';
 
-class AddEventBottomSheet extends HookConsumerWidget {
+class AddEventBottomSheet extends HookConsumerWidget with CoachManager {
   const AddEventBottomSheet({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final GlobalKey<State<StatefulWidget>> selectFromOfficialEventKey =
         useMemoized(() => GlobalKey());
-    final GlobalKey<State<StatefulWidget>> selectFromOriginalEventKey =
-        useMemoized(() => GlobalKey());
-    final GlobalKey<State<StatefulWidget>> createPublicEventKey =
-        useMemoized(() => GlobalKey());
-    final GlobalKey<State<StatefulWidget>> createPrivateEventKey =
-        useMemoized(() => GlobalKey());
 
     final List<TutorialStep> steps = <TutorialStep>[
       TutorialStep(
         targetKey: selectFromOfficialEventKey,
-        title: context.l10n.add_event_official_title,
-        description: context.l10n.add_event_official_description,
+        title: context.l10n.coach_step3_title,
+        description: context.l10n.coach_step3_description,
         tag: 'official_event',
-      ),
-      TutorialStep(
-        targetKey: selectFromOriginalEventKey,
-        title: context.l10n.add_event_original_title,
-        description: context.l10n.add_event_original_description,
-        tag: 'original_event',
-      ),
-      TutorialStep(
-        targetKey: createPublicEventKey,
-        title: context.l10n.add_event_create_public_title,
-        description: context.l10n.add_event_create_public_description,
-        tag: 'create_public',
-      ),
-      TutorialStep(
-        targetKey: createPrivateEventKey,
-        title: context.l10n.add_event_create_private_title,
-        description: context.l10n.add_event_create_private_description,
-        tag: 'create_private',
       ),
     ];
 
     useEffect(() {
       Future<void>.microtask(() async {
+        if (!context.mounted) return;
         final PreferencesService preferences =
             ref.read(preferencesServiceProvider);
-        final bool hasSeenTutorial = await preferences.hasSeenTutorial();
-        if (!hasSeenTutorial) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            Future<void>.delayed(const Duration(milliseconds: 200), () {
-              if (context.mounted) {
-                TutorialOverlay(
-                  context: context,
-                  steps: steps,
-                  finshText: context.l10n.common_finish,
-                  onFinish: () => preferences.markTutorialAsSeen(),
-                  skipText: context.l10n.common_skip,
-                  onSkip: () => preferences.markTutorialAsSeen(),
-                  nextText: context.l10n.common_next,
-                ).show();
-              }
-            });
-          });
-        }
+        showIfNeeded(
+          context: context,
+          preferences: preferences,
+          steps: steps,
+          onComplete: () => transitPage(
+            context: context,
+            routeInfo: ChooseEventRoute(
+              eventType: EventType.official,
+            ),
+          ),
+        );
       });
 
       return null;
@@ -115,7 +86,6 @@ class AddEventBottomSheet extends HookConsumerWidget {
                   ),
                   const SizedBox(height: 12),
                   ListTile(
-                    key: selectFromOriginalEventKey,
                     tileColor: context.colorScheme.surface,
                     leading: const Icon(Icons.diversity_3),
                     title: Text(
@@ -131,7 +101,6 @@ class AddEventBottomSheet extends HookConsumerWidget {
                   ),
                   const SizedBox(height: 12),
                   ListTile(
-                    key: createPublicEventKey,
                     tileColor: context.colorScheme.surface,
                     leading: const Icon(Icons.public),
                     title: Text(
@@ -146,7 +115,6 @@ class AddEventBottomSheet extends HookConsumerWidget {
                   ),
                   const SizedBox(height: 12),
                   ListTile(
-                    key: createPrivateEventKey,
                     tileColor: context.colorScheme.surface,
                     leading: const Icon(Icons.lock),
                     title: Text(
