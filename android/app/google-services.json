@@ -14,11 +14,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "630270810691-o1qo7tid48c0rj66bga3gp787fgadqne.apps.googleusercontent.com",
+          "client_id": "630270810691-218sv216au9sc0frcs0q190f46jncp3c.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.fefeyo.linca",
-            "certificate_hash": "27397a9e08cfcec8cb75fa15ea7c52f53a834ede"
+            "certificate_hash": "694a364a03899091f574dcd796c32ab9c4d1ead8"
+          }
+        },
+        {
+          "client_id": "630270810691-cg9col7rnjj5r6b28kobe3aam354etr1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fefeyo.linca",
+            "certificate_hash": "b1412041175067fd5b7cf153d808707be4694270"
           }
         },
         {

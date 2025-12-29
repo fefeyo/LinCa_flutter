@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/network/controller/linca_controller.dart';
 import 'package:linca_otaku_support/core/utils/linca_event_extension.dart';
@@ -56,6 +57,7 @@ class EventController extends LincaController<List<LincaEvent>> {
         tags: event.tagIds
             .map((String id) => tagsMap[id])
             .whereType<Tag>()
+            .sorted((Tag a, Tag b) => a.order.compareTo(b.order))
             .toList(),
         venue: venuesMap[event.venueId] ?? const Venue(),
         group: groupsMap[event.organizer] ?? const Group(),

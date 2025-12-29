@@ -11,16 +11,25 @@ final StateNotifierProvider<MyEventViewModel, MyEventState>
     myEventViewModelProvider =
     StateNotifierProvider<MyEventViewModel, MyEventState>((Ref ref) {
   final Map<LincaEvent, ParticipationInfo> myEvents =
-      ref.watch(participationControllerProvider).value ??
+      ref.read(participationControllerProvider).value ??
           <LincaEvent, ParticipationInfo>{};
 
-  return MyEventViewModel(myEvents.sort());
+  final MyEventViewModel viewModel = MyEventViewModel(myEvents.sort());
+
+  ref.listen(participationControllerProvider,
+      (_, AsyncValue<Map<LincaEvent, ParticipationInfo>> next) {
+    final Map<LincaEvent, ParticipationInfo>? newParticipations = next.value;
+    if (newParticipations != null) {
+      viewModel.updateParticipations(newParticipations);
+    }
+  });
+
+  return viewModel;
 });
 
 class MyEventViewModel extends StateNotifier<MyEventState> {
-  MyEventViewModel(this.myEvents) : super(MyEventState(sortedEvents: myEvents));
-
-  final Map<LincaEvent, ParticipationInfo> myEvents;
+  MyEventViewModel(Map<LincaEvent, ParticipationInfo> myEvents)
+      : super(MyEventState(initialEvents: myEvents));
 
   void setFilterSettings(FilterSettings filterSettings) {
     state = state.copyWith(
@@ -39,7 +48,7 @@ class MyEventViewModel extends StateNotifier<MyEventState> {
   }
 
   Map<LincaEvent, ParticipationInfo> sortEvents(FilterSettings filterSettings) {
-    List<LincaEvent> events = myEvents.keys.toList();
+    List<LincaEvent> events = state.initialEvents.keys.toList();
 
     if (filterSettings.isHiddenOriginalEvent) {
       events = events
@@ -61,7 +70,7 @@ class MyEventViewModel extends StateNotifier<MyEventState> {
 
     if (!filterSettings.isShowOfficialEvent &&
         !filterSettings.isShowOriginalEvent) {
-      events = myEvents.keys.toList();
+      events = state.initialEvents.keys.toList();
     }
 
     events = events
@@ -75,12 +84,27 @@ class MyEventViewModel extends StateNotifier<MyEventState> {
     for (final LincaEvent event in events) {
       if (filterSettings.participationFilters.isNotEmpty &&
           !filterSettings.participationFilters
-              .contains(myEvents[event]!.participationType)) {
+              .contains(state.initialEvents[event]!.participationType)) {
         continue;
       }
-      sortedMap[event] = myEvents[event]!;
+      sortedMap[event] = state.initialEvents[event]!;
     }
 
     return sortedMap;
+  }
+
+  void updateParticipations(
+    Map<LincaEvent, ParticipationInfo> newParticipations,
+  ) {
+    final Map<LincaEvent, ParticipationInfo> updatedEvents =
+        Map<LincaEvent, ParticipationInfo>.of(newParticipations);
+
+    state = state.copyWith(
+      initialEvents: updatedEvents,
+    );
+
+    state = state.copyWith(
+      sortedEvents: sortEvents(state.filterSettings),
+    );
   }
 }
