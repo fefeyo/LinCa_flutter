@@ -32,29 +32,27 @@ class SeriesGraphPage extends HookConsumerWidget {
     final HighlightState state = ref.watch(highlightViewModelProvider);
 
     final List<Tag> seriesTags =
-        (ref
-            .read(tagControllerProvider)
-            .value ?? <Tag>[]).seriesTags;
+        (ref.read(tagControllerProvider).value ?? <Tag>[]).seriesTags;
 
     final Map<String, int> counts =
         state.filteredMyEvents.seriesParticipationCounts;
 
     final List<PieChartSectionData> sections = seriesTags
         .map((Tag tag) {
-      final int count = counts[tag.slug] ?? 0;
-      if (count == 0) return null;
+          final int count = counts[tag.slug] ?? 0;
+          if (count == 0) return null;
 
-      return PieChartSectionData(
-        color: tag.getSeriesColor(context),
-        value: count.toDouble(),
-        title: '$count',
-        radius: 100,
-        titleStyle: context.textTheme.titleMedium?.copyWith(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-        ),
-      );
-    })
+          return PieChartSectionData(
+            color: tag.getSeriesColor(context),
+            value: count.toDouble(),
+            title: '$count',
+            radius: 100,
+            titleStyle: context.textTheme.titleMedium?.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          );
+        })
         .whereType<PieChartSectionData>()
         .toList();
 
@@ -67,16 +65,13 @@ class SeriesGraphPage extends HookConsumerWidget {
           bottom: 0,
           child: Padding(
             padding: const EdgeInsets.all(16),
-            child: RepaintBoundary(
-              key: repaintKey,
-              child: Column(
-                children: <Widget>[
-                  Expanded(
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: RepaintBoundary(
+                    key: repaintKey,
                     child: Container(
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width - 32,
+                      width: MediaQuery.of(context).size.width - 32,
                       padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(24),
@@ -99,7 +94,6 @@ class SeriesGraphPage extends HookConsumerWidget {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-
                           /// ---------- 見出し ----------
                           Text(
                             context.l10n.highlight_series_breakdown_title(
@@ -142,7 +136,7 @@ class SeriesGraphPage extends HookConsumerWidget {
 
                               return Padding(
                                 padding:
-                                const EdgeInsets.symmetric(vertical: 4),
+                                    const EdgeInsets.symmetric(vertical: 4),
                                 child: Row(
                                   children: <Widget>[
                                     Container(
@@ -186,28 +180,28 @@ class SeriesGraphPage extends HookConsumerWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () => context.router.pop(),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
+                ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => context.router.pop(),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
                       ),
-                      child: Text(
-                        context.l10n.highlight_end,
-                        style: context.textTheme.titleMedium?.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    ),
+                    child: Text(
+                      context.l10n.highlight_end,
+                      style: context.textTheme.titleMedium?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -238,15 +232,17 @@ class SeriesGraphPage extends HookConsumerWidget {
 
   Future<Uint8List> _capture(GlobalKey key) async {
     final RenderRepaintBoundary boundary =
-    key.currentContext!.findRenderObject() as RenderRepaintBoundary;
+        key.currentContext!.findRenderObject() as RenderRepaintBoundary;
     final ui.Image image = await boundary.toImage(pixelRatio: 3);
     final ByteData byteData =
-    (await image.toByteData(format: ui.ImageByteFormat.png))!;
+        (await image.toByteData(format: ui.ImageByteFormat.png))!;
     return byteData.buffer.asUint8List();
   }
 
-  Future<void> _shareImage(
-      {required BuildContext context, required Uint8List pngBytes,}) async {
+  Future<void> _shareImage({
+    required BuildContext context,
+    required Uint8List pngBytes,
+  }) async {
     final XFile file = XFile.fromData(
       pngBytes,
       mimeType: 'image/png',

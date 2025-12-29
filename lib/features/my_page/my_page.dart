@@ -207,7 +207,6 @@ class MyPage extends HookConsumerWidget {
                   );
                   if (comfirmed == true && context.mounted) {
                     authController.signOut();
-                    ref.invalidate(participationControllerProvider);
                     preferencesService.clearUserSignInData();
                     context.router.replace(const LoginRoute());
                   }
