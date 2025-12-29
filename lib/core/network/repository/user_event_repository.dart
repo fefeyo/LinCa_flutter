@@ -132,4 +132,25 @@ class UserEventRepository extends FirestoreRepository<UnOfficialEvent> {
       'updatedAt': FieldValue.serverTimestamp()
     });
   }
+
+  Future<void> deleteMyPrivateEvents(String? userId) async {
+    if (userId == null) return;
+
+    final CollectionReference<Map<String, dynamic>> col =
+    fireStore.collection(AppConstants.userEventPath);
+
+    final QuerySnapshot<Map<String, dynamic>> privateSnapshot = await col
+        .where('visibility', isEqualTo: false)
+        .where('createdBy', isEqualTo: userId)
+        .get();
+
+    final WriteBatch batch = fireStore.batch();
+
+    for (final QueryDocumentSnapshot<Map<String, dynamic>> doc
+    in privateSnapshot.docs) {
+      batch.delete(doc.reference);
+    }
+
+    await batch.commit();
+  }
 }

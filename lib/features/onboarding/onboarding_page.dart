@@ -94,6 +94,9 @@ class OnboardingPage extends HookConsumerWidget {
         );
       } else {
         await userController.updateDisplayName(onboardingState.nickname);
+        if (user?.user.bio.isEmpty == true) {
+          await userController.updateBio('よろしくお願いします！');
+        }
         final SharedPreferences sharedPreferences =
             await SharedPreferences.getInstance();
         sharedPreferences.setBool(AppConstants.hasSeenOnboarding, true);

@@ -80,7 +80,9 @@ class YearSelectPage extends HookConsumerWidget {
                           const SizedBox(height: 12),
                           DropdownButtonHideUnderline(
                             child: DropdownButton<String>(
-                              value: state.selectedYear,
+                              value: state.selectedYear.isEmpty
+                                  ? null
+                                  : state.selectedYear,
                               isDense: false,
                               style: context.textTheme.headlineMedium?.copyWith(
                                 fontWeight: FontWeight.bold,

@@ -29,7 +29,7 @@ final StateNotifierProvider<MyEventViewModel, MyEventState>
 
 class MyEventViewModel extends StateNotifier<MyEventState> {
   MyEventViewModel(Map<LincaEvent, ParticipationInfo> myEvents)
-      : super(MyEventState(initialEvents: myEvents));
+      : super(MyEventState(initialEvents: myEvents, sortedEvents: myEvents));
 
   void setFilterSettings(FilterSettings filterSettings) {
     state = state.copyWith(
