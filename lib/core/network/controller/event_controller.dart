@@ -59,7 +59,56 @@ class EventController extends AsyncNotifier<List<LincaEvent>> {
     return lincaEvents.sortWithDisplayOrder(DisplayOrder.newest);
   }
 
+<<<<<<< Updated upstream
   Future<List<Event>> fetchEvents() => eventRepository.fetchEvents();
 
   Future<List<Event>> getEvents() => eventRepository.getEvents();
+=======
+  Future<void> _refreshInBackground() async {
+    try {
+      final List<OfficialEvent> updated = await eventRepository.fetch();
+      if (updated.isEmpty) return;
+
+      final Map<String, Venue> venuesMap = {
+        for (final Venue venue
+            in ref.read(venueControllerProvider).value ?? <Venue>[])
+          venue.id: venue,
+      };
+      final Map<String, Tag> tagsMap = {
+        for (final Tag tag in ref.read(tagControllerProvider).value ?? <Tag>[])
+          tag.id: tag,
+      };
+      final Map<String, Group> groupsMap = {
+        for (final Group group
+            in ref.read(groupControllerProvider).value ?? <Group>[])
+          group.slug: group,
+      };
+
+      final List<LincaEvent> refreshed =
+          await Future.wait(updated.map((OfficialEvent event) async {
+        return LincaEvent(
+          event: event,
+          tags: event.tagIds
+              .map((String id) => tagsMap[id])
+              .whereType<Tag>()
+              .toList(),
+          venue: venuesMap[event.venueId] ?? const Venue(),
+          group: groupsMap[event.organizer] ?? const Group(),
+        );
+      }));
+
+      final Map<String, LincaEvent> merged = <String, LincaEvent>{
+        for (final LincaEvent event in state.value ?? <LincaEvent>[])
+          event.event.id: event,
+        for (final LincaEvent event in refreshed) event.event.id: event,
+      };
+
+      state = AsyncValue<List<LincaEvent>>.data(
+        merged.values.toList().sortWithDisplayOrder(),
+      );
+    } catch (error, stackTrace) {
+      state = AsyncValue<List<LincaEvent>>.error(error, stackTrace);
+    }
+  }
+>>>>>>> Stashed changes
 }
