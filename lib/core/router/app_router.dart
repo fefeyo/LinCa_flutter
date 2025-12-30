@@ -35,5 +35,6 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: SelectFavoriteTagRoute.page),
         AutoRoute(page: HighlightRoute.page),
         AutoRoute(page: LincaCalendarRoute.page),
+        AutoRoute(page: OutputParticipateEventsRoute.page),
       ];
 }

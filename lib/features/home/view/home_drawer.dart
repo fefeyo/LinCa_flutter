@@ -211,7 +211,7 @@ class HomeDrawer extends HookConsumerWidget
           ListTile(
             leading: const Icon(Icons.calendar_month),
             title: Text(
-              'イベントカレンダー',
+              'イベントカレンダー（beta）',
               style: context.textTheme.bodyMedium,
             ),
             onTap: () {
@@ -228,6 +228,16 @@ class HomeDrawer extends HookConsumerWidget
               logEvent(event: AnalyticsEvent.openHighLightClick);
 
               transitPage(const HighlightRoute());
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.privacy_tip_outlined),
+            title: Text(
+              '参加イベント出力画面（beta）',
+              style: context.textTheme.bodyMedium,
+            ),
+            onTap: () {
+              transitPage(const OutputParticipateEventsRoute());
             },
           ),
           ListTile(

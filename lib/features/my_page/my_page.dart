@@ -108,7 +108,7 @@ class MyPage extends HookConsumerWidget
               ),
               const SizedBox(height: 16),
               MyPageItem(
-                title: 'イベントカレンダー',
+                title: 'イベントカレンダー（beta）',
                 onClickItem: () {
                   context.router.push(const LincaCalendarRoute());
                 },
@@ -119,6 +119,12 @@ class MyPage extends HookConsumerWidget
                   logEvent(event: AnalyticsEvent.openHighLightClick);
 
                   context.router.push(const HighlightRoute());
+                },
+              ),
+              MyPageItem(
+                title: '参加イベント出力画面（beta）',
+                onClickItem: () {
+                  context.router.push(const OutputParticipateEventsRoute());
                 },
               ),
               MyPageItem(
