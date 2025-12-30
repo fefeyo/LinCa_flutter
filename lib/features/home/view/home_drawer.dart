@@ -222,6 +222,16 @@ class HomeDrawer extends StatelessWidget {
               );
             },
           ),
+          ListTile(
+            leading: const Icon(Icons.privacy_tip_outlined),
+            title: Text(
+              '参加イベント出力画面',
+              style: context.textTheme.bodyMedium,
+            ),
+            onTap: () {
+              transitPage(OutputParticipateEventsRoute());
+            },
+          ),
           const SizedBox(
             height: 16,
           ),
