@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/models/linca_user.dart';
-import 'package:linca_otaku_support/core/network/providers.dart';
 import 'package:linca_otaku_support/core/utils/linca_user_extension.dart';
 import 'package:linca_otaku_support/core/utils/preferences_service.dart';
 import 'package:linca_otaku_support/core/widgets/common/common_simple_dialog.dart';

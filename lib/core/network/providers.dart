@@ -1,30 +1,30 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:linca_otaku_support/core/models/linca_user.dart';
-import 'package:linca_otaku_support/core/network/controller/participation_controller.dart';
-import 'package:linca_otaku_support/core/network/controller/user_event_controller.dart';
-import 'package:linca_otaku_support/core/network/model/participation_info.dart';
-import 'package:linca_otaku_support/core/network/repository/participation_repository.dart';
-import 'package:linca_otaku_support/core/network/repository/user_event_repository.dart';
-import 'package:linca_otaku_support/core/utils/providers.dart';
 
 import '../auth/providers.dart';
 import '../models/linca_event.dart';
+import '../models/linca_user.dart';
+import '../utils/providers.dart';
 import 'controller/badge_controller.dart';
 import 'controller/event_controller.dart';
 import 'controller/friend_controller.dart';
 import 'controller/group_controller.dart';
+import 'controller/participation_controller.dart';
 import 'controller/tag_controller.dart';
 import 'controller/user_controller.dart';
+import 'controller/user_event_controller.dart';
 import 'controller/venue_controller.dart';
 import 'model/group.dart';
 import 'model/linca_badge.dart';
+import 'model/participation_info.dart';
 import 'model/tag.dart';
 import 'model/venue.dart';
 import 'repository/badge_repository.dart';
 import 'repository/event_repository.dart';
 import 'repository/friend_repository.dart';
 import 'repository/group_repository.dart';
+import 'repository/participation_repository.dart';
 import 'repository/tag_repository.dart';
+import 'repository/user_event_repository.dart';
 import 'repository/user_repository.dart';
 import 'repository/venue_repository.dart';
 
