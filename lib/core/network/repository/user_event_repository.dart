@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:linca_otaku_support/core/constants/app_constants.dart';
 import 'package:linca_otaku_support/core/network/model/event_base.dart';
 
@@ -64,8 +65,25 @@ class UserEventRepository extends FirestoreRepository<UnOfficialEvent> {
         ...privateServerSnapshot.docs.map(toEvent),
       ];
 
+      int cacheReadCount = 0;
+      int serverReadCount = 0;
+
+      cacheReadCount =
+          publicCacheSnapshot.docs.length +
+              privateCacheSnapshot.docs.length;
+
+      serverReadCount =
+          publicServerSnapshot.docs.length +
+              privateServerSnapshot.docs.length;
+
+      debugPrint(
+        '[Firestore READ][user_events] '
+            'cache=$cacheReadCount '
+            'server=$serverReadCount',
+      );
+
       // 最後に同期時間を更新
-      preferences.updateLastUpdatedAt(AppConstants.friendLastFetchedAtKey);
+      preferences.updateLastUpdatedAt(AppConstants.userEventLastFetchedAtKey);
     } catch (e) {
       return <UnOfficialEvent>[];
     }

@@ -2,12 +2,17 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/constants/analytics_event.dart';
+import 'package:linca_otaku_support/core/constants/analytics_screen.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
+import 'package:linca_otaku_support/core/utils/event_analytics_manager.dart';
 import 'package:linca_otaku_support/core/utils/linca_event_extension.dart';
+import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
 import 'package:linca_otaku_support/features/highlight/data/highlight_state.dart';
 import 'package:linca_otaku_support/features/highlight/view_model/highlight_view_model.dart';
 
-class YearSelectPage extends HookConsumerWidget {
+class YearSelectPage extends HookConsumerWidget
+    with ScreenAnalyticsManager, EventAnalyticsManager {
   const YearSelectPage({
     super.key,
     required this.onNext,
@@ -17,6 +22,8 @@ class YearSelectPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    logScreen(AnalyticsScreen.highlightYearSelect);
+
     final HighlightState state = ref.watch(highlightViewModelProvider);
     final HighlightViewModel viewModel =
         ref.read(highlightViewModelProvider.notifier);
@@ -99,6 +106,13 @@ class YearSelectPage extends HookConsumerWidget {
                                   )
                                   .toList(),
                               onChanged: (String? year) {
+                                logEvent(
+                                  event: AnalyticsEvent.yearSelectSelectYear,
+                                  params: <String, Object>{
+                                    'selectedYear': year ?? 'no value selected'
+                                  },
+                                );
+
                                 if (year != null) {
                                   viewModel.setSelectedYear(year);
                                 }

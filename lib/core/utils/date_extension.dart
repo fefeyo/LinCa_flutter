@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 extension DateTimeExtention on DateTime {
-  String simpleDateFormat() => DateFormat('yyyy/MM/dd').format(this);
+  String simpleDateFormat() => DateFormat('yyyy/MM/dd(E)', 'ja_JP').format(this);
 
   bool get isToday {
     final DateTime now = DateTime.now();

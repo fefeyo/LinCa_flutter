@@ -1,4 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/constants/participation_type.dart';
 import '../../../core/models/linca_event.dart';
 import '../../../core/network/model/participation_info.dart';
 import '../../../core/network/providers.dart';
@@ -24,6 +25,9 @@ class HighlightViewModel extends StateNotifier<HighlightState> {
     final Map<LincaEvent, ParticipationInfo> filteredMyEvents = state
         .myEvents.entries
         .where((MapEntry<LincaEvent, ParticipationInfo> entry) {
+      if (entry.value.participationType == ParticipationType.absent) {
+        return false;
+      }
       final DateTime? eventDate = entry.key.event.date;
       if (eventDate == null) return false;
 

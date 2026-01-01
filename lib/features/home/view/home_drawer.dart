@@ -1,18 +1,24 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/constants/analytics_screen.dart';
 import 'package:linca_otaku_support/core/models/linca_user.dart';
+import 'package:linca_otaku_support/core/utils/event_analytics_manager.dart';
 import 'package:linca_otaku_support/core/utils/group_extension.dart';
 import 'package:linca_otaku_support/core/utils/linca_user_extension.dart';
+import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../core/constants/analytics_event.dart';
 import '../../../core/utils/context_extension.dart';
 import '../../../core/asset_gen/assets.gen.dart';
 import '../../../core/router/app_router.gr.dart';
 import '../../../core/widgets/bottom_sheet/my_qr_bottom_sheet.dart';
 
-class HomeDrawer extends StatelessWidget {
+class HomeDrawer extends HookConsumerWidget
+    with ScreenAnalyticsManager, EventAnalyticsManager {
   const HomeDrawer({
     super.key,
     required this.lincaUser,
@@ -21,7 +27,9 @@ class HomeDrawer extends StatelessWidget {
   final LincaUser lincaUser;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    logScreen(AnalyticsScreen.homeDrawer);
+
     void transitPage(PageRouteInfo routeInfo) {
       context.router.pop();
       context.router.push(routeInfo);
@@ -93,7 +101,14 @@ class HomeDrawer extends StatelessWidget {
               context.l10n.my_event_title,
               style: context.textTheme.bodyMedium,
             ),
-            onTap: () => changeTab(0),
+            onTap: () {
+              logEvent(
+                event: AnalyticsEvent.homeTabClick,
+                params: <String, Object>{'index': 0},
+              );
+
+              changeTab(0);
+            },
           ),
           ListTile(
             leading: const Icon(Icons.event_note),
@@ -101,7 +116,14 @@ class HomeDrawer extends StatelessWidget {
               context.l10n.recent_event_title,
               style: context.textTheme.bodyMedium,
             ),
-            onTap: () => changeTab(1),
+            onTap: () {
+              logEvent(
+                event: AnalyticsEvent.homeTabClick,
+                params: <String, Object>{'index': 1},
+              );
+
+              changeTab(1);
+            },
           ),
           ListTile(
             leading: const Icon(Icons.person),
@@ -109,7 +131,14 @@ class HomeDrawer extends StatelessWidget {
               context.l10n.my_page_title,
               style: context.textTheme.bodyMedium,
             ),
-            onTap: () => changeTab(2),
+            onTap: () {
+              logEvent(
+                event: AnalyticsEvent.homeTabClick,
+                params: <String, Object>{'index': 2},
+              );
+
+              changeTab(2);
+            },
           ),
           const Divider(),
           Padding(
@@ -127,9 +156,11 @@ class HomeDrawer extends StatelessWidget {
               context.l10n.edit_my_linca_title,
               style: context.textTheme.bodyMedium,
             ),
-            onTap: () => transitPage(
-              LincaEditRoute(userProfile: lincaUser.userProfile),
-            ),
+            onTap: () {
+              logEvent(event: AnalyticsEvent.openEditMyLincaCardClick);
+
+              transitPage(LincaEditRoute(userProfile: lincaUser.userProfile));
+            },
           ),
           ListTile(
             leading: const Icon(Icons.recent_actors),
@@ -137,7 +168,11 @@ class HomeDrawer extends StatelessWidget {
               context.l10n.traded_linca_list_title,
               style: context.textTheme.bodyMedium,
             ),
-            onTap: () => transitPage(const TradedLincaListRoute()),
+            onTap: () {
+              logEvent(event: AnalyticsEvent.openTradedLincaCardClick);
+
+              transitPage(const TradedLincaListRoute());
+            },
           ),
           ListTile(
             leading: const Icon(Icons.qr_code_scanner),
@@ -145,7 +180,11 @@ class HomeDrawer extends StatelessWidget {
               context.l10n.my_qr_code_title,
               style: context.textTheme.bodyMedium,
             ),
-            onTap: () => MyQRBottomSheet.show(context),
+            onTap: () {
+              logEvent(event: AnalyticsEvent.openLincaQRClick);
+
+              MyQRBottomSheet.show(context);
+            },
           ),
           ListTile(
             leading: const Icon(Icons.emoji_events),
@@ -153,7 +192,11 @@ class HomeDrawer extends StatelessWidget {
               context.l10n.acquired_badges_title,
               style: context.textTheme.bodyMedium,
             ),
-            onTap: () => transitPage(AcquiredBadgeRoute()),
+            onTap: () {
+              logEvent(event: AnalyticsEvent.openAcquiredBadgeListClick);
+
+              transitPage(AcquiredBadgeRoute());
+            },
           ),
           const Divider(),
           Padding(
@@ -171,7 +214,11 @@ class HomeDrawer extends StatelessWidget {
               context.l10n.highlight_title,
               style: context.textTheme.bodyMedium,
             ),
-            onTap: () => transitPage(const HighlightRoute()),
+            onTap: () {
+              logEvent(event: AnalyticsEvent.openHighLightClick);
+
+              transitPage(const HighlightRoute());
+            },
           ),
           ListTile(
             leading: const Icon(Icons.edit_calendar),
@@ -179,7 +226,11 @@ class HomeDrawer extends StatelessWidget {
               context.l10n.created_events_title,
               style: context.textTheme.bodyMedium,
             ),
-            onTap: () => transitPage(const CreatedEventListRoute()),
+            onTap: () {
+              logEvent(event: AnalyticsEvent.openCreatedEventListClick);
+
+              transitPage(const CreatedEventListRoute());
+            },
           ),
           const Divider(),
           Padding(
@@ -197,7 +248,11 @@ class HomeDrawer extends StatelessWidget {
               context.l10n.app_settings_title,
               style: context.textTheme.bodyMedium,
             ),
-            onTap: () => openAppSettings(),
+            onTap: () {
+              logEvent(event: AnalyticsEvent.openAppSettingsClick);
+
+              openAppSettings();
+            },
           ),
           const Divider(),
           Padding(
@@ -216,6 +271,8 @@ class HomeDrawer extends StatelessWidget {
               style: context.textTheme.bodyMedium,
             ),
             onTap: () {
+              logEvent(event: AnalyticsEvent.openPrivacyPolicyClick);
+
               launchUrl(
                 Uri.parse(context.l10n.privacy_policy_url),
                 mode: LaunchMode.externalApplication,

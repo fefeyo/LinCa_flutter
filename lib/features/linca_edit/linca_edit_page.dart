@@ -4,6 +4,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/auth/providers.dart';
+import 'package:linca_otaku_support/core/constants/analytics_event.dart';
+import 'package:linca_otaku_support/core/constants/analytics_screen.dart';
 import 'package:linca_otaku_support/core/constants/app_constants.dart';
 import 'package:linca_otaku_support/core/models/favorite_badges.dart';
 import 'package:linca_otaku_support/core/models/user_profile.dart';
@@ -12,9 +14,11 @@ import 'package:linca_otaku_support/core/network/model/group.dart';
 import 'package:linca_otaku_support/core/network/model/linca_badge.dart';
 import 'package:linca_otaku_support/core/network/providers.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
+import 'package:linca_otaku_support/core/utils/event_analytics_manager.dart';
 import 'package:linca_otaku_support/core/utils/favorite_badges_extension.dart';
 import 'package:linca_otaku_support/core/utils/image_uploader.dart';
 import 'package:linca_otaku_support/core/utils/map_value_extension.dart';
+import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
 import 'package:linca_otaku_support/core/widgets/common/common_simple_dialog.dart';
 import 'package:linca_otaku_support/features/linca_edit/data/sns_type.dart';
 import 'package:reorderables/reorderables.dart';
@@ -26,7 +30,8 @@ import 'data/linca_edit_state.dart';
 import 'view_model/linca_edit_view_model.dart';
 
 @RoutePage()
-class LincaEditPage extends HookConsumerWidget {
+class LincaEditPage extends HookConsumerWidget
+    with ScreenAnalyticsManager, EventAnalyticsManager {
   const LincaEditPage({
     super.key,
     required this.userProfile,
@@ -36,6 +41,8 @@ class LincaEditPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    logScreen(AnalyticsScreen.editMyLincaCard);
+
     final LincaEditState state = ref.watch(lincaEditViewModelProvider);
     final LincaEditViewModel viewModel =
         ref.read(lincaEditViewModelProvider.notifier);
@@ -61,6 +68,8 @@ class LincaEditPage extends HookConsumerWidget {
     }, const <Object?>[]);
 
     void updateUserData() async {
+      logEvent(event: AnalyticsEvent.editMyLincaSaveClick);
+
       final User user = state.userProfile?.user.copyWith(
             photoUrl: state.userProfile?.user.photoUrl ?? '',
             favoriteGroups: state.userProfile?.favoriteGroups

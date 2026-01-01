@@ -16,16 +16,25 @@ class BadgeController extends LincaController<List<LincaBadge>> {
     final List<LincaBadge> badges = await badgeRepository.get();
 
     if (badges.isNotEmpty) {
-      badgeRepository.refreshInBackground(
-        current: state.value ?? <LincaBadge>[],
-        onChanged: (List<LincaBadge> updatedBadges) {
-          state = AsyncValue<List<LincaBadge>>.data(updatedBadges);
-        },
-      );
+      unawaited(_refreshInBackground(badges));
     } else {
       badges.addAll(await badgeRepository.fetch());
     }
 
     return badges;
+  }
+
+  Future<void> _refreshInBackground(List<LincaBadge> current) async {
+    final List<LincaBadge> fetched =
+        await badgeRepository.fetch(); // 差分 or 全件
+
+    badgeRepository.refreshInBackground(
+      current: current,
+      updated: fetched,
+      getId: (LincaBadge badge) => badge.id,
+      onChanged: (List<LincaBadge> merged) {
+        state = AsyncValue<List<LincaBadge>>.data(merged);
+      },
+    );
   }
 }

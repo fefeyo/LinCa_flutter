@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/constants/analytics_event.dart';
+import 'package:linca_otaku_support/core/constants/analytics_screen.dart';
 import 'package:linca_otaku_support/core/constants/app_constants.dart';
 import 'package:linca_otaku_support/core/models/linca_event.dart';
 import 'package:linca_otaku_support/core/network/controller/participation_controller.dart';
@@ -11,6 +13,8 @@ import 'package:linca_otaku_support/core/network/model/tag.dart';
 import 'package:linca_otaku_support/core/network/providers.dart';
 import 'package:linca_otaku_support/core/router/app_router.gr.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
+import 'package:linca_otaku_support/core/utils/event_analytics_manager.dart';
+import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
 import 'package:linca_otaku_support/core/widgets/common/required_rich_text.dart';
 import 'package:uuid/uuid.dart';
 
@@ -19,7 +23,8 @@ import '../../core/network/model/participation_info.dart';
 import 'data/create_event_type.dart';
 
 @RoutePage()
-class CreateEventPage extends HookConsumerWidget {
+class CreateEventPage extends HookConsumerWidget
+    with ScreenAnalyticsManager, EventAnalyticsManager {
   const CreateEventPage({
     super.key,
     required this.createEventType,
@@ -33,6 +38,20 @@ class CreateEventPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    if (createEventType == CreateEventType.public) {
+      if (isEditMode) {
+        logScreen(AnalyticsScreen.editPublicEvent);
+      } else {
+        logScreen(AnalyticsScreen.createPublicEvent);
+      }
+    } else {
+      if (isEditMode) {
+        logScreen(AnalyticsScreen.editPrivateEvent);
+      } else {
+        logScreen(AnalyticsScreen.createPrivateEvent);
+      }
+    }
+
     final String title = switch (createEventType) {
       CreateEventType.public =>
         isEditMode ? '公開イベント編集' : context.l10n.create_public_event_title,
@@ -82,6 +101,12 @@ class CreateEventPage extends HookConsumerWidget {
           IconButton(
             icon: const Icon(Icons.save),
             onPressed: () async {
+              logEvent(
+                event: isEditMode
+                    ? AnalyticsEvent.editEventSaveClick
+                    : AnalyticsEvent.createEventSaveClick,
+              );
+
               if (formKey.value.currentState?.validate() == false) return;
               final String errorMessage;
               if (titleController.text.isEmpty) {

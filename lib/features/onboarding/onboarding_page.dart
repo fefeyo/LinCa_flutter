@@ -3,7 +3,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/constants/analytics_event.dart';
+import 'package:linca_otaku_support/core/constants/analytics_screen.dart';
 import 'package:linca_otaku_support/core/models/linca_user.dart';
+import 'package:linca_otaku_support/core/utils/event_analytics_manager.dart';
+import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
 import 'package:linca_otaku_support/features/onboarding/view/tutorial_custom_step_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -19,11 +23,14 @@ import 'view/tutorial_input_nickname_page.dart';
 import 'view_model/onboarding_view_model.dart';
 
 @RoutePage()
-class OnboardingPage extends HookConsumerWidget {
+class OnboardingPage extends HookConsumerWidget
+    with ScreenAnalyticsManager, EventAnalyticsManager {
   const OnboardingPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    logScreen(AnalyticsScreen.onboarding);
+
     final OnboardingState onboardingState =
         ref.watch(onboardingViewModelProvider);
     final PageController controller = PageController();
@@ -100,6 +107,8 @@ class OnboardingPage extends HookConsumerWidget {
         ref.invalidate(userControllerProvider);
         ref.invalidate(participationControllerProvider);
         if (context.mounted) {
+          logEvent(event: AnalyticsEvent.onboardingComplete);
+
           context.router.push(const HomeRoute());
         }
       }

@@ -15,15 +15,24 @@ class VenueController extends LincaController<List<Venue>> {
     final List<Venue> venues = await venueRepository.get();
 
     if (venues.isNotEmpty) {
-      venueRepository.refreshInBackground(
-          current: state.value ?? <Venue>[],
-          onChanged: (List<Venue> venues) {
-            state = AsyncValue<List<Venue>>.data(venues);
-          });
+      unawaited(_refreshInBackground(venues));
     } else {
       venues.addAll(await venueRepository.fetch());
     }
 
     return venues;
+  }
+
+  Future<void> _refreshInBackground(List<Venue> current) async {
+    final List<Venue> updated = await venueRepository.fetch();
+
+    venueRepository.refreshInBackground(
+      current: current,
+      updated: updated,
+      getId: (Venue venue) => venue.id,
+      onChanged: (List<Venue> venues) {
+        state = AsyncValue<List<Venue>>.data(venues);
+      },
+    );
   }
 }

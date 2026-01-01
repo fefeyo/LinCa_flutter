@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:linca_otaku_support/core/utils/preferences_service.dart';
 
 abstract class FirestoreRepository<T> {
@@ -34,18 +35,31 @@ abstract class FirestoreRepository<T> {
 
     try {
       final QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await query.get();
+      await query.get();
+
+      final int readCount = querySnapshot.docs.length;
+
+      debugPrint(
+        '[Firestore READ] '
+            'collection=$collectionPath '
+            'read=$readCount '
+            'diffFetch=${lastUpdatedAtKey != null}',
+      );
+
       final List<T> updatedResult = querySnapshot.docs
           .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) =>
-              fromJson(<String, dynamic>{...doc.data(), 'id': doc.id}))
+          fromJson(<String, dynamic>{...doc.data(), 'id': doc.id}))
           .toList();
+
       if (lastUpdatedAtKey != null) {
         preferences.updateLastUpdatedAt(lastUpdatedAtKey);
       }
+
       return updatedResult;
     } catch (e) {
       return <T>[];
     }
+
   }
 
   /// ================================
@@ -67,16 +81,25 @@ abstract class FirestoreRepository<T> {
 
   Future<void> refreshInBackground({
     required List<T> current,
-    required Function(List<T> updated) onChanged,
+    required List<T> updated,
+    required String Function(T item) getId,
+    required Function(List<T> merged) onChanged,
   }) async {
     try {
-      final List<T> updated = await fetch();
-
-      if (updated.isNotEmpty) {
-        onChanged(<T>[...current, ...updated]);
+      if (updated.isEmpty) {
+        onChanged(current);
+        return;
       }
+
+      final Map<String, T> merged = <String, T>{
+        for (final T item in current) getId(item): item,
+        for (final T item in updated) getId(item): item,
+      };
+
+      onChanged(merged.values.toList());
     } catch (_) {
       onChanged(current);
     }
   }
+
 }

@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/constants/analytics_event.dart';
+import 'package:linca_otaku_support/core/constants/analytics_screen.dart';
 import 'package:linca_otaku_support/core/constants/app_constants.dart';
 import 'package:linca_otaku_support/core/models/linca_user.dart';
 import 'package:linca_otaku_support/core/network/controller/user_controller.dart';
 import 'package:linca_otaku_support/core/network/providers.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
+import 'package:linca_otaku_support/core/utils/event_analytics_manager.dart';
+import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
 import 'package:linca_otaku_support/core/widgets/bottom_sheet/my_qr_bottom_sheet.dart';
 import 'package:linca_otaku_support/features/my_page/view/linca_vertical.dart';
 
@@ -15,11 +19,14 @@ import 'data/traded_linca_list_state.dart';
 import 'view_model/traded_linca_list_view_model.dart';
 
 @RoutePage()
-class TradedLincaListPage extends HookConsumerWidget {
+class TradedLincaListPage extends HookConsumerWidget
+    with ScreenAnalyticsManager, EventAnalyticsManager {
   const TradedLincaListPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    logScreen(AnalyticsScreen.tradedLincaCardList);
+
     final TradedLincaListState state =
         ref.watch(tradedLincaListViewModelProvider);
     final UserController userController =
@@ -60,17 +67,19 @@ class TradedLincaListPage extends HookConsumerWidget {
                     itemBuilder: (BuildContext context, int index) {
                       final LincaUser lincaUser = state.friends[index];
                       return LincaVertical(
-                        lincaUser: lincaUser,
-                        animationTag:
-                            '${AppConstants.heroTagLincaCardFriend}$index',
-                        onTap: (LincaUser lincaUser, String animationTag) =>
+                          lincaUser: lincaUser,
+                          animationTag:
+                              '${AppConstants.heroTagLincaCardFriend}$index',
+                          onTap: (LincaUser lincaUser, String animationTag) {
+                            logEvent(event: AnalyticsEvent.simpleLincaCardTap);
+
                             context.router.push(
-                          LincaDetailRoute(
-                            lincaUser: lincaUser,
-                            animationTag: animationTag,
-                          ),
-                        ),
-                      );
+                              LincaDetailRoute(
+                                lincaUser: lincaUser,
+                                animationTag: animationTag,
+                              ),
+                            );
+                          });
                     },
                   ),
                 )

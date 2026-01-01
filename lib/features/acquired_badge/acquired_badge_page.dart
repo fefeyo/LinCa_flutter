@@ -3,14 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/constants/analytics_screen.dart';
 import 'package:linca_otaku_support/core/models/linca_user.dart';
 import 'package:linca_otaku_support/core/network/controller/user_controller.dart';
 import 'package:linca_otaku_support/core/network/model/linca_badge.dart';
 import 'package:linca_otaku_support/core/network/providers.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
+import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
 
 @RoutePage()
-class AcquiredBadgePage extends HookConsumerWidget {
+class AcquiredBadgePage extends HookConsumerWidget with ScreenAnalyticsManager {
   const AcquiredBadgePage({
     super.key,
     this.selectable = false,
@@ -20,6 +22,8 @@ class AcquiredBadgePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    logScreen(AnalyticsScreen.acquiredBadgeList);
+
     final LincaUser? lincaUser = ref.watch(userControllerProvider).value;
     final UserController userController =
         ref.read(userControllerProvider.notifier);

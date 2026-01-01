@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/constants/analytics_screen.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
+import 'package:linca_otaku_support/core/utils/event_analytics_manager.dart';
 import 'package:linca_otaku_support/core/utils/linca_event_extension.dart';
 import 'package:linca_otaku_support/features/highlight/data/highlight_state.dart';
 import 'package:linca_otaku_support/features/highlight/view_model/highlight_view_model.dart';
 
-class EventCountPage extends HookConsumerWidget {
+import '../../../core/utils/screen_analytics_manager.dart';
+
+class EventCountPage extends HookConsumerWidget
+    with ScreenAnalyticsManager, EventAnalyticsManager {
   const EventCountPage({
     super.key,
     required this.onNext,
@@ -17,6 +22,8 @@ class EventCountPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    logScreen(AnalyticsScreen.highlightEventCount);
+
     final HighlightState state = ref.watch(highlightViewModelProvider);
 
     return Stack(

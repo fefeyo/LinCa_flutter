@@ -3,9 +3,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_tutorial_overlay/flutter_tutorial_overlay.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/constants/analytics_event.dart';
+import 'package:linca_otaku_support/core/constants/analytics_screen.dart';
 import 'package:linca_otaku_support/core/network/model/participation_info.dart';
 import 'package:linca_otaku_support/core/utils/coach_manager.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
+import 'package:linca_otaku_support/core/utils/event_analytics_manager.dart';
+import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
 import 'package:linca_otaku_support/features/my_event/data/my_event_state.dart';
 import 'package:linca_otaku_support/features/my_event/view_model/my_event_view_model.dart';
 
@@ -17,11 +21,14 @@ import '../../core/widgets/bottom_sheet/add_event_bottom_sheet.dart';
 import '../../core/widgets/event/event_card.dart';
 
 @RoutePage()
-class MyEventPage extends HookConsumerWidget with CoachManager {
+class MyEventPage extends HookConsumerWidget
+    with CoachManager, ScreenAnalyticsManager, EventAnalyticsManager {
   const MyEventPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    logScreen(AnalyticsScreen.myEvent);
+
     final MyEventState state = ref.watch(myEventViewModelProvider);
     final GlobalKey eventListKey = useMemoized(() => GlobalKey());
     final GlobalKey floatingActionButtonKey = useMemoized(() => GlobalKey());
@@ -32,12 +39,16 @@ class MyEventPage extends HookConsumerWidget with CoachManager {
         title: context.l10n.coach_step1_title,
         description: context.l10n.coach_step1_description,
         tag: 'event_list',
+        onStepNext: (String _) =>
+            logEvent(event: AnalyticsEvent.coachNextClick),
       ),
       TutorialStep(
         targetKey: floatingActionButtonKey,
         title: context.l10n.coach_step2_title,
         description: context.l10n.coach_step2_description,
         tag: 'add_event',
+        onStepNext: (String _) =>
+            logEvent(event: AnalyticsEvent.coachNextClick),
       ),
     ];
 
@@ -51,6 +62,7 @@ class MyEventPage extends HookConsumerWidget with CoachManager {
           preferences: preferences,
           steps: steps,
           onComplete: () => AddEventBottomSheet.show(context),
+          onSkip: () => logEvent(event: AnalyticsEvent.coachSkipClick),
         );
       });
 
@@ -79,12 +91,16 @@ class MyEventPage extends HookConsumerWidget with CoachManager {
                       state.sortedEvents.values.elementAt(index);
                   return EventCard(
                     lincaEvent: lincaEvent,
-                    onClick: () => context.router.push(
-                      EventDetailRoute(
-                        lincaEvent: lincaEvent,
-                        participationInfo: participationInfo,
-                      ),
-                    ),
+                    onClick: () {
+                      logEvent(event: AnalyticsEvent.myEventEventCardClick);
+
+                      context.router.push(
+                        EventDetailRoute(
+                          lincaEvent: lincaEvent,
+                          participationInfo: participationInfo,
+                        ),
+                      );
+                    },
                     participationInfo: participationInfo,
                   );
                 },
@@ -96,7 +112,11 @@ class MyEventPage extends HookConsumerWidget with CoachManager {
       ),
       floatingActionButton: FloatingActionButton(
         key: floatingActionButtonKey,
-        onPressed: () => AddEventBottomSheet.show(context),
+        onPressed: () {
+          AddEventBottomSheet.show(context);
+
+          logEvent(event: AnalyticsEvent.eventAddClick);
+        },
         child: const Icon(Icons.add),
       ),
     );

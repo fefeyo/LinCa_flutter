@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:linca_otaku_support/core/utils/color_extension.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
 import 'package:linca_otaku_support/core/utils/date_extension.dart';
+import 'package:linca_otaku_support/core/utils/event_analytics_manager.dart';
 import 'package:linca_otaku_support/core/utils/group_extension.dart';
 import 'package:linca_otaku_support/core/utils/linca_event_extension.dart';
 import 'package:linca_otaku_support/core/widgets/common/event_status_badges.dart';
 
+import '../../constants/analytics_event.dart';
 import '../../models/linca_event.dart';
 import '../../network/model/participation_info.dart';
 
-class EventCard extends StatelessWidget {
+class EventCard extends StatelessWidget with EventAnalyticsManager {
   const EventCard({
     super.key,
     required this.lincaEvent,
@@ -99,7 +101,18 @@ class EventCard extends StatelessWidget {
             child: Material(
               type: MaterialType.transparency,
               child: InkWell(
-                onTap: onClick,
+                onTap: () {
+                  logEvent(
+                    event: AnalyticsEvent.eventCardClick,
+                    params: <String, Object>{
+                      'lincaEvent': lincaEvent,
+                      'participationInfo':
+                          participationInfo ?? 'no participation',
+                    },
+                  );
+
+                  onClick();
+                },
               ),
             ),
           ),

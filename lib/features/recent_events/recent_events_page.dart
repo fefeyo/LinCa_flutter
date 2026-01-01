@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/constants/analytics_screen.dart';
 import 'package:linca_otaku_support/core/network/model/participation_info.dart';
 import 'package:linca_otaku_support/core/utils/date_extension.dart';
+import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
 
 import '../../core/router/app_router.gr.dart';
 import '../../core/utils/context_extension.dart';
@@ -11,11 +13,13 @@ import '../../core/network/providers.dart';
 import '../../core/widgets/event/event_card.dart';
 
 @RoutePage()
-class RecentEventsPage extends HookConsumerWidget {
+class RecentEventsPage extends HookConsumerWidget with ScreenAnalyticsManager {
   const RecentEventsPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    logScreen(AnalyticsScreen.recentEvent);
+
     final AsyncValue<List<LincaEvent>> events =
         ref.watch(eventControllerProvider);
     final Map<LincaEvent, ParticipationInfo> participations =

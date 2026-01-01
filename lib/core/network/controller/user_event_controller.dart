@@ -37,29 +37,7 @@ class UserEventController extends LincaController<List<LincaEvent>> {
 
     final List<UnOfficialEvent> events = await userEventRepository.get();
     if (events.isNotEmpty) {
-      final List<UnOfficialEvent> unofficialEvents = state.value
-              ?.map((LincaEvent event) => event.event as UnOfficialEvent)
-              .toList() ??
-          <UnOfficialEvent>[];
-      userEventRepository.refreshInBackground(
-          current: unofficialEvents,
-          onChanged: (List<UnOfficialEvent> updatedEvents) async {
-            final List<LincaEvent> lincaEvents =
-                await Future.wait(events.map((UnOfficialEvent event) async {
-              // タグ一覧を取得
-              final List<Tag> tags = event.tagIds
-                  .map((String tagId) =>
-                      allTags.firstWhereOrNull((Tag tag) => tag.id == tagId))
-                  .whereType<Tag>()
-                  .toList();
-
-              return LincaEvent(
-                event: event,
-                tags: tags,
-              );
-            }).toList());
-            state = AsyncValue<List<LincaEvent>>.data(lincaEvents);
-          });
+      unawaited(refreshInBackground(current: events));
     } else {
       events.addAll(await userEventRepository.fetch());
     }
@@ -114,6 +92,46 @@ class UserEventController extends LincaController<List<LincaEvent>> {
     }
 
     return null;
+  }
+
+  Future<void> refreshInBackground(
+      {List<UnOfficialEvent> current = const <UnOfficialEvent>[]}) async {
+    final List<Tag> allTags = ref.read(tagControllerProvider).value ?? <Tag>[];
+
+    final List<UnOfficialEvent> fetched = await userEventRepository.fetch();
+
+    if (current.isEmpty) {
+      current = state.value
+              ?.map((LincaEvent event) => event.event as UnOfficialEvent)
+              .toList() ??
+          <UnOfficialEvent>[];
+    }
+
+    userEventRepository.refreshInBackground(
+      current: current,
+      updated: fetched,
+      getId: (UnOfficialEvent event) => event.id,
+      onChanged: (List<UnOfficialEvent> merged) async {
+        final List<LincaEvent> lincaEvents = await Future.wait(
+          merged.map(
+            (UnOfficialEvent event) async {
+              final List<Tag> tags = event.tagIds
+                  .map((String id) =>
+                      allTags.firstWhereOrNull((Tag tag) => tag.id == id))
+                  .whereType<Tag>()
+                  .toList();
+
+              return LincaEvent(
+                event: event,
+                tags: tags,
+              );
+            },
+          ),
+        );
+
+        state = AsyncValue<List<LincaEvent>>.data(lincaEvents);
+      },
+    );
   }
 
   Future<void> deleteEvent({

@@ -3,14 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/constants/analytics_event.dart';
+import 'package:linca_otaku_support/core/constants/analytics_screen.dart';
 import 'package:linca_otaku_support/core/constants/app_constants.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
+import 'package:linca_otaku_support/core/utils/event_analytics_manager.dart';
+import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
 
 import '../../../core/asset_gen/assets.gen.dart';
 import '../../../core/network/model/group.dart';
 
 @RoutePage()
-class SelectFavoriteTagPage extends HookConsumerWidget {
+class SelectFavoriteTagPage extends HookConsumerWidget
+    with ScreenAnalyticsManager, EventAnalyticsManager {
   const SelectFavoriteTagPage({
     super.key,
     required this.groups,
@@ -24,6 +29,8 @@ class SelectFavoriteTagPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    logScreen(AnalyticsScreen.selectFavoriteTag);
+
     const double imageHeight = 50.0;
     const double titlePadding = 8.0;
     final ValueNotifier<List<Group>> changedFavoriteTags =
@@ -37,6 +44,12 @@ class SelectFavoriteTagPage extends HookConsumerWidget {
         canPop: false,
         onPopInvokedWithResult: (bool didPop, _) async {
           if (didPop) return;
+          logEvent(
+            event: AnalyticsEvent.selectFavoriteTagBackClick,
+            params: <String, Object>{
+              'changedFavoriteTags': changedFavoriteTags
+            },
+          );
 
           context.router.pop(changedFavoriteTags.value);
         },
