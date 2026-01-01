@@ -251,7 +251,7 @@ class SeriesGraphPage extends HookConsumerWidget {
     await SharePlus.instance.share(
       ShareParams(
         files: <XFile>[file],
-        text: context.l10n.highlight_share_message,
+        text: context.l10n.common_hashtag,
       ),
     );
   }

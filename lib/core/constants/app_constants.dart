@@ -61,7 +61,7 @@ class AppConstants {
   static const int bioMaxLength = 300;
   static const int snsMaxLength = 30;
   static const int eventMemoMaxLength = 500;
-  static const int originalEventNameMaxLength = 30;
+  static const int originalEventNameMaxLength = 70;
   static const int originalEventDescriptionMaxLength = 1000;
   static const int originalEventVenueMaxLength = 30;
   static const int originalEventOrganizerMaxLength = 30;

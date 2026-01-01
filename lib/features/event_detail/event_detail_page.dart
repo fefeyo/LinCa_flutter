@@ -335,7 +335,7 @@ class EventDetailPage extends HookConsumerWidget with CoachManager {
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text(context.l10n.snackbar_title_deleted),
+                          content: Text(context.l10n.my_event_deleted),
                           backgroundColor: Colors.red,
                         ),
                       );
