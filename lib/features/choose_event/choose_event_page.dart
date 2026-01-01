@@ -117,28 +117,32 @@ class ChooseEventPage extends HookConsumerWidget with CoachManager {
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
         child: state.sortedEvents.isNotEmpty
-            ? ListView.separated(
-                key: eventListKey,
-                clipBehavior: Clip.none,
-                itemCount: state.sortedEvents.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final LincaEvent lincaEvent = state.sortedEvents[index];
-                  final ParticipationInfo? participationInfo =
-                      state.participations[lincaEvent];
-                  return EventCard(
-                    lincaEvent: lincaEvent,
-                    onClick: () => context.router.push(
-                      EventDetailRoute(
-                        lincaEvent: lincaEvent,
-                        participationInfo: participationInfo,
+            ? RefreshIndicator(
+                child: ListView.separated(
+                  key: eventListKey,
+                  clipBehavior: Clip.none,
+                  itemCount: state.sortedEvents.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final LincaEvent lincaEvent = state.sortedEvents[index];
+                    final ParticipationInfo? participationInfo =
+                        state.participations[lincaEvent];
+                    return EventCard(
+                      lincaEvent: lincaEvent,
+                      onClick: () => context.router.push(
+                        EventDetailRoute(
+                          lincaEvent: lincaEvent,
+                          participationInfo: participationInfo,
+                        ),
                       ),
-                    ),
-                    participationInfo: participationInfo,
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) =>
-                    const SizedBox(height: 12),
-              )
+                      participationInfo: participationInfo,
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const SizedBox(height: 12),
+                ),
+                onRefresh: () async {
+                  await viewModel.refresh(eventType);
+                })
             : Center(
                 child: Text(
                   context.l10n.event_list_empty_title,

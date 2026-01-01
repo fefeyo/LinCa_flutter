@@ -14,21 +14,19 @@ final AutoDisposeStateNotifierProvider<ChooseEventViewModel, ChooseEventState>
         (Ref ref) {
   final List<LincaEvent> events =
       ref.read(eventControllerProvider).value ?? <LincaEvent>[];
-  final List<LincaEvent> userEvents =
-      ref.read(userEventControllerProvider).value?.where((LincaEvent event) {
-        final EventBase eventBase = event.event;
-
-        // 公式イベントは常に表示
-        if (eventBase is OfficialEvent) return true;
-
-        // 有志イベント → 公開のみ表示
-        return (eventBase as UnOfficialEvent).visibility == true;
-      }).toList() ?? <LincaEvent>[];
+  final List<LincaEvent> userEvents = ref
+          .read(userEventControllerProvider)
+          .value
+          ?.where((LincaEvent event) =>
+              (event.event as UnOfficialEvent).visibility == true)
+          .toList() ??
+      <LincaEvent>[];
   final Map<LincaEvent, ParticipationInfo> participations =
       ref.read(participationControllerProvider).value ??
           <LincaEvent, ParticipationInfo>{};
 
   final ChooseEventViewModel viewModel = ChooseEventViewModel(
+    ref,
     <LincaEvent>[
       ...events,
       ...userEvents,
@@ -49,6 +47,7 @@ final AutoDisposeStateNotifierProvider<ChooseEventViewModel, ChooseEventState>
 
 class ChooseEventViewModel extends StateNotifier<ChooseEventState> {
   ChooseEventViewModel(
+      this.ref,
     this.initialEvents,
     final Map<LincaEvent, ParticipationInfo> participations,
   ) : super(
@@ -58,6 +57,7 @@ class ChooseEventViewModel extends StateNotifier<ChooseEventState> {
           ),
         );
 
+  final Ref ref;
   final List<LincaEvent> initialEvents;
 
   void setEventType(EventType eventType) {
@@ -130,5 +130,14 @@ class ChooseEventViewModel extends StateNotifier<ChooseEventState> {
       participations: newParticipations,
       sortedEvents: sortedEvents,
     );
+  }
+
+  Future<void> refresh(EventType eventType) async {
+    switch (eventType) {
+      case EventType.official:
+        await ref.read(eventControllerProvider.notifier).refreshInBackground();
+      case EventType.unofficial:
+        await ref.read(userEventControllerProvider.notifier).refreshInBackground();
+    }
   }
 }
