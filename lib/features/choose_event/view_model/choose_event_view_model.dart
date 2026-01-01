@@ -47,7 +47,7 @@ final AutoDisposeStateNotifierProvider<ChooseEventViewModel, ChooseEventState>
 
 class ChooseEventViewModel extends StateNotifier<ChooseEventState> {
   ChooseEventViewModel(
-      this.ref,
+    this.ref,
     this.initialEvents,
     final Map<LincaEvent, ParticipationInfo> participations,
   ) : super(
@@ -137,7 +137,9 @@ class ChooseEventViewModel extends StateNotifier<ChooseEventState> {
       case EventType.official:
         await ref.read(eventControllerProvider.notifier).refreshInBackground();
       case EventType.unofficial:
-        await ref.read(userEventControllerProvider.notifier).refreshInBackground();
+        await ref
+            .read(userEventControllerProvider.notifier)
+            .refreshInBackground();
     }
   }
 }

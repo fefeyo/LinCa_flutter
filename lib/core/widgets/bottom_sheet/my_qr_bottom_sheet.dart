@@ -1,20 +1,27 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/auth/providers.dart';
+import 'package:linca_otaku_support/core/constants/analytics_event.dart';
+import 'package:linca_otaku_support/core/constants/analytics_screen.dart';
 import 'package:linca_otaku_support/core/network/controller/friend_controller.dart';
 import 'package:linca_otaku_support/core/network/providers.dart';
 import 'package:linca_otaku_support/core/router/app_router.gr.dart';
+import 'package:linca_otaku_support/core/utils/event_analytics_manager.dart';
+import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
 
 import '../../../core/utils/context_extension.dart';
 import '../../../core/utils/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-class MyQRBottomSheet extends HookConsumerWidget {
+class MyQRBottomSheet extends HookConsumerWidget
+    with ScreenAnalyticsManager, EventAnalyticsManager {
   const MyQRBottomSheet({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    logScreen(AnalyticsScreen.showQR);
+
     final String? uid = ref.watch(uidProvider);
     final FriendController friendController =
         ref.read(friendControllerProvider);
@@ -55,6 +62,8 @@ class MyQRBottomSheet extends HookConsumerWidget {
                   const SizedBox(height: 16),
                   ElevatedButton.icon(
                     onPressed: () async {
+                      logEvent(event: AnalyticsEvent.showQRReadClick);
+
                       final String? result = await context.router
                           .push<String>(const QrCodeReadRoute());
                       if (result != null) {

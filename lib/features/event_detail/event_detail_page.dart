@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_tutorial_overlay/flutter_tutorial_overlay.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/constants/analytics_event.dart';
+import 'package:linca_otaku_support/core/constants/analytics_screen.dart';
 import 'package:linca_otaku_support/core/constants/app_constants.dart';
 import 'package:linca_otaku_support/core/constants/participation_type.dart';
 import 'package:linca_otaku_support/core/models/linca_user.dart';
@@ -16,8 +18,10 @@ import 'package:linca_otaku_support/core/network/model/linca_badge.dart';
 import 'package:linca_otaku_support/core/network/model/participation_info.dart';
 import 'package:linca_otaku_support/core/router/app_router.gr.dart';
 import 'package:linca_otaku_support/core/utils/coach_manager.dart';
+import 'package:linca_otaku_support/core/utils/event_analytics_manager.dart';
 import 'package:linca_otaku_support/core/utils/event_base_extension.dart';
 import 'package:linca_otaku_support/core/utils/linca_event_extension.dart';
+import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
 import 'package:linca_otaku_support/core/utils/tag_extension.dart';
 import 'package:linca_otaku_support/core/widgets/common/common_simple_dialog.dart';
 import 'package:linca_otaku_support/core/widgets/common/common_simple_loading_dialog.dart';
@@ -40,7 +44,8 @@ import '../../core/utils/preferences_service.dart';
 import '../../core/utils/providers.dart';
 
 @RoutePage()
-class EventDetailPage extends HookConsumerWidget with CoachManager {
+class EventDetailPage extends HookConsumerWidget
+    with CoachManager, ScreenAnalyticsManager, EventAnalyticsManager {
   const EventDetailPage({
     super.key,
     required this.lincaEvent,
@@ -52,6 +57,8 @@ class EventDetailPage extends HookConsumerWidget with CoachManager {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    logScreen(AnalyticsScreen.eventDetail);
+
     final EventDetailViewModel viewModel =
         ref.read(eventDetailViewModelProvider.notifier);
     final ParticipationController participationController =
@@ -83,12 +90,16 @@ class EventDetailPage extends HookConsumerWidget with CoachManager {
         title: context.l10n.coach_step5_title,
         description: context.l10n.coach_step5_description,
         tag: 'participation_area',
+        onStepNext: (String _) =>
+            logEvent(event: AnalyticsEvent.coachNextClick),
       ),
       TutorialStep(
         targetKey: saveButtonKey,
         title: context.l10n.coach_step6_title,
         description: context.l10n.coach_step6_description,
         tag: 'save_button',
+        onStepNext: (String _) =>
+            logEvent(event: AnalyticsEvent.coachCompleteClick),
       ),
     ];
 
@@ -104,6 +115,7 @@ class EventDetailPage extends HookConsumerWidget with CoachManager {
           steps: steps,
           isCompletable: true,
           onComplete: () => preferences.markTutorialAsSeen(),
+          onSkip: () => logEvent(event: AnalyticsEvent.coachSkipClick),
         );
       });
 
@@ -314,6 +326,8 @@ class EventDetailPage extends HookConsumerWidget with CoachManager {
                 ],
                 onSelected: (String value) {
                   if (value == 'edit') {
+                    logEvent(event: AnalyticsEvent.eventDetailEditClick);
+
                     final UnOfficialEvent event =
                         lincaEvent.event as UnOfficialEvent;
                     context.router.pop();
@@ -328,6 +342,8 @@ class EventDetailPage extends HookConsumerWidget with CoachManager {
                     );
                   }
                   if (value == 'delete') {
+                    logEvent(event: AnalyticsEvent.eventDetailCloseClick);
+
                     participationController.deleteParticipation(
                       lincaEvent,
                       participationInfo!,
@@ -358,6 +374,16 @@ class EventDetailPage extends HookConsumerWidget with CoachManager {
       floatingActionButton: FloatingActionButton.extended(
         key: saveButtonKey,
         onPressed: () async {
+          logEvent(
+            event: AnalyticsEvent.eventDetailSaveClick,
+            params: <String, Object>{
+              'eventId': lincaEvent.event.id,
+              'participationType': selectedParticipationType.value,
+              'participationMemo': participationMemoController.text,
+              'groupSlug': lincaEvent.organizer,
+            },
+          );
+
           await participationController.createParticipation(
             lincaEvent: lincaEvent,
             participation: ParticipationInfo(

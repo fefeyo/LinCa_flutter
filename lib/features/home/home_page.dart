@@ -2,15 +2,19 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/constants/analytics_event.dart';
+import 'package:linca_otaku_support/core/constants/analytics_screen.dart';
 import 'package:linca_otaku_support/core/constants/app_constants.dart';
 import 'package:linca_otaku_support/core/models/filter_settings.dart';
 import 'package:linca_otaku_support/core/models/linca_event.dart';
 import 'package:linca_otaku_support/core/models/linca_user.dart';
 import 'package:linca_otaku_support/core/network/providers.dart';
 import 'package:linca_otaku_support/core/utils/date_extension.dart';
+import 'package:linca_otaku_support/core/utils/event_analytics_manager.dart';
 import 'package:linca_otaku_support/core/utils/linca_event_extension.dart';
 import 'package:linca_otaku_support/core/utils/preferences_service.dart';
 import 'package:linca_otaku_support/core/utils/providers.dart';
+import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
 import 'package:linca_otaku_support/features/my_event/data/my_event_state.dart';
 
 import '../../../core/utils/context_extension.dart';
@@ -22,7 +26,8 @@ import '../my_event/view_model/my_event_view_model.dart';
 import 'view/home_drawer.dart';
 
 @RoutePage()
-class HomePage extends HookConsumerWidget {
+class HomePage extends HookConsumerWidget
+    with ScreenAnalyticsManager, EventAnalyticsManager {
   const HomePage({super.key});
 
   @override
@@ -66,6 +71,8 @@ class HomePage extends HookConsumerWidget {
               events: todayEvents,
               participations: myEvents,
             );
+
+            logScreen(AnalyticsScreen.onTheDayEvent);
           });
         }
       }
@@ -107,6 +114,8 @@ class HomePage extends HookConsumerWidget {
                 ? <Widget>[
                     IconButton(
                       onPressed: () async {
+                        logEvent(event: AnalyticsEvent.myEventFilterClick);
+
                         final FilterSettings? result =
                             await EventSortBottomSheet.show(
                           context,
@@ -133,6 +142,8 @@ class HomePage extends HookConsumerWidget {
                           searchController.clear();
                           myEventViewModel.setKeyword('');
                         }
+
+                        logEvent(event: AnalyticsEvent.myEventSearchClick);
                       },
                     ),
                   ]
@@ -144,7 +155,18 @@ class HomePage extends HookConsumerWidget {
           body: FadeTransition(opacity: animation, child: child),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: tabs.activeIndex,
-            onTap: tabs.setActiveIndex,
+            onTap: (int index) {
+              logEvent(
+                event: AnalyticsEvent.homeTabClick,
+                params: <String, Object>{'index': index},
+              );
+
+              tabs.setActiveIndex(index);
+
+              if (index != 0) {
+                isSearching.value = false;
+              }
+            },
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: const Icon(Icons.event),

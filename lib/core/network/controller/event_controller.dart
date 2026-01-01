@@ -72,16 +72,16 @@ class EventController extends LincaController<List<LincaEvent>> {
       final List<OfficialEvent> updated = await eventRepository.fetch();
       if (updated.isEmpty) return;
 
-      final Map<String, Venue> venuesMap = {
+      final Map<String, Venue> venuesMap = <String, Venue>{
         for (final Venue venue
             in ref.read(venueControllerProvider).value ?? <Venue>[])
           venue.id: venue,
       };
-      final Map<String, Tag> tagsMap = {
+      final Map<String, Tag> tagsMap = <String, Tag>{
         for (final Tag tag in ref.read(tagControllerProvider).value ?? <Tag>[])
           tag.id: tag,
       };
-      final Map<String, Group> groupsMap = {
+      final Map<String, Group> groupsMap = <String, Group>{
         for (final Group group
             in ref.read(groupControllerProvider).value ?? <Group>[])
           group.slug: group,
@@ -100,7 +100,7 @@ class EventController extends LincaController<List<LincaEvent>> {
         );
       }));
 
-      final Map<String, LincaEvent> merged = {
+      final Map<String, LincaEvent> merged = <String, LincaEvent>{
         for (final LincaEvent event in state.value ?? <LincaEvent>[])
           event.event.id: event,
         for (final LincaEvent event in refreshed) event.event.id: event,

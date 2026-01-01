@@ -5,18 +5,23 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/constants/analytics_event.dart';
 import 'package:linca_otaku_support/core/network/model/tag.dart';
 import 'package:linca_otaku_support/core/network/providers.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
+import 'package:linca_otaku_support/core/utils/event_analytics_manager.dart';
 import 'package:linca_otaku_support/core/utils/linca_event_extension.dart';
+import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
 import 'package:linca_otaku_support/core/utils/tag_extension.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../core/constants/analytics_screen.dart';
 import '../data/highlight_state.dart';
 import '../view_model/highlight_view_model.dart';
 
-class SeriesGraphPage extends HookConsumerWidget {
+class SeriesGraphPage extends HookConsumerWidget
+    with ScreenAnalyticsManager, EventAnalyticsManager {
   const SeriesGraphPage({
     super.key,
     required this.onNext,
@@ -28,6 +33,8 @@ class SeriesGraphPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    logScreen(AnalyticsScreen.highlightSeriesGraph);
+
     final GlobalKey repaintKey = GlobalKey();
     final HighlightState state = ref.watch(highlightViewModelProvider);
 
@@ -220,6 +227,8 @@ class SeriesGraphPage extends HookConsumerWidget {
           child: IconButton(
             icon: const Icon(Icons.share),
             onPressed: () async {
+              logEvent(event: AnalyticsEvent.seriesGraphShareClick);
+
               final Uint8List png = await _capture(repaintKey);
               if (!context.mounted) return;
               await _shareImage(context: context, pngBytes: png);

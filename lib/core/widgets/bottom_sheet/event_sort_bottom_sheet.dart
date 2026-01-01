@@ -2,9 +2,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/constants/analytics_event.dart';
+import 'package:linca_otaku_support/core/constants/analytics_screen.dart';
 import 'package:linca_otaku_support/core/constants/event_type.dart';
 import 'package:linca_otaku_support/core/models/filter_settings.dart';
 import 'package:linca_otaku_support/core/network/providers.dart';
+import 'package:linca_otaku_support/core/utils/event_analytics_manager.dart';
+import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
 import 'package:linca_otaku_support/core/utils/tag_extension.dart';
 
 import '../../../core/utils/context_extension.dart';
@@ -12,7 +16,8 @@ import '../../constants/participation_type.dart';
 import '../../network/model/tag.dart';
 import '../../utils/sort_items_extension.dart';
 
-class EventSortBottomSheet extends HookConsumerWidget {
+class EventSortBottomSheet extends HookConsumerWidget
+    with ScreenAnalyticsManager, EventAnalyticsManager {
   const EventSortBottomSheet({
     super.key,
     required this.initialSettings,
@@ -36,6 +41,8 @@ class EventSortBottomSheet extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    logScreen(AnalyticsScreen.eventSortBottomSheet);
+
     final TextEditingController keywordController =
         useTextEditingController(text: initialSettings.keyword);
     final ValueNotifier<DisplayOrder> currentDisplayOrder =
@@ -150,7 +157,11 @@ class EventSortBottomSheet extends HookConsumerWidget {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        onPressed: () => context.router.pop(),
+                        onPressed: () {
+                          logEvent(event: AnalyticsEvent.filterCancelClick);
+
+                          context.router.pop();
+                        },
                         child: Text(
                           context.l10n.common_cancel,
                           style: context.textTheme.titleMedium?.copyWith(
@@ -171,22 +182,28 @@ class EventSortBottomSheet extends HookConsumerWidget {
                           ),
                         ),
                         onPressed: () {
-                          context.router.pop(
-                            FilterSettings(
-                              keyword: keywordController.text,
-                              displayOrder: currentDisplayOrder.value,
-                              participationFilters:
-                                  currentParticipationTypes.value,
-                              seriesTags: currentSeriesTags.value,
-                              typeTags: currentTypeTags.value,
-                              isHiddenParticipationEvent:
-                                  isHiddenParticipationEvent.value,
-                              isHiddenOriginalEvent:
-                                  isHiddenOriginalEvent.value,
-                              isShowOfficialEvent: isShowOfficialEvent.value,
-                              isShowOriginalEvent: isShowOriginalEvent.value,
-                            ),
+                          final FilterSettings filterSettings = FilterSettings(
+                            keyword: keywordController.text,
+                            displayOrder: currentDisplayOrder.value,
+                            participationFilters:
+                                currentParticipationTypes.value,
+                            seriesTags: currentSeriesTags.value,
+                            typeTags: currentTypeTags.value,
+                            isHiddenParticipationEvent:
+                                isHiddenParticipationEvent.value,
+                            isHiddenOriginalEvent: isHiddenOriginalEvent.value,
+                            isShowOfficialEvent: isShowOfficialEvent.value,
+                            isShowOriginalEvent: isShowOriginalEvent.value,
                           );
+
+                          logEvent(
+                            event: AnalyticsEvent.filterConfirmClick,
+                            params: <String, Object>{
+                              'filterSettings': filterSettings,
+                            },
+                          );
+
+                          context.router.pop(filterSettings);
                         },
                         child: Text(
                           context.l10n.common_determination,

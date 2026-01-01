@@ -10,6 +10,7 @@ mixin CoachManager {
     required List<TutorialStep> steps,
     bool isCompletable = false,
     required VoidCallback onComplete,
+    required VoidCallback onSkip,
   }) async {
     final bool hasSeenTutorial = await preferences.hasSeenTutorial();
     if (!hasSeenTutorial) {
@@ -25,7 +26,10 @@ mixin CoachManager {
                   : context.l10n.common_next,
               skipText: context.l10n.common_skip,
               onComplete: onComplete,
-              onSkip: () => preferences.markTutorialAsSeen(),
+              onSkip: () {
+                onSkip();
+                preferences.markTutorialAsSeen();
+              },
             ).show();
           }
         });

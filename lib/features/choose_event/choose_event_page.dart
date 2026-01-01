@@ -3,10 +3,14 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_tutorial_overlay/flutter_tutorial_overlay.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/constants/analytics_screen.dart';
 import 'package:linca_otaku_support/core/network/model/participation_info.dart';
 import 'package:linca_otaku_support/core/utils/coach_manager.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
+import 'package:linca_otaku_support/core/utils/event_analytics_manager.dart';
+import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
 
+import '../../core/constants/analytics_event.dart';
 import '../../core/constants/event_type.dart';
 import '../../core/models/filter_settings.dart';
 import '../../core/models/linca_event.dart';
@@ -19,7 +23,8 @@ import 'data/choose_event_state.dart';
 import 'view_model/choose_event_view_model.dart';
 
 @RoutePage()
-class ChooseEventPage extends HookConsumerWidget with CoachManager {
+class ChooseEventPage extends HookConsumerWidget
+    with CoachManager, ScreenAnalyticsManager, EventAnalyticsManager {
   const ChooseEventPage({
     super.key,
     required this.eventType,
@@ -29,6 +34,10 @@ class ChooseEventPage extends HookConsumerWidget with CoachManager {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    logScreen(eventType == EventType.official
+        ? AnalyticsScreen.chooseOfficialEvent
+        : AnalyticsScreen.chooseUnOfficialEvent);
+
     final ChooseEventState state = ref.watch(chooseEventViewModelProvider);
     final ChooseEventViewModel viewModel =
         ref.read(chooseEventViewModelProvider.notifier);
@@ -43,6 +52,8 @@ class ChooseEventPage extends HookConsumerWidget with CoachManager {
         title: context.l10n.coach_step4_title,
         description: context.l10n.coach_step4_description,
         tag: 'event_list',
+        onStepNext: (String _) =>
+            logEvent(event: AnalyticsEvent.coachNextClick),
       ),
     ];
 
@@ -57,7 +68,8 @@ class ChooseEventPage extends HookConsumerWidget with CoachManager {
           context: context,
           preferences: preferences,
           steps: steps,
-          onComplete: () {},
+          onComplete: () => <dynamic, dynamic>{},
+          onSkip: () => logEvent(event: AnalyticsEvent.coachSkipClick),
         );
       });
 
@@ -89,6 +101,8 @@ class ChooseEventPage extends HookConsumerWidget with CoachManager {
           if (eventType == EventType.official)
             IconButton(
               onPressed: () async {
+                logEvent(event: AnalyticsEvent.chooseEventFilterClick);
+
                 final FilterSettings? result = await EventSortBottomSheet.show(
                   context,
                   state.filterSettings,
@@ -105,6 +119,8 @@ class ChooseEventPage extends HookConsumerWidget with CoachManager {
           IconButton(
             icon: Icon(isSearching.value ? Icons.close : Icons.search),
             onPressed: () {
+              logEvent(event: AnalyticsEvent.chooseEventSearchClick);
+
               isSearching.value = !isSearching.value;
               if (!isSearching.value) {
                 searchController.clear();
@@ -128,12 +144,17 @@ class ChooseEventPage extends HookConsumerWidget with CoachManager {
                         state.participations[lincaEvent];
                     return EventCard(
                       lincaEvent: lincaEvent,
-                      onClick: () => context.router.push(
-                        EventDetailRoute(
-                          lincaEvent: lincaEvent,
-                          participationInfo: participationInfo,
-                        ),
-                      ),
+                      onClick: () {
+                        logEvent(
+                            event: AnalyticsEvent.chooseEventEventCardClick);
+
+                        context.router.push(
+                          EventDetailRoute(
+                            lincaEvent: lincaEvent,
+                            participationInfo: participationInfo,
+                          ),
+                        );
+                      },
                       participationInfo: participationInfo,
                     );
                   },
@@ -141,6 +162,8 @@ class ChooseEventPage extends HookConsumerWidget with CoachManager {
                       const SizedBox(height: 12),
                 ),
                 onRefresh: () async {
+                  logEvent(event: AnalyticsEvent.chooseEventRefreshed);
+
                   await viewModel.refresh(eventType);
                 })
             : Center(

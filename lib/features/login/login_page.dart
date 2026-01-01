@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/auth/data/auth_state.dart';
+import 'package:linca_otaku_support/core/constants/analytics_event.dart';
+import 'package:linca_otaku_support/core/constants/analytics_screen.dart';
 import 'package:linca_otaku_support/core/utils/color_extension.dart';
+import 'package:linca_otaku_support/core/utils/event_analytics_manager.dart';
+import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_button/sign_in_button.dart';
 
@@ -14,11 +18,14 @@ import '../../core/constants/app_constants.dart';
 import '../../core/router/app_router.gr.dart';
 
 @RoutePage()
-class LoginPage extends HookConsumerWidget {
+class LoginPage extends HookConsumerWidget
+    with ScreenAnalyticsManager, EventAnalyticsManager {
   const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    logScreen(AnalyticsScreen.login);
+
     final AsyncValue<AuthState> authState = ref.watch(authControllerProvider);
     final AuthController authController =
         ref.read(authControllerProvider.notifier);
@@ -70,6 +77,15 @@ class LoginPage extends HookConsumerWidget {
                 onPressed: () async {
                   final bool isSignedIn =
                       await authController.signInAnonymously();
+
+                  logEvent(
+                    event: AnalyticsEvent.loginClick,
+                    params: <String, Object>{
+                      'provider': 'guest',
+                      'isSignedIn': isSignedIn,
+                    },
+                  );
+
                   actionAfterSignIn(isSignedIn);
                 },
               ),
@@ -78,6 +94,15 @@ class LoginPage extends HookConsumerWidget {
                 onPressed: () async {
                   final bool isSignedIn =
                       await authController.signInWithGoogle();
+
+                  logEvent(
+                    event: AnalyticsEvent.loginClick,
+                    params: <String, Object>{
+                      'provider': 'google',
+                      'isSignedIn': isSignedIn,
+                    },
+                  );
+
                   actionAfterSignIn(isSignedIn);
                 },
               ),
@@ -86,6 +111,15 @@ class LoginPage extends HookConsumerWidget {
                 onPressed: () async {
                   final bool isSignedIn =
                       await authController.signInWithTwitter();
+
+                  logEvent(
+                    event: AnalyticsEvent.loginClick,
+                    params: <String, Object>{
+                      'provider': 'twitter',
+                      'isSignedIn': isSignedIn,
+                    },
+                  );
+
                   actionAfterSignIn(isSignedIn);
                 },
               ),

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/constants/analytics_event.dart';
+import 'package:linca_otaku_support/core/constants/analytics_screen.dart';
 import 'package:linca_otaku_support/core/models/linca_user.dart';
+import 'package:linca_otaku_support/core/utils/event_analytics_manager.dart';
 import 'package:linca_otaku_support/core/utils/linca_user_extension.dart';
 import 'package:linca_otaku_support/core/utils/preferences_service.dart';
+import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
 import 'package:linca_otaku_support/core/widgets/common/common_simple_dialog.dart';
 import 'package:linca_otaku_support/features/my_page/data/my_page_state.dart';
 import 'package:linca_otaku_support/features/my_page/view_model/my_page_view_model.dart';
@@ -21,11 +25,14 @@ import 'view/linca_vertical.dart';
 import 'view/my_page_item.dart';
 
 @RoutePage()
-class MyPage extends HookConsumerWidget {
+class MyPage extends HookConsumerWidget
+    with ScreenAnalyticsManager, EventAnalyticsManager {
   const MyPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    logScreen(AnalyticsScreen.myPage);
+
     final AsyncValue<AuthState> authState = ref.watch(authControllerProvider);
     final AuthController authController =
         ref.read(authControllerProvider.notifier);
@@ -41,16 +48,17 @@ class MyPage extends HookConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               LincaVertical(
-                lincaUser: state.lincaUser,
-                animationTag: AppConstants.heroTagLincaCardMyPage,
-                onTap: (LincaUser lincaUser, String animationTag) =>
+                  lincaUser: state.lincaUser,
+                  animationTag: AppConstants.heroTagLincaCardMyPage,
+                  onTap: (LincaUser lincaUser, String animationTag) {
+                    logEvent(event: AnalyticsEvent.simpleLincaCardTap);
                     context.router.push(
-                  LincaDetailRoute(
-                    lincaUser: lincaUser,
-                    animationTag: animationTag,
-                  ),
-                ),
-              ),
+                      LincaDetailRoute(
+                        lincaUser: lincaUser,
+                        animationTag: animationTag,
+                      ),
+                    );
+                  }),
               const SizedBox(height: 32),
               Text(
                 context.l10n.common_linca_card,
@@ -59,24 +67,39 @@ class MyPage extends HookConsumerWidget {
               const SizedBox(height: 16),
               MyPageItem(
                 title: context.l10n.edit_my_linca_title,
-                onClickItem: () => context.router.push(
-                  LincaEditRoute(
-                    userProfile: state.lincaUser.userProfile,
-                  ),
-                ),
+                onClickItem: () {
+                  logEvent(event: AnalyticsEvent.openEditMyLincaCardClick);
+
+                  context.router.push(
+                    LincaEditRoute(
+                      userProfile: state.lincaUser.userProfile,
+                    ),
+                  );
+                },
               ),
               MyPageItem(
                 title: context.l10n.traded_linca_list_title,
-                onClickItem: () =>
-                    context.router.push(const TradedLincaListRoute()),
+                onClickItem: () {
+                  logEvent(event: AnalyticsEvent.openTradedLincaCardClick);
+
+                  context.router.push(const TradedLincaListRoute());
+                },
               ),
               MyPageItem(
                 title: context.l10n.my_qr_code_title,
-                onClickItem: () => MyQRBottomSheet.show(context),
+                onClickItem: () {
+                  logEvent(event: AnalyticsEvent.openLincaQRClick);
+
+                  MyQRBottomSheet.show(context);
+                },
               ),
               MyPageItem(
                 title: context.l10n.acquired_badges_title,
-                onClickItem: () => context.router.push(AcquiredBadgeRoute()),
+                onClickItem: () {
+                  logEvent(event: AnalyticsEvent.openAcquiredBadgeListClick);
+
+                  context.router.push(AcquiredBadgeRoute());
+                },
               ),
               const SizedBox(height: 16),
               Text(
@@ -86,12 +109,19 @@ class MyPage extends HookConsumerWidget {
               const SizedBox(height: 16),
               MyPageItem(
                 title: context.l10n.highlight_title,
-                onClickItem: () => context.router.push(const HighlightRoute()),
+                onClickItem: () {
+                  logEvent(event: AnalyticsEvent.openHighLightClick);
+
+                  context.router.push(const HighlightRoute());
+                },
               ),
               MyPageItem(
                 title: context.l10n.created_events_title,
-                onClickItem: () =>
-                    context.router.push(const CreatedEventListRoute()),
+                onClickItem: () {
+                  logEvent(event: AnalyticsEvent.openCreatedEventListClick);
+
+                  context.router.push(const CreatedEventListRoute());
+                },
               ),
               const SizedBox(height: 16),
               Text(
@@ -101,7 +131,11 @@ class MyPage extends HookConsumerWidget {
               const SizedBox(height: 16),
               MyPageItem(
                 title: context.l10n.app_settings_title,
-                onClickItem: () => openAppSettings(),
+                onClickItem: () {
+                  logEvent(event: AnalyticsEvent.openAppSettingsClick);
+
+                  openAppSettings();
+                },
               ),
               MyPageItem(
                 title: context.l10n.link_to_google_account,
@@ -111,6 +145,9 @@ class MyPage extends HookConsumerWidget {
                 trailing: authController.isBothProviderLinked()
                     ? ElevatedButton(
                         onPressed: () async {
+                          logEvent(
+                              event: AnalyticsEvent.googleAccountUnLinkClick);
+
                           await authController.unLinkGoogle();
                           ref.invalidate(authControllerProvider);
                           if (!context.mounted) return;
@@ -132,6 +169,8 @@ class MyPage extends HookConsumerWidget {
                 onClickItem: authController.isGoogleLinked()
                     ? () {}
                     : () async {
+                        logEvent(event: AnalyticsEvent.googleAccountLinkClick);
+
                         final bool isSignedIn =
                             await authController.linkGoogle();
                         if (!context.mounted || !isSignedIn) {
@@ -157,6 +196,9 @@ class MyPage extends HookConsumerWidget {
                 trailing: authController.isBothProviderLinked()
                     ? ElevatedButton(
                         onPressed: () async {
+                          logEvent(
+                              event: AnalyticsEvent.twitterAccountUnLinkClick);
+
                           await authController.unLinkTwitter();
                           ref.invalidate(authControllerProvider);
                           if (!context.mounted) return;
@@ -178,6 +220,8 @@ class MyPage extends HookConsumerWidget {
                 onClickItem: authController.isTwitterLinked()
                     ? () {}
                     : () async {
+                        logEvent(event: AnalyticsEvent.twitterAccountLinkClick);
+
                         final bool isSignedIn =
                             await authController.linkTwitter();
                         if (!context.mounted || !isSignedIn) {
@@ -199,6 +243,8 @@ class MyPage extends HookConsumerWidget {
                 title: context.l10n.sign_out,
                 trailing: null,
                 onClickItem: () async {
+                  logEvent(event: AnalyticsEvent.signOutClick);
+
                   final bool? comfirmed = await CommonSimpleDialog.show(
                     context: context,
                     title: context.l10n.account_logout_dialog_title,
@@ -216,6 +262,8 @@ class MyPage extends HookConsumerWidget {
                 title: context.l10n.delete_account_title,
                 trailing: null,
                 onClickItem: () async {
+                  logEvent(event: AnalyticsEvent.deleteMyAccountClick);
+
                   final bool? comfirmed = await CommonSimpleDialog.show(
                     context: context,
                     title: context.l10n.account_delete_dialog_title,

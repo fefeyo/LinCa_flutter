@@ -3,9 +3,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/constants/analytics_event.dart';
 import 'package:linca_otaku_support/core/constants/app_constants.dart';
 import 'package:linca_otaku_support/core/network/model/participation_info.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
+import 'package:linca_otaku_support/core/utils/event_analytics_manager.dart';
 import 'package:linca_otaku_support/core/utils/event_base_extension.dart';
 import 'package:linca_otaku_support/core/utils/preferences_service.dart';
 import 'package:linca_otaku_support/core/utils/providers.dart';
@@ -13,7 +15,8 @@ import '../../asset_gen/assets.gen.dart';
 import '../../models/linca_event.dart';
 import '../../router/app_router.gr.dart';
 
-class OnTheDayEventDialog extends HookConsumerWidget {
+class OnTheDayEventDialog extends HookConsumerWidget
+    with EventAnalyticsManager {
   const OnTheDayEventDialog({
     super.key,
     required this.events,
@@ -67,12 +70,23 @@ class OnTheDayEventDialog extends HookConsumerWidget {
                     final LincaEvent event = events[index];
 
                     return GestureDetector(
-                      onTap: () => context.router.push(
-                        EventDetailRoute(
-                          lincaEvent: event,
-                          participationInfo: participations[event],
-                        ),
-                      ),
+                      onTap: () {
+                        context.router.push(
+                          EventDetailRoute(
+                            lincaEvent: event,
+                            participationInfo: participations[event],
+                          ),
+                        );
+
+                        logEvent(
+                          event: AnalyticsEvent.onTheDayEventEventClick,
+                          params: <String, Object>{
+                            'lincaEvent': event,
+                            'participationInfo':
+                                participations[event] ?? 'no participation'
+                          },
+                        );
+                      },
                       child: Stack(
                         fit: StackFit.expand,
                         children: <Widget>[
@@ -199,6 +213,13 @@ class OnTheDayEventDialog extends HookConsumerWidget {
 
             TextButton(
               onPressed: () {
+                logEvent(
+                  event: AnalyticsEvent.onTheDayEventCloseClick,
+                  params: <String, Object>{
+                    'hideOnTheDayDialog': dontShowToday.value
+                  },
+                );
+
                 if (dontShowToday.value) {
                   // 今日表示しない設定を保存
                   final PreferencesService sharedPreferences =
