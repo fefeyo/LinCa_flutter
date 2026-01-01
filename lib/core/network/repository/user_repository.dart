@@ -56,6 +56,16 @@ class UserRepository {
     });
   }
 
+  Future<void> updateBio(String bio) async {
+    if (uid == null) return;
+
+    final DocumentReference<Map<String, dynamic>> document = doc(uid!);
+    await document.update(<String, dynamic>{
+      'bio': bio,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
   Future<void> updateUserPhoto(String photoUrl) async {
     if (uid == null) return;
 

@@ -27,6 +27,22 @@
       }
     }
   },
+  "common_year": "common_year",
+  "@common_year": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "common_count": "common_count",
+  "@common_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "common_save": "Save",
   "common_edit": "common_edit",
   "common_delete": "common_delete",
@@ -40,6 +56,8 @@
   "common_determination": "common_determination",
   "common_required": "common_required",
   "common_event": "Event",
+  "common_official_event": "common_official_event",
+  "common_original_event": "common_original_event",
   "common_linca_card": "LinCaCard",
   "common_save_suceeded": "Event saved",
   "menu_title": "Menu",
@@ -255,24 +273,6 @@
       }
     }
   },
-  "common_official_event": "common_official_event",
-  "common_original_event": "common_original_event",
-  "common_year": "common_year",
-  "@common_year": {
-    "placeholders": {
-      "year": {
-        "type": "String"
-      }
-    }
-  },
-  "common_count": "common_count",
-  "@common_count": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "highlight_series_breakdown_title": "highlight_series_breakdown_title",
   "@highlight_series_breakdown_title": {
     "placeholders": {
@@ -282,6 +282,7 @@
     }
   },
   "highlight_series_breakdown_subtitle": "highlight_series_breakdown_subtitle",
+  "highlight_generated_sign": "highlight_print_sign",
   "highlight_end": "highlight_end",
-  "highlight_generated_sign": "highlight_print_sign"
+  "highlight_share_message": "#LinCa"
 }

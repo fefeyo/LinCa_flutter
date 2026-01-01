@@ -81,6 +81,15 @@ class UserController extends LincaController<LincaUser> {
             const LincaUser());
   }
 
+  Future<void> updateBio(String bio) async {
+    if (uid == null) return;
+    await userRepository.updateBio(bio);
+    final User user = state.value?.user ?? const User();
+    state = AsyncValue<LincaUser>.data(
+        state.value?.copyWith(user: user.copyWith(bio: bio)) ??
+            const LincaUser());
+  }
+
   Future<void> updateUserPhoto(String photoUrl) async {
     if (uid == null) return;
     await userRepository.updateUserPhoto(photoUrl);

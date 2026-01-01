@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/network/repository/user_event_repository.dart';
 
 import '../../network/providers.dart';
 import '../../network/repository/user_repository.dart';
@@ -13,11 +14,13 @@ import '../repository/auth_repository.dart';
 class AuthController extends AsyncNotifier<AuthState> {
   late AuthRepository authRepository;
   late UserRepository userRepository;
+  late UserEventRepository userEventRepository;
 
   @override
   FutureOr<AuthState> build() async {
     authRepository = ref.read(authRepositoryProvider);
     userRepository = ref.read(userRepositoryProvider);
+    userEventRepository = ref.read(userEventRepositoryProvider);
     return AuthState(
       isSignedIn: authRepository.currentUser != null,
       isGoogleLinked: authRepository.isGoogleLinked(),
@@ -152,6 +155,8 @@ class AuthController extends AsyncNotifier<AuthState> {
     state = const AsyncLoading<AuthState>();
     state = await AsyncValue.guard(() async {
       await userRepository.deleteMyUserData(authRepository.currentUser?.uid);
+      await userEventRepository
+          .deleteMyPrivateEvents(authRepository.currentUser?.uid);
       await authRepository.deleteAccount();
 
       return _buildAuthState();

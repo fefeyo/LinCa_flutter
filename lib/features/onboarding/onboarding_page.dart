@@ -97,6 +97,8 @@ class OnboardingPage extends HookConsumerWidget {
         final SharedPreferences sharedPreferences =
             await SharedPreferences.getInstance();
         sharedPreferences.setBool(AppConstants.hasSeenOnboarding, true);
+        ref.invalidate(userControllerProvider);
+        ref.invalidate(participationControllerProvider);
         if (context.mounted) {
           context.router.push(const HomeRoute());
         }

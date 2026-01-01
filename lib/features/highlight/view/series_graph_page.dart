@@ -65,11 +65,11 @@ class SeriesGraphPage extends HookConsumerWidget {
           bottom: 0,
           child: Padding(
             padding: const EdgeInsets.all(16),
-            child: RepaintBoundary(
-              key: repaintKey,
-              child: Column(
-                children: <Widget>[
-                  Expanded(
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: RepaintBoundary(
+                    key: repaintKey,
                     child: Container(
                       width: MediaQuery.of(context).size.width - 32,
                       padding: const EdgeInsets.all(24),
@@ -180,28 +180,28 @@ class SeriesGraphPage extends HookConsumerWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () => context.router.pop(),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
+                ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => context.router.pop(),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
                       ),
-                      child: Text(
-                        context.l10n.highlight_end,
-                        style: context.textTheme.titleMedium?.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    ),
+                    child: Text(
+                      context.l10n.highlight_end,
+                      style: context.textTheme.titleMedium?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -221,7 +221,8 @@ class SeriesGraphPage extends HookConsumerWidget {
             icon: const Icon(Icons.share),
             onPressed: () async {
               final Uint8List png = await _capture(repaintKey);
-              await _shareImage(png);
+              if (!context.mounted) return;
+              await _shareImage(context: context, pngBytes: png);
             },
           ),
         ),
@@ -238,14 +239,20 @@ class SeriesGraphPage extends HookConsumerWidget {
     return byteData.buffer.asUint8List();
   }
 
-  Future<void> _shareImage(Uint8List pngBytes) async {
+  Future<void> _shareImage({
+    required BuildContext context,
+    required Uint8List pngBytes,
+  }) async {
     final XFile file = XFile.fromData(
       pngBytes,
       mimeType: 'image/png',
       name: 'linca_highlight.png',
     );
     await SharePlus.instance.share(
-      ShareParams(files: <XFile>[file]),
+      ShareParams(
+        files: <XFile>[file],
+        text: context.l10n.highlight_share_message,
+      ),
     );
   }
 }

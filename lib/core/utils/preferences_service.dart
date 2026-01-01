@@ -26,4 +26,9 @@ class PreferencesService {
   Future<void> clear() async {
     await sharedPreferences.clear();
   }
+
+  Future<void> clearUserSignInData() async {
+    await sharedPreferences.remove(AppConstants.hasSeenOnboarding);
+    await sharedPreferences.remove(AppConstants.participationLastUpdatedAtKey);
+  }
 }

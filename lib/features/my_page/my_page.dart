@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/models/linca_user.dart';
-import 'package:linca_otaku_support/core/network/providers.dart';
 import 'package:linca_otaku_support/core/utils/linca_user_extension.dart';
+import 'package:linca_otaku_support/core/utils/preferences_service.dart';
 import 'package:linca_otaku_support/core/widgets/common/common_simple_dialog.dart';
 import 'package:linca_otaku_support/features/my_page/data/my_page_state.dart';
 import 'package:linca_otaku_support/features/my_page/view_model/my_page_view_model.dart';
@@ -15,6 +15,7 @@ import '../../core/auth/controller/auth_controller.dart';
 import '../../core/auth/data/auth_state.dart';
 import '../../core/auth/providers.dart';
 import '../../core/router/app_router.gr.dart';
+import '../../core/utils/providers.dart';
 import '../../core/widgets/bottom_sheet/my_qr_bottom_sheet.dart';
 import 'view/linca_vertical.dart';
 import 'view/my_page_item.dart';
@@ -29,6 +30,8 @@ class MyPage extends HookConsumerWidget {
     final AuthController authController =
         ref.read(authControllerProvider.notifier);
     final MyPageState state = ref.watch(myPageViewModelProvider);
+    final PreferencesService preferencesService =
+        ref.read(preferencesServiceProvider);
 
     return Scaffold(
       body: Padding(
@@ -203,7 +206,7 @@ class MyPage extends HookConsumerWidget {
                   );
                   if (comfirmed == true && context.mounted) {
                     authController.signOut();
-                    ref.invalidate(participationControllerProvider);
+                    preferencesService.clearUserSignInData();
                     context.router.replace(const LoginRoute());
                   }
                 },
@@ -221,6 +224,7 @@ class MyPage extends HookConsumerWidget {
                   );
                   if (comfirmed == true && context.mounted) {
                     authController.deleteMyAccount();
+                    preferencesService.clearUserSignInData();
                     context.router.replace(const LoginRoute());
                   }
                 },
