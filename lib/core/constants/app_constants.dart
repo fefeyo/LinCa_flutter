@@ -67,4 +67,28 @@ class AppConstants {
   static const int originalEventOrganizerMaxLength = 30;
   static const int originalEventUrlMaxLength = 100;
 
+  // 参考URL: https://w.atwiki.jp/lovelive-sif/pages/26.html
+  static const List<String> defaultNames = <String>[
+    '幻の学院生',
+    '明るい学院生',
+    '期待の学院生',
+    '純粋な学院生',
+    '素直な学院生',
+    '元気な学院生',
+    '天然な学院生',
+    '勇敢な学院生',
+    '憧れの学院生',
+    '気になる学院生',
+    '真面目な学院生',
+    '不思議な学院生',
+    '癒し系な学院生',
+    '心優しい学院生',
+    'さわやかな学院生',
+    '頼りになる学院生',
+    'さすらいの学院生',
+    '正義感あふれる学院生',
+    'カラオケ好きの学院生',
+    'アイドル好きの学院生',
+  ];
+
 }

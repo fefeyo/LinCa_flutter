@@ -82,7 +82,7 @@ class LoginPage extends HookConsumerWidget
                     event: AnalyticsEvent.loginClick,
                     params: <String, Object>{
                       'provider': 'guest',
-                      'isSignedIn': isSignedIn,
+                      'isSignedIn': isSignedIn ? 1 : 0,
                     },
                   );
 
@@ -99,7 +99,7 @@ class LoginPage extends HookConsumerWidget
                     event: AnalyticsEvent.loginClick,
                     params: <String, Object>{
                       'provider': 'google',
-                      'isSignedIn': isSignedIn,
+                      'isSignedIn': isSignedIn ? 1 : 0,
                     },
                   );
 
@@ -116,7 +116,7 @@ class LoginPage extends HookConsumerWidget
                     event: AnalyticsEvent.loginClick,
                     params: <String, Object>{
                       'provider': 'twitter',
-                      'isSignedIn': isSignedIn,
+                      'isSignedIn': isSignedIn ? 1 : 0,
                     },
                   );
 

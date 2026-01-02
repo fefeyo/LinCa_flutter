@@ -9,7 +9,7 @@ part 'user.g.dart';
 abstract class User with _$User {
   const factory User({
     @Default('') String id,
-    @Default('幻の学院生') String displayName,
+    @Default('') String displayName,
     @Default('') String photoUrl,
     @Default('よろしくお願いします！') String bio,
     @Default(<String>[]) List<String> favoriteGroups,

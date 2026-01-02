@@ -21,7 +21,7 @@ class UserRepository {
           await transaction.get(document);
       if (!snap.exists) {
         transaction.set(document, <String, Object?>{
-          'displayName': '幻の学院生',
+          'displayName': '',
           'photoUrl': '',
           'bio': 'よろしくお願いします！',
           'favoriteGroups': <String>[],
