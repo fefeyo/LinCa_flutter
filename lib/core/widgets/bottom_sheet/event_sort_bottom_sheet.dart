@@ -199,7 +199,20 @@ class EventSortBottomSheet extends HookConsumerWidget
                           logEvent(
                             event: AnalyticsEvent.filterConfirmClick,
                             params: <String, Object>{
-                              'filterSettings': filterSettings,
+                              'keyword': keywordController.text,
+                              'displayOrder': currentDisplayOrder.value,
+                              'participationFilters':
+                                  currentParticipationTypes.value,
+                              'seriesTags': currentSeriesTags.value,
+                              'typeTags': currentTypeTags.value,
+                              'isHiddenParticipationEvent':
+                                  isHiddenParticipationEvent.value ? 1 : 0,
+                              'isHiddenOriginalEvent':
+                                  isHiddenOriginalEvent.value ? 1 : 0,
+                              'isShowOfficialEvent':
+                                  isShowOfficialEvent.value ? 1 : 0,
+                              'isShowOriginalEvent':
+                                  isShowOriginalEvent.value ? 1 : 0,
                             },
                           );
 
