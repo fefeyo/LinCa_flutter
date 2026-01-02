@@ -44,6 +44,18 @@ android {
         versionName = flutter.versionName
     }
 
+    flavorDimensions += "env"
+    productFlavors {
+        create("dev") {
+            dimension = "env"
+            applicationIdSuffix = ".dev"
+            resValue("string", "app_name", "LinCa! DEV")
+        }
+        create("prod") {
+            dimension = "env"
+            resValue("string", "app_name", "LinCa!")
+        }
+    }
     signingConfigs {
         create("release") {
             keyAlias = keystoreProperties["keyAlias"] as String
@@ -56,6 +68,9 @@ android {
     buildTypes {
         getByName("release") {
             signingConfig = signingConfigs.getByName("release")
+        }
+        getByName("debug") {
+
         }
     }
 }

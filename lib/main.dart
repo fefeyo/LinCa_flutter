@@ -11,7 +11,6 @@ import 'core/network/providers.dart';
 import 'core/theme/app_schemes.dart';
 import 'core/theme/app_theme.dart';
 import 'core/utils/providers.dart';
-import 'firebase_options.dart';
 import 'l10n/app_localizations.dart';
 
 import 'core/router/app_router.dart';
@@ -21,12 +20,10 @@ final AppRouter appRouter = AppRouter();
 void main() async {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    await Firebase.initializeApp();
     GoogleSignIn.instance.initialize(
-        serverClientId: '630270810691-cavclpg0rs7vr4kgojc93fv0'
-            '8ovrssgl.apps.googleusercontent.com');
+        serverClientId:
+            '630270810691-cavclpg0rs7vr4kgojc93fv08ovrssgl.apps.googleusercontent.com');
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final ProviderContainer container = ProviderContainer(overrides: <Override>[
       sharedPreferencesProvider.overrideWithValue(preferences),

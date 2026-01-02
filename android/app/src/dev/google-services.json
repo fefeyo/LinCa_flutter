@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "445008221554",
+    "project_id": "linca-dev",
+    "storage_bucket": "linca-dev.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:445008221554:android:590b4c3430df6a07a279eb",
+        "android_client_info": {
+          "package_name": "com.fefeyo.linca.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "445008221554-sq6horfo0qfseb074ikt3s6kvsaut32q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAqLUIDNmRCiIgXCNOvEQ8uDntlNEFnnY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "445008221554-sq6horfo0qfseb074ikt3s6kvsaut32q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
