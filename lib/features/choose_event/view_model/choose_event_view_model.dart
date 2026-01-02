@@ -49,6 +49,14 @@ final AutoDisposeStateNotifierProvider<ChooseEventViewModel, ChooseEventState>
     }
   });
 
+  ref.listen(userEventControllerProvider,
+      (_, AsyncValue<List<LincaEvent>> next) {
+    final List<LincaEvent>? events = next.value;
+    if (events != null) {
+      viewModel.updateEvents(events);
+    }
+  });
+
   return viewModel;
 });
 
