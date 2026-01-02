@@ -18,9 +18,9 @@ class ParticipationController
   Future<Map<LincaEvent, ParticipationInfo>> buildImpl() async {
     participationRepository = ref.read(participationRepositoryProvider);
     final List<LincaEvent> events =
-        ref.watch(eventControllerProvider).value ?? <LincaEvent>[];
+        ref.read(eventControllerProvider).value ?? <LincaEvent>[];
     final List<LincaEvent> userEvents =
-        ref.watch(userEventControllerProvider).value ?? <LincaEvent>[];
+        ref.read(userEventControllerProvider).value ?? <LincaEvent>[];
 
     List<ParticipationInfo> participationInfos =
         await participationRepository.get();

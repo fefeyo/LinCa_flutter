@@ -41,6 +41,8 @@ extension LincaEventExtension on LincaEvent {
 extension LincaEventsExtension on List<LincaEvent> {
   // キーワードフィルタリング
   List<LincaEvent> filterWithKeyword(String keyword) {
+    if (keyword.isEmpty) return this;
+
     final List<String> keywords = keyword
         .toLowerCase()
         .split(' ')
