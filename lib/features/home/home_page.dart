@@ -106,9 +106,18 @@ class HomePage extends HookConsumerWidget
                       myEventViewModel.setKeyword(value);
                     },
                   )
-                : Text(
-                    appBarTitles[tabs.activeIndex],
-                    style: context.textTheme.titleMedium,
+                : Column(
+                    children: <Widget>[
+                      Text(
+                        appBarTitles[tabs.activeIndex],
+                        style: context.textTheme.titleMedium,
+                      ),
+                      if (tabs.activeIndex == 0)
+                        Text(
+                          '件数: ${myEventState.sortedEvents.length}',
+                          style: context.textTheme.bodyMedium,
+                        ),
+                    ],
                   ),
             actions: tabs.activeIndex == 0
                 ? <Widget>[
