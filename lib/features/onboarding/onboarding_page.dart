@@ -106,6 +106,7 @@ class OnboardingPage extends HookConsumerWidget
         sharedPreferences.setBool(AppConstants.hasSeenOnboarding, true);
         ref.invalidate(userControllerProvider);
         ref.invalidate(participationControllerProvider);
+        ref.invalidate(userEventControllerProvider);
         if (context.mounted) {
           logEvent(event: AnalyticsEvent.onboardingComplete);
 

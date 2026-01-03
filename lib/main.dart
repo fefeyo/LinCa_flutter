@@ -23,6 +23,7 @@ void main() async {
     await Firebase.initializeApp();
     GoogleSignIn.instance.initialize(
         serverClientId:
+            // ignore: lines_longer_than_80_chars
             '630270810691-cavclpg0rs7vr4kgojc93fv08ovrssgl.apps.googleusercontent.com');
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final ProviderContainer container = ProviderContainer(overrides: <Override>[

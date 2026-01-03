@@ -209,6 +209,16 @@ class HomeDrawer extends HookConsumerWidget
             ),
           ),
           ListTile(
+            leading: const Icon(Icons.calendar_month),
+            title: Text(
+              'イベントカレンダー',
+              style: context.textTheme.bodyMedium,
+            ),
+            onTap: () {
+              transitPage(const LincaCalendarRoute());
+            },
+          ),
+          ListTile(
             leading: const Icon(Icons.auto_graph),
             title: Text(
               context.l10n.highlight_title,
