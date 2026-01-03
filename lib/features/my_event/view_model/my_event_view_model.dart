@@ -74,9 +74,13 @@ class MyEventViewModel extends StateNotifier<MyEventState> {
     }
 
     events = events
-        .filterWithKeyword(filterSettings.keyword)
+        .filterWithPeriod(
+          startDate: filterSettings.startDate,
+          endDate: filterSettings.endDate,
+        )
         .filterWithTag(filterSettings.typeTags)
         .filterWithTag(filterSettings.seriesTags)
+        .filterWithKeyword(filterSettings.keyword)
         .sortWithDisplayOrder(displayOrder: filterSettings.displayOrder);
 
     final Map<LincaEvent, ParticipationInfo> sortedMap =

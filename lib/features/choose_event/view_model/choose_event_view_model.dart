@@ -127,9 +127,13 @@ class ChooseEventViewModel extends StateNotifier<ChooseEventState> {
     }
 
     sortedEvents = sortedEvents
-        .filterWithKeyword(filterSettings.keyword)
+        .filterWithPeriod(
+          startDate: filterSettings.startDate,
+          endDate: filterSettings.endDate,
+        )
         .filterWithTag(filterSettings.typeTags)
         .filterWithTag(filterSettings.seriesTags)
+        .filterWithKeyword(filterSettings.keyword)
         .sortWithDisplayOrder(displayOrder: filterSettings.displayOrder);
 
     return sortedEvents;

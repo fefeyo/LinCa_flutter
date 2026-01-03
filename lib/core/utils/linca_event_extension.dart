@@ -126,6 +126,31 @@ extension LincaEventsExtension on List<LincaEvent> {
     return sortedEvents;
   }
 
+  List<LincaEvent> filterWithPeriod({
+    required DateTime? startDate,
+    required DateTime? endDate,
+  }) {
+    List<LincaEvent> filteredEvents = this;
+
+    if (startDate != null) {
+      filteredEvents = filteredEvents.where((LincaEvent event) {
+        final DateTime? date = event.event.date;
+        if (date == null) return false;
+        return !date.isBefore(startDate);
+      }).toList();
+    }
+
+    if (endDate != null) {
+      filteredEvents = filteredEvents.where((LincaEvent event) {
+        final DateTime? date = event.event.date;
+        if (date == null) return false;
+        return !date.isAfter(endDate);
+      }).toList();
+    }
+
+    return filteredEvents;
+  }
+
   List<LincaEvent> getTodayEvents() {
     final DateTime now = DateTime.now();
     final DateTime today = DateTime(now.year, now.month, now.day);

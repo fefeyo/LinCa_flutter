@@ -7,6 +7,7 @@ import 'package:linca_otaku_support/core/constants/analytics_screen.dart';
 import 'package:linca_otaku_support/core/constants/event_type.dart';
 import 'package:linca_otaku_support/core/models/filter_settings.dart';
 import 'package:linca_otaku_support/core/network/providers.dart';
+import 'package:linca_otaku_support/core/utils/date_extension.dart';
 import 'package:linca_otaku_support/core/utils/event_analytics_manager.dart';
 import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
 import 'package:linca_otaku_support/core/utils/tag_extension.dart';
@@ -62,6 +63,9 @@ class EventSortBottomSheet extends HookConsumerWidget
         useState(initialSettings.isHiddenParticipationEvent);
     final ValueNotifier<bool> isHiddenOriginalEvent =
         useState(initialSettings.isHiddenOriginalEvent);
+    final ValueNotifier<DateTime?> startDate =
+        useState(initialSettings.startDate);
+    final ValueNotifier<DateTime?> endDate = useState(initialSettings.endDate);
 
     return SafeArea(
       child: Padding(
@@ -105,6 +109,16 @@ class EventSortBottomSheet extends HookConsumerWidget
                       const SizedBox(height: 8),
                       const Divider(),
                       const SizedBox(height: 8),
+                      _buildDateRangeArea(
+                        context: context,
+                        startDate: startDate.value,
+                        endDate: endDate.value,
+                        onChanged:
+                            (DateTime? inputStartDate, DateTime? inputEndDate) {
+                          startDate.value = inputStartDate;
+                          endDate.value = inputEndDate;
+                        },
+                      ),
                       ..._buildParticipationAreaIfNeeded(
                         context: context,
                         currentParticipationTypes:
@@ -194,6 +208,8 @@ class EventSortBottomSheet extends HookConsumerWidget
                             isHiddenOriginalEvent: isHiddenOriginalEvent.value,
                             isShowOfficialEvent: isShowOfficialEvent.value,
                             isShowOriginalEvent: isShowOriginalEvent.value,
+                            startDate: startDate.value,
+                            endDate: endDate.value,
                           );
 
                           logEvent(
@@ -213,6 +229,8 @@ class EventSortBottomSheet extends HookConsumerWidget
                                   isShowOfficialEvent.value ? 1 : 0,
                               'isShowOriginalEvent':
                                   isShowOriginalEvent.value ? 1 : 0,
+                              'startDate': startDate,
+                              'endDate': endDate,
                             },
                           );
 
@@ -470,6 +488,81 @@ class EventSortBottomSheet extends HookConsumerWidget
         ).toList(),
       ),
     ];
+  }
+
+  Widget _buildDateRangeArea({
+    required BuildContext context,
+    required DateTime? startDate,
+    required DateTime? endDate,
+    required void Function(DateTime? start, DateTime? end) onChanged,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          '期間を選択',
+          style: context.textTheme.bodyMedium,
+        ),
+        const SizedBox(height: 8),
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: OutlinedButton(
+                onPressed: () async {
+                  final DateTime now = DateTime.now();
+                  final DateTime? picked = await showDatePicker(
+                    context: context,
+                    initialDate: startDate ?? DateTime.now(),
+                    // 最小はμ's1stがある2012
+                    firstDate: DateTime(2012),
+                    // 最大は現在の1年後まで
+                    lastDate: now.copyWith(year: now.year + 1),
+                  );
+                  if (picked != null) {
+                    onChanged(picked, endDate);
+                  }
+                },
+                child: Text(
+                  startDate != null ? startDate.simpleDateFormat() : '開始日',
+                  style: context.textTheme.bodyMedium,
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              '〜',
+              style: context.textTheme.bodyMedium,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: OutlinedButton(
+                onPressed: () async {
+                  final DateTime? picked = await showDatePicker(
+                    context: context,
+                    initialDate: endDate ?? DateTime.now(),
+                    firstDate: DateTime(2010),
+                    lastDate: DateTime(2100),
+                  );
+                  if (picked != null) {
+                    onChanged(startDate, picked);
+                  }
+                },
+                child: Text(
+                  endDate != null ? endDate.simpleDateFormat() : '終了日',
+                  style: context.textTheme.bodyMedium,
+                ),
+              ),
+            ),
+          ],
+        ),
+        TextButton(
+          onPressed: () => onChanged(null, null),
+          child: const Text('期間をクリア'),
+        ),
+        const Divider(),
+        const SizedBox(height: 8),
+      ],
+    );
   }
 
   static Future<FilterSettings?> show(
