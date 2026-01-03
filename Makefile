@@ -29,7 +29,7 @@ create_feature:
 	@bash scripts/create_feature.sh $(name)
 
 generate_dev_apk:
-	flutter build apk --flavor dev -t lib/main_dev.dart
+	flutter build apk --debug --flavor dev -t lib/main_dev.dart
 
 generate_launcher_icon:
 	flutter pub run flutter_launcher_icons
