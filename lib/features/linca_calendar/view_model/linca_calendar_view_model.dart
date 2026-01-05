@@ -1,4 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/local/models/calendar_event.dart';
+import 'package:linca_otaku_support/core/local/models/calendar_event_type.dart';
 import 'package:linca_otaku_support/core/models/linca_event.dart';
 import 'package:linca_otaku_support/core/utils/date_extension.dart';
 import '../../../core/network/model/event_base.dart';
@@ -59,11 +61,35 @@ class LincaCalendarViewModel extends StateNotifier<LincaCalendarState> {
           ),
         );
 
-  void updateFocusedMonth(DateTime dateTime) {
-    state = state.copyWith(
-      focusedMonth: dateTime,
-    );
+  final int calendarMinYear = 2012;
+  final int calendarMaxYear = 2028;
+
+  DateTime get calendarMinMonth =>
+      DateTime(calendarMinYear, 1);
+
+  DateTime get calendarMaxMonth =>
+      DateTime(calendarMaxYear, 12);
+
+  bool get canGoPrevMonth =>
+      state.focusedMonth.isAfter(calendarMinMonth);
+
+  bool get canGoNextMonth =>
+      state.focusedMonth.isBefore(calendarMaxMonth);
+
+  void updateFocusedMonth(DateTime newMonth) {
+    if (newMonth.isBefore(calendarMinMonth)) {
+      state = state.copyWith(focusedMonth: calendarMinMonth);
+      return;
+    }
+
+    if (newMonth.isAfter(calendarMaxMonth)) {
+      state = state.copyWith(focusedMonth: calendarMaxMonth);
+      return;
+    }
+
+    state = state.copyWith(focusedMonth: newMonth);
   }
+
 
   void updateSelectedDate(DateTime dateTime) {
     state = state.copyWith(
@@ -76,7 +102,44 @@ class LincaCalendarViewModel extends StateNotifier<LincaCalendarState> {
         lincaEvent.event.date?.isSameDate(dateTime) == true);
   }
 
+  bool hasAnniversary(DateTime dateTime) {
+    return state.calendarEvents.any((CalendarEvent calendarEvent) {
+      if (calendarEvent.type == CalendarEventType.holiday ||
+          calendarEvent.type == CalendarEventType.variableHoliday) {
+        return false;
+      }
+
+      return calendarEvent.date.isSameMonthDay(dateTime);
+    });
+  }
+
+  bool isHoliday(DateTime dateTime) {
+    return state.calendarEvents.any((CalendarEvent calendarEvent) {
+      if (calendarEvent.type != CalendarEventType.holiday &&
+          calendarEvent.type != CalendarEventType.variableHoliday) {
+        return false;
+      }
+
+      if (calendarEvent.date.isSameDate(dateTime)) {
+        return true;
+      }
+
+      return calendarEvent.date.isSameMonthDay(dateTime) &&
+          calendarEvent.type != CalendarEventType.variableHoliday;
+    });
+  }
+
   void updateParticipations(Map<LincaEvent, ParticipationInfo> participations) {
     state = state.copyWith(myEvents: participations);
+  }
+
+  void updateCalendarEvents(List<CalendarEvent> calendarEvents) {
+    state = state.copyWith(calendarEvents: calendarEvents);
+  }
+
+  void resetCalendar() {
+    final DateTime now = DateTime.now();
+    updateSelectedDate(now);
+    updateFocusedMonth(now);
   }
 }

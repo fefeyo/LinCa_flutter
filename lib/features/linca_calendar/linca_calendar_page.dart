@@ -9,11 +9,8 @@ class LincaCalendarPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('イベントカレンダー'),
-      ),
-      body: const SafeArea(
+    return const Scaffold(
+      body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 8),
           child: LincaCalendar(),

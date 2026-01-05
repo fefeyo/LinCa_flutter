@@ -53,10 +53,12 @@ class CreateEventPage extends HookConsumerWidget
     }
 
     final String title = switch (createEventType) {
-      CreateEventType.public =>
-        isEditMode ? '公開イベント編集' : context.l10n.create_public_event_title,
-      CreateEventType.private =>
-        isEditMode ? '非公開イベント編集' : context.l10n.create_private_event_title,
+      CreateEventType.public => isEditMode
+          ? context.l10n.edit_public_event_title
+          : context.l10n.create_public_event_title,
+      CreateEventType.private => isEditMode
+          ? context.l10n.edit_private_event_title
+          : context.l10n.create_private_event_title,
     };
     final TextEditingController titleController =
         useTextEditingController(text: unOfficialEvent?.title);

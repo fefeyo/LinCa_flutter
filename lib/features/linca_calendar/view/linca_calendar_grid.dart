@@ -39,14 +39,18 @@ class LincaCalendarGrid extends HookConsumerWidget {
 
         final DateTime now = DateTime.now();
         final bool isToday = date.isSameDate(now);
+        final bool isHoliday = viewModel.isHoliday(date);
+        final bool hasEvent = viewModel.hasEvent(date);
+        final bool hasAnniversary = viewModel.hasAnniversary(date);
         final bool isSelected =
             selectedDate != null && date.isSameDate(selectedDate!);
-        final bool hasEvent = viewModel.hasEvent(date);
 
         return LincaCalendarDayCell(
           date: date,
           isToday: isToday,
+          isHoliday: isHoliday,
           hasEvent: hasEvent,
+          hasAnniversary: hasAnniversary,
           isSelected: isSelected,
           onTap: () => onSelect(date),
         );

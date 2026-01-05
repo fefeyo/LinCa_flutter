@@ -108,12 +108,6 @@ class MyPage extends HookConsumerWidget
               ),
               const SizedBox(height: 16),
               MyPageItem(
-                title: 'イベントカレンダー（beta）',
-                onClickItem: () {
-                  context.router.push(const LincaCalendarRoute());
-                },
-              ),
-              MyPageItem(
                 title: context.l10n.highlight_title,
                 onClickItem: () {
                   logEvent(event: AnalyticsEvent.openHighLightClick);

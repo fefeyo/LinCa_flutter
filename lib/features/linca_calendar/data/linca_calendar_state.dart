@@ -1,4 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:linca_otaku_support/core/local/models/calendar_event.dart';
+import 'package:linca_otaku_support/core/local/models/calendar_event_type.dart';
 import 'package:linca_otaku_support/core/utils/date_extension.dart';
 
 import '../../../core/models/linca_event.dart';
@@ -14,6 +16,7 @@ abstract class LincaCalendarState with _$LincaCalendarState {
     @Default(<LincaEvent>[]) List<LincaEvent> events,
     @Default(<LincaEvent, ParticipationInfo>{})
     Map<LincaEvent, ParticipationInfo> myEvents,
+    @Default(<CalendarEvent>[]) List<CalendarEvent> calendarEvents,
   }) = _LincaCalendarState;
 
   const LincaCalendarState._();
@@ -33,5 +36,26 @@ abstract class LincaCalendarState with _$LincaCalendarState {
         if (event.event.date?.isSameDate(targetDate) == true)
           event: myEvents[event],
     };
+  }
+
+  List<CalendarEvent> get selectedDateCalendarEvents {
+    if (selectedDate == null) {
+      return <CalendarEvent>[];
+    }
+
+    return calendarEvents
+        .where((CalendarEvent calendarEvent) {
+      // ① 年月日まで完全一致
+      final bool sameDate =
+      calendarEvent.date.isSameDate(selectedDate!);
+
+      // ② variableHoliday 以外で月日一致
+      final bool sameMonthDayButNotVariableHoliday =
+          calendarEvent.type != CalendarEventType.variableHoliday &&
+              calendarEvent.date.isSameMonthDay(selectedDate!);
+
+      return sameDate || sameMonthDayButNotVariableHoliday;
+    })
+        .toList();
   }
 }

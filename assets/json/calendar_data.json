@@ -1,0 +1,2026 @@
+[
+  {
+    "id": "new_years_day",
+    "name": "元日",
+    "type": "holiday",
+    "color": "#FF3B30",
+    "date": "2025-12-31T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "national_foundation_day",
+    "name": "建国記念の日",
+    "type": "holiday",
+    "color": "#FF3B30",
+    "date": "2026-02-10T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "emperors_birthday",
+    "name": "天皇誕生日",
+    "type": "holiday",
+    "color": "#FF3B30",
+    "date": "2026-02-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "showa_day",
+    "name": "昭和の日",
+    "type": "holiday",
+    "color": "#FF3B30",
+    "date": "2026-04-28T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "constitution_memorial_day",
+    "name": "憲法記念日",
+    "type": "holiday",
+    "color": "#FF3B30",
+    "date": "2026-05-02T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "greenery_day",
+    "name": "みどりの日",
+    "type": "holiday",
+    "color": "#FF3B30",
+    "date": "2026-05-03T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "childrens_day",
+    "name": "こどもの日",
+    "type": "holiday",
+    "color": "#FF3B30",
+    "date": "2026-05-04T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "mountain_day",
+    "name": "山の日",
+    "type": "holiday",
+    "color": "#FF3B30",
+    "date": "2026-08-10T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day",
+    "name": "秋分の日",
+    "type": "holiday",
+    "color": "#FF3B30",
+    "date": "2026-09-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "culture_day",
+    "name": "文化の日",
+    "type": "holiday",
+    "color": "#FF3B30",
+    "date": "2026-11-02T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "labor_thanksgiving_day",
+    "name": "勤労感謝の日",
+    "type": "holiday",
+    "color": "#FF3B30",
+    "date": "2026-11-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "kosaka_honoka",
+    "name": "高坂穂乃果",
+    "type": "character_birthday",
+    "color": "#F38500",
+    "date": "2026-08-02T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "ayase_eri",
+    "name": "絢瀬絵里",
+    "type": "character_birthday",
+    "color": "#7AEEFF",
+    "date": "2026-10-20T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "minami_kotori",
+    "name": "南ことり",
+    "type": "character_birthday",
+    "color": "#CEBFBF",
+    "date": "2026-09-11T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "sonoda_umi",
+    "name": "園田海未",
+    "type": "character_birthday",
+    "color": "#1769FF",
+    "date": "2026-03-14T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "hoshizora_rin",
+    "name": "星空凛",
+    "type": "character_birthday",
+    "color": "#EBE317",
+    "date": "2026-10-31T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "nishikino_maki",
+    "name": "西木野真姫",
+    "type": "character_birthday",
+    "color": "#FF503E",
+    "date": "2026-04-18T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "tojo_nozomi",
+    "name": "東條希",
+    "type": "character_birthday",
+    "color": "#C455F6",
+    "date": "2026-06-08T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "koizumi_hanayo",
+    "name": "小泉花陽",
+    "type": "character_birthday",
+    "color": "#6AE673",
+    "date": "2026-01-16T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "yazawa_niko",
+    "name": "矢澤にこ",
+    "type": "character_birthday",
+    "color": "#FF4F91",
+    "date": "2026-07-21T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "takami_chika",
+    "name": "高海千歌",
+    "type": "character_birthday",
+    "color": "#FF9547",
+    "date": "2026-07-31T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "sakurauchi_riko",
+    "name": "桜内梨子",
+    "type": "character_birthday",
+    "color": "#FF9EAC",
+    "date": "2026-09-18T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "matsuura_kanan",
+    "name": "松浦果南",
+    "type": "character_birthday",
+    "color": "#27C1B7",
+    "date": "2026-02-09T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "kurosawa_dia",
+    "name": "黒澤ダイヤ",
+    "type": "character_birthday",
+    "color": "#DB0839",
+    "date": "2025-12-31T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "watanabe_you",
+    "name": "渡辺曜",
+    "type": "character_birthday",
+    "color": "#66C0FF",
+    "date": "2026-04-16T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "tsushima_yoshiko",
+    "name": "津島善子",
+    "type": "character_birthday",
+    "color": "#C1CAD4",
+    "date": "2026-07-12T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "kunikida_hanamaru",
+    "name": "国木田花丸",
+    "type": "character_birthday",
+    "color": "#FFD010",
+    "date": "2026-03-03T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "ohara_mari",
+    "name": "小原鞠莉",
+    "type": "character_birthday",
+    "color": "#C252C6",
+    "date": "2026-06-12T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "kurosawa_ruby",
+    "name": "黒澤ルビィ",
+    "type": "character_birthday",
+    "color": "#FF6FBE",
+    "date": "2026-09-20T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "kazuno_sarah",
+    "name": "鹿角聖良",
+    "type": "character_birthday",
+    "color": "#32BFDB",
+    "date": "2026-05-03T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "kazuno_leah",
+    "name": "鹿角理亞",
+    "type": "character_birthday",
+    "color": "#D2D2D2",
+    "date": "2026-12-11T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "uehara_ayumu",
+    "name": "上原歩夢",
+    "type": "character_birthday",
+    "color": "#ED7D95",
+    "date": "2026-02-28T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "nakasu_kasumi",
+    "name": "中須かすみ",
+    "type": "character_birthday",
+    "color": "#E7D600",
+    "date": "2026-01-22T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "osaka_shizuku",
+    "name": "桜坂しずく",
+    "type": "character_birthday",
+    "color": "#01B7ED",
+    "date": "2026-04-02T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "asaka_karin",
+    "name": "朝香果林",
+    "type": "character_birthday",
+    "color": "#485EC6",
+    "date": "2026-06-28T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "miyashita_ai",
+    "name": "宮下愛",
+    "type": "character_birthday",
+    "color": "#FF5800",
+    "date": "2026-05-29T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "konoe_kanata",
+    "name": "近江彼方",
+    "type": "character_birthday",
+    "color": "#A664A0",
+    "date": "2026-12-15T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "yuki_setsuna",
+    "name": "優木せつ菜",
+    "type": "character_birthday",
+    "color": "#D81C2F",
+    "date": "2026-08-07T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "emma_verde",
+    "name": "エマ・ヴェルデ",
+    "type": "character_birthday",
+    "color": "#84C36E",
+    "date": "2026-02-04T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "tennoji_rina",
+    "name": "天王寺璃奈",
+    "type": "character_birthday",
+    "color": "#9CA5B9",
+    "date": "2026-11-12T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "mifune_shioriko",
+    "name": "三船栞子",
+    "type": "character_birthday",
+    "color": "#37B484",
+    "date": "2026-10-04T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "mia_taylor",
+    "name": "ミア・テイラー",
+    "type": "character_birthday",
+    "color": "#A99E98",
+    "date": "2026-12-05T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "zhong_lanzhu",
+    "name": "鐘嵐珠",
+    "type": "character_birthday",
+    "color": "#F8C8C4",
+    "date": "2026-02-14T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "shibuya_kanon",
+    "name": "澁谷かのん",
+    "type": "character_birthday",
+    "color": "#FF7F27",
+    "date": "2026-04-30T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "tang_keke",
+    "name": "唐可可",
+    "type": "character_birthday",
+    "color": "#7EE6DF",
+    "date": "2026-07-16T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "arashi_chisato",
+    "name": "嵐千砂都",
+    "type": "character_birthday",
+    "color": "#FF6E90",
+    "date": "2026-02-24T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "heanna_sumire",
+    "name": "平安名すみれ",
+    "type": "character_birthday",
+    "color": "#74F466",
+    "date": "2026-09-27T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "hazuki_ren",
+    "name": "葉月恋",
+    "type": "character_birthday",
+    "color": "#0000A0",
+    "date": "2026-11-23T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "sakurakoji_kinako",
+    "name": "桜小路きな子",
+    "type": "character_birthday",
+    "color": "#EBE317",
+    "date": "2026-04-09T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "yoneme_mei",
+    "name": "米女メイ",
+    "type": "character_birthday",
+    "color": "#FF3535",
+    "date": "2026-10-28T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "wakana_shiki",
+    "name": "若菜四季",
+    "type": "character_birthday",
+    "color": "#92E8C2",
+    "date": "2026-06-16T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "onitsuka_natsumi",
+    "name": "鬼塚夏美",
+    "type": "character_birthday",
+    "color": "#FF51C4",
+    "date": "2026-08-06T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "wien_margarete",
+    "name": "ウィーン・マルガレーテ",
+    "type": "character_birthday",
+    "color": "#E49DFD",
+    "date": "2026-01-19T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "onitsuka_tomari",
+    "name": "鬼塚冬毬",
+    "type": "character_birthday",
+    "color": "#76DDDF",
+    "date": "2026-12-27T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "hijirisawa_yuna",
+    "name": "聖澤悠奈",
+    "type": "character_birthday",
+    "color": "#FFD010",
+    "date": "2026-08-10T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "hiiragi_mao",
+    "name": "柊摩央",
+    "type": "character_birthday",
+    "color": "#9970B3",
+    "date": "2026-12-01T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "hinoshita_kaho",
+    "name": "日野下花帆",
+    "type": "character_birthday",
+    "color": "#F8B500",
+    "date": "2026-05-21T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "murano_sayaka",
+    "name": "村野さやか",
+    "type": "character_birthday",
+    "color": "#5383C3",
+    "date": "2026-01-12T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "osawa_rurino",
+    "name": "大沢瑠璃乃",
+    "type": "character_birthday",
+    "color": "#E7609E",
+    "date": "2026-08-30T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "momose_ginko",
+    "name": "百生吟子",
+    "type": "character_birthday",
+    "color": "#A2D7DD",
+    "date": "2026-10-19T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "kachimachi_kosuzu",
+    "name": "徒町小鈴",
+    "type": "character_birthday",
+    "color": "#FFD010",
+    "date": "2026-02-27T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "anyoji_hime",
+    "name": "安養寺姫芽",
+    "type": "character_birthday",
+    "color": "#9D8DE2",
+    "date": "2026-09-23T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "ceras_yanagida_lilienfeld",
+    "name": "セラス柳田リリエンフェルト",
+    "type": "character_birthday",
+    "color": "#F56455",
+    "date": "2026-06-25T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "katsuragi_izumi",
+    "name": "桂城泉",
+    "type": "character_birthday",
+    "color": "#1EBECD",
+    "date": "2026-11-30T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "otomune_kozue",
+    "name": "乙宗梢",
+    "type": "character_birthday",
+    "color": "#68BE8D",
+    "date": "2026-06-14T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "yugiri_tuzuri",
+    "name": "夕霧綴理",
+    "type": "character_birthday",
+    "color": "#BA2636",
+    "date": "2026-11-16T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "fujishima_megumi",
+    "name": "藤島慈",
+    "type": "character_birthday",
+    "color": "#C8C2C6",
+    "date": "2026-12-19T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "yohane",
+    "name": "ヨハネ",
+    "type": "character_birthday",
+    "color": "#C1CAD4",
+    "date": "2026-07-12T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "hanamaru",
+    "name": "ハナマル",
+    "type": "character_birthday",
+    "color": "#FFD010",
+    "date": "2026-03-03T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "dia",
+    "name": "ダイヤ",
+    "type": "character_birthday",
+    "color": "#DB0839",
+    "date": "2025-12-31T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "ruby",
+    "name": "ルビィ",
+    "type": "character_birthday",
+    "color": "#FF6FBE",
+    "date": "2026-09-20T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "chika",
+    "name": "チカ",
+    "type": "character_birthday",
+    "color": "#FF9547",
+    "date": "2026-07-31T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "you",
+    "name": "ヨウ",
+    "type": "character_birthday",
+    "color": "#66C0FF",
+    "date": "2026-04-16T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "kanan",
+    "name": "カナン",
+    "type": "character_birthday",
+    "color": "#27C1B7",
+    "date": "2026-02-09T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "riko",
+    "name": "リコ",
+    "type": "character_birthday",
+    "color": "#FF9EAC",
+    "date": "2026-09-18T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "mari",
+    "name": "マリ",
+    "type": "character_birthday",
+    "color": "#C252C6",
+    "date": "2026-06-12T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "takahashi_polka",
+    "name": "高橋ポルカ",
+    "type": "character_birthday",
+    "color": "#EBE317",
+    "date": "2026-08-17T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "azabu_mai",
+    "name": "麻布麻衣",
+    "type": "character_birthday",
+    "color": "#4D93D9",
+    "date": "2026-02-12T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "goto_akira",
+    "name": "五桐玲",
+    "type": "character_birthday",
+    "color": "#B5E6A2",
+    "date": "2026-07-08T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "komagata_hanabi",
+    "name": "駒形花火",
+    "type": "character_birthday",
+    "color": "#FF4747",
+    "date": "2026-06-10T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "kanazawa_miracle",
+    "name": "金澤奇跡",
+    "type": "character_birthday",
+    "color": "#FFB6C1",
+    "date": "2026-03-01T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "chofu_noriko",
+    "name": "調布のりこ",
+    "type": "character_birthday",
+    "color": "#CC66FF",
+    "date": "2026-04-03T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "harumiya_yukuri",
+    "name": "春宮ゆくり",
+    "type": "character_birthday",
+    "color": "#B3E0F2",
+    "date": "2026-09-21T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "konohana_aurora",
+    "name": "此花輝夜",
+    "type": "character_birthday",
+    "color": "#FF5B9D",
+    "date": "2026-01-02T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "yamada_midori",
+    "name": "山田真緑",
+    "type": "character_birthday",
+    "color": "#3FBF7F",
+    "date": "2026-05-06T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "sasaki_shion",
+    "name": "佐々木翔音",
+    "type": "character_birthday",
+    "color": "#D2D2D2",
+    "date": "2026-11-10T15:00:00.000Z",
+    "priority": 10
+  },
+  {
+    "id": "nitta_emi",
+    "name": "新田恵海",
+    "type": "cast_birthday",
+    "color": "#F38500",
+    "date": "2026-12-09T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "nanjo_yoshino",
+    "name": "南條愛乃",
+    "type": "cast_birthday",
+    "color": "#7AEEFF",
+    "date": "2026-07-11T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "uchida_aya",
+    "name": "内田彩",
+    "type": "cast_birthday",
+    "color": "#CEBFBF",
+    "date": "2026-07-22T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "mimori_suzuko",
+    "name": "三森すずこ",
+    "type": "cast_birthday",
+    "color": "#1769FF",
+    "date": "2026-06-27T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "iida_riho",
+    "name": "飯田里穂",
+    "type": "cast_birthday",
+    "color": "#EBE317",
+    "date": "2026-10-25T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "pile",
+    "name": "Pile",
+    "type": "cast_birthday",
+    "color": "#FF503E",
+    "date": "2026-05-01T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "kuzuda_aina",
+    "name": "楠田亜衣奈",
+    "type": "cast_birthday",
+    "color": "#C455F6",
+    "date": "2026-01-31T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "kubo_yurika",
+    "name": "久保ユリカ",
+    "type": "cast_birthday",
+    "color": "#6AE673",
+    "date": "2026-05-18T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "tokui_sora",
+    "name": "徳井青空",
+    "type": "cast_birthday",
+    "color": "#FF4F91",
+    "date": "2026-12-25T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "inami_anju",
+    "name": "伊波杏樹",
+    "type": "cast_birthday",
+    "color": "#FF9547",
+    "date": "2026-02-06T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "aida_rikako",
+    "name": "逢田梨香子",
+    "type": "cast_birthday",
+    "color": "#FF9EAC",
+    "date": "2026-08-07T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "suwa_nanaka",
+    "name": "諏訪ななか",
+    "type": "cast_birthday",
+    "color": "#27C1B7",
+    "date": "2026-11-01T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "komiya_arisa",
+    "name": "小宮有紗",
+    "type": "cast_birthday",
+    "color": "#DB0839",
+    "date": "2026-02-04T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "saito_shuka",
+    "name": "斉藤朱夏",
+    "type": "cast_birthday",
+    "color": "#66C0FF",
+    "date": "2026-08-15T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "kobayashi_aika",
+    "name": "小林愛香",
+    "type": "cast_birthday",
+    "color": "#C1CAD4",
+    "date": "2026-10-22T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "takatsuki_kanako",
+    "name": "高槻かなこ",
+    "type": "cast_birthday",
+    "color": "#FFD010",
+    "date": "2026-09-24T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "suzuki_aina",
+    "name": "鈴木愛奈",
+    "type": "cast_birthday",
+    "color": "#C252C6",
+    "date": "2026-07-22T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "furihata_ai",
+    "name": "降幡愛",
+    "type": "cast_birthday",
+    "color": "#FF6FBE",
+    "date": "2026-02-18T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "tano_asami",
+    "name": "田野アサミ",
+    "type": "cast_birthday",
+    "color": "#32BFDB",
+    "date": "2026-02-11T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "sato_hinata",
+    "name": "佐藤日向",
+    "type": "cast_birthday",
+    "color": "#D2D2D2",
+    "date": "2026-12-22T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "oonishi_aguri",
+    "name": "大西亜玖璃",
+    "type": "cast_birthday",
+    "color": "#ED7D95",
+    "date": "2026-05-01T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "sagara_mayu",
+    "name": "相良茉優",
+    "type": "cast_birthday",
+    "color": "#E7D600",
+    "date": "2026-04-16T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "maeda_kaori",
+    "name": "前田佳織里",
+    "type": "cast_birthday",
+    "color": "#01B7ED",
+    "date": "2026-04-24T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "kubota_miyu",
+    "name": "久保田未夢",
+    "type": "cast_birthday",
+    "color": "#485EC6",
+    "date": "2026-01-30T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "murakami_natsumi",
+    "name": "村上奈津実",
+    "type": "cast_birthday",
+    "color": "#FF5800",
+    "date": "2026-09-06T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "kito_akari",
+    "name": "鬼頭明里",
+    "type": "cast_birthday",
+    "color": "#A664A0",
+    "date": "2026-10-15T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "hayashi_koko",
+    "name": "林鼓子",
+    "type": "cast_birthday",
+    "color": "#D81C2F",
+    "date": "2026-05-14T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "kusunoki_tomori",
+    "name": "楠木ともり",
+    "type": "cast_birthday",
+    "color": "#D81C2F",
+    "date": "2026-12-21T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "saside_maria",
+    "name": "指出毬亜",
+    "type": "cast_birthday",
+    "color": "#84C36E",
+    "date": "2026-09-19T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "tanaka_chiemi",
+    "name": "田中ちえ美",
+    "type": "cast_birthday",
+    "color": "#9CA5B9",
+    "date": "2026-10-05T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "mifune_shioriko",
+    "name": "小泉萌香",
+    "type": "cast_birthday",
+    "color": "#37B484",
+    "date": "2026-02-26T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "uchida_shu",
+    "name": "内田秀",
+    "type": "cast_birthday",
+    "color": "#A99E98",
+    "date": "2026-05-23T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "homoto_akina",
+    "name": "法元明菜",
+    "type": "cast_birthday",
+    "color": "#F8C8C4",
+    "date": "2026-08-04T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "date_sariyu",
+    "name": "伊達さゆり",
+    "type": "cast_birthday",
+    "color": "#FF7F27",
+    "date": "2026-09-29T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "liyuu",
+    "name": "Liyuu",
+    "type": "cast_birthday",
+    "color": "#7EE6DF",
+    "date": "2026-01-08T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "misaki_nako",
+    "name": "岬なこ",
+    "type": "cast_birthday",
+    "color": "#FF6E90",
+    "date": "2026-03-07T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "payton_naomi",
+    "name": "ペイトン尚未",
+    "type": "cast_birthday",
+    "color": "#74F466",
+    "date": "2026-06-30T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "aoyama_nagisa",
+    "name": "青山なぎさ",
+    "type": "cast_birthday",
+    "color": "#0000A0",
+    "date": "2026-05-15T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "suzuhara_nozomi",
+    "name": "鈴原希実",
+    "type": "cast_birthday",
+    "color": "#EBE317",
+    "date": "2026-10-31T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "yabushima_akane",
+    "name": "薮島朱音",
+    "type": "cast_birthday",
+    "color": "#FF3535",
+    "date": "2026-07-17T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "ookuma_wakana",
+    "name": "大熊和奏",
+    "type": "cast_birthday",
+    "color": "#92E8C2",
+    "date": "2026-04-12T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "emori_aya",
+    "name": "絵森彩",
+    "type": "cast_birthday",
+    "color": "#FF51C4",
+    "date": "2026-02-22T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "yuina",
+    "name": "結那",
+    "type": "cast_birthday",
+    "color": "#E49DFD",
+    "date": "2026-09-26T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "sakakura_sakura",
+    "name": "坂倉花",
+    "type": "cast_birthday",
+    "color": "#76DDDF",
+    "date": "2026-04-02T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "yoshitake_chihaya",
+    "name": "吉武千颯",
+    "type": "cast_birthday",
+    "color": "#FFD010",
+    "date": "2026-03-27T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "yuuki_yuna",
+    "name": "結木ゆな",
+    "type": "cast_birthday",
+    "color": "#9970B3",
+    "date": "2026-06-08T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "nirei_nozomi",
+    "name": "楡井希実",
+    "type": "cast_birthday",
+    "color": "#F8B500",
+    "date": "2026-05-20T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "nonaka_kokona",
+    "name": "野中ここな",
+    "type": "cast_birthday",
+    "color": "#5383C3",
+    "date": "2026-01-27T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "kan-kanna",
+    "name": "菅叶和",
+    "type": "cast_birthday",
+    "color": "#E7609E",
+    "date": "2026-11-28T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "sakurai_hina",
+    "name": "櫻井陽菜",
+    "type": "cast_birthday",
+    "color": "#A2D7DD",
+    "date": "2026-09-16T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "hayama_fuuka",
+    "name": "葉山風花",
+    "type": "cast_birthday",
+    "color": "#FFD010",
+    "date": "2026-01-27T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "kurusu_rin",
+    "name": "来栖りん",
+    "type": "cast_birthday",
+    "color": "#9D8DE2",
+    "date": "2026-11-07T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "miyake_miyu",
+    "name": "三宅美羽",
+    "type": "cast_birthday",
+    "color": "#F56455",
+    "date": "2026-12-13T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "shindo_amane",
+    "name": "進藤あまね",
+    "type": "cast_birthday",
+    "color": "#1EBECD",
+    "date": "2026-04-19T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "hanamiya_niina",
+    "name": "花宮初奈",
+    "type": "cast_birthday",
+    "color": "#68BE8D",
+    "date": "2026-10-23T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "sasaki_kotoko",
+    "name": "佐々木琴子",
+    "type": "cast_birthday",
+    "color": "#BA2636",
+    "date": "2026-08-27T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "tukine_kona",
+    "name": "月音こな",
+    "type": "cast_birthday",
+    "color": "#C8C2C6",
+    "date": "2026-08-19T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "ayasaki_honon",
+    "name": "綾咲穂音",
+    "type": "cast_birthday",
+    "color": "#EBE317",
+    "date": "2026-12-30T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "endo_rina",
+    "name": "遠藤璃菜",
+    "type": "cast_birthday",
+    "color": "#4D93D9",
+    "date": "2026-10-03T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "miyano_seri",
+    "name": "宮野芹",
+    "type": "cast_birthday",
+    "color": "#B5E6A2",
+    "date": "2026-01-04T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "fujino_kokoro",
+    "name": "藤野こころ",
+    "type": "cast_birthday",
+    "color": "#FF4747",
+    "date": "2026-03-30T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "sakano_aiha",
+    "name": "坂野愛羽",
+    "type": "cast_birthday",
+    "color": "#FFB6C1",
+    "date": "2026-05-30T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "seko_ria",
+    "name": "瀬古梨愛",
+    "type": "cast_birthday",
+    "color": "#CC66FF",
+    "date": "2026-09-18T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "okumura_yuki",
+    "name": "奥村優季",
+    "type": "cast_birthday",
+    "color": "#B3E0F2",
+    "date": "2026-10-12T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "amasawa_akane",
+    "name": "天沢朱音",
+    "type": "cast_birthday",
+    "color": "#FF5B9D",
+    "date": "2026-01-18T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "kotomori_honoka",
+    "name": "小戸森穂花",
+    "type": "cast_birthday",
+    "color": "#3FBF7F",
+    "date": "2026-01-22T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "suzunose_aoi",
+    "name": "涼ノ瀬葵音",
+    "type": "cast_birthday",
+    "color": "#D2D2D2",
+    "date": "2026-06-17T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "coming_of_age_day_2012",
+    "name": "成人の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2012-01-08T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2012",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2012-07-15T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2012",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2012-09-16T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2012",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2012-09-21T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2012",
+    "name": "スポーツの日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2012-10-07T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "coming_of_age_day_2013",
+    "name": "成人の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2013-01-13T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2013",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2013-07-14T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2013",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2013-09-15T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2013",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2013-09-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2013",
+    "name": "スポーツの日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2013-10-13T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "coming_of_age_day_2014",
+    "name": "成人の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2014-01-12T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2014",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2014-07-20T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2014",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2014-09-14T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2014",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2014-09-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2014",
+    "name": "スポーツの日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2014-10-12T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "coming_of_age_day_2015",
+    "name": "成人の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2015-01-11T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2015",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2015-07-19T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2015",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2015-09-20T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2015",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2015-09-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2015",
+    "name": "スポーツの日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2015-10-11T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "coming_of_age_day_2016",
+    "name": "成人の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2016-01-10T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2016",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2016-07-17T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2016",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2016-09-18T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2016",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2016-09-21T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2016",
+    "name": "スポーツの日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2016-10-09T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "coming_of_age_day_2017",
+    "name": "成人の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2017-01-08T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2017",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2017-07-16T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2017",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2017-09-17T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2017",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2017-09-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2017",
+    "name": "スポーツの日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2017-10-08T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "coming_of_age_day_2018",
+    "name": "成人の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2018-01-07T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2018",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2018-07-15T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2018",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2018-09-16T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2018",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2018-09-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2018",
+    "name": "スポーツの日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2018-10-07T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "coming_of_age_day_2019",
+    "name": "成人の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2019-01-13T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2019",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2019-07-14T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2019",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2019-09-15T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2019",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2019-09-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2019",
+    "name": "スポーツの日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2019-10-13T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "coming_of_age_day_2020",
+    "name": "成人の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2020-01-12T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2020",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2020-07-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2020",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2020-09-20T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2020",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2020-09-21T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2020",
+    "name": "スポーツの日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2020-10-11T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "coming_of_age_day_2021",
+    "name": "成人の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2021-01-10T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2021",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2021-07-21T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2021",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2021-09-19T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2021",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2021-09-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2021",
+    "name": "スポーツの日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2021-10-10T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "coming_of_age_day_2022",
+    "name": "成人の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2022-01-09T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2022",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2022-07-17T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2022",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2022-09-18T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2022",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2022-09-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2022",
+    "name": "スポーツの日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2022-10-09T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "coming_of_age_day_2023",
+    "name": "成人の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2023-01-08T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2023",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2023-07-16T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2023",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2023-09-17T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2023",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2023-09-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2023",
+    "name": "スポーツの日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2023-10-08T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "coming_of_age_day_2024",
+    "name": "成人の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2024-01-07T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2024",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2024-07-14T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2024",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2024-09-15T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2024",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2024-09-21T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "coming_of_age_day_2025",
+    "name": "成人の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2025-01-12T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2025",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2025-07-20T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2025",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2025-09-14T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2025",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2025-09-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2025",
+    "name": "スポーツの日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2025-10-12T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "coming_of_age_day_2026",
+    "name": "成人の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2026-01-11T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "vernal_equinox_day_2026",
+    "name": "春分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2026-03-19T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "substitute_holiday_2026",
+    "name": "振替休日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2026-05-05T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2026",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2026-07-19T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2026",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2026-09-20T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "citizen_holiday_2026",
+    "name": "国民の休日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2026-09-21T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2026",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2026-09-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2026",
+    "name": "スポーツの日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2026-10-11T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "coming_of_age_day_2027",
+    "name": "成人の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2027-01-10T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "vernal_equinox_day_2027",
+    "name": "春分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2027-03-20T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "substitute_holiday_2026",
+    "name": "振替休日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2027-03-21T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2027",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2027-07-18T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2027",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2027-09-19T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2027",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2027-09-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2027",
+    "name": "スポーツの日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2027-10-10T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "coming_of_age_day_2028",
+    "name": "成人の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2028-01-09T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "vernal_equinox_day_2028",
+    "name": "春分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2028-03-19T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2028",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2028-07-16T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2028",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2028-09-17T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2028",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2028-09-21T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2028",
+    "name": "スポーツの日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2028-10-08T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "coming_of_age_day_2029",
+    "name": "成人の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2029-01-07T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2029",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2029-07-15T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2029",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2029-09-16T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2029",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2029-09-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2029",
+    "name": "スポーツの日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2029-10-07T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "coming_of_age_day_2030",
+    "name": "成人の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2030-01-13T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2030",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2030-07-14T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2030",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2030-09-15T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2030",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2030-09-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2030",
+    "name": "スポーツの日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2030-10-13T15:00:00.000Z",
+    "priority": 100
+  }
+]

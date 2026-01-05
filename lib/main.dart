@@ -5,6 +5,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/local/controller/calendar_event_controller.dart';
 import 'package:linca_otaku_support/core/models/linca_event.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/network/providers.dart';
@@ -43,6 +44,7 @@ void main() async {
     await Future.wait(<Future<Object>>[
       container.read(participationControllerProvider.future),
     ]);
+    await container.read(calendarEventsProvider.future);
     runApp(
       UncontrolledProviderScope(
         container: container,

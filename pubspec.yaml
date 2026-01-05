@@ -99,6 +99,7 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/lottie/
+    - assets/json/
 
 flutter_gen:
   output: lib/core/asset_gen/

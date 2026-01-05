@@ -42,7 +42,7 @@ class CreatedEventListPage extends HookConsumerWidget
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '作成済みイベント一覧',
+          context.l10n.created_events_title,
           style: context.textTheme.titleMedium,
         ),
       ),
@@ -109,7 +109,6 @@ class CreatedEventListPage extends HookConsumerWidget
           right: 8,
           child: IconButton(
             icon: const Icon(Icons.delete, color: Colors.red),
-            tooltip: 'イベントを削除',
             onPressed: () async {
               logEvent(
                 event: AnalyticsEvent.createdDeleteClick,

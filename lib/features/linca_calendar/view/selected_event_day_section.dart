@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:linca_otaku_support/core/local/models/calendar_event.dart';
 import 'package:linca_otaku_support/core/network/model/participation_info.dart';
 import 'package:linca_otaku_support/features/linca_calendar/view/selected_event_day_empty.dart';
+import 'package:linca_otaku_support/features/linca_calendar/view/selected_event_day_section_calendar_event_list.dart';
 import 'package:linca_otaku_support/features/linca_calendar/view/selected_event_day_section_event_list.dart';
 
 import '../../../core/models/linca_event.dart';
@@ -11,16 +13,20 @@ class SelectedDayEventSection extends StatelessWidget {
     super.key,
     required this.selectedDate,
     required this.events,
+    required this.calendarEvents,
   });
 
   final DateTime? selectedDate;
   final Map<LincaEvent, ParticipationInfo?> events;
+  final List<CalendarEvent> calendarEvents;
 
   @override
   Widget build(BuildContext context) {
     if (selectedDate == null) {
       return const SizedBox.shrink();
     }
+    final bool hasEvent = events.isNotEmpty;
+    final bool hasAnniversary = calendarEvents.isNotEmpty;
 
     return Column(
       children: <Widget>[
@@ -30,11 +36,12 @@ class SelectedDayEventSection extends StatelessWidget {
           style: context.textTheme.titleMedium,
         ),
         const SizedBox(height: 8),
-        Expanded(
-          child: events.isNotEmpty
-              ? SelectedEventDaySectionEventList(events: events)
-              : const SelectedEventDayEmpty(),
-        ),
+        if (hasAnniversary)
+          SelectedEventDaySectionCalendarEventList(
+              calendarEvents: calendarEvents),
+        if (hasEvent)
+          Expanded(child: SelectedEventDaySectionEventList(events: events)),
+        if (!hasEvent) const SelectedEventDayEmpty(),
       ],
     );
   }

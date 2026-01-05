@@ -9,8 +9,8 @@ class LincaCalendarHeader extends StatelessWidget {
   });
 
   final DateTime focusedMonth;
-  final VoidCallback onPrev;
-  final VoidCallback onNext;
+  final VoidCallback? onPrev;
+  final VoidCallback? onNext;
 
   @override
   Widget build(BuildContext context) {
