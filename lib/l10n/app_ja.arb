@@ -61,6 +61,28 @@
   "common_linca_card": "LinCaカード",
   "common_hashtag": "#LinCa",
   "common_save_suceeded": "保存に成功しました",
+  "initial_load_title": "初期データを読み込み中",
+  "initial_load_progress": "読み込み状況 {completed}/{total}",
+  "@initial_load_progress": {
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "initial_load_error": "読み込みに失敗しました",
+  "initial_load_retry": "再試行",
+  "initial_load_badges": "バッジを読み込み中",
+  "initial_load_groups": "グループを読み込み中",
+  "initial_load_tags": "タグを読み込み中",
+  "initial_load_venues": "会場を読み込み中",
+  "initial_load_user": "ユーザー情報を読み込み中",
+  "initial_load_events": "イベントを読み込み中",
+  "initial_load_user_events": "参加イベントを読み込み中",
+  "initial_load_participations": "参加情報を読み込み中",
   "menu_title": "メニュー",
   "my_event_title": "マイイベント",
   "recent_event_title": "直近のイベント",
