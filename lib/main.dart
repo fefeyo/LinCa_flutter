@@ -5,9 +5,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:linca_otaku_support/core/models/linca_event.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'core/network/providers.dart';
 import 'core/theme/app_schemes.dart';
 import 'core/theme/app_theme.dart';
 import 'core/utils/providers.dart';
@@ -30,20 +28,6 @@ void main() async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final ProviderContainer container = ProviderContainer(overrides: <Override>[
       sharedPreferencesProvider.overrideWithValue(preferences),
-    ]);
-    await Future.wait(<Future<List<Object>>>[
-      container.read(badgeControllerProvider.future),
-      container.read(groupControllerProvider.future),
-      container.read(tagControllerProvider.future),
-      container.read(venueControllerProvider.future),
-    ]);
-    await container.read(userControllerProvider.future);
-    await Future.wait(<Future<List<LincaEvent>>>[
-      container.read(eventControllerProvider.future),
-      container.read(userEventControllerProvider.future),
-    ]);
-    await Future.wait(<Future<Object>>[
-      container.read(participationControllerProvider.future),
     ]);
     runApp(
       UncontrolledProviderScope(

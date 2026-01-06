@@ -61,6 +61,28 @@
   "common_linca_card": "LinCaCard",
   "common_hashtag": "#LinCa",
   "common_save_suceeded": "Event saved",
+  "initial_load_title": "Loading initial data",
+  "initial_load_progress": "Loading {completed}/{total}",
+  "@initial_load_progress": {
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "initial_load_error": "Failed to load data",
+  "initial_load_retry": "Retry",
+  "initial_load_badges": "Loading badges",
+  "initial_load_groups": "Loading groups",
+  "initial_load_tags": "Loading tags",
+  "initial_load_venues": "Loading venues",
+  "initial_load_user": "Loading user profile",
+  "initial_load_events": "Loading events",
+  "initial_load_user_events": "Loading participation events",
+  "initial_load_participations": "Loading participation details",
   "menu_title": "Menu",
   "my_event_title": "MyEvent",
   "recent_event_title": "RecentEvent",

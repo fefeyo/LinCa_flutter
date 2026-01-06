@@ -10,6 +10,10 @@ class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => <AutoRoute>[
         AutoRoute(
+          page: InitialLoadRoute.page,
+          initial: true,
+        ),
+        AutoRoute(
           page: HomeRoute.page,
           children: <AutoRoute>[
             AutoRoute(page: MyEventRoute.page),
@@ -17,7 +21,6 @@ class AppRouter extends RootStackRouter {
             AutoRoute(page: MyRoute.page),
           ],
           guards: const <AutoRouteGuard>[AuthGuard()],
-          initial: true,
         ),
         AutoRoute(page: OnboardingRoute.page),
         AutoRoute(
