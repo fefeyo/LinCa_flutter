@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:linca_otaku_support/core/local/models/calendar_event.dart';
 import 'package:linca_otaku_support/core/local/models/calendar_event_type.dart';
+import 'package:linca_otaku_support/core/utils/calendar_event_type_extension.dart';
 import 'package:linca_otaku_support/core/utils/date_extension.dart';
 
 import '../../../core/models/linca_event.dart';
@@ -44,6 +45,7 @@ abstract class LincaCalendarState with _$LincaCalendarState {
     }
 
     return calendarEvents
+    .where((CalendarEvent calendarEvent) => !calendarEvent.type.isHoliday)
         .where((CalendarEvent calendarEvent) {
       // ① 年月日まで完全一致
       final bool sameDate =

@@ -2,6 +2,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/local/models/calendar_event.dart';
 import 'package:linca_otaku_support/core/local/models/calendar_event_type.dart';
 import 'package:linca_otaku_support/core/models/linca_event.dart';
+import 'package:linca_otaku_support/core/utils/calendar_event_type_extension.dart';
 import 'package:linca_otaku_support/core/utils/date_extension.dart';
 import '../../../core/network/model/event_base.dart';
 import '../../../core/network/model/participation_info.dart';
@@ -64,17 +65,13 @@ class LincaCalendarViewModel extends StateNotifier<LincaCalendarState> {
   final int calendarMinYear = 2012;
   final int calendarMaxYear = 2028;
 
-  DateTime get calendarMinMonth =>
-      DateTime(calendarMinYear, 1);
+  DateTime get calendarMinMonth => DateTime(calendarMinYear, 1);
 
-  DateTime get calendarMaxMonth =>
-      DateTime(calendarMaxYear, 12);
+  DateTime get calendarMaxMonth => DateTime(calendarMaxYear, 12);
 
-  bool get canGoPrevMonth =>
-      state.focusedMonth.isAfter(calendarMinMonth);
+  bool get canGoPrevMonth => state.focusedMonth.isAfter(calendarMinMonth);
 
-  bool get canGoNextMonth =>
-      state.focusedMonth.isBefore(calendarMaxMonth);
+  bool get canGoNextMonth => state.focusedMonth.isBefore(calendarMaxMonth);
 
   void updateFocusedMonth(DateTime newMonth) {
     if (newMonth.isBefore(calendarMinMonth)) {
@@ -90,7 +87,6 @@ class LincaCalendarViewModel extends StateNotifier<LincaCalendarState> {
     state = state.copyWith(focusedMonth: newMonth);
   }
 
-
   void updateSelectedDate(DateTime dateTime) {
     state = state.copyWith(
       selectedDate: dateTime,
@@ -104,8 +100,7 @@ class LincaCalendarViewModel extends StateNotifier<LincaCalendarState> {
 
   bool hasAnniversary(DateTime dateTime) {
     return state.calendarEvents.any((CalendarEvent calendarEvent) {
-      if (calendarEvent.type == CalendarEventType.holiday ||
-          calendarEvent.type == CalendarEventType.variableHoliday) {
+      if (calendarEvent.type.isHoliday) {
         return false;
       }
 
@@ -115,8 +110,7 @@ class LincaCalendarViewModel extends StateNotifier<LincaCalendarState> {
 
   bool isHoliday(DateTime dateTime) {
     return state.calendarEvents.any((CalendarEvent calendarEvent) {
-      if (calendarEvent.type != CalendarEventType.holiday &&
-          calendarEvent.type != CalendarEventType.variableHoliday) {
+      if (!calendarEvent.type.isHoliday) {
         return false;
       }
 

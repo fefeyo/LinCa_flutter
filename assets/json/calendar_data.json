@@ -1,93 +1,5 @@
 [
   {
-    "id": "new_years_day",
-    "name": "元日",
-    "type": "holiday",
-    "color": "#FF3B30",
-    "date": "2025-12-31T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "national_foundation_day",
-    "name": "建国記念の日",
-    "type": "holiday",
-    "color": "#FF3B30",
-    "date": "2026-02-10T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "emperors_birthday",
-    "name": "天皇誕生日",
-    "type": "holiday",
-    "color": "#FF3B30",
-    "date": "2026-02-22T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "showa_day",
-    "name": "昭和の日",
-    "type": "holiday",
-    "color": "#FF3B30",
-    "date": "2026-04-28T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "constitution_memorial_day",
-    "name": "憲法記念日",
-    "type": "holiday",
-    "color": "#FF3B30",
-    "date": "2026-05-02T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "greenery_day",
-    "name": "みどりの日",
-    "type": "holiday",
-    "color": "#FF3B30",
-    "date": "2026-05-03T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "childrens_day",
-    "name": "こどもの日",
-    "type": "holiday",
-    "color": "#FF3B30",
-    "date": "2026-05-04T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "mountain_day",
-    "name": "山の日",
-    "type": "holiday",
-    "color": "#FF3B30",
-    "date": "2026-08-10T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "autumnal_equinox_day",
-    "name": "秋分の日",
-    "type": "holiday",
-    "color": "#FF3B30",
-    "date": "2026-09-22T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "culture_day",
-    "name": "文化の日",
-    "type": "holiday",
-    "color": "#FF3B30",
-    "date": "2026-11-02T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "labor_thanksgiving_day",
-    "name": "勤労感謝の日",
-    "type": "holiday",
-    "color": "#FF3B30",
-    "date": "2026-11-22T15:00:00.000Z",
-    "priority": 100
-  },
-  {
     "id": "kosaka_honoka",
     "name": "高坂穂乃果",
     "type": "character_birthday",
@@ -544,6 +456,14 @@
     "priority": 10
   },
   {
+    "id": "lailaps",
+    "name": "ライラプス",
+    "type": "character_birthday",
+    "color": "#ABBED1",
+    "date": "2026-01-10T15:00:00.000Z",
+    "priority": 10
+  },
+  {
     "id": "hanamaru",
     "name": "ハナマル",
     "type": "character_birthday",
@@ -689,7 +609,7 @@
   },
   {
     "id": "nitta_emi",
-    "name": "新田恵海",
+    "name": "新田恵海（高坂穂乃果役）",
     "type": "cast_birthday",
     "color": "#F38500",
     "date": "2026-12-09T15:00:00.000Z",
@@ -697,7 +617,7 @@
   },
   {
     "id": "nanjo_yoshino",
-    "name": "南條愛乃",
+    "name": "南條愛乃（絢瀬絵里役）",
     "type": "cast_birthday",
     "color": "#7AEEFF",
     "date": "2026-07-11T15:00:00.000Z",
@@ -705,7 +625,7 @@
   },
   {
     "id": "uchida_aya",
-    "name": "内田彩",
+    "name": "内田彩（南ことり役）",
     "type": "cast_birthday",
     "color": "#CEBFBF",
     "date": "2026-07-22T15:00:00.000Z",
@@ -713,7 +633,7 @@
   },
   {
     "id": "mimori_suzuko",
-    "name": "三森すずこ",
+    "name": "三森すずこ（園田海未役）",
     "type": "cast_birthday",
     "color": "#1769FF",
     "date": "2026-06-27T15:00:00.000Z",
@@ -721,7 +641,7 @@
   },
   {
     "id": "iida_riho",
-    "name": "飯田里穂",
+    "name": "飯田里穂（星空凛役）",
     "type": "cast_birthday",
     "color": "#EBE317",
     "date": "2026-10-25T15:00:00.000Z",
@@ -729,15 +649,15 @@
   },
   {
     "id": "pile",
-    "name": "Pile",
+    "name": "Pile（西木野真姫役）",
     "type": "cast_birthday",
     "color": "#FF503E",
     "date": "2026-05-01T15:00:00.000Z",
     "priority": 20
   },
   {
-    "id": "kuzuda_aina",
-    "name": "楠田亜衣奈",
+    "id": "kusuda_aina",
+    "name": "楠田亜衣奈（東條希役）",
     "type": "cast_birthday",
     "color": "#C455F6",
     "date": "2026-01-31T15:00:00.000Z",
@@ -745,7 +665,7 @@
   },
   {
     "id": "kubo_yurika",
-    "name": "久保ユリカ",
+    "name": "久保ユリカ（小泉花陽役）",
     "type": "cast_birthday",
     "color": "#6AE673",
     "date": "2026-05-18T15:00:00.000Z",
@@ -753,15 +673,31 @@
   },
   {
     "id": "tokui_sora",
-    "name": "徳井青空",
+    "name": "徳井青空（矢澤にこ役）",
     "type": "cast_birthday",
     "color": "#FF4F91",
     "date": "2026-12-25T15:00:00.000Z",
     "priority": 20
   },
   {
+    "id": "sakuragawa_megu",
+    "name": "櫻川めぐ（綺羅ツバサ役）",
+    "type": "cast_birthday",
+    "color": "#A68721",
+    "date": "2026-10-23T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "oohashi_ayuru",
+    "name": "大橋歩夕（優木あんじゅ役）",
+    "type": "cast_birthday",
+    "color": "#BF6821",
+    "date": "2026-04-27T15:00:00.000Z",
+    "priority": 20
+  },
+  {
     "id": "inami_anju",
-    "name": "伊波杏樹",
+    "name": "伊波杏樹（高海千歌、チカ役）",
     "type": "cast_birthday",
     "color": "#FF9547",
     "date": "2026-02-06T15:00:00.000Z",
@@ -769,7 +705,7 @@
   },
   {
     "id": "aida_rikako",
-    "name": "逢田梨香子",
+    "name": "逢田梨香子（桜内梨子、リコ役）",
     "type": "cast_birthday",
     "color": "#FF9EAC",
     "date": "2026-08-07T15:00:00.000Z",
@@ -777,7 +713,7 @@
   },
   {
     "id": "suwa_nanaka",
-    "name": "諏訪ななか",
+    "name": "諏訪ななか（松浦果南、カナン役）",
     "type": "cast_birthday",
     "color": "#27C1B7",
     "date": "2026-11-01T15:00:00.000Z",
@@ -785,7 +721,7 @@
   },
   {
     "id": "komiya_arisa",
-    "name": "小宮有紗",
+    "name": "小宮有紗（黒澤ダイヤ、ダイヤ役）",
     "type": "cast_birthday",
     "color": "#DB0839",
     "date": "2026-02-04T15:00:00.000Z",
@@ -793,7 +729,7 @@
   },
   {
     "id": "saito_shuka",
-    "name": "斉藤朱夏",
+    "name": "斉藤朱夏（渡辺曜、ヨウ役）",
     "type": "cast_birthday",
     "color": "#66C0FF",
     "date": "2026-08-15T15:00:00.000Z",
@@ -801,7 +737,7 @@
   },
   {
     "id": "kobayashi_aika",
-    "name": "小林愛香",
+    "name": "小林愛香（津島善子、ヨハネ役）",
     "type": "cast_birthday",
     "color": "#C1CAD4",
     "date": "2026-10-22T15:00:00.000Z",
@@ -809,7 +745,7 @@
   },
   {
     "id": "takatsuki_kanako",
-    "name": "高槻かなこ",
+    "name": "高槻かなこ（国木田花丸、ハナマル役）",
     "type": "cast_birthday",
     "color": "#FFD010",
     "date": "2026-09-24T15:00:00.000Z",
@@ -817,7 +753,7 @@
   },
   {
     "id": "suzuki_aina",
-    "name": "鈴木愛奈",
+    "name": "鈴木愛奈（小原鞠莉、マリ役）",
     "type": "cast_birthday",
     "color": "#C252C6",
     "date": "2026-07-22T15:00:00.000Z",
@@ -825,7 +761,7 @@
   },
   {
     "id": "furihata_ai",
-    "name": "降幡愛",
+    "name": "降幡愛（黒澤ルビィ、ルビィ役）",
     "type": "cast_birthday",
     "color": "#FF6FBE",
     "date": "2026-02-18T15:00:00.000Z",
@@ -833,7 +769,7 @@
   },
   {
     "id": "tano_asami",
-    "name": "田野アサミ",
+    "name": "田野アサミ（鹿角聖良役）",
     "type": "cast_birthday",
     "color": "#32BFDB",
     "date": "2026-02-11T15:00:00.000Z",
@@ -841,7 +777,7 @@
   },
   {
     "id": "sato_hinata",
-    "name": "佐藤日向",
+    "name": "佐藤日向（鹿角理亞役）",
     "type": "cast_birthday",
     "color": "#D2D2D2",
     "date": "2026-12-22T15:00:00.000Z",
@@ -849,7 +785,7 @@
   },
   {
     "id": "oonishi_aguri",
-    "name": "大西亜玖璃",
+    "name": "大西亜玖璃（上原歩夢役）",
     "type": "cast_birthday",
     "color": "#ED7D95",
     "date": "2026-05-01T15:00:00.000Z",
@@ -857,7 +793,7 @@
   },
   {
     "id": "sagara_mayu",
-    "name": "相良茉優",
+    "name": "相良茉優（中須かすみ役）",
     "type": "cast_birthday",
     "color": "#E7D600",
     "date": "2026-04-16T15:00:00.000Z",
@@ -865,7 +801,7 @@
   },
   {
     "id": "maeda_kaori",
-    "name": "前田佳織里",
+    "name": "前田佳織里（桜坂しずく役）",
     "type": "cast_birthday",
     "color": "#01B7ED",
     "date": "2026-04-24T15:00:00.000Z",
@@ -873,7 +809,7 @@
   },
   {
     "id": "kubota_miyu",
-    "name": "久保田未夢",
+    "name": "久保田未夢（朝香果林役）",
     "type": "cast_birthday",
     "color": "#485EC6",
     "date": "2026-01-30T15:00:00.000Z",
@@ -881,7 +817,7 @@
   },
   {
     "id": "murakami_natsumi",
-    "name": "村上奈津実",
+    "name": "村上奈津実（宮下愛役）",
     "type": "cast_birthday",
     "color": "#FF5800",
     "date": "2026-09-06T15:00:00.000Z",
@@ -889,7 +825,7 @@
   },
   {
     "id": "kito_akari",
-    "name": "鬼頭明里",
+    "name": "鬼頭明里（近江彼方役）",
     "type": "cast_birthday",
     "color": "#A664A0",
     "date": "2026-10-15T15:00:00.000Z",
@@ -897,7 +833,7 @@
   },
   {
     "id": "hayashi_koko",
-    "name": "林鼓子",
+    "name": "林鼓子（優木せつ菜役）",
     "type": "cast_birthday",
     "color": "#D81C2F",
     "date": "2026-05-14T15:00:00.000Z",
@@ -905,7 +841,7 @@
   },
   {
     "id": "kusunoki_tomori",
-    "name": "楠木ともり",
+    "name": "楠木ともり（優木せつ菜役）",
     "type": "cast_birthday",
     "color": "#D81C2F",
     "date": "2026-12-21T15:00:00.000Z",
@@ -913,7 +849,7 @@
   },
   {
     "id": "saside_maria",
-    "name": "指出毬亜",
+    "name": "指出毬亜（エマ・ヴェルデ役）",
     "type": "cast_birthday",
     "color": "#84C36E",
     "date": "2026-09-19T15:00:00.000Z",
@@ -921,15 +857,15 @@
   },
   {
     "id": "tanaka_chiemi",
-    "name": "田中ちえ美",
+    "name": "田中ちえ美（天王寺璃奈役）",
     "type": "cast_birthday",
     "color": "#9CA5B9",
     "date": "2026-10-05T15:00:00.000Z",
     "priority": 20
   },
   {
-    "id": "mifune_shioriko",
-    "name": "小泉萌香",
+    "id": "koizumi_moeka",
+    "name": "小泉萌香（三船栞子役）",
     "type": "cast_birthday",
     "color": "#37B484",
     "date": "2026-02-26T15:00:00.000Z",
@@ -937,7 +873,7 @@
   },
   {
     "id": "uchida_shu",
-    "name": "内田秀",
+    "name": "内田秀（ミア・テイラー役）",
     "type": "cast_birthday",
     "color": "#A99E98",
     "date": "2026-05-23T15:00:00.000Z",
@@ -945,15 +881,23 @@
   },
   {
     "id": "homoto_akina",
-    "name": "法元明菜",
+    "name": "法元明菜（鐘嵐珠役）",
     "type": "cast_birthday",
     "color": "#F8C8C4",
     "date": "2026-08-04T15:00:00.000Z",
     "priority": 20
   },
   {
+    "id": "yano_hinaki",
+    "name": "矢野妃菜喜（高咲侑役）",
+    "type": "cast_birthday",
+    "color": "#1D1D1D",
+    "date": "2026-03-04T15:00:00.000Z",
+    "priority": 20
+  },
+  {
     "id": "date_sariyu",
-    "name": "伊達さゆり",
+    "name": "伊達さゆり（澁谷かのん役）",
     "type": "cast_birthday",
     "color": "#FF7F27",
     "date": "2026-09-29T15:00:00.000Z",
@@ -961,7 +905,7 @@
   },
   {
     "id": "liyuu",
-    "name": "Liyuu",
+    "name": "Liyuu（唐可可役）",
     "type": "cast_birthday",
     "color": "#7EE6DF",
     "date": "2026-01-08T15:00:00.000Z",
@@ -969,7 +913,7 @@
   },
   {
     "id": "misaki_nako",
-    "name": "岬なこ",
+    "name": "岬なこ（嵐千砂都役）",
     "type": "cast_birthday",
     "color": "#FF6E90",
     "date": "2026-03-07T15:00:00.000Z",
@@ -977,7 +921,7 @@
   },
   {
     "id": "payton_naomi",
-    "name": "ペイトン尚未",
+    "name": "ペイトン尚未（平安名すみれ役）",
     "type": "cast_birthday",
     "color": "#74F466",
     "date": "2026-06-30T15:00:00.000Z",
@@ -985,7 +929,7 @@
   },
   {
     "id": "aoyama_nagisa",
-    "name": "青山なぎさ",
+    "name": "青山なぎさ（葉月恋役）",
     "type": "cast_birthday",
     "color": "#0000A0",
     "date": "2026-05-15T15:00:00.000Z",
@@ -993,7 +937,7 @@
   },
   {
     "id": "suzuhara_nozomi",
-    "name": "鈴原希実",
+    "name": "鈴原希実（桜小路きな子役）",
     "type": "cast_birthday",
     "color": "#EBE317",
     "date": "2026-10-31T15:00:00.000Z",
@@ -1001,7 +945,7 @@
   },
   {
     "id": "yabushima_akane",
-    "name": "薮島朱音",
+    "name": "薮島朱音（米女メイ役）",
     "type": "cast_birthday",
     "color": "#FF3535",
     "date": "2026-07-17T15:00:00.000Z",
@@ -1009,7 +953,7 @@
   },
   {
     "id": "ookuma_wakana",
-    "name": "大熊和奏",
+    "name": "大熊和奏（若菜四季役）",
     "type": "cast_birthday",
     "color": "#92E8C2",
     "date": "2026-04-12T15:00:00.000Z",
@@ -1017,7 +961,7 @@
   },
   {
     "id": "emori_aya",
-    "name": "絵森彩",
+    "name": "絵森彩（鬼塚夏美役）",
     "type": "cast_birthday",
     "color": "#FF51C4",
     "date": "2026-02-22T15:00:00.000Z",
@@ -1025,7 +969,7 @@
   },
   {
     "id": "yuina",
-    "name": "結那",
+    "name": "結那（ウィーン・マルガレーテ役）",
     "type": "cast_birthday",
     "color": "#E49DFD",
     "date": "2026-09-26T15:00:00.000Z",
@@ -1033,7 +977,7 @@
   },
   {
     "id": "sakakura_sakura",
-    "name": "坂倉花",
+    "name": "坂倉花（鬼塚冬毬役）",
     "type": "cast_birthday",
     "color": "#76DDDF",
     "date": "2026-04-02T15:00:00.000Z",
@@ -1041,7 +985,7 @@
   },
   {
     "id": "yoshitake_chihaya",
-    "name": "吉武千颯",
+    "name": "吉武千颯（聖澤悠奈役）",
     "type": "cast_birthday",
     "color": "#FFD010",
     "date": "2026-03-27T15:00:00.000Z",
@@ -1049,7 +993,7 @@
   },
   {
     "id": "yuuki_yuna",
-    "name": "結木ゆな",
+    "name": "結木ゆな（柊摩央役）",
     "type": "cast_birthday",
     "color": "#9970B3",
     "date": "2026-06-08T15:00:00.000Z",
@@ -1057,7 +1001,7 @@
   },
   {
     "id": "nirei_nozomi",
-    "name": "楡井希実",
+    "name": "楡井希実（日野下花帆役）",
     "type": "cast_birthday",
     "color": "#F8B500",
     "date": "2026-05-20T15:00:00.000Z",
@@ -1065,23 +1009,23 @@
   },
   {
     "id": "nonaka_kokona",
-    "name": "野中ここな",
+    "name": "野中ここな（村野さやか役）",
     "type": "cast_birthday",
     "color": "#5383C3",
     "date": "2026-01-27T15:00:00.000Z",
     "priority": 20
   },
   {
-    "id": "kan-kanna",
-    "name": "菅叶和",
+    "id": "kan_kanna",
+    "name": "菅叶和（大沢瑠璃乃役）",
     "type": "cast_birthday",
     "color": "#E7609E",
-    "date": "2026-11-28T15:00:00.000Z",
+    "date": "2026-11-18T15:00:00.000Z",
     "priority": 20
   },
   {
     "id": "sakurai_hina",
-    "name": "櫻井陽菜",
+    "name": "櫻井陽菜（百生吟子役）",
     "type": "cast_birthday",
     "color": "#A2D7DD",
     "date": "2026-09-16T15:00:00.000Z",
@@ -1089,7 +1033,7 @@
   },
   {
     "id": "hayama_fuuka",
-    "name": "葉山風花",
+    "name": "葉山風花（徒町小鈴役）",
     "type": "cast_birthday",
     "color": "#FFD010",
     "date": "2026-01-27T15:00:00.000Z",
@@ -1097,15 +1041,15 @@
   },
   {
     "id": "kurusu_rin",
-    "name": "来栖りん",
+    "name": "来栖りん（安養寺姫芽役）",
     "type": "cast_birthday",
     "color": "#9D8DE2",
     "date": "2026-11-07T15:00:00.000Z",
     "priority": 20
   },
   {
-    "id": "miyake_miyu",
-    "name": "三宅美羽",
+    "id": "miyake_miu",
+    "name": "三宅美羽（セラス柳田リリエンフェルト役）",
     "type": "cast_birthday",
     "color": "#F56455",
     "date": "2026-12-13T15:00:00.000Z",
@@ -1113,7 +1057,7 @@
   },
   {
     "id": "shindo_amane",
-    "name": "進藤あまね",
+    "name": "進藤あまね（桂城泉役）",
     "type": "cast_birthday",
     "color": "#1EBECD",
     "date": "2026-04-19T15:00:00.000Z",
@@ -1121,7 +1065,7 @@
   },
   {
     "id": "hanamiya_niina",
-    "name": "花宮初奈",
+    "name": "花宮初奈（乙宗梢役）",
     "type": "cast_birthday",
     "color": "#68BE8D",
     "date": "2026-10-23T15:00:00.000Z",
@@ -1129,7 +1073,7 @@
   },
   {
     "id": "sasaki_kotoko",
-    "name": "佐々木琴子",
+    "name": "佐々木琴子（夕霧綴理役）",
     "type": "cast_birthday",
     "color": "#BA2636",
     "date": "2026-08-27T15:00:00.000Z",
@@ -1137,10 +1081,218 @@
   },
   {
     "id": "tukine_kona",
-    "name": "月音こな",
+    "name": "月音こな（藤島慈役）",
     "type": "cast_birthday",
     "color": "#C8C2C6",
     "date": "2026-08-19T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "horiuchi_marina",
+    "name": "堀内まり菜（椿ルリカ役）",
+    "type": "cast_birthday",
+    "color": "#73B8E2",
+    "date": "2026-04-28T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "watanabe_miho",
+    "name": "渡邉美穂（椿ルリカ役）",
+    "type": "cast_birthday",
+    "color": "#73B8E2",
+    "date": "2026-02-23T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "asai_nanami",
+    "name": "浅井七海（皇ユズハ役）",
+    "type": "cast_birthday",
+    "color": "#C8C8C8",
+    "date": "2026-05-19T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "an_julia",
+    "name": "杏ジュリア（北条ユキノ役）",
+    "type": "cast_birthday",
+    "color": "#F58220",
+    "date": "2026-01-14T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "koyama_rina",
+    "name": "小山璃奈（天草ヒカル役）",
+    "type": "cast_birthday",
+    "color": "#3C6854",
+    "date": "2026-03-03T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "haruna_mai",
+    "name": "春名真依（天草ヒカル役）",
+    "type": "cast_birthday",
+    "color": "#3C6854",
+    "date": "2026-01-04T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "yamauchi_mizuki",
+    "name": "山内瑞葵（天草ヒカル役）",
+    "type": "cast_birthday",
+    "color": "#3C6854",
+    "date": "2026-09-19T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "sato_minami",
+    "name": "佐藤美波（三笠マーヤ役）",
+    "type": "cast_birthday",
+    "color": "#E48898",
+    "date": "2026-08-02T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "matsuzawa_kanon",
+    "name": "松澤可苑（三笠マーヤ役）",
+    "type": "cast_birthday",
+    "color": "#E48898",
+    "date": "2026-07-21T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "yura_akari",
+    "name": "由良朱合（三笠マーヤ役）",
+    "type": "cast_birthday",
+    "color": "#E48898",
+    "date": "2026-03-11T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "sekine_yuuna",
+    "name": "関根優那（滝沢アンズ役）",
+    "type": "cast_birthday",
+    "color": "#D81F35",
+    "date": "2026-09-27T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "tomita_nanaka",
+    "name": "冨田菜々風（滝沢アンズ役）",
+    "type": "cast_birthday",
+    "color": "#D81F35",
+    "date": "2026-07-16T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "saiba_mizuki",
+    "name": "西葉瑞希（若槻ミスズ/滝沢アンズ役）",
+    "type": "cast_birthday",
+    "color": "#004C71",
+    "date": "2026-04-26T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "minamino_hana",
+    "name": "南野巴那（若槻ミスズ役）",
+    "type": "cast_birthday",
+    "color": "#004C71",
+    "date": "2026-04-01T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "yasumoto_ayaka",
+    "name": "安本彩花（若槻ミスズ役）",
+    "type": "cast_birthday",
+    "color": "#004C71",
+    "date": "2026-06-26T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "hoshimori_sana",
+    "name": "星守紗凪（来栖トア役）",
+    "type": "cast_birthday",
+    "color": "#FF8C90",
+    "date": "2026-01-20T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "kurogi_miyu",
+    "name": "黒木美佑（来栖トア役）",
+    "type": "cast_birthday",
+    "color": "#FF8C90",
+    "date": "2026-02-21T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "nishida_arie",
+    "name": "西田有愛（来栖トア役）",
+    "type": "cast_birthday",
+    "color": "#FF8C90",
+    "date": "2026-12-20T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "nakamura_yuna",
+    "name": "仲村悠菜（来栖トア役）",
+    "type": "cast_birthday",
+    "color": "#FF8C90",
+    "date": "2026-05-28T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "mita_ibuki",
+    "name": "三田美吹（鈴賀レナ役）",
+    "type": "cast_birthday",
+    "color": "#ABC900",
+    "date": "2026-07-18T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "suzuki_mayuri",
+    "name": "鈴木まゆり（鈴賀レナ/皇ユズハ/晴風サヤカ役）",
+    "type": "cast_birthday",
+    "color": "#ABC900",
+    "date": "2026-01-24T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "kato_yuuka",
+    "name": "加藤夕夏（鈴賀レナ役）",
+    "type": "cast_birthday",
+    "color": "#ABC900",
+    "date": "2026-07-31T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "rina",
+    "name": "里菜（鈴賀レナ役）",
+    "type": "cast_birthday",
+    "color": "#ABC900",
+    "date": "2026-06-17T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "aoyama_ruri",
+    "name": "青山瑠里（晴風サヤカ役）",
+    "type": "cast_birthday",
+    "color": "#EBE317",
+    "date": "2026-01-30T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "nishida_hirari",
+    "name": "西田ひらり（晴風サヤカ役）",
+    "type": "cast_birthday",
+    "color": "#EBE317",
+    "date": "2026-06-29T15:00:00.000Z",
+    "priority": 20
+  },
+  {
+    "id": "yamamoto_airi",
+    "name": "山本愛梨（晴風サヤカ役）",
+    "type": "cast_birthday",
+    "color": "#EBE317",
+    "date": "2026-11-07T15:00:00.000Z",
     "priority": 20
   },
   {
@@ -1224,43 +1376,83 @@
     "priority": 20
   },
   {
+    "id": "new_years_day",
+    "name": "元日",
+    "type": "holiday",
+    "color": "#FF3B30",
+    "date": "2025-12-31T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "national_foundation_day",
+    "name": "建国記念の日",
+    "type": "holiday",
+    "color": "#FF3B30",
+    "date": "2026-02-10T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "showa_day",
+    "name": "昭和の日",
+    "type": "holiday",
+    "color": "#FF3B30",
+    "date": "2026-04-28T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "constitution_memorial_day",
+    "name": "憲法記念日",
+    "type": "holiday",
+    "color": "#FF3B30",
+    "date": "2026-05-02T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "greenery_day",
+    "name": "みどりの日",
+    "type": "holiday",
+    "color": "#FF3B30",
+    "date": "2026-05-03T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "childrens_day",
+    "name": "こどもの日",
+    "type": "holiday",
+    "color": "#FF3B30",
+    "date": "2026-05-04T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "culture_day",
+    "name": "文化の日",
+    "type": "holiday",
+    "color": "#FF3B30",
+    "date": "2026-11-02T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "labor_thanksgiving_day",
+    "name": "勤労感謝の日",
+    "type": "holiday",
+    "color": "#FF3B30",
+    "date": "2026-11-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "coming_of_age_day_2011",
+    "name": "成人の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2011-01-09T15:00:00.000Z",
+    "priority": 100
+  },
+  {
     "id": "coming_of_age_day_2012",
     "name": "成人の日",
     "type": "variable_holiday",
     "color": "#FF3B30",
     "date": "2012-01-08T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "marine_day_2012",
-    "name": "海の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2012-07-15T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "respect_for_the_aged_day_2012",
-    "name": "敬老の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2012-09-16T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "autumnal_equinox_day_2012",
-    "name": "秋分の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2012-09-21T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "sports_day_2012",
-    "name": "スポーツの日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2012-10-07T15:00:00.000Z",
     "priority": 100
   },
   {
@@ -1272,75 +1464,11 @@
     "priority": 100
   },
   {
-    "id": "marine_day_2013",
-    "name": "海の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2013-07-14T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "respect_for_the_aged_day_2013",
-    "name": "敬老の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2013-09-15T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "autumnal_equinox_day_2013",
-    "name": "秋分の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2013-09-22T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "sports_day_2013",
-    "name": "スポーツの日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2013-10-13T15:00:00.000Z",
-    "priority": 100
-  },
-  {
     "id": "coming_of_age_day_2014",
     "name": "成人の日",
     "type": "variable_holiday",
     "color": "#FF3B30",
     "date": "2014-01-12T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "marine_day_2014",
-    "name": "海の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2014-07-20T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "respect_for_the_aged_day_2014",
-    "name": "敬老の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2014-09-14T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "autumnal_equinox_day_2014",
-    "name": "秋分の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2014-09-22T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "sports_day_2014",
-    "name": "スポーツの日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2014-10-12T15:00:00.000Z",
     "priority": 100
   },
   {
@@ -1352,75 +1480,11 @@
     "priority": 100
   },
   {
-    "id": "marine_day_2015",
-    "name": "海の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2015-07-19T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "respect_for_the_aged_day_2015",
-    "name": "敬老の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2015-09-20T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "autumnal_equinox_day_2015",
-    "name": "秋分の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2015-09-22T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "sports_day_2015",
-    "name": "スポーツの日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2015-10-11T15:00:00.000Z",
-    "priority": 100
-  },
-  {
     "id": "coming_of_age_day_2016",
     "name": "成人の日",
     "type": "variable_holiday",
     "color": "#FF3B30",
     "date": "2016-01-10T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "marine_day_2016",
-    "name": "海の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2016-07-17T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "respect_for_the_aged_day_2016",
-    "name": "敬老の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2016-09-18T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "autumnal_equinox_day_2016",
-    "name": "秋分の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2016-09-21T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "sports_day_2016",
-    "name": "スポーツの日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2016-10-09T15:00:00.000Z",
     "priority": 100
   },
   {
@@ -1432,75 +1496,11 @@
     "priority": 100
   },
   {
-    "id": "marine_day_2017",
-    "name": "海の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2017-07-16T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "respect_for_the_aged_day_2017",
-    "name": "敬老の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2017-09-17T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "autumnal_equinox_day_2017",
-    "name": "秋分の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2017-09-22T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "sports_day_2017",
-    "name": "スポーツの日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2017-10-08T15:00:00.000Z",
-    "priority": 100
-  },
-  {
     "id": "coming_of_age_day_2018",
     "name": "成人の日",
     "type": "variable_holiday",
     "color": "#FF3B30",
     "date": "2018-01-07T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "marine_day_2018",
-    "name": "海の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2018-07-15T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "respect_for_the_aged_day_2018",
-    "name": "敬老の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2018-09-16T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "autumnal_equinox_day_2018",
-    "name": "秋分の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2018-09-22T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "sports_day_2018",
-    "name": "スポーツの日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2018-10-07T15:00:00.000Z",
     "priority": 100
   },
   {
@@ -1512,75 +1512,11 @@
     "priority": 100
   },
   {
-    "id": "marine_day_2019",
-    "name": "海の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2019-07-14T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "respect_for_the_aged_day_2019",
-    "name": "敬老の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2019-09-15T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "autumnal_equinox_day_2019",
-    "name": "秋分の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2019-09-22T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "sports_day_2019",
-    "name": "スポーツの日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2019-10-13T15:00:00.000Z",
-    "priority": 100
-  },
-  {
     "id": "coming_of_age_day_2020",
     "name": "成人の日",
     "type": "variable_holiday",
     "color": "#FF3B30",
     "date": "2020-01-12T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "marine_day_2020",
-    "name": "海の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2020-07-22T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "respect_for_the_aged_day_2020",
-    "name": "敬老の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2020-09-20T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "autumnal_equinox_day_2020",
-    "name": "秋分の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2020-09-21T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "sports_day_2020",
-    "name": "スポーツの日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2020-10-11T15:00:00.000Z",
     "priority": 100
   },
   {
@@ -1592,75 +1528,11 @@
     "priority": 100
   },
   {
-    "id": "marine_day_2021",
-    "name": "海の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2021-07-21T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "respect_for_the_aged_day_2021",
-    "name": "敬老の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2021-09-19T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "autumnal_equinox_day_2021",
-    "name": "秋分の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2021-09-22T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "sports_day_2021",
-    "name": "スポーツの日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2021-10-10T15:00:00.000Z",
-    "priority": 100
-  },
-  {
     "id": "coming_of_age_day_2022",
     "name": "成人の日",
     "type": "variable_holiday",
     "color": "#FF3B30",
     "date": "2022-01-09T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "marine_day_2022",
-    "name": "海の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2022-07-17T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "respect_for_the_aged_day_2022",
-    "name": "敬老の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2022-09-18T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "autumnal_equinox_day_2022",
-    "name": "秋分の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2022-09-22T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "sports_day_2022",
-    "name": "スポーツの日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2022-10-09T15:00:00.000Z",
     "priority": 100
   },
   {
@@ -1672,67 +1544,11 @@
     "priority": 100
   },
   {
-    "id": "marine_day_2023",
-    "name": "海の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2023-07-16T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "respect_for_the_aged_day_2023",
-    "name": "敬老の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2023-09-17T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "autumnal_equinox_day_2023",
-    "name": "秋分の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2023-09-22T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "sports_day_2023",
-    "name": "スポーツの日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2023-10-08T15:00:00.000Z",
-    "priority": 100
-  },
-  {
     "id": "coming_of_age_day_2024",
     "name": "成人の日",
     "type": "variable_holiday",
     "color": "#FF3B30",
     "date": "2024-01-07T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "marine_day_2024",
-    "name": "海の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2024-07-14T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "respect_for_the_aged_day_2024",
-    "name": "敬老の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2024-09-15T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "autumnal_equinox_day_2024",
-    "name": "秋分の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2024-09-21T15:00:00.000Z",
     "priority": 100
   },
   {
@@ -1744,99 +1560,11 @@
     "priority": 100
   },
   {
-    "id": "marine_day_2025",
-    "name": "海の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2025-07-20T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "respect_for_the_aged_day_2025",
-    "name": "敬老の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2025-09-14T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "autumnal_equinox_day_2025",
-    "name": "秋分の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2025-09-22T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "sports_day_2025",
-    "name": "スポーツの日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2025-10-12T15:00:00.000Z",
-    "priority": 100
-  },
-  {
     "id": "coming_of_age_day_2026",
     "name": "成人の日",
     "type": "variable_holiday",
     "color": "#FF3B30",
     "date": "2026-01-11T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "vernal_equinox_day_2026",
-    "name": "春分の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2026-03-19T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "substitute_holiday_2026",
-    "name": "振替休日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2026-05-05T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "marine_day_2026",
-    "name": "海の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2026-07-19T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "respect_for_the_aged_day_2026",
-    "name": "敬老の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2026-09-20T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "citizen_holiday_2026",
-    "name": "国民の休日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2026-09-21T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "autumnal_equinox_day_2026",
-    "name": "秋分の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2026-09-22T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "sports_day_2026",
-    "name": "スポーツの日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2026-10-11T15:00:00.000Z",
     "priority": 100
   },
   {
@@ -1848,99 +1576,11 @@
     "priority": 100
   },
   {
-    "id": "vernal_equinox_day_2027",
-    "name": "春分の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2027-03-20T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "substitute_holiday_2026",
-    "name": "振替休日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2027-03-21T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "marine_day_2027",
-    "name": "海の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2027-07-18T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "respect_for_the_aged_day_2027",
-    "name": "敬老の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2027-09-19T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "autumnal_equinox_day_2027",
-    "name": "秋分の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2027-09-22T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "sports_day_2027",
-    "name": "スポーツの日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2027-10-10T15:00:00.000Z",
-    "priority": 100
-  },
-  {
     "id": "coming_of_age_day_2028",
     "name": "成人の日",
     "type": "variable_holiday",
     "color": "#FF3B30",
     "date": "2028-01-09T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "vernal_equinox_day_2028",
-    "name": "春分の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2028-03-19T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "marine_day_2028",
-    "name": "海の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2028-07-16T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "respect_for_the_aged_day_2028",
-    "name": "敬老の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2028-09-17T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "autumnal_equinox_day_2028",
-    "name": "秋分の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2028-09-21T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "sports_day_2028",
-    "name": "スポーツの日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2028-10-08T15:00:00.000Z",
     "priority": 100
   },
   {
@@ -1952,43 +1592,483 @@
     "priority": 100
   },
   {
-    "id": "marine_day_2029",
-    "name": "海の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2029-07-15T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "respect_for_the_aged_day_2029",
-    "name": "敬老の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2029-09-16T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "autumnal_equinox_day_2029",
-    "name": "秋分の日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2029-09-22T15:00:00.000Z",
-    "priority": 100
-  },
-  {
-    "id": "sports_day_2029",
-    "name": "スポーツの日",
-    "type": "variable_holiday",
-    "color": "#FF3B30",
-    "date": "2029-10-07T15:00:00.000Z",
-    "priority": 100
-  },
-  {
     "id": "coming_of_age_day_2030",
     "name": "成人の日",
     "type": "variable_holiday",
     "color": "#FF3B30",
     "date": "2030-01-13T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "emperors_birthday_2011",
+    "name": "天皇誕生日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2011-12-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "emperors_birthday_2012",
+    "name": "天皇誕生日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2012-12-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "emperors_birthday_2013",
+    "name": "天皇誕生日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2013-12-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "emperors_birthday_2014",
+    "name": "天皇誕生日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2014-12-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "emperors_birthday_2015",
+    "name": "天皇誕生日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2015-12-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "emperors_birthday_2016",
+    "name": "天皇誕生日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2016-12-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "emperors_birthday_2017",
+    "name": "天皇誕生日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2017-12-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "emperors_birthday_2018",
+    "name": "天皇誕生日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2018-12-23T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "emperors_birthday_2019",
+    "name": "天皇誕生日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2019-02-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "emperors_birthday_2020",
+    "name": "天皇誕生日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2020-02-23T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "emperors_birthday_2021",
+    "name": "天皇誕生日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2021-02-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "emperors_birthday_2022",
+    "name": "天皇誕生日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2022-02-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "emperors_birthday_2023",
+    "name": "天皇誕生日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2023-02-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "emperors_birthday_2024",
+    "name": "天皇誕生日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2024-02-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "emperors_birthday_2025",
+    "name": "天皇誕生日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2025-02-23T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "emperors_birthday_2026",
+    "name": "天皇誕生日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2026-02-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "emperors_birthday_2027",
+    "name": "天皇誕生日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2027-02-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "emperors_birthday_2028",
+    "name": "天皇誕生日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2028-02-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "emperors_birthday_2029",
+    "name": "天皇誕生日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2029-02-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "emperors_birthday_2030",
+    "name": "天皇誕生日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2030-02-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "vernal_equinox_day_2011",
+    "name": "春分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2011-03-20T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "vernal_equinox_day_2012",
+    "name": "春分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2012-03-19T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "vernal_equinox_day_2013",
+    "name": "春分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2013-03-19T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "vernal_equinox_day_2014",
+    "name": "春分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2014-03-20T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "vernal_equinox_day_2015",
+    "name": "春分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2015-03-20T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "vernal_equinox_day_2016",
+    "name": "春分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2016-03-19T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "vernal_equinox_day_2017",
+    "name": "春分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2017-03-19T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "vernal_equinox_day_2018",
+    "name": "春分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2018-03-20T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "vernal_equinox_day_2019",
+    "name": "春分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2019-03-20T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "vernal_equinox_day_2020",
+    "name": "春分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2020-03-19T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "vernal_equinox_day_2021",
+    "name": "春分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2021-03-19T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "vernal_equinox_day_2022",
+    "name": "春分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2022-03-20T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "vernal_equinox_day_2023",
+    "name": "春分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2023-03-20T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "vernal_equinox_day_2024",
+    "name": "春分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2024-03-19T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "vernal_equinox_day_2025",
+    "name": "春分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2025-03-19T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "vernal_equinox_day_2026",
+    "name": "春分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2026-03-19T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "vernal_equinox_day_2027",
+    "name": "春分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2027-03-21T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "vernal_equinox_day_2028",
+    "name": "春分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2028-03-19T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "vernal_equinox_day_2029",
+    "name": "春分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2029-03-19T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "vernal_equinox_day_2030",
+    "name": "春分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2030-03-19T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2011",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2011-07-17T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2012",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2012-07-15T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2013",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2013-07-14T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2014",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2014-07-20T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2015",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2015-07-19T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2016",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2016-07-17T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2017",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2017-07-16T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2018",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2018-07-15T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2019",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2019-07-14T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2020",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2020-07-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2021",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2021-07-21T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2022",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2022-07-17T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2023",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2023-07-16T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2024",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2024-07-14T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2025",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2025-07-20T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2026",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2026-07-19T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2027",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2027-07-18T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2028",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2028-07-16T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "marine_day_2029",
+    "name": "海の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2029-07-15T15:00:00.000Z",
     "priority": 100
   },
   {
@@ -2000,11 +2080,435 @@
     "priority": 100
   },
   {
+    "id": "mountain_day_2016",
+    "name": "山の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2016-08-10T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "mountain_day_2017",
+    "name": "山の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2017-08-10T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "mountain_day_2018",
+    "name": "山の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2018-08-10T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "mountain_day_2019",
+    "name": "山の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2019-08-11T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "mountain_day_2020",
+    "name": "山の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2020-08-09T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "mountain_day_2021",
+    "name": "山の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2021-08-08T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "mountain_day_2022",
+    "name": "山の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2022-08-10T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "mountain_day_2023",
+    "name": "山の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2023-08-10T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "mountain_day_2024",
+    "name": "山の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2024-08-11T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "mountain_day_2025",
+    "name": "山の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2025-08-10T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "mountain_day_2026",
+    "name": "山の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2026-08-10T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "mountain_day_2027",
+    "name": "山の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2027-08-10T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "mountain_day_2028",
+    "name": "山の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2028-08-10T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "mountain_day_2029",
+    "name": "山の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2029-08-10T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "mountain_day_2030",
+    "name": "山の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2030-08-11T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2011",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2011-09-18T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2012",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2012-09-16T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2013",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2013-09-15T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2014",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2014-09-14T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2015",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2015-09-20T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2016",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2016-09-18T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2017",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2017-09-17T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2018",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2018-09-16T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2019",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2019-09-15T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2020",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2020-09-20T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2021",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2021-09-19T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2022",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2022-09-18T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2023",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2023-09-17T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2024",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2024-09-15T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2025",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2025-09-14T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2026",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2026-09-20T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2027",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2027-09-19T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2028",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2028-09-17T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "respect_for_the_aged_day_2029",
+    "name": "敬老の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2029-09-16T15:00:00.000Z",
+    "priority": 100
+  },
+  {
     "id": "respect_for_the_aged_day_2030",
     "name": "敬老の日",
     "type": "variable_holiday",
     "color": "#FF3B30",
     "date": "2030-09-15T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2011",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2011-09-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2012",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2012-09-21T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2013",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2013-09-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2014",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2014-09-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2015",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2015-09-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2016",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2016-09-21T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2017",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2017-09-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2018",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2018-09-23T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2019",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2019-09-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2020",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2020-09-21T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2021",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2021-09-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2022",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2022-09-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2023",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2023-09-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2024",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2024-09-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2025",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2025-09-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2026",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2026-09-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2027",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2027-09-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2028",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2028-09-21T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "autumnal_equinox_day_2029",
+    "name": "秋分の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2029-09-23T15:00:00.000Z",
     "priority": 100
   },
   {
@@ -2016,11 +2520,323 @@
     "priority": 100
   },
   {
+    "id": "sports_day_2011",
+    "name": "体育の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2011-10-09T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2012",
+    "name": "体育の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2012-10-07T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2013",
+    "name": "体育の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2013-10-13T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2014",
+    "name": "体育の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2014-10-12T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2015",
+    "name": "体育の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2015-10-11T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2016",
+    "name": "体育の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2016-10-09T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2017",
+    "name": "体育の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2017-10-08T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2018",
+    "name": "体育の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2018-10-07T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2019",
+    "name": "体育の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2019-10-13T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2020",
+    "name": "スポーツの日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2020-07-23T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2021",
+    "name": "スポーツの日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2021-07-22T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2022",
+    "name": "スポーツの日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2022-10-09T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2023",
+    "name": "スポーツの日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2023-10-08T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2024",
+    "name": "スポーツの日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2024-10-13T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2025",
+    "name": "スポーツの日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2025-10-12T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2026",
+    "name": "スポーツの日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2026-10-11T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2027",
+    "name": "スポーツの日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2027-10-10T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2028",
+    "name": "スポーツの日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2028-10-08T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "sports_day_2029",
+    "name": "スポーツの日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2029-10-07T15:00:00.000Z",
+    "priority": 100
+  },
+  {
     "id": "sports_day_2030",
     "name": "スポーツの日",
     "type": "variable_holiday",
     "color": "#FF3B30",
     "date": "2030-10-13T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "substitute_holiday_2013_1",
+    "name": "振替休日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2013-05-05T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "substitute_holiday_2013_2",
+    "name": "振替休日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2013-11-03T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "substitute_holiday_2017",
+    "name": "振替休日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2017-01-01T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "substitute_holiday_2018_1",
+    "name": "振替休日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2018-02-11T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "substitute_holiday_2018_2",
+    "name": "振替休日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2018-04-29T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "substitute_holiday_2019",
+    "name": "振替休日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2019-11-03T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "substitute_holiday_2020",
+    "name": "振替休日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2020-05-05T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "substitute_holiday_2023",
+    "name": "振替休日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2023-01-01T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "substitute_holiday_2024_1",
+    "name": "振替休日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2024-02-11T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "substitute_holiday_2024_2",
+    "name": "振替休日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2024-05-05T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "substitute_holiday_2024_3",
+    "name": "振替休日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2024-11-03T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "substitute_holiday_2026",
+    "name": "振替休日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2026-05-05T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "substitute_holiday_2029_1",
+    "name": "振替休日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2029-02-11T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "substitute_holiday_2029_2",
+    "name": "振替休日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2029-04-29T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "substitute_holiday_2030_1",
+    "name": "振替休日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2030-05-05T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "substitute_holiday_2030_2",
+    "name": "振替休日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2030-11-03T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "citizen_holiday_2014",
+    "name": "国民の休日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2014-09-21T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "citizen_holiday_2026",
+    "name": "国民の休日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2026-09-21T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "accession_day_2019",
+    "name": "天皇の即位の日",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2019-04-30T15:00:00.000Z",
+    "priority": 100
+  },
+  {
+    "id": "enthronement_ceremony_2019",
+    "name": "即位礼正殿の儀",
+    "type": "variable_holiday",
+    "color": "#FF3B30",
+    "date": "2019-10-21T15:00:00.000Z",
     "priority": 100
   }
 ]
