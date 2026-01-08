@@ -65,6 +65,7 @@ dependencies:
   firebase_performance: ^0.11.1+2
   firebase_crashlytics: ^5.0.4
   share_plus: ^12.0.1
+  image_gallery_saver_plus: ^4.0.1
 
 dev_dependencies:
   flutter_test:
@@ -98,16 +99,10 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/lottie/
+    - assets/json/
 
 flutter_gen:
   output: lib/core/asset_gen/
   line_length: 80
   integrations:
     flutter_svg: true
-
-flutter_launcher_icons:
-  android: true
-  ios: true
-  image_path: "assets/icons/linca_icon.png"
-  adaptive_icon_background: "assets/icons/linca_icon_back.png"
-  adaptive_icon_foreground: "assets/icons/linca_icon.png"

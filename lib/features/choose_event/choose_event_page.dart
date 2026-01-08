@@ -93,9 +93,17 @@ class ChooseEventPage extends HookConsumerWidget
                   viewModel.setKeyword(value);
                 },
               )
-            : Text(
-                context.l10n.title_choose_event,
-                style: context.textTheme.titleMedium,
+            : Column(
+                children: <Widget>[
+                  Text(
+                    context.l10n.title_choose_event,
+                    style: context.textTheme.titleMedium,
+                  ),
+                  Text(
+                    '件数: ${state.sortedEvents.length}',
+                    style: context.textTheme.bodyMedium,
+                  ),
+                ],
               ),
         actions: <Widget>[
           if (eventType == EventType.official)

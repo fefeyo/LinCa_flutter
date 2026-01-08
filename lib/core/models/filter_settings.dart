@@ -19,5 +19,7 @@ abstract class FilterSettings with _$FilterSettings {
     @Default(false) bool isHiddenOriginalEvent,
     @Default(false) bool isShowOfficialEvent,
     @Default(false) bool isShowOriginalEvent,
+    DateTime? startDate,
+    DateTime? endDate,
   }) = _FilterSettings;
 }

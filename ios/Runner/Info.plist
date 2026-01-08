@@ -63,5 +63,7 @@
   </array>
   <key>NSLocationWhenInUseUsageDescription</key>
   <string>現在地を表示するために位置情報を使用します</string>
+  <key>NSPhotoLibraryAddUsageDescription</key>
+  <string>画像を保存するために写真ライブラリへのアクセスが必要です</string>
 </dict>
 </plist>

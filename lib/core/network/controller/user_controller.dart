@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/constants/app_constants.dart';
 import 'package:linca_otaku_support/core/models/favorite_badges.dart';
 import 'package:linca_otaku_support/core/models/linca_user.dart';
 import 'package:linca_otaku_support/core/network/controller/linca_controller.dart';
@@ -72,7 +74,10 @@ class UserController extends LincaController<LincaUser> {
   }
 
   Future<void> updateDisplayName(String displayName) async {
-    displayName = displayName.isNotEmpty ? displayName : '幻の学院生';
+    displayName = displayName.isNotEmpty
+        ? displayName
+        : AppConstants
+            .defaultNames[Random().nextInt(AppConstants.defaultNames.length)];
     if (uid == null) return;
     await userRepository.updateDisplayName(displayName);
     final User user = state.value?.user ?? const User();

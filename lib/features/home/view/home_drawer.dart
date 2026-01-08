@@ -221,6 +221,16 @@ class HomeDrawer extends HookConsumerWidget
             },
           ),
           ListTile(
+            leading: const Icon(Icons.privacy_tip_outlined),
+            title: Text(
+              '参加イベント出力画面（beta）',
+              style: context.textTheme.bodyMedium,
+            ),
+            onTap: () {
+              transitPage(const OutputParticipateEventsRoute());
+            },
+          ),
+          ListTile(
             leading: const Icon(Icons.edit_calendar),
             title: Text(
               context.l10n.created_events_title,

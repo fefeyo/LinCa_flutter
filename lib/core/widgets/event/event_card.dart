@@ -105,7 +105,9 @@ class EventCard extends StatelessWidget with EventAnalyticsManager {
                   logEvent(
                     event: AnalyticsEvent.eventCardClick,
                     params: <String, Object>{
-                      'lincaEvent': lincaEvent,
+                      'eventId': lincaEvent.event.id,
+                      'eventName': lincaEvent.event.title,
+                      'eventDate': lincaEvent.event.date?.simpleDateFormat() ?? 'no date',
                       'participationInfo':
                           participationInfo ?? 'no participation',
                     },

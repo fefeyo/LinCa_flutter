@@ -13,7 +13,7 @@ class AppRouter extends RootStackRouter {
           page: HomeRoute.page,
           children: <AutoRoute>[
             AutoRoute(page: MyEventRoute.page),
-            AutoRoute(page: RecentEventsRoute.page),
+            AutoRoute(page: LincaCalendarRoute.page),
             AutoRoute(page: MyRoute.page),
           ],
           guards: const <AutoRouteGuard>[AuthGuard()],
@@ -34,5 +34,6 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: AcquiredBadgeRoute.page),
         AutoRoute(page: SelectFavoriteTagRoute.page),
         AutoRoute(page: HighlightRoute.page),
+        AutoRoute(page: OutputParticipateEventsRoute.page),
       ];
 }

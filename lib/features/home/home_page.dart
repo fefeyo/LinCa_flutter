@@ -15,6 +15,7 @@ import 'package:linca_otaku_support/core/utils/linca_event_extension.dart';
 import 'package:linca_otaku_support/core/utils/preferences_service.dart';
 import 'package:linca_otaku_support/core/utils/providers.dart';
 import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
+import 'package:linca_otaku_support/features/linca_calendar/view_model/linca_calendar_view_model.dart';
 import 'package:linca_otaku_support/features/my_event/data/my_event_state.dart';
 
 import '../../../core/utils/context_extension.dart';
@@ -32,14 +33,9 @@ class HomePage extends HookConsumerWidget
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final List<String> appBarTitles = <String>[
-      context.l10n.my_event_title,
-      context.l10n.recent_event_appbar_title,
-      context.l10n.my_page_title,
-    ];
     final List<String> titles = <String>[
       context.l10n.my_event_title,
-      context.l10n.recent_event_title,
+      'イベントカレンダー',
       context.l10n.my_page_title,
     ];
     final MyEventState myEventState = ref.watch(myEventViewModelProvider);
@@ -53,6 +49,8 @@ class HomePage extends HookConsumerWidget
     final Map<LincaEvent, ParticipationInfo> myEvents =
         ref.watch(participationControllerProvider).value ??
             <LincaEvent, ParticipationInfo>{};
+    final LincaCalendarViewModel lincaCalendarViewModel =
+        ref.read(lincaCalendarViewModelProvider.notifier);
 
     useEffect(() {
       Future<void> effect() async {
@@ -85,7 +83,7 @@ class HomePage extends HookConsumerWidget
     return AutoTabsRouter(
       routes: const <PageRouteInfo<Object?>>[
         MyEventRoute(),
-        RecentEventsRoute(),
+        LincaCalendarRoute(),
         MyRoute(),
       ],
       transitionBuilder:
@@ -93,62 +91,76 @@ class HomePage extends HookConsumerWidget
         final TabsRouter tabs = AutoTabsRouter.of(context);
         return Scaffold(
           appBar: AppBar(
-            title: isSearching.value
-                ? TextField(
-                    controller: searchController,
-                    autofocus: true,
-                    decoration: InputDecoration(
-                      hintText: context.l10n.hint_choose_official_event_keyword,
-                      border: InputBorder.none,
+              title: isSearching.value
+                  ? TextField(
+                      controller: searchController,
+                      autofocus: true,
+                      decoration: InputDecoration(
+                        hintText:
+                            context.l10n.hint_choose_official_event_keyword,
+                        border: InputBorder.none,
+                      ),
+                      style: context.textTheme.bodyMedium,
+                      onChanged: (String value) {
+                        myEventViewModel.setKeyword(value);
+                      },
+                    )
+                  : Column(
+                      children: <Widget>[
+                        Text(
+                          titles[tabs.activeIndex],
+                          style: context.textTheme.titleMedium,
+                        ),
+                        if (tabs.activeIndex == 0)
+                          Text(
+                            '件数: ${myEventState.sortedEvents.length}',
+                            style: context.textTheme.bodyMedium,
+                          ),
+                      ],
                     ),
-                    style: context.textTheme.bodyMedium,
-                    onChanged: (String value) {
-                      myEventViewModel.setKeyword(value);
+              actions: <Widget>[
+                if (tabs.activeIndex == 0)
+                  IconButton(
+                    onPressed: () async {
+                      logEvent(event: AnalyticsEvent.myEventFilterClick);
+
+                      final FilterSettings? result =
+                          await EventSortBottomSheet.show(
+                        context,
+                        myEventState.filterSettings,
+                        needInputArea: true,
+                        needHiddenOriginalEventArea: true,
+                        needDisplayOrderArea: true,
+                        needParticipationArea: true,
+                        needEventTypeArea: true,
+                        needTagsArea: true,
+                      );
+                      if (result != null) {
+                        myEventViewModel.setFilterSettings(result);
+                      }
                     },
-                  )
-                : Text(
-                    appBarTitles[tabs.activeIndex],
-                    style: context.textTheme.titleMedium,
+                    icon: const Icon(Icons.sort),
                   ),
-            actions: tabs.activeIndex == 0
-                ? <Widget>[
-                    IconButton(
-                      onPressed: () async {
-                        logEvent(event: AnalyticsEvent.myEventFilterClick);
+                if (tabs.activeIndex == 0)
+                  IconButton(
+                    icon: Icon(isSearching.value ? Icons.close : Icons.search),
+                    onPressed: () {
+                      isSearching.value = !isSearching.value;
+                      if (!isSearching.value) {
+                        searchController.clear();
+                        myEventViewModel.setKeyword('');
+                      }
 
-                        final FilterSettings? result =
-                            await EventSortBottomSheet.show(
-                          context,
-                          myEventState.filterSettings,
-                          needInputArea: true,
-                          needHiddenOriginalEventArea: true,
-                          needDisplayOrderArea: true,
-                          needParticipationArea: true,
-                          needEventTypeArea: true,
-                          needTagsArea: true,
-                        );
-                        if (result != null) {
-                          myEventViewModel.setFilterSettings(result);
-                        }
-                      },
-                      icon: const Icon(Icons.sort),
-                    ),
-                    IconButton(
-                      icon:
-                          Icon(isSearching.value ? Icons.close : Icons.search),
-                      onPressed: () {
-                        isSearching.value = !isSearching.value;
-                        if (!isSearching.value) {
-                          searchController.clear();
-                          myEventViewModel.setKeyword('');
-                        }
-
-                        logEvent(event: AnalyticsEvent.myEventSearchClick);
-                      },
-                    ),
-                  ]
-                : null,
-          ),
+                      logEvent(event: AnalyticsEvent.myEventSearchClick);
+                    },
+                  ),
+                if (tabs.activeIndex == 1)
+                  IconButton(
+                    icon: const Icon(Icons.calendar_today),
+                    onPressed: () => lincaCalendarViewModel
+                        .resetCalendar(),
+                  ),
+              ]),
           drawer: HomeDrawer(
             lincaUser: lincaUser,
           ),

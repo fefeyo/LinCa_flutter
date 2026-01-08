@@ -42,26 +42,42 @@ final AutoDisposeStateNotifierProvider<ChooseEventViewModel, ChooseEventState>
     }
   });
 
+  ref.listen(eventControllerProvider, (_, AsyncValue<List<LincaEvent>> next) {
+    final List<LincaEvent>? events = next.value;
+    if (events != null) {
+      viewModel.updateEvents(events);
+    }
+  });
+
+  ref.listen(userEventControllerProvider,
+      (_, AsyncValue<List<LincaEvent>> next) {
+    final List<LincaEvent>? events = next.value;
+    if (events != null) {
+      viewModel.updateEvents(events);
+    }
+  });
+
   return viewModel;
 });
 
 class ChooseEventViewModel extends StateNotifier<ChooseEventState> {
   ChooseEventViewModel(
     this.ref,
-    this.initialEvents,
+    List<LincaEvent> initialEvents,
     final Map<LincaEvent, ParticipationInfo> participations,
   ) : super(
           ChooseEventState(
+            initialEvents: initialEvents,
             sortedEvents: initialEvents.sortWithDisplayOrder(),
             participations: participations,
           ),
         );
 
   final Ref ref;
-  final List<LincaEvent> initialEvents;
 
   void setEventType(EventType eventType) {
-    final List<LincaEvent> events = initialEvents.where((LincaEvent event) {
+    final List<LincaEvent> events =
+        state.initialEvents.where((LincaEvent event) {
       if (eventType == EventType.official) {
         return event.event is OfficialEvent;
       }
@@ -82,18 +98,19 @@ class ChooseEventViewModel extends StateNotifier<ChooseEventState> {
 
     state = state.copyWith(
       filterSettings: filterSettings,
-      sortedEvents: sortEvents(filterSettings),
+      sortedEvents: sortEvents(state.initialEvents, filterSettings),
     );
   }
 
   void setFilterSettings(FilterSettings filterSettings) {
     state = state.copyWith(
       filterSettings: filterSettings,
-      sortedEvents: sortEvents(filterSettings),
+      sortedEvents: sortEvents(state.initialEvents, filterSettings),
     );
   }
 
-  List<LincaEvent> sortEvents(FilterSettings filterSettings) {
+  List<LincaEvent> sortEvents(
+      List<LincaEvent> initialEvents, FilterSettings filterSettings) {
     List<LincaEvent> sortedEvents = initialEvents.where((LincaEvent event) {
       if (state.eventType == EventType.official) {
         return event.event is OfficialEvent;
@@ -110,9 +127,13 @@ class ChooseEventViewModel extends StateNotifier<ChooseEventState> {
     }
 
     sortedEvents = sortedEvents
-        .filterWithKeyword(filterSettings.keyword)
+        .filterWithPeriod(
+          startDate: filterSettings.startDate,
+          endDate: filterSettings.endDate,
+        )
         .filterWithTag(filterSettings.typeTags)
         .filterWithTag(filterSettings.seriesTags)
+        .filterWithKeyword(filterSettings.keyword)
         .sortWithDisplayOrder(displayOrder: filterSettings.displayOrder);
 
     return sortedEvents;
@@ -129,6 +150,13 @@ class ChooseEventViewModel extends StateNotifier<ChooseEventState> {
     state = state.copyWith(
       participations: newParticipations,
       sortedEvents: sortedEvents,
+    );
+  }
+
+  void updateEvents(List<LincaEvent> events) {
+    state = state.copyWith(
+      initialEvents: events,
+      sortedEvents: sortEvents(events, state.filterSettings),
     );
   }
 

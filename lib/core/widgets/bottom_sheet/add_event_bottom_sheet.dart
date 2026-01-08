@@ -144,7 +144,8 @@ class AddEventBottomSheet extends HookConsumerWidget
                       style: context.textTheme.bodyMedium,
                     ),
                     onTap: () {
-                      logEvent(event: AnalyticsEvent.addEventCreatePrivateClick);
+                      logEvent(
+                          event: AnalyticsEvent.addEventCreatePrivateClick);
 
                       transitPage(
                         context: context,

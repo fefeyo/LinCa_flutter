@@ -5,13 +5,13 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/local/controller/calendar_event_controller.dart';
 import 'package:linca_otaku_support/core/models/linca_event.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/network/providers.dart';
 import 'core/theme/app_schemes.dart';
 import 'core/theme/app_theme.dart';
 import 'core/utils/providers.dart';
-import 'firebase_options.dart';
 import 'l10n/app_localizations.dart';
 
 import 'core/router/app_router.dart';
@@ -21,12 +21,11 @@ final AppRouter appRouter = AppRouter();
 void main() async {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    await Firebase.initializeApp();
     GoogleSignIn.instance.initialize(
-        serverClientId: '630270810691-cavclpg0rs7vr4kgojc93fv0'
-            '8ovrssgl.apps.googleusercontent.com');
+        serverClientId:
+            // ignore: lines_longer_than_80_chars
+            '630270810691-cavclpg0rs7vr4kgojc93fv08ovrssgl.apps.googleusercontent.com');
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final ProviderContainer container = ProviderContainer(overrides: <Override>[
       sharedPreferencesProvider.overrideWithValue(preferences),
@@ -45,6 +44,7 @@ void main() async {
     await Future.wait(<Future<Object>>[
       container.read(participationControllerProvider.future),
     ]);
+    await container.read(calendarEventsProvider.future);
     runApp(
       UncontrolledProviderScope(
         container: container,

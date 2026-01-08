@@ -25,5 +25,11 @@ clean:
 env:
 	bash scripts/prepare_env.sh
 
-create-feature:
+create_feature:
 	@bash scripts/create_feature.sh $(name)
+
+generate_dev_apk:
+	flutter build apk --debug --flavor dev -t lib/main_dev.dart
+
+generate_launcher_icon:
+	flutter pub run flutter_launcher_icons

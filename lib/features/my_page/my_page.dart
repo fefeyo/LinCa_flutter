@@ -116,6 +116,12 @@ class MyPage extends HookConsumerWidget
                 },
               ),
               MyPageItem(
+                title: '参加イベント出力画面（beta）',
+                onClickItem: () {
+                  context.router.push(const OutputParticipateEventsRoute());
+                },
+              ),
+              MyPageItem(
                 title: context.l10n.created_events_title,
                 onClickItem: () {
                   logEvent(event: AnalyticsEvent.openCreatedEventListClick);

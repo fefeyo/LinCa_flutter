@@ -1,0 +1,139 @@
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:linca_otaku_support/core/local/models/calendar_event.dart';
+import 'package:linca_otaku_support/core/local/models/calendar_event_type.dart';
+import 'package:linca_otaku_support/core/models/linca_event.dart';
+import 'package:linca_otaku_support/core/utils/calendar_event_type_extension.dart';
+import 'package:linca_otaku_support/core/utils/date_extension.dart';
+import '../../../core/network/model/event_base.dart';
+import '../../../core/network/model/participation_info.dart';
+import '../../../core/network/providers.dart';
+import '../data/linca_calendar_state.dart';
+
+final StateNotifierProvider<LincaCalendarViewModel, LincaCalendarState>
+    lincaCalendarViewModelProvider =
+    StateNotifierProvider<LincaCalendarViewModel, LincaCalendarState>(
+  (Ref ref) {
+    final List<LincaEvent> events =
+        ref.read(eventControllerProvider).value ?? <LincaEvent>[];
+    final List<LincaEvent> userEvents = ref
+            .read(userEventControllerProvider)
+            .value
+            ?.where((LincaEvent event) =>
+                (event.event as UnOfficialEvent).visibility == true)
+            .toList() ??
+        <LincaEvent>[];
+    final Map<LincaEvent, ParticipationInfo> participations =
+        ref.read(participationControllerProvider).value ??
+            <LincaEvent, ParticipationInfo>{};
+
+    final LincaCalendarViewModel viewModel = LincaCalendarViewModel(
+      events: <LincaEvent>[
+        ...events,
+        ...userEvents,
+      ],
+      myEvents: participations,
+    );
+
+    ref.listen(
+      participationControllerProvider,
+      (_, AsyncValue<Map<LincaEvent, ParticipationInfo>> next) {
+        final Map<LincaEvent, ParticipationInfo>? newParticipations =
+            next.value;
+        if (newParticipations != null) {
+          viewModel.updateParticipations(newParticipations);
+        }
+      },
+    );
+
+    return viewModel;
+  },
+);
+
+class LincaCalendarViewModel extends StateNotifier<LincaCalendarState> {
+  LincaCalendarViewModel({
+    required List<LincaEvent> events,
+    required Map<LincaEvent, ParticipationInfo> myEvents,
+  }) : super(
+          LincaCalendarState(
+            selectedDate: DateTime.now(),
+            focusedMonth: DateTime.now(),
+            events: events,
+            myEvents: myEvents,
+          ),
+        );
+
+  final int calendarMinYear = 2012;
+  final int calendarMaxYear = 2028;
+
+  DateTime get calendarMinMonth => DateTime(calendarMinYear, 1);
+
+  DateTime get calendarMaxMonth => DateTime(calendarMaxYear, 12);
+
+  bool get canGoPrevMonth => state.focusedMonth.isAfter(calendarMinMonth);
+
+  bool get canGoNextMonth => state.focusedMonth.isBefore(calendarMaxMonth);
+
+  void updateFocusedMonth(DateTime newMonth) {
+    if (newMonth.isBefore(calendarMinMonth)) {
+      state = state.copyWith(focusedMonth: calendarMinMonth);
+      return;
+    }
+
+    if (newMonth.isAfter(calendarMaxMonth)) {
+      state = state.copyWith(focusedMonth: calendarMaxMonth);
+      return;
+    }
+
+    state = state.copyWith(focusedMonth: newMonth);
+  }
+
+  void updateSelectedDate(DateTime dateTime) {
+    state = state.copyWith(
+      selectedDate: dateTime,
+    );
+  }
+
+  bool hasEvent(DateTime dateTime) {
+    return state.events.any((LincaEvent lincaEvent) =>
+        lincaEvent.event.date?.isSameDate(dateTime) == true);
+  }
+
+  bool hasAnniversary(DateTime dateTime) {
+    return state.calendarEvents.any((CalendarEvent calendarEvent) {
+      if (calendarEvent.type.isHoliday) {
+        return false;
+      }
+
+      return calendarEvent.date.isSameMonthDay(dateTime);
+    });
+  }
+
+  bool isHoliday(DateTime dateTime) {
+    return state.calendarEvents.any((CalendarEvent calendarEvent) {
+      if (!calendarEvent.type.isHoliday) {
+        return false;
+      }
+
+      if (calendarEvent.date.isSameDate(dateTime)) {
+        return true;
+      }
+
+      return calendarEvent.date.isSameMonthDay(dateTime) &&
+          calendarEvent.type != CalendarEventType.variableHoliday;
+    });
+  }
+
+  void updateParticipations(Map<LincaEvent, ParticipationInfo> participations) {
+    state = state.copyWith(myEvents: participations);
+  }
+
+  void updateCalendarEvents(List<CalendarEvent> calendarEvents) {
+    state = state.copyWith(calendarEvents: calendarEvents);
+  }
+
+  void resetCalendar() {
+    final DateTime now = DateTime.now();
+    updateSelectedDate(now);
+    updateFocusedMonth(now);
+  }
+}

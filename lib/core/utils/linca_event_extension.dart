@@ -41,16 +41,22 @@ extension LincaEventExtension on LincaEvent {
 extension LincaEventsExtension on List<LincaEvent> {
   // キーワードフィルタリング
   List<LincaEvent> filterWithKeyword(String keyword) {
-    List<LincaEvent> sortedEvents = this;
-    final List<String> keywords = keyword.split(' ');
-    sortedEvents = where((LincaEvent event) {
-      return keywords.any((String keyword) =>
-              event.event.title.contains(keyword) ||
-              event.event.displayKana.contains(keyword)) ||
-          event.event.id == keyword;
-    }).toList();
+    if (keyword.isEmpty) return this;
 
-    return sortedEvents;
+    final List<String> keywords = keyword
+        .toLowerCase()
+        .split(' ')
+        .where((String word) => word.isNotEmpty)
+        .toList();
+
+    return where((LincaEvent event) {
+      final String title = event.event.title.toLowerCase();
+      final String kana = event.event.displayKana.toLowerCase();
+      final String id = event.event.id.toLowerCase();
+
+      return keywords
+          .any((String k) => title.contains(k) || kana.contains(k) || id == k);
+    }).toList();
   }
 
   // 表示順ソート
@@ -118,6 +124,31 @@ extension LincaEventsExtension on List<LincaEvent> {
     }
 
     return sortedEvents;
+  }
+
+  List<LincaEvent> filterWithPeriod({
+    required DateTime? startDate,
+    required DateTime? endDate,
+  }) {
+    List<LincaEvent> filteredEvents = this;
+
+    if (startDate != null) {
+      filteredEvents = filteredEvents.where((LincaEvent event) {
+        final DateTime? date = event.event.date;
+        if (date == null) return false;
+        return !date.isBefore(startDate);
+      }).toList();
+    }
+
+    if (endDate != null) {
+      filteredEvents = filteredEvents.where((LincaEvent event) {
+        final DateTime? date = event.event.date;
+        if (date == null) return false;
+        return !date.isAfter(endDate);
+      }).toList();
+    }
+
+    return filteredEvents;
   }
 
   List<LincaEvent> getTodayEvents() {
