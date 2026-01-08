@@ -60,29 +60,29 @@ class EventDetailPage extends HookConsumerWidget
     logScreen(AnalyticsScreen.eventDetail);
 
     final EventDetailViewModel viewModel =
-        ref.read(eventDetailViewModelProvider.notifier);
+    ref.read(eventDetailViewModelProvider.notifier);
     final ParticipationController participationController =
-        ref.read(participationControllerProvider.notifier);
+    ref.read(participationControllerProvider.notifier);
     final ValueNotifier<ParticipationType> selectedParticipationType = useState(
         participationInfo?.participationType ?? ParticipationType.onSite);
     final TextEditingController participationMemoController =
-        useTextEditingController(text: participationInfo?.participationMemo);
+    useTextEditingController(text: participationInfo?.participationMemo);
     final LincaUser? lincaUser = ref.watch(userControllerProvider).value;
     final UserController userController =
-        ref.read(userControllerProvider.notifier);
+    ref.read(userControllerProvider.notifier);
     final bool isToday = lincaEvent.event.date?.isToday == true;
     final bool isCheckInAvailable =
         lincaEvent.event.displayCheckInId.isNotEmpty;
     final bool isAlreadyCheckedIn = lincaUser?.acquiredBadges.any(
             (LincaBadge badge) =>
-                badge.id == lincaEvent.event.displayCheckInId) ??
+        badge.id == lincaEvent.event.displayCheckInId) ??
         false;
     final bool isMyEvent = lincaEvent.event is UnOfficialEvent &&
         (lincaEvent.event as UnOfficialEvent).createdBy == lincaUser?.user.id;
     final GlobalKey<State<StatefulWidget>> participationAreaKey =
-        useMemoized(() => GlobalKey());
+    useMemoized(() => GlobalKey());
     final GlobalKey<State<StatefulWidget>> saveButtonKey =
-        useMemoized(() => GlobalKey());
+    useMemoized(() => GlobalKey());
 
     final List<TutorialStep> steps = <TutorialStep>[
       TutorialStep(
@@ -108,7 +108,7 @@ class EventDetailPage extends HookConsumerWidget
       Future<void>.microtask(() async {
         if (!context.mounted) return;
         final PreferencesService preferences =
-            ref.read(preferencesServiceProvider);
+        ref.read(preferencesServiceProvider);
         showIfNeeded(
           context: context,
           preferences: preferences,
@@ -128,7 +128,7 @@ class EventDetailPage extends HookConsumerWidget
     ref.listen<CheckInCondition?>(
       eventDetailViewModelProvider
           .select((EventDetailState state) => state.checkInCondition),
-      (CheckInCondition? previous, CheckInCondition? next) async {
+          (CheckInCondition? previous, CheckInCondition? next) async {
         final CheckInCondition? checkInCondition = next;
         if (checkInCondition != null) {
           final String? message;
@@ -160,18 +160,18 @@ class EventDetailPage extends HookConsumerWidget
     ref.listen<bool>(
         eventDetailViewModelProvider
             .select((EventDetailState state) => state.isLoading),
-        (bool? previous, bool next) {
-      final bool isLoadingBefore = previous ?? false;
-      final bool isLoadingNow = next;
+            (bool? previous, bool next) {
+          final bool isLoadingBefore = previous ?? false;
+          final bool isLoadingNow = next;
 
-      if (!isLoadingBefore && isLoadingNow) {
-        // ローディング開始 → 表示
-        CommonSimpleLoadingDialog.show(context: context);
-      } else if (isLoadingBefore && !isLoadingNow) {
-        // ローディング終了 → 閉じる
-        Navigator.of(context, rootNavigator: true).pop();
-      }
-    });
+          if (!isLoadingBefore && isLoadingNow) {
+            // ローディング開始 → 表示
+            CommonSimpleLoadingDialog.show(context: context);
+          } else if (isLoadingBefore && !isLoadingNow) {
+            // ローディング終了 → 閉じる
+            Navigator.of(context, rootNavigator: true).pop();
+          }
+        });
 
     return Scaffold(
       body: Stack(
@@ -188,19 +188,19 @@ class EventDetailPage extends HookConsumerWidget
                 flexibleSpace: FlexibleSpaceBar(
                   background: lincaEvent.event.displayImageUrl.isNotEmpty
                       ? GestureDetector(
-                          onTap: () => ImagePreviewDialog.show(
-                            context: context,
-                            imageUrl: lincaEvent.event.displayImageUrl,
-                          ),
-                          child: CachedNetworkImage(
-                            imageUrl: lincaEvent.event.displayImageUrl,
-                            fit: BoxFit.fitWidth,
-                          ),
-                        )
+                    onTap: () => ImagePreviewDialog.show(
+                      context: context,
+                      imageUrl: lincaEvent.event.displayImageUrl,
+                    ),
+                    child: CachedNetworkImage(
+                      imageUrl: lincaEvent.event.displayImageUrl,
+                      fit: BoxFit.fitWidth,
+                    ),
+                  )
                       : Image.asset(
-                          Assets.images.defaultLiveBackground.path,
-                          fit: BoxFit.cover,
-                        ),
+                    Assets.images.defaultLiveBackground.path,
+                    fit: BoxFit.cover,
+                  ),
                   collapseMode: CollapseMode.parallax,
                 ),
               ),
@@ -247,9 +247,9 @@ class EventDetailPage extends HookConsumerWidget
                       ..._buildParticipationToggleArea(
                         context: context,
                         selectedParticipationType:
-                            selectedParticipationType.value,
+                        selectedParticipationType.value,
                         availableParticipationTypes:
-                            lincaEvent.event.availableParticipationTypes,
+                        lincaEvent.event.availableParticipationTypes,
                         participationAreaKey: participationAreaKey,
                         onClickButton: (ParticipationType participationType) {
                           selectedParticipationType.value = participationType;
@@ -258,7 +258,7 @@ class EventDetailPage extends HookConsumerWidget
                       ..._buildEventMemoArea(
                         context: context,
                         participationMemoController:
-                            participationMemoController,
+                        participationMemoController,
                       ),
                       ..._buildTagsArea(context),
                     ],
@@ -270,17 +270,19 @@ class EventDetailPage extends HookConsumerWidget
           Positioned(
             top: 16,
             left: 16,
-            child: IconButton(
-              onPressed: () => context.router.pop(),
-              icon: const Icon(
-                Icons.close,
-                color: Colors.white,
-              ),
-              style: IconButton.styleFrom(
-                backgroundColor: Colors.black26,
-                shape: const CircleBorder(),
-                fixedSize: const Size(48, 48),
-                padding: EdgeInsets.zero,
+            child: SafeArea(
+              child: IconButton(
+                onPressed: () => context.router.pop(),
+                icon: const Icon(
+                  Icons.close,
+                  color: Colors.white,
+                ),
+                style: IconButton.styleFrom(
+                  backgroundColor: Colors.black26,
+                  shape: const CircleBorder(),
+                  fixedSize: const Size(48, 48),
+                  padding: EdgeInsets.zero,
+                ),
               ),
             ),
           ),
@@ -288,84 +290,86 @@ class EventDetailPage extends HookConsumerWidget
             Positioned(
               top: 16,
               right: 16,
-              child: PopupMenuButton<String>(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                itemBuilder: (_) => <PopupMenuEntry<String>>[
-                  if (isMyEvent)
-                    PopupMenuItem<String>(
-                      value: 'edit',
-                      child: Row(
-                        children: <Widget>[
-                          const Icon(Icons.edit),
-                          const SizedBox(width: 8),
-                          Text(
-                            '編集',
-                            style: context.textTheme.titleMedium,
-                          ),
-                        ],
-                      ),
-                    ),
-                  if (participationInfo != null && !isMyEvent)
-                    PopupMenuItem<String>(
-                      value: 'delete',
-                      child: Row(
-                        children: <Widget>[
-                          const Icon(Icons.delete, color: Colors.red),
-                          const SizedBox(width: 8),
-                          Text(
-                            '削除',
-                            style: context.textTheme.titleMedium?.copyWith(
-                              color: Colors.red,
+              child: SafeArea(
+                child: PopupMenuButton<String>(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  itemBuilder: (_) => <PopupMenuEntry<String>>[
+                    if (isMyEvent)
+                      PopupMenuItem<String>(
+                        value: 'edit',
+                        child: Row(
+                          children: <Widget>[
+                            const Icon(Icons.edit),
+                            const SizedBox(width: 8),
+                            Text(
+                              '編集',
+                              style: context.textTheme.titleMedium,
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                ],
-                onSelected: (String value) {
-                  if (value == 'edit') {
-                    logEvent(event: AnalyticsEvent.eventDetailEditClick);
-
-                    final UnOfficialEvent event =
-                        lincaEvent.event as UnOfficialEvent;
-                    context.router.pop();
-                    context.router.push(
-                      CreateEventRoute(
-                        createEventType: event.visibility
-                            ? CreateEventType.public
-                            : CreateEventType.private,
-                        isEditMode: true,
-                        unOfficialEvent: event,
+                    if (participationInfo != null && !isMyEvent)
+                      PopupMenuItem<String>(
+                        value: 'delete',
+                        child: Row(
+                          children: <Widget>[
+                            const Icon(Icons.delete, color: Colors.red),
+                            const SizedBox(width: 8),
+                            Text(
+                              '削除',
+                              style: context.textTheme.titleMedium?.copyWith(
+                                color: Colors.red,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    );
-                  }
-                  if (value == 'delete') {
-                    logEvent(event: AnalyticsEvent.eventDetailCloseClick);
+                  ],
+                  onSelected: (String value) {
+                    if (value == 'edit') {
+                      logEvent(event: AnalyticsEvent.eventDetailEditClick);
 
-                    participationController.deleteParticipation(
-                      lincaEvent,
-                      participationInfo!,
-                    );
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(context.l10n.my_event_deleted),
-                          backgroundColor: Colors.red,
+                      final UnOfficialEvent event =
+                      lincaEvent.event as UnOfficialEvent;
+                      context.router.pop();
+                      context.router.push(
+                        CreateEventRoute(
+                          createEventType: event.visibility
+                              ? CreateEventType.public
+                              : CreateEventType.private,
+                          isEditMode: true,
+                          unOfficialEvent: event,
                         ),
                       );
-                      context.router.pop();
                     }
-                  }
-                },
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.black26,
-                    shape: BoxShape.circle,
+                    if (value == 'delete') {
+                      logEvent(event: AnalyticsEvent.eventDetailCloseClick);
+
+                      participationController.deleteParticipation(
+                        lincaEvent,
+                        participationInfo!,
+                      );
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(context.l10n.my_event_deleted),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                        context.router.pop();
+                      }
+                    }
+                  },
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.black26,
+                      shape: BoxShape.circle,
+                    ),
+                    padding: const EdgeInsets.all(12),
+                    child: const Icon(Icons.more_vert, color: Colors.white),
                   ),
-                  padding: const EdgeInsets.all(12),
-                  child: const Icon(Icons.more_vert, color: Colors.white),
                 ),
               ),
             ),
@@ -450,29 +454,29 @@ class EventDetailPage extends HookConsumerWidget
   Widget _buildVenueAreaIfNeeded(BuildContext context) {
     return lincaEvent.venueName.isNotEmpty
         ? InkWell(
-            onTap: () {
-              final Uri url =
-                  Uri.parse(context.l10n.map_launch_url(lincaEvent.venueName));
-              launchUrl(url, mode: LaunchMode.externalApplication);
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              child: Row(
-                children: <Widget>[
-                  const Icon(Icons.pin_drop),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Expanded(
-                    child: Text(
-                      lincaEvent.venueName,
-                      style: context.textTheme.titleMedium,
-                    ),
-                  ),
-                ],
+      onTap: () {
+        final Uri url =
+        Uri.parse(context.l10n.map_launch_url(lincaEvent.venueName));
+        launchUrl(url, mode: LaunchMode.externalApplication);
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: Row(
+          children: <Widget>[
+            const Icon(Icons.pin_drop),
+            const SizedBox(
+              width: 8,
+            ),
+            Expanded(
+              child: Text(
+                lincaEvent.venueName,
+                style: context.textTheme.titleMedium,
               ),
             ),
-          )
+          ],
+        ),
+      ),
+    )
         : const SizedBox.shrink();
   }
 
@@ -677,7 +681,7 @@ class EventDetailPage extends HookConsumerWidget
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content:
-                        Text(context.l10n.event_detail_text_event_code_copied),
+                    Text(context.l10n.event_detail_text_event_code_copied),
                     behavior: SnackBarBehavior.floating,
                     duration: const Duration(seconds: 1),
                     backgroundColor: context.colorScheme.secondaryContainer,
@@ -698,7 +702,7 @@ class EventDetailPage extends HookConsumerWidget
         spacing: 4,
         children: <Widget>[
           ...lincaEvent.tags.displayTags.map(
-            (Tag tag) {
+                (Tag tag) {
               return Chip(
                 label: Text(
                   tag.name,
