@@ -22,7 +22,7 @@ class LincaVertical extends HookConsumerWidget {
   const LincaVertical({
     super.key,
     required this.lincaUser,
-    this.upcomingEvent,
+    this.upcomingEvents = const <LincaEvent>[],
     this.isFullScreen = false,
     this.animationTag = '',
     this.onTap,
@@ -31,7 +31,7 @@ class LincaVertical extends HookConsumerWidget {
   });
 
   final LincaUser lincaUser;
-  final LincaEvent? upcomingEvent;
+  final List<LincaEvent> upcomingEvents;
   final bool isFullScreen;
   final String animationTag;
   final Function(LincaUser lincaUser, String animationTag)? onTap;
@@ -113,7 +113,7 @@ class LincaVertical extends HookConsumerWidget {
 
                     ..._buildUpcomingEvent(
                       context: context,
-                      upcomingEvent: upcomingEvent,
+                      upcomingEvents: upcomingEvents,
                     ),
 
                     // Xアカウント、Instagramアカウント、Blueskyアカウント
@@ -245,9 +245,9 @@ class LincaVertical extends HookConsumerWidget {
                   child: buildCard(),
                 )
               : SizedBox(
-            width: double.infinity,
-            child: buildCard(),
-          ),
+                  width: double.infinity,
+                  child: buildCard(),
+                ),
         );
       } else {
         return isFullScreen
@@ -269,11 +269,11 @@ class LincaVertical extends HookConsumerWidget {
 
   List<Widget> _buildUpcomingEvent({
     required BuildContext context,
-    required LincaEvent? upcomingEvent,
+    required List<LincaEvent> upcomingEvents,
   }) {
     if (!isFullScreen) return <Widget>[];
 
-    if (upcomingEvent != null) {
+    if (upcomingEvents.isNotEmpty) {
       return <Widget>[
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -286,17 +286,18 @@ class LincaVertical extends HookConsumerWidget {
           ),
         ),
         const SizedBox(height: 4),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: EventCard(
-            lincaEvent: upcomingEvent,
-            onClick: () => context.router.push(
-              EventDetailRoute(
-                lincaEvent: upcomingEvent,
+        for (final LincaEvent event in upcomingEvents)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: EventCard(
+              lincaEvent: event,
+              onClick: () => context.router.push(
+                EventDetailRoute(
+                  lincaEvent: event,
+                ),
               ),
             ),
           ),
-        ),
         const SizedBox(height: 16),
       ];
     } else {

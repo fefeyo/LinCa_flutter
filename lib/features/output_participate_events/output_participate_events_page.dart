@@ -18,7 +18,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../../core/models/filter_settings.dart';
 import '../../core/models/linca_event.dart';
-import '../../core/widgets/bottom_sheet/event_sort_bottom_sheet.dart';
+import '../../core/router/app_router.gr.dart';
 
 @RoutePage()
 class OutputParticipateEventsPage extends HookConsumerWidget {
@@ -56,21 +56,22 @@ class OutputParticipateEventsPage extends HookConsumerWidget {
                 },
               )
             : Text(
-                '参加イベント出力画面',
+                context.l10n.event_output_title,
                 style: context.textTheme.titleMedium,
               ),
         actions: <Widget>[
           IconButton(
             onPressed: () async {
-              final FilterSettings? result = await EventSortBottomSheet.show(
-                context,
-                state.filterSettings,
-                needInputArea: true,
-                needHiddenOriginalEventArea: true,
-                needDisplayOrderArea: true,
-                needParticipationArea: true,
-                needEventTypeArea: true,
-                needTagsArea: true,
+              final FilterSettings? result = await context.router.push(
+                EventSortFilterRoute(
+                  initialSettings: state.filterSettings,
+                  needInputArea: true,
+                  needHiddenOriginalEventArea: true,
+                  needDisplayOrderArea: true,
+                  needParticipationArea: true,
+                  needEventTypeArea: true,
+                  needTagsArea: true,
+                ),
               );
               if (result != null) {
                 viewModel.setFilterSettings(result);
@@ -141,14 +142,15 @@ class OutputParticipateEventsPage extends HookConsumerWidget {
       if (!status.isGranted) {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('保存に必要な権限がありません')),
+            SnackBar(
+                content: Text(context.l10n.picture_save_permission_disabled)),
           );
         }
         return;
       }
     }
 
-    final Map<String, dynamic> result = await ImageGallerySaverPlus.saveImage(
+    final Map<Object?, Object?> result = await ImageGallerySaverPlus.saveImage(
       pngBytes,
       quality: 100,
       name: 'linca_events_${DateTime.now().millisecondsSinceEpoch}',
@@ -158,11 +160,17 @@ class OutputParticipateEventsPage extends HookConsumerWidget {
 
     if (result['isSuccess'] == true) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('画像を保存しました')),
+        SnackBar(
+          content: Text(context.l10n.picture_saved),
+          duration: const Duration(milliseconds: 1500),
+        ),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('画像の保存に失敗しました')),
+        SnackBar(
+          content: Text(context.l10n.picture_save_failed),
+          duration: const Duration(milliseconds: 1500),
+        ),
       );
     }
   }

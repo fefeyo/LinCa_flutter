@@ -117,11 +117,11 @@ class CreatedEventListPage extends HookConsumerWidget
 
               final bool? confirmed = await CommonSimpleDialog.show(
                 context: context,
-                title: '削除の確認',
-                content: 'このイベントを削除しますか？',
+                title: context.l10n.created_event_delete_event_title,
+                content: context.l10n.created_event_delete_event_description,
                 cancelText: context.l10n.common_cancel,
                 onClickCancel: () => <dynamic, dynamic>{},
-                okText: '削除する',
+                okText: context.l10n.created_event_delete_event_confirm,
               );
 
               if (confirmed == true) {

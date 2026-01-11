@@ -1,5 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/utils/linca_event_extension.dart';
+import 'package:linca_otaku_support/core/utils/sort_items_extension.dart';
 import '../../../core/models/filter_settings.dart';
 import '../../../core/models/linca_event.dart';
 import '../../../core/network/model/event_base.dart';
@@ -21,8 +22,19 @@ final StateNotifierProvider<OutputParticipateEventsViewModel,
 class OutputParticipateEventsViewModel
     extends StateNotifier<OutputParticipateEventsState> {
   OutputParticipateEventsViewModel(Map<LincaEvent, ParticipationInfo> myEvents)
-      : super(OutputParticipateEventsState(
-            initialEvents: myEvents, sortedEvents: myEvents));
+      : super(
+          OutputParticipateEventsState(
+            initialEvents: myEvents,
+            sortedEvents: myEvents,
+            filterSettings: const FilterSettings(
+              displayOrder: DisplayOrder.oldest,
+            ),
+          ),
+        ) {
+    state = state.copyWith(
+      sortedEvents: sortEvents(state.filterSettings),
+    );
+  }
 
   void setFilterSettings(FilterSettings filterSettings) {
     state = state.copyWith(
@@ -33,7 +45,7 @@ class OutputParticipateEventsViewModel
 
   void setKeyword(String keyword) {
     final FilterSettings filterSettings =
-    state.filterSettings.copyWith(keyword: keyword);
+        state.filterSettings.copyWith(keyword: keyword);
     state = state.copyWith(
       filterSettings: filterSettings,
       sortedEvents: sortEvents(filterSettings),
@@ -67,13 +79,17 @@ class OutputParticipateEventsViewModel
     }
 
     events = events
+        .filterWithPeriod(
+          startDate: filterSettings.startDate,
+          endDate: filterSettings.endDate,
+        )
         .filterWithKeyword(filterSettings.keyword)
         .filterWithTag(filterSettings.typeTags)
         .filterWithTag(filterSettings.seriesTags)
         .sortWithDisplayOrder(displayOrder: filterSettings.displayOrder);
 
     final Map<LincaEvent, ParticipationInfo> sortedMap =
-    <LincaEvent, ParticipationInfo>{};
+        <LincaEvent, ParticipationInfo>{};
     for (final LincaEvent event in events) {
       if (filterSettings.participationFilters.isNotEmpty &&
           !filterSettings.participationFilters

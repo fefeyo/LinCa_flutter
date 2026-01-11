@@ -7,6 +7,6 @@ part 'linca_detail_state.freezed.dart';
 abstract class LincaDetailState with _$LincaDetailState {
   const factory LincaDetailState({
     @Default(<LincaEvent>[]) List<LincaEvent> participationEvents,
-    LincaEvent? upcomingEvent,
+    @Default(<LincaEvent>[]) List<LincaEvent> upcomingEvents,
   }) = _LincaDetailState;
 }

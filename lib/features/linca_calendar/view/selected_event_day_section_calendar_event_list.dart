@@ -23,7 +23,7 @@ class SelectedEventDaySectionCalendarEventList extends StatelessWidget {
             text = calendarEvent.name;
           case CalendarEventType.characterBirthday:
           case CalendarEventType.castBirthday:
-            text = '${calendarEvent.name} 誕生日';
+            text = context.l10n.event_calendar_birthday(calendarEvent.name);
         }
 
         return Row(

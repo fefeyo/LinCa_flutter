@@ -18,42 +18,59 @@ class CustomParticipationButton extends StatelessWidget {
   final IconData iconData;
   final VoidCallback onClick;
 
+  bool get isSelected => participationType == selectedParticipationType;
+
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
+    final Color primary = context.colorScheme.primary;
+
+    return AnimatedContainer(
+      height: 100,
+      duration: const Duration(milliseconds: 200),
+      margin: EdgeInsets.zero, // ← 親に任せる
+      decoration: BoxDecoration(
+        color: isSelected
+            ? primary
+            : Colors.transparent,
+        borderRadius: BorderRadius.circular(22),
+        boxShadow: isSelected
+            ? <BoxShadow>[
+          BoxShadow(
+            color: primary.withValues(alpha: 0.35),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ]
+            : null,
+      ),
       child: InkWell(
+        borderRadius: BorderRadius.circular(22),
         onTap: onClick,
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const SizedBox(height: 16,),
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: participationType == selectedParticipationType
-                    ? context.colorScheme.primary.withValues(alpha: 0.25)
-                    : Colors.transparent,
-              ),
-              child: Icon(
-                iconData,
-                color: Colors.black87,
+            Icon(
+              iconData,
+              size: 30,
+              color: isSelected
+                  ? context.colorScheme.onPrimary
+                  : context.colorScheme.onSurfaceVariant,
+            ),
+            const SizedBox(height: 6),
+            Text(
+              participationType.label(context),
+              textAlign: TextAlign.center,
+              style: context.textTheme.labelMedium?.copyWith(
+                color: isSelected
+                    ? context.colorScheme.onPrimary
+                    : context.colorScheme.onSurfaceVariant,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 4),
-            SizedBox(
-              height: 50,
-              child: Text(
-                participationType.label(context),
-                style: context.textTheme.bodyMedium,
-                softWrap: true,
-                textAlign: TextAlign.center,
-              ),
-            )
           ],
         ),
       ),
     );
   }
 }
+

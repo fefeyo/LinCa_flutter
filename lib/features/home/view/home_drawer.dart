@@ -40,259 +40,262 @@ class HomeDrawer extends HookConsumerWidget
       context.tabsRouter.setActiveIndex(index);
     }
 
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          DrawerHeader(
-            margin: EdgeInsets.zero,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: <Color>[
-                  lincaUser.favoriteGroups.getFavoriteColor(context),
-                  lincaUser.favoriteGroups
-                      .getFavoriteColor(context)
-                      .withValues(alpha: .70),
+    return SafeArea(
+      child: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              margin: EdgeInsets.zero,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: <Color>[
+                    lincaUser.favoriteGroups.getFavoriteColor(context),
+                    lincaUser.favoriteGroups
+                        .getFavoriteColor(context)
+                        .withValues(alpha: .70),
+                  ],
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    width: 75,
+                    height: 75,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: context.colorScheme.surface,
+                        width: 3,
+                      ),
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.06),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
+                        )
+                      ],
+                    ),
+                    child: CircleAvatar(
+                      backgroundImage: lincaUser.user.photoUrl.isNotEmpty ==
+                              true
+                          ? CachedNetworkImageProvider(lincaUser.user.photoUrl)
+                          : AssetImage(Assets.images.userIcon.path),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    lincaUser.user.displayName,
+                    style: context.textTheme.titleLarge?.copyWith(
+                      color: Colors.white,
+                    ),
+                  ),
                 ],
               ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  width: 75,
-                  height: 75,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: context.colorScheme.surface,
-                      width: 3,
-                    ),
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.06),
-                        blurRadius: 8,
-                        offset: const Offset(0, 4),
-                      )
-                    ],
-                  ),
-                  child: CircleAvatar(
-                    backgroundImage: lincaUser.user.photoUrl.isNotEmpty == true
-                        ? CachedNetworkImageProvider(lincaUser.user.photoUrl)
-                        : AssetImage(Assets.images.userIcon.path),
-                  ),
+            ListTile(
+              leading: const Icon(Icons.event),
+              title: Text(
+                context.l10n.my_event_title,
+                style: context.textTheme.bodyMedium,
+              ),
+              onTap: () {
+                logEvent(
+                  event: AnalyticsEvent.homeTabClick,
+                  params: <String, Object>{'index': 0},
+                );
+
+                changeTab(0);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.event_note),
+              title: Text(
+                context.l10n.recent_event_title,
+                style: context.textTheme.bodyMedium,
+              ),
+              onTap: () {
+                logEvent(
+                  event: AnalyticsEvent.homeTabClick,
+                  params: <String, Object>{'index': 1},
+                );
+
+                changeTab(1);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: Text(
+                context.l10n.my_page_title,
+                style: context.textTheme.bodyMedium,
+              ),
+              onTap: () {
+                logEvent(
+                  event: AnalyticsEvent.homeTabClick,
+                  params: <String, Object>{'index': 2},
+                );
+
+                changeTab(2);
+              },
+            ),
+            const Divider(),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: Text(
+                context.l10n.common_linca_card,
+                style: context.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
                 ),
-                const SizedBox(height: 10),
-                Text(
-                  lincaUser.user.displayName,
-                  style: context.textTheme.titleLarge?.copyWith(
-                    color: Colors.white,
-                  ),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.edit_note),
+              title: Text(
+                context.l10n.edit_my_linca_title,
+                style: context.textTheme.bodyMedium,
+              ),
+              onTap: () {
+                logEvent(event: AnalyticsEvent.openEditMyLincaCardClick);
+
+                transitPage(LincaEditRoute(userProfile: lincaUser.userProfile));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.recent_actors),
+              title: Text(
+                context.l10n.traded_linca_list_title,
+                style: context.textTheme.bodyMedium,
+              ),
+              onTap: () {
+                logEvent(event: AnalyticsEvent.openTradedLincaCardClick);
+
+                transitPage(const TradedLincaListRoute());
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.qr_code_scanner),
+              title: Text(
+                context.l10n.my_qr_code_title,
+                style: context.textTheme.bodyMedium,
+              ),
+              onTap: () {
+                logEvent(event: AnalyticsEvent.openLincaQRClick);
+
+                MyQRBottomSheet.show(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.emoji_events),
+              title: Text(
+                context.l10n.acquired_badges_title,
+                style: context.textTheme.bodyMedium,
+              ),
+              onTap: () {
+                logEvent(event: AnalyticsEvent.openAcquiredBadgeListClick);
+
+                transitPage(AcquiredBadgeRoute());
+              },
+            ),
+            const Divider(),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: Text(
+                context.l10n.common_event,
+                style: context.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
-            ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.event),
-            title: Text(
-              context.l10n.my_event_title,
-              style: context.textTheme.bodyMedium,
-            ),
-            onTap: () {
-              logEvent(
-                event: AnalyticsEvent.homeTabClick,
-                params: <String, Object>{'index': 0},
-              );
-
-              changeTab(0);
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.event_note),
-            title: Text(
-              context.l10n.recent_event_title,
-              style: context.textTheme.bodyMedium,
-            ),
-            onTap: () {
-              logEvent(
-                event: AnalyticsEvent.homeTabClick,
-                params: <String, Object>{'index': 1},
-              );
-
-              changeTab(1);
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.person),
-            title: Text(
-              context.l10n.my_page_title,
-              style: context.textTheme.bodyMedium,
-            ),
-            onTap: () {
-              logEvent(
-                event: AnalyticsEvent.homeTabClick,
-                params: <String, Object>{'index': 2},
-              );
-
-              changeTab(2);
-            },
-          ),
-          const Divider(),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            child: Text(
-              context.l10n.common_linca_card,
-              style: context.textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.bold,
               ),
             ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.edit_note),
-            title: Text(
-              context.l10n.edit_my_linca_title,
-              style: context.textTheme.bodyMedium,
-            ),
-            onTap: () {
-              logEvent(event: AnalyticsEvent.openEditMyLincaCardClick);
+            ListTile(
+              leading: const Icon(Icons.auto_graph),
+              title: Text(
+                context.l10n.highlight_title,
+                style: context.textTheme.bodyMedium,
+              ),
+              onTap: () {
+                logEvent(event: AnalyticsEvent.openHighLightClick);
 
-              transitPage(LincaEditRoute(userProfile: lincaUser.userProfile));
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.recent_actors),
-            title: Text(
-              context.l10n.traded_linca_list_title,
-              style: context.textTheme.bodyMedium,
+                transitPage(const HighlightRoute());
+              },
             ),
-            onTap: () {
-              logEvent(event: AnalyticsEvent.openTradedLincaCardClick);
-
-              transitPage(const TradedLincaListRoute());
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.qr_code_scanner),
-            title: Text(
-              context.l10n.my_qr_code_title,
-              style: context.textTheme.bodyMedium,
+            ListTile(
+              leading: const Icon(Icons.format_list_bulleted),
+              title: Text(
+                context.l10n.event_output_title,
+                style: context.textTheme.bodyMedium,
+              ),
+              onTap: () {
+                transitPage(const OutputParticipateEventsRoute());
+              },
             ),
-            onTap: () {
-              logEvent(event: AnalyticsEvent.openLincaQRClick);
+            ListTile(
+              leading: const Icon(Icons.edit_calendar),
+              title: Text(
+                context.l10n.created_events_title,
+                style: context.textTheme.bodyMedium,
+              ),
+              onTap: () {
+                logEvent(event: AnalyticsEvent.openCreatedEventListClick);
 
-              MyQRBottomSheet.show(context);
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.emoji_events),
-            title: Text(
-              context.l10n.acquired_badges_title,
-              style: context.textTheme.bodyMedium,
+                transitPage(const CreatedEventListRoute());
+              },
             ),
-            onTap: () {
-              logEvent(event: AnalyticsEvent.openAcquiredBadgeListClick);
-
-              transitPage(AcquiredBadgeRoute());
-            },
-          ),
-          const Divider(),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            child: Text(
-              context.l10n.common_event,
-              style: context.textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.bold,
+            const Divider(),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: Text(
+                context.l10n.common_setting,
+                style: context.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.auto_graph),
-            title: Text(
-              context.l10n.highlight_title,
-              style: context.textTheme.bodyMedium,
-            ),
-            onTap: () {
-              logEvent(event: AnalyticsEvent.openHighLightClick);
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: Text(
+                context.l10n.app_settings_title,
+                style: context.textTheme.bodyMedium,
+              ),
+              onTap: () {
+                logEvent(event: AnalyticsEvent.openAppSettingsClick);
 
-              transitPage(const HighlightRoute());
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.privacy_tip_outlined),
-            title: Text(
-              '参加イベント出力画面（beta）',
-              style: context.textTheme.bodyMedium,
+                openAppSettings();
+              },
             ),
-            onTap: () {
-              transitPage(const OutputParticipateEventsRoute());
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.edit_calendar),
-            title: Text(
-              context.l10n.created_events_title,
-              style: context.textTheme.bodyMedium,
-            ),
-            onTap: () {
-              logEvent(event: AnalyticsEvent.openCreatedEventListClick);
-
-              transitPage(const CreatedEventListRoute());
-            },
-          ),
-          const Divider(),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            child: Text(
-              context.l10n.common_setting,
-              style: context.textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.bold,
+            const Divider(),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: Text(
+                context.l10n.etc_title,
+                style: context.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.settings),
-            title: Text(
-              context.l10n.app_settings_title,
-              style: context.textTheme.bodyMedium,
-            ),
-            onTap: () {
-              logEvent(event: AnalyticsEvent.openAppSettingsClick);
-
-              openAppSettings();
-            },
-          ),
-          const Divider(),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            child: Text(
-              context.l10n.etc_title,
-              style: context.textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.bold,
+            ListTile(
+              leading: const Icon(Icons.privacy_tip_outlined),
+              title: Text(
+                context.l10n.privacy_policy_title,
+                style: context.textTheme.bodyMedium,
               ),
-            ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.privacy_tip_outlined),
-            title: Text(
-              context.l10n.privacy_policy_title,
-              style: context.textTheme.bodyMedium,
-            ),
-            onTap: () {
-              logEvent(event: AnalyticsEvent.openPrivacyPolicyClick);
+              onTap: () {
+                logEvent(event: AnalyticsEvent.openPrivacyPolicyClick);
 
-              launchUrl(
-                Uri.parse(context.l10n.privacy_policy_url),
-                mode: LaunchMode.externalApplication,
-              );
-            },
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-        ],
+                launchUrl(
+                  Uri.parse(context.l10n.privacy_policy_url),
+                  mode: LaunchMode.externalApplication,
+                );
+              },
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+          ],
+        ),
       ),
     );
   }

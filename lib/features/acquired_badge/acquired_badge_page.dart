@@ -31,6 +31,7 @@ class AcquiredBadgePage extends HookConsumerWidget with ScreenAnalyticsManager {
       if (selectable) null,
       ...lincaUser?.acquiredBadges ?? <LincaBadge>[],
     ];
+    final bool needEmptyView = acquiredBadges.isEmpty && !selectable;
 
     useEffect(() {
       Future<void>.microtask(() {
@@ -43,83 +44,90 @@ class AcquiredBadgePage extends HookConsumerWidget with ScreenAnalyticsManager {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          selectable ? 'バッジ選択' : '獲得済みバッジ一覧',
+          selectable
+              ? context.l10n.aqcuired_badge_title_select
+              : context.l10n.aqcuired_badge_title_select,
           style: context.textTheme.titleMedium,
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: GridView.builder(
-          itemCount: acquiredBadges.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 16,
-            crossAxisSpacing: 8,
-            childAspectRatio: 1,
-          ),
-          itemBuilder: (BuildContext context, int index) {
-            final LincaBadge? item = acquiredBadges[index];
-
-            return GestureDetector(
-              onTap: selectable
-                  ? item != null
-                      ? () => context.router.pop(item)
-                      : () => context.router.pop(LincaBadge.unselected)
-                  : null,
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.grey,
-                    width: 1,
-                  ),
-                  borderRadius: BorderRadius.circular(8),
+      body: needEmptyView
+          ? const Center(
+              child: Text('獲得済みのバッジがありません'),
+            )
+          : Padding(
+              padding: const EdgeInsets.all(16),
+              child: GridView.builder(
+                itemCount: acquiredBadges.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 16,
+                  crossAxisSpacing: 8,
+                  childAspectRatio: 1,
                 ),
-                child: Center(
-                  child: item == null
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            const Icon(Icons.cancel, size: 40),
-                            const SizedBox(height: 8),
-                            Text(
-                              '未選択',
-                              style: context.textTheme.bodySmall,
-                            ),
-                          ],
-                        )
-                      : Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              SizedBox(
-                                width: 120,
-                                height: 120,
-                                child: item.iconUrl.isNotEmpty
-                                    ? CachedNetworkImage(imageUrl: item.iconUrl)
-                                    : const Icon(
-                                        Icons.device_unknown,
-                                        size: 40,
+                itemBuilder: (BuildContext context, int index) {
+                  final LincaBadge? item = acquiredBadges[index];
+
+                  return GestureDetector(
+                    onTap: selectable
+                        ? item != null
+                            ? () => context.router.pop(item)
+                            : () => context.router.pop(LincaBadge.unselected)
+                        : null,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.grey,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Center(
+                        child: item == null
+                            ? Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  const Icon(Icons.cancel, size: 40),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    context.l10n.common_no_selected,
+                                    style: context.textTheme.bodySmall,
+                                  ),
+                                ],
+                              )
+                            : Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    SizedBox(
+                                      width: 120,
+                                      height: 120,
+                                      child: item.iconUrl.isNotEmpty
+                                          ? CachedNetworkImage(
+                                              imageUrl: item.iconUrl)
+                                          : const Icon(
+                                              Icons.device_unknown,
+                                              size: 40,
+                                            ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8),
+                                      child: Text(
+                                        item.name,
+                                        style: context.textTheme.bodySmall,
                                       ),
-                              ),
-                              const SizedBox(height: 8),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8),
-                                child: Text(
-                                  item.name,
-                                  style: context.textTheme.bodySmall,
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                ),
+                      ),
+                    ),
+                  );
+                },
               ),
-            );
-          },
-        ),
-      ),
+            ),
     );
   }
 }

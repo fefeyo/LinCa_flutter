@@ -32,6 +32,7 @@ import 'package:linca_otaku_support/features/event_detail/data/event_detail_stat
 import 'package:linca_otaku_support/features/event_detail/view/custom_participation_button.dart';
 import 'package:linca_otaku_support/features/event_detail/view_model/event_detail_view_model.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../core/utils/context_extension.dart';
 import '../../../core/utils/date_extension.dart';
@@ -40,6 +41,7 @@ import '../../core/models/check_in_condition.dart';
 import '../../core/models/linca_event.dart';
 import '../../core/network/model/tag.dart';
 import '../../core/network/providers.dart';
+import '../../core/utils/image_uploader.dart';
 import '../../core/utils/preferences_service.dart';
 import '../../core/utils/providers.dart';
 
@@ -60,29 +62,29 @@ class EventDetailPage extends HookConsumerWidget
     logScreen(AnalyticsScreen.eventDetail);
 
     final EventDetailViewModel viewModel =
-    ref.read(eventDetailViewModelProvider.notifier);
+        ref.read(eventDetailViewModelProvider.notifier);
     final ParticipationController participationController =
-    ref.read(participationControllerProvider.notifier);
+        ref.watch(participationControllerProvider.notifier);
     final ValueNotifier<ParticipationType> selectedParticipationType = useState(
         participationInfo?.participationType ?? ParticipationType.onSite);
     final TextEditingController participationMemoController =
-    useTextEditingController(text: participationInfo?.participationMemo);
+        useTextEditingController(text: participationInfo?.participationMemo);
     final LincaUser? lincaUser = ref.watch(userControllerProvider).value;
     final UserController userController =
-    ref.read(userControllerProvider.notifier);
+        ref.read(userControllerProvider.notifier);
     final bool isToday = lincaEvent.event.date?.isToday == true;
     final bool isCheckInAvailable =
         lincaEvent.event.displayCheckInId.isNotEmpty;
     final bool isAlreadyCheckedIn = lincaUser?.acquiredBadges.any(
             (LincaBadge badge) =>
-        badge.id == lincaEvent.event.displayCheckInId) ??
+                badge.id == lincaEvent.event.displayCheckInId) ??
         false;
     final bool isMyEvent = lincaEvent.event is UnOfficialEvent &&
         (lincaEvent.event as UnOfficialEvent).createdBy == lincaUser?.user.id;
     final GlobalKey<State<StatefulWidget>> participationAreaKey =
-    useMemoized(() => GlobalKey());
+        useMemoized(() => GlobalKey());
     final GlobalKey<State<StatefulWidget>> saveButtonKey =
-    useMemoized(() => GlobalKey());
+        useMemoized(() => GlobalKey());
 
     final List<TutorialStep> steps = <TutorialStep>[
       TutorialStep(
@@ -108,7 +110,7 @@ class EventDetailPage extends HookConsumerWidget
       Future<void>.microtask(() async {
         if (!context.mounted) return;
         final PreferencesService preferences =
-        ref.read(preferencesServiceProvider);
+            ref.read(preferencesServiceProvider);
         showIfNeeded(
           context: context,
           preferences: preferences,
@@ -128,7 +130,7 @@ class EventDetailPage extends HookConsumerWidget
     ref.listen<CheckInCondition?>(
       eventDetailViewModelProvider
           .select((EventDetailState state) => state.checkInCondition),
-          (CheckInCondition? previous, CheckInCondition? next) async {
+      (CheckInCondition? previous, CheckInCondition? next) async {
         final CheckInCondition? checkInCondition = next;
         if (checkInCondition != null) {
           final String? message;
@@ -160,18 +162,18 @@ class EventDetailPage extends HookConsumerWidget
     ref.listen<bool>(
         eventDetailViewModelProvider
             .select((EventDetailState state) => state.isLoading),
-            (bool? previous, bool next) {
-          final bool isLoadingBefore = previous ?? false;
-          final bool isLoadingNow = next;
+        (bool? previous, bool next) {
+      final bool isLoadingBefore = previous ?? false;
+      final bool isLoadingNow = next;
 
-          if (!isLoadingBefore && isLoadingNow) {
-            // ローディング開始 → 表示
-            CommonSimpleLoadingDialog.show(context: context);
-          } else if (isLoadingBefore && !isLoadingNow) {
-            // ローディング終了 → 閉じる
-            Navigator.of(context, rootNavigator: true).pop();
-          }
-        });
+      if (!isLoadingBefore && isLoadingNow) {
+        // ローディング開始 → 表示
+        CommonSimpleLoadingDialog.show(context: context);
+      } else if (isLoadingBefore && !isLoadingNow) {
+        // ローディング終了 → 閉じる
+        Navigator.of(context, rootNavigator: true).pop();
+      }
+    });
 
     return Scaffold(
       body: Stack(
@@ -188,19 +190,19 @@ class EventDetailPage extends HookConsumerWidget
                 flexibleSpace: FlexibleSpaceBar(
                   background: lincaEvent.event.displayImageUrl.isNotEmpty
                       ? GestureDetector(
-                    onTap: () => ImagePreviewDialog.show(
-                      context: context,
-                      imageUrl: lincaEvent.event.displayImageUrl,
-                    ),
-                    child: CachedNetworkImage(
-                      imageUrl: lincaEvent.event.displayImageUrl,
-                      fit: BoxFit.fitWidth,
-                    ),
-                  )
+                          onTap: () => ImagePreviewDialog.show(
+                            context: context,
+                            imageUrl: lincaEvent.event.displayImageUrl,
+                          ),
+                          child: CachedNetworkImage(
+                            imageUrl: lincaEvent.event.displayImageUrl,
+                            fit: BoxFit.fitWidth,
+                          ),
+                        )
                       : Image.asset(
-                    Assets.images.defaultLiveBackground.path,
-                    fit: BoxFit.cover,
-                  ),
+                          Assets.images.defaultLiveBackground.path,
+                          fit: BoxFit.cover,
+                        ),
                   collapseMode: CollapseMode.parallax,
                 ),
               ),
@@ -247,20 +249,33 @@ class EventDetailPage extends HookConsumerWidget
                       ..._buildParticipationToggleArea(
                         context: context,
                         selectedParticipationType:
-                        selectedParticipationType.value,
+                            selectedParticipationType.value,
                         availableParticipationTypes:
-                        lincaEvent.event.availableParticipationTypes,
+                            lincaEvent.event.availableParticipationTypes,
                         participationAreaKey: participationAreaKey,
                         onClickButton: (ParticipationType participationType) {
                           selectedParticipationType.value = participationType;
                         },
                       ),
+                      ..._buildEventMemoryArea(
+                        context: context,
+                        uid: lincaUser?.user.id,
+                        participationInfo: participationInfo,
+                        updateUserPhoto: (String photoUrl, int index) {
+                          participationController.updateParticipationMemory(
+                            participationInfo: participationInfo,
+                            index: index,
+                            photoUrl: photoUrl,
+                          );
+                        },
+                      ),
                       ..._buildEventMemoArea(
                         context: context,
                         participationMemoController:
-                        participationMemoController,
+                            participationMemoController,
                       ),
                       ..._buildTagsArea(context),
+                      const SizedBox(height: 60),
                     ],
                   ),
                 ),
@@ -304,7 +319,7 @@ class EventDetailPage extends HookConsumerWidget
                             const Icon(Icons.edit),
                             const SizedBox(width: 8),
                             Text(
-                              '編集',
+                              context.l10n.common_edit,
                               style: context.textTheme.titleMedium,
                             ),
                           ],
@@ -318,7 +333,7 @@ class EventDetailPage extends HookConsumerWidget
                             const Icon(Icons.delete, color: Colors.red),
                             const SizedBox(width: 8),
                             Text(
-                              '削除',
+                              context.l10n.common_delete,
                               style: context.textTheme.titleMedium?.copyWith(
                                 color: Colors.red,
                               ),
@@ -332,7 +347,7 @@ class EventDetailPage extends HookConsumerWidget
                       logEvent(event: AnalyticsEvent.eventDetailEditClick);
 
                       final UnOfficialEvent event =
-                      lincaEvent.event as UnOfficialEvent;
+                          lincaEvent.event as UnOfficialEvent;
                       context.router.pop();
                       context.router.push(
                         CreateEventRoute(
@@ -454,29 +469,29 @@ class EventDetailPage extends HookConsumerWidget
   Widget _buildVenueAreaIfNeeded(BuildContext context) {
     return lincaEvent.venueName.isNotEmpty
         ? InkWell(
-      onTap: () {
-        final Uri url =
-        Uri.parse(context.l10n.map_launch_url(lincaEvent.venueName));
-        launchUrl(url, mode: LaunchMode.externalApplication);
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        child: Row(
-          children: <Widget>[
-            const Icon(Icons.pin_drop),
-            const SizedBox(
-              width: 8,
-            ),
-            Expanded(
-              child: Text(
-                lincaEvent.venueName,
-                style: context.textTheme.titleMedium,
+            onTap: () {
+              final Uri url =
+                  Uri.parse(context.l10n.map_launch_url(lincaEvent.venueName));
+              launchUrl(url, mode: LaunchMode.externalApplication);
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Row(
+                children: <Widget>[
+                  const Icon(Icons.pin_drop),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  Expanded(
+                    child: Text(
+                      lincaEvent.venueName,
+                      style: context.textTheme.titleMedium,
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
-    )
+          )
         : const SizedBox.shrink();
   }
 
@@ -490,7 +505,7 @@ class EventDetailPage extends HookConsumerWidget
         onPressed: () => isAlreadyCheckedIn ? null : onClick(),
         icon: const Icon(Icons.location_on),
         label: Text(
-          '会場チェックイン',
+          context.l10n.check_in,
           style: context.textTheme.bodySmall?.copyWith(
             color: context.colorScheme.surface,
           ),
@@ -588,14 +603,98 @@ class EventDetailPage extends HookConsumerWidget
     return <Widget>[
       Container(
         key: participationAreaKey,
+        padding: const EdgeInsets.all(6),
         decoration: BoxDecoration(
-          color: context.colorScheme.secondaryContainer,
-          borderRadius: BorderRadius.circular(24),
+          color: context.colorScheme.surfaceContainerHighest,
+          borderRadius: BorderRadius.circular(28),
         ),
         child: Row(children: buttons),
       ),
-      const SizedBox(height: 8),
+      const SizedBox(height: 16),
     ];
+  }
+
+  List<Widget> _buildEventMemoryArea({
+    required BuildContext context,
+    required String? uid,
+    required ParticipationInfo? participationInfo,
+    required Function(String photoUrl, int index) updateUserPhoto,
+  }) {
+    if (participationInfo == null) return <Widget>[];
+
+    return <Widget>[
+      Text(
+        'イベントメモリー(3枚まで)',
+        style: context.textTheme.titleMedium,
+      ),
+      const SizedBox(height: 8),
+      SizedBox(
+        height: 96,
+        child: ListView(
+          scrollDirection: Axis.horizontal,
+          children: <Widget>[
+            for (final String imageUrl in participationInfo.imageUrls)
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: GestureDetector(
+                  onTap: () => ImagePreviewDialog.show(
+                    context: context,
+                    imageUrl: imageUrl,
+                  ),
+                  child: CachedNetworkImage(
+                    imageUrl: imageUrl,
+                    width: 96,
+                    height: 96,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            if (participationInfo.imageUrls.length < 3 && uid != null)
+              buildAddImageButton(
+                context: context,
+                uid: uid,
+                updateUserPhoto: updateUserPhoto,
+              ),
+          ],
+        ),
+      ),
+      const SizedBox(height: 16),
+    ];
+  }
+
+  Widget buildAddImageButton({
+    required BuildContext context,
+    required String uid,
+    required Function(String photoUrl, int index) updateUserPhoto,
+  }) {
+    return GestureDetector(
+      onTap: () async {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => const Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+        final String uuid = const Uuid().v4();
+        final String? photoUrl = await pickCompressAndUploadImage(
+          uid: uid,
+          uploadPath: 'participations/$uid/$uuid.jpg',
+        );
+        if (context.mounted) context.router.pop();
+        if (photoUrl == null) return;
+        updateUserPhoto(photoUrl, -1);
+      },
+      child: Container(
+        width: 96,
+        height: 96,
+        color: context.colorScheme.surfaceContainerLow,
+        child: Icon(
+          Icons.add_a_photo,
+          color: context.colorScheme.onSurfaceVariant,
+        ),
+      ),
+    );
   }
 
   List<Widget> _buildEventMemoArea({
@@ -681,7 +780,7 @@ class EventDetailPage extends HookConsumerWidget
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content:
-                    Text(context.l10n.event_detail_text_event_code_copied),
+                        Text(context.l10n.event_detail_text_event_code_copied),
                     behavior: SnackBarBehavior.floating,
                     duration: const Duration(seconds: 1),
                     backgroundColor: context.colorScheme.secondaryContainer,
@@ -702,7 +801,7 @@ class EventDetailPage extends HookConsumerWidget
         spacing: 4,
         children: <Widget>[
           ...lincaEvent.tags.displayTags.map(
-                (Tag tag) {
+            (Tag tag) {
               return Chip(
                 label: Text(
                   tag.name,

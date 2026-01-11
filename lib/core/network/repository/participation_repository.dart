@@ -43,7 +43,7 @@ class ParticipationRepository extends FirestoreRepository<ParticipationInfo> {
     );
   }
 
-  Future<void> create(ParticipationInfo participation) async {
+  Future<void> update(ParticipationInfo participation) async {
     if (uid == null) return;
 
     await fireStore

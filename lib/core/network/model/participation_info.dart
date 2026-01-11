@@ -13,6 +13,7 @@ abstract class ParticipationInfo with _$ParticipationInfo {
     ParticipationType? participationType,
     @Default('') String participationMemo,
     @Default('') String groupSlug,
+    @Default(<String>[]) List<String> imageUrls,
   }) = _ParticipationInfo;
 
   factory ParticipationInfo.fromJson(Map<String, dynamic> json) =>

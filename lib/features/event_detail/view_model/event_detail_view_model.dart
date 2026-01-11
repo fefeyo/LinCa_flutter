@@ -2,6 +2,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/constants/app_constants.dart';
 import 'package:linca_otaku_support/core/models/linca_event.dart';
+import 'package:linca_otaku_support/core/network/model/participation_info.dart';
 import '../../../core/models/check_in_condition.dart';
 import '../data/event_detail_state.dart';
 

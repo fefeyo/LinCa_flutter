@@ -41,9 +41,7 @@ void main() async {
       container.read(eventControllerProvider.future),
       container.read(userEventControllerProvider.future),
     ]);
-    await Future.wait(<Future<Object>>[
-      container.read(participationControllerProvider.future),
-    ]);
+    await container.read(participationControllerProvider.future);
     await container.read(calendarEventsProvider.future);
     runApp(
       UncontrolledProviderScope(

@@ -72,10 +72,10 @@ class TutorialInputNicknamePage extends HookConsumerWidget {
                   TextFormField(
                     controller: controller,
                     validator: validate,
-                    decoration: const InputDecoration(
-                      labelText: 'ニックネーム',
-                      hintText: '例：幻の学院生',
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: context.l10n.linca_edit_label_nickname,
+                      hintText: context.l10n.linca_edit_label_nickname_hint,
+                      border: const OutlineInputBorder(),
                     ),
                     maxLength: AppConstants.userNameMaxLength,
                     onChanged: viewModel.setNickName,

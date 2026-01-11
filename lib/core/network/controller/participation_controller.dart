@@ -49,13 +49,13 @@ class ParticipationController
     required ParticipationInfo participation,
     bool needsRefresh = false,
   }) async {
-    await participationRepository.create(participation);
+    await participationRepository.update(participation);
 
     if (needsRefresh) {
       final AsyncValue<Map<LincaEvent, ParticipationInfo>> currentState = state;
       if (currentState is AsyncData<Map<LincaEvent, ParticipationInfo>>) {
         final Map<LincaEvent, ParticipationInfo> updated =
-        Map<LincaEvent, ParticipationInfo>.of(currentState.value);
+            Map<LincaEvent, ParticipationInfo>.of(currentState.value);
         updated[lincaEvent] = participation;
 
         state = AsyncValue<Map<LincaEvent, ParticipationInfo>>.data(updated);
@@ -161,5 +161,49 @@ class ParticipationController
     }
 
     return lincaEvents;
+  }
+
+  Future<void> updateParticipationMemory({
+    required ParticipationInfo? participationInfo,
+    required int index,
+    required String photoUrl,
+  }) async {
+    if (participationInfo == null) return;
+
+    final AsyncValue<Map<LincaEvent, ParticipationInfo>> currentState = state;
+    state = const AsyncValue<Map<LincaEvent, ParticipationInfo>>.loading();
+    if (currentState is! AsyncData<Map<LincaEvent, ParticipationInfo>>) return;
+
+    final LincaEvent? targetEvent = currentState.value.keys.firstWhereOrNull(
+      (LincaEvent event) => event.event.id == participationInfo.eventId,
+    );
+    if (targetEvent == null) return;
+
+    final ParticipationInfo existingInfo = currentState.value[targetEvent]!;
+
+    final List<String> newImageUrls;
+    if (index < 0) {
+      newImageUrls = <String>[...existingInfo.imageUrls, photoUrl];
+    } else if (index < existingInfo.imageUrls.length) {
+      newImageUrls = <String>[...existingInfo.imageUrls];
+      newImageUrls[index] = photoUrl;
+    } else {
+      return;
+    }
+
+    final ParticipationInfo newInfo =
+        existingInfo.copyWith(imageUrls: newImageUrls);
+
+    await participationRepository.update(newInfo);
+
+    final Map<LincaEvent, ParticipationInfo> rebuilt =
+        <LincaEvent, ParticipationInfo>{
+      for (final MapEntry<LincaEvent, ParticipationInfo> entry
+          in currentState.value.entries)
+        entry.key == targetEvent ? entry.key : entry.key:
+            entry.key == targetEvent ? newInfo : entry.value,
+    };
+
+    state = AsyncData<Map<LincaEvent, ParticipationInfo>>(rebuilt);
   }
 }

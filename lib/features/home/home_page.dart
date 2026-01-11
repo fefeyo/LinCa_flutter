@@ -21,7 +21,6 @@ import 'package:linca_otaku_support/features/my_event/data/my_event_state.dart';
 import '../../../core/utils/context_extension.dart';
 import '../../core/network/model/participation_info.dart';
 import '../../core/router/app_router.gr.dart';
-import '../../core/widgets/bottom_sheet/event_sort_bottom_sheet.dart';
 import '../../core/widgets/dialog/on_the_day_event_dialog.dart';
 import '../my_event/view_model/my_event_view_model.dart';
 import 'view/home_drawer.dart';
@@ -35,7 +34,7 @@ class HomePage extends HookConsumerWidget
   Widget build(BuildContext context, WidgetRef ref) {
     final List<String> titles = <String>[
       context.l10n.my_event_title,
-      'イベントカレンダー',
+      context.l10n.event_calendar_title,
       context.l10n.my_page_title,
     ];
     final MyEventState myEventState = ref.watch(myEventViewModelProvider);
@@ -113,7 +112,8 @@ class HomePage extends HookConsumerWidget
                         ),
                         if (tabs.activeIndex == 0)
                           Text(
-                            '件数: ${myEventState.sortedEvents.length}',
+                            context.l10n.common_event_count(
+                                myEventState.sortedEvents.length),
                             style: context.textTheme.bodyMedium,
                           ),
                       ],
@@ -124,16 +124,16 @@ class HomePage extends HookConsumerWidget
                     onPressed: () async {
                       logEvent(event: AnalyticsEvent.myEventFilterClick);
 
-                      final FilterSettings? result =
-                          await EventSortBottomSheet.show(
-                        context,
-                        myEventState.filterSettings,
-                        needInputArea: true,
-                        needHiddenOriginalEventArea: true,
-                        needDisplayOrderArea: true,
-                        needParticipationArea: true,
-                        needEventTypeArea: true,
-                        needTagsArea: true,
+                      final FilterSettings? result = await context.router.push(
+                        EventSortFilterRoute(
+                          initialSettings: myEventState.filterSettings,
+                          needInputArea: true,
+                          needHiddenOriginalEventArea: true,
+                          needDisplayOrderArea: true,
+                          needParticipationArea: true,
+                          needEventTypeArea: true,
+                          needTagsArea: true,
+                        ),
                       );
                       if (result != null) {
                         myEventViewModel.setFilterSettings(result);
@@ -155,10 +155,10 @@ class HomePage extends HookConsumerWidget
                     },
                   ),
                 if (tabs.activeIndex == 1)
-                  IconButton(
-                    icon: const Icon(Icons.calendar_today),
-                    onPressed: () => lincaCalendarViewModel
-                        .resetCalendar(),
+                  TextButton.icon(
+                    onPressed: () => lincaCalendarViewModel.resetCalendar(),
+                    icon: const Icon(Icons.today),
+                    label: Text('今日'),
                   ),
               ]),
           drawer: HomeDrawer(

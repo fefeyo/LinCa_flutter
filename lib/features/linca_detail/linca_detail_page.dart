@@ -47,7 +47,7 @@ class LincaDetailPage extends HookConsumerWidget {
               FlipCard(
                 front: LincaVertical(
                   lincaUser: lincaUser,
-                  upcomingEvent: state.upcomingEvent,
+                  upcomingEvents: state.upcomingEvents,
                   isFullScreen: true,
                   animationTag: animationTag,
                   onClickFlip: () => isFront.value = !isFront.value,

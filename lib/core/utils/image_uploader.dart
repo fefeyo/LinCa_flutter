@@ -6,7 +6,10 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
-Future<String?> pickCompressAndUploadImage(String uid) async {
+Future<String?> pickCompressAndUploadImage({
+  required String uid,
+  required String uploadPath,
+}) async {
   try {
     // 画像を選択
     final XFile? pickedFile =
@@ -17,7 +20,7 @@ Future<String?> pickCompressAndUploadImage(String uid) async {
     final File originalFile = File(pickedFile.path);
     // 2. 一時ディレクトリへ圧縮
     final Directory tempDir = await getTemporaryDirectory();
-    final String targetPath = '${tempDir.path}/profile.jpg';
+    final String targetPath = '${tempDir.path}/tmp.jpg';
 
     final XFile? compressedFile = await FlutterImageCompress.compressAndGetFile(
       originalFile.path,
@@ -31,7 +34,7 @@ Future<String?> pickCompressAndUploadImage(String uid) async {
 
     // 3. Firebase Storage にアップロード
     final Reference storageRef =
-        FirebaseStorage.instance.ref().child('users/$uid/profile.jpg');
+        FirebaseStorage.instance.ref().child(uploadPath);
 
     await storageRef.putFile(
       File(compressedFile.path),

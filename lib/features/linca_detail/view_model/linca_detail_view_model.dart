@@ -60,7 +60,7 @@ class LincaDetailViewModel extends StateNotifier<LincaDetailState> {
 
     state = state.copyWith(
       participationEvents: participationEvents,
-      upcomingEvent: upcomingEvent.firstOrNull,
+      upcomingEvents: upcomingEvent.take(2).toList(),
     );
   }
 }
