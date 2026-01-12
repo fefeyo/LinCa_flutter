@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/utils/date_extension.dart';
 import 'package:linca_otaku_support/core/utils/tag_extension.dart';
+import 'package:linca_otaku_support/core/widgets/event/participation_status_badge.dart';
 
 import '../../../core/utils/context_extension.dart';
 import '../../core/constants/analytics_event.dart';
@@ -98,7 +99,7 @@ class EventSortFilterPage extends HookConsumerWidget
               startDate.value = null;
               endDate.value = null;
             },
-            child: Text('条件をリセット'),
+            child: Text(context.l10n.event_sort_clear),
           ),
         ],
       ),
@@ -358,18 +359,11 @@ class EventSortFilterPage extends HookConsumerWidget
   }) {
     if (!needParticipationArea) return <Widget>[];
 
-    final String title;
-    if (currentParticipationTypes.isEmpty) {
-      title = context.l10n.event_sort_section_title_paricipation;
-    } else {
-      title = '${context.l10n.event_sort_section_title_paricipation} 選択中';
-    }
-
     return <Widget>[
       _buildExpansionSection(
         context: context,
-        title: title,
-        initiallyExpanded: currentParticipationTypes.isNotEmpty,
+        title: context.l10n.event_sort_section_title_paricipation,
+        isSelected: currentParticipationTypes.isNotEmpty,
         child: Wrap(
           spacing: 4,
           runSpacing: 8,
@@ -412,17 +406,11 @@ class EventSortFilterPage extends HookConsumerWidget
   }) {
     if (!needEventTypeArea) return <Widget>[];
 
-    final String title;
-    if (!isShowOfficialEvent && !isShowOriginalEvent) {
-      title = context.l10n.event_sort_section_title_paricipation;
-    } else {
-      title = '${context.l10n.event_sort_section_title_paricipation} 選択中';
-    }
-
     return <Widget>[
       _buildExpansionSection(
         context: context,
-        title: title,
+        title: context.l10n.event_sort_section_title_event_type,
+        isSelected: isShowOfficialEvent || isShowOriginalEvent,
         child: Wrap(
           spacing: 4,
           runSpacing: 8,
@@ -460,18 +448,11 @@ class EventSortFilterPage extends HookConsumerWidget
   }) {
     if (!needTagsArea) return <Widget>[];
 
-    final String title;
-    if (currentTags.isEmpty) {
-      title = context.l10n.event_sort_section_title_paricipation;
-    } else {
-      title = '${context.l10n.event_sort_section_title_paricipation} 選択中';
-    }
-
     return <Widget>[
       _buildExpansionSection(
         context: context,
-        title: title,
-        initiallyExpanded: currentTags.isNotEmpty,
+        title: context.l10n.event_sort_section_title_event_style,
+        isSelected: currentTags.isNotEmpty,
         child: Wrap(
           spacing: 4,
           runSpacing: 8,
@@ -517,7 +498,7 @@ class EventSortFilterPage extends HookConsumerWidget
       _buildExpansionSection(
         context: context,
         title: context.l10n.event_sort_section_title_series_tag,
-        initiallyExpanded: currentTags.isNotEmpty,
+        isSelected: currentTags.isNotEmpty,
         child: Wrap(
           spacing: 4,
           runSpacing: 8,
@@ -557,7 +538,7 @@ class EventSortFilterPage extends HookConsumerWidget
     return _buildExpansionSection(
       context: context,
       title: context.l10n.event_sort_span_title,
-      initiallyExpanded: startDate != null || endDate != null,
+      isSelected: startDate != null || endDate != null,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -629,17 +610,27 @@ class EventSortFilterPage extends HookConsumerWidget
     required BuildContext context,
     required String title,
     required Widget child,
-    bool initiallyExpanded = false,
+    required bool isSelected,
   }) {
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
         tilePadding: EdgeInsets.zero,
         childrenPadding: const EdgeInsets.only(bottom: 8),
-        initiallyExpanded: initiallyExpanded,
-        title: Text(
-          title,
-          style: context.textTheme.bodyMedium,
+        initiallyExpanded: isSelected,
+        title: Row(
+          children: [
+            Text(
+              title,
+              style: context.textTheme.bodyMedium,
+            ),
+            const Spacer(),
+            if (isSelected)
+              ParticipationStatusBadge(
+                text: context.l10n.event_sort_selected,
+                color: Colors.red,
+              )
+          ],
         ),
         children: <Widget>[child],
       ),

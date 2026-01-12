@@ -12,20 +12,29 @@ final StateNotifierProvider<OutputParticipateEventsViewModel,
         OutputParticipateEventsState> outputParticipateEventsViewModelProvider =
     StateNotifierProvider<OutputParticipateEventsViewModel,
         OutputParticipateEventsState>((Ref ref) {
-  final Map<LincaEvent, ParticipationInfo> myEvents =
-      ref.read(participationControllerProvider).value ??
-          <LincaEvent, ParticipationInfo>{};
+  final List<LincaEvent> officialEvents =
+      ref.read(eventControllerProvider).value ?? <LincaEvent>[];
+  final List<LincaEvent> originalEvents =
+      ref.read(userEventControllerProvider).value ?? <LincaEvent>[];
+  final List<ParticipationInfo> participations =
+      ref.read(participationControllerProvider).value ?? <ParticipationInfo>[];
 
-  return OutputParticipateEventsViewModel(myEvents.sort());
+  return OutputParticipateEventsViewModel(
+    <LincaEvent>[...officialEvents, ...originalEvents],
+    participations,
+  );
 });
 
 class OutputParticipateEventsViewModel
     extends StateNotifier<OutputParticipateEventsState> {
-  OutputParticipateEventsViewModel(Map<LincaEvent, ParticipationInfo> myEvents)
-      : super(
+  OutputParticipateEventsViewModel(
+    List<LincaEvent> allEvents,
+    List<ParticipationInfo> participations,
+  ) : super(
           OutputParticipateEventsState(
-            initialEvents: myEvents,
-            sortedEvents: myEvents,
+            allEvents: allEvents,
+            sortedEvents: allEvents,
+            participations: participations,
             filterSettings: const FilterSettings(
               displayOrder: DisplayOrder.oldest,
             ),
@@ -52,8 +61,8 @@ class OutputParticipateEventsViewModel
     );
   }
 
-  Map<LincaEvent, ParticipationInfo> sortEvents(FilterSettings filterSettings) {
-    List<LincaEvent> events = state.initialEvents.keys.toList();
+  List<LincaEvent> sortEvents(FilterSettings filterSettings) {
+    List<LincaEvent> events = List<LincaEvent>.of(state.allEvents);
 
     if (filterSettings.isHiddenOriginalEvent) {
       events = events
@@ -75,7 +84,7 @@ class OutputParticipateEventsViewModel
 
     if (!filterSettings.isShowOfficialEvent &&
         !filterSettings.isShowOriginalEvent) {
-      events = state.initialEvents.keys.toList();
+      events = state.allEvents;
     }
 
     events = events
@@ -88,17 +97,6 @@ class OutputParticipateEventsViewModel
         .filterWithTag(filterSettings.seriesTags)
         .sortWithDisplayOrder(displayOrder: filterSettings.displayOrder);
 
-    final Map<LincaEvent, ParticipationInfo> sortedMap =
-        <LincaEvent, ParticipationInfo>{};
-    for (final LincaEvent event in events) {
-      if (filterSettings.participationFilters.isNotEmpty &&
-          !filterSettings.participationFilters
-              .contains(state.initialEvents[event]!.participationType)) {
-        continue;
-      }
-      sortedMap[event] = state.initialEvents[event]!;
-    }
-
-    return sortedMap;
+    return events;
   }
 }

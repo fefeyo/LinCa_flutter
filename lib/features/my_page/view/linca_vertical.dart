@@ -10,6 +10,7 @@ import 'package:linca_otaku_support/core/utils/color_extension.dart';
 import 'package:linca_otaku_support/core/utils/favorite_badges_extension.dart';
 import 'package:linca_otaku_support/core/utils/group_extension.dart';
 import 'package:linca_otaku_support/core/widgets/common/common_close_button.dart';
+import 'package:linca_otaku_support/core/widgets/dialog/image_preview_dialog.dart';
 import 'package:linca_otaku_support/core/widgets/event/event_card.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -164,10 +165,21 @@ class LincaVertical extends HookConsumerWidget {
                       )
                     ],
                   ),
-                  child: CircleAvatar(
-                    backgroundImage: lincaUser.user.photoUrl.isNotEmpty == true
-                        ? CachedNetworkImageProvider(lincaUser.user.photoUrl)
-                        : AssetImage(Assets.images.userIcon.path),
+                  child: GestureDetector(
+                    onTap: () {
+                      if (lincaUser.user.photoUrl.isNotEmpty == true &&
+                          isFullScreen) {
+                        ImagePreviewDialog.show(
+                            context: context,
+                            imageUrl: lincaUser.user.photoUrl);
+                      }
+                    },
+                    child: CircleAvatar(
+                      backgroundImage: lincaUser.user.photoUrl.isNotEmpty ==
+                              true
+                          ? CachedNetworkImageProvider(lincaUser.user.photoUrl)
+                          : AssetImage(Assets.images.userIcon.path),
+                    ),
                   ),
                 ),
               ),

@@ -51,8 +51,11 @@ class AcquiredBadgePage extends HookConsumerWidget with ScreenAnalyticsManager {
         ),
       ),
       body: needEmptyView
-          ? const Center(
-              child: Text('獲得済みのバッジがありません'),
+          ? Center(
+              child: Text(
+                context.l10n.badge_list_empty_title,
+                style: context.textTheme.titleMedium,
+              ),
             )
           : Padding(
               padding: const EdgeInsets.all(16),

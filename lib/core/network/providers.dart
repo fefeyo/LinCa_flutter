@@ -113,10 +113,10 @@ final Provider<ParticipationRepository> participationRepositoryProvider =
   ),
 );
 
-final AsyncNotifierProvider<ParticipationController,
-        Map<LincaEvent, ParticipationInfo>> participationControllerProvider =
-    AsyncNotifierProvider<ParticipationController,
-        Map<LincaEvent, ParticipationInfo>>(ParticipationController.new);
+final AsyncNotifierProvider<ParticipationController, List<ParticipationInfo>>
+    participationControllerProvider =
+    AsyncNotifierProvider<ParticipationController, List<ParticipationInfo>>(
+        ParticipationController.new);
 
 final Provider<FriendRepository> friendRepositoryProvider =
     Provider<FriendRepository>(

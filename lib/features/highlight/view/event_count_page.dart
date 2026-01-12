@@ -44,7 +44,7 @@ class EventCountPage extends HookConsumerWidget
                 const SizedBox(height: 24),
 
                 Text(
-                  context.l10n.common_count(state.filteredMyEvents.eventCount),
+                  context.l10n.common_count(state.filteredMyEvents.length),
                   style: context.textTheme.displayLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),

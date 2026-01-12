@@ -22,26 +22,24 @@ final StateNotifierProvider<LincaCalendarViewModel, LincaCalendarState>
                 (event.event as UnOfficialEvent).visibility == true)
             .toList() ??
         <LincaEvent>[];
-    final Map<LincaEvent, ParticipationInfo> participations =
+    final List<ParticipationInfo> participations =
         ref.read(participationControllerProvider).value ??
-            <LincaEvent, ParticipationInfo>{};
+            <ParticipationInfo>[];
 
     final LincaCalendarViewModel viewModel = LincaCalendarViewModel(
       events: <LincaEvent>[
         ...events,
         ...userEvents,
       ],
-      myEvents: participations,
+      participations: participations,
     );
 
     ref.listen(
       participationControllerProvider,
-      (_, AsyncValue<Map<LincaEvent, ParticipationInfo>> next) {
-        final Map<LincaEvent, ParticipationInfo>? newParticipations =
-            next.value;
-        if (newParticipations != null) {
-          viewModel.updateParticipations(newParticipations);
-        }
+      (_, AsyncValue<List<ParticipationInfo>> next) {
+        final List<ParticipationInfo> newParticipations =
+            next.value ?? <ParticipationInfo>[];
+        viewModel.updateParticipations(newParticipations);
       },
     );
 
@@ -52,13 +50,13 @@ final StateNotifierProvider<LincaCalendarViewModel, LincaCalendarState>
 class LincaCalendarViewModel extends StateNotifier<LincaCalendarState> {
   LincaCalendarViewModel({
     required List<LincaEvent> events,
-    required Map<LincaEvent, ParticipationInfo> myEvents,
+    required List<ParticipationInfo> participations,
   }) : super(
           LincaCalendarState(
             selectedDate: DateTime.now(),
             focusedMonth: DateTime.now(),
             events: events,
-            myEvents: myEvents,
+            participations: participations,
           ),
         );
 
@@ -123,8 +121,8 @@ class LincaCalendarViewModel extends StateNotifier<LincaCalendarState> {
     });
   }
 
-  void updateParticipations(Map<LincaEvent, ParticipationInfo> participations) {
-    state = state.copyWith(myEvents: participations);
+  void updateParticipations(List<ParticipationInfo> participations) {
+    state = state.copyWith(participations: participations);
   }
 
   void updateCalendarEvents(List<CalendarEvent> calendarEvents) {

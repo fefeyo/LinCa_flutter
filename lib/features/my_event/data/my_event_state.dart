@@ -9,10 +9,9 @@ part 'my_event_state.freezed.dart';
 @freezed
 abstract class MyEventState with _$MyEventState {
   const factory MyEventState({
-    @Default(<LincaEvent, ParticipationInfo>{})
-    Map<LincaEvent, ParticipationInfo> initialEvents,
-    @Default(<LincaEvent, ParticipationInfo>{})
-    Map<LincaEvent, ParticipationInfo> sortedEvents,
+    @Default(<LincaEvent>[]) List<LincaEvent> allEvents,
+    @Default(<LincaEvent>[]) List<LincaEvent> sortedEvents,
+    @Default(<ParticipationInfo>[]) List<ParticipationInfo> participations,
     @Default(FilterSettings()) FilterSettings filterSettings,
   }) = _MyEventState;
 }

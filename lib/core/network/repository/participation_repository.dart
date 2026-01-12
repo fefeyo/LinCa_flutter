@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:linca_otaku_support/core/constants/app_constants.dart';
 
 import '../model/participation_info.dart';
@@ -51,7 +52,10 @@ class ParticipationRepository extends FirestoreRepository<ParticipationInfo> {
         .doc(uid)
         .collection(AppConstants.participationsPath)
         .doc(participation.eventId)
-        .set(participation.toJson());
+        .set(
+          participation.toJson(),
+          SetOptions(merge: true),
+        );
   }
 
   Future<void> delete(String eventId) async {

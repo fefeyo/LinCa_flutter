@@ -117,7 +117,6 @@
   "onboarding_step3_description": "推しタグやバッジを使って自分だけのプロフィールを作成してみましょう。\nデジタル名刺のように他のユーザーとLinCaカードを交換することもできます。",
   "onboarding_step4_title": "ニックネームを設定しよう",
   "onboarding_step4_description": "LinCaカードに表示されるニックネームを設定しましょう。\n（あとから変更することもできます。）",
-  "snackbar_title_deleted": "削除に成功しました",
   "my_event_deleted": "マイイベントから削除しました",
   "original_event_deleted": "イベントを削除しました",
   "map_launch_url": "https://www.google.com/maps/search/?api=1&query={query}",
@@ -226,10 +225,11 @@
       }
     }
   },
-  "check_in_location_permission_disabled": "位置情報サービスが無効です\nアプリ設定から位置情報サービスを有効にしてください",
-  "check_in_location_permission_denied": "位置情報の許可が必要です",
-  "check_in_location_permission_denied_forever": "位置情報の許可が必要です\nアプリ設定から位置情報サービスを有効にしてください",
-  "check_in_in_range": "バッジを獲得しました。\n獲得済みバッジ一覧から確認してください。",
+  "check_in_location_permission_disabled": "位置情報サービスが無効です\n端末のアプリ設定から位置情報へのアクセスを有効にしてください",
+  "check_in_location_permission_denied": "位置情報サービスの許可が必要です",
+  "check_in_location_permission_denied_forever": "位置情報サービスの許可が必要です\n端末のアプリ設定から位置情報へのアクセスを有効にしてください",
+  "check_in_in_range_title": "チェックイン完了！",
+  "check_in_in_range_description": "バッジを獲得しました。\n獲得済みバッジ一覧から確認してください。",
   "check_in_already_checked_in": "既にチェックイン済みです",
   "check_in_out_range": "チェックイン範囲外です",
   "create_event_event_name_required": "イベント名を入力してください",
@@ -307,8 +307,8 @@
       }
     }
   },
-  "created_event_delete_event_title": "削除の確認",
-  "created_event_delete_event_description": "このイベントを削除しますか？",
+  "created_event_delete_event_title": "このイベントを削除しますか？",
+  "created_event_delete_event_description": "削除したイベントは復元できません。よろしいですか？",
   "created_event_delete_event_confirm": "削除する",
   "common_event_count": "件数: {count}",
   "@common_event_count": {
@@ -341,7 +341,17 @@
   "linca_edit_label_nickname_hint": "例：幻の学院生",
   "picture_saved": "画像を保存しました",
   "picture_save_failed": "画像の保存に失敗しました",
-  "picture_save_permission_disabled": "画像の保存に必要な権限がありません",
+  "picture_save_permission_disabled": "画像の保存に必要な権限がありません\n端末のアプリ設定から写真へのアクセスを有効にしてください",
   "qr_hold_up_message": "QRコードを枠内にかざしてください",
-  "event_sort_span_title": "期間"
+  "event_sort_span_title": "期間",
+  "common_today": "今日",
+  "event_sort_clear": "条件をクリア",
+  "event_sort_selected": "選択中",
+  "badge_list_empty_title": "獲得済みバッジがありません",
+  "event_detail_memory_title": "イベントメモリー(最大3枚)",
+  "event_detail_memory_deleted": "画像を削除しました",
+  "my_event_delete_dialog_title": "マイイベントから削除しますか？",
+  "my_event_delete_dialog_description": "マイイベントから削除すると登録した画像やメモも削除されます。よろしいですか？",
+  "picture_save_dialog_title": "画像を保存しますか？",
+  "picture_save_dialog_description": "表示されているイベントの一覧を画像で保存します。よろしいですか？"
 }

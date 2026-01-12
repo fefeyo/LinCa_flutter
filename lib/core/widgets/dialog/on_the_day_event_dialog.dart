@@ -9,14 +9,17 @@ import 'package:linca_otaku_support/core/network/model/participation_info.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
 import 'package:linca_otaku_support/core/utils/event_analytics_manager.dart';
 import 'package:linca_otaku_support/core/utils/event_base_extension.dart';
+import 'package:linca_otaku_support/core/utils/participation_extension.dart';
 import 'package:linca_otaku_support/core/utils/preferences_service.dart';
 import 'package:linca_otaku_support/core/utils/providers.dart';
+import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
 import '../../asset_gen/assets.gen.dart';
+import '../../constants/analytics_screen.dart';
 import '../../models/linca_event.dart';
 import '../../router/app_router.gr.dart';
 
 class OnTheDayEventDialog extends HookConsumerWidget
-    with EventAnalyticsManager {
+    with ScreenAnalyticsManager, EventAnalyticsManager {
   const OnTheDayEventDialog({
     super.key,
     required this.events,
@@ -24,10 +27,12 @@ class OnTheDayEventDialog extends HookConsumerWidget
   });
 
   final List<LincaEvent> events;
-  final Map<LincaEvent, ParticipationInfo> participations;
+  final List<ParticipationInfo> participations;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    logScreen(AnalyticsScreen.onTheDayEvent);
+
     final PageController controller = usePageController(viewportFraction: 1.0);
     final ValueNotifier<int> currentPage = useState(0);
     final ValueNotifier<bool> dontShowToday = useState(false);
@@ -68,22 +73,28 @@ class OnTheDayEventDialog extends HookConsumerWidget
                   itemCount: events.length,
                   itemBuilder: (BuildContext context, int index) {
                     final LincaEvent event = events[index];
+                    final ParticipationInfo? participationInfo =
+                        participations.getByEventId(event.event.id);
 
                     return GestureDetector(
                       onTap: () {
                         context.router.push(
                           EventDetailRoute(
                             lincaEvent: event,
-                            participationInfo: participations[event],
+                            participationInfo: participationInfo,
                           ),
                         );
 
                         logEvent(
                           event: AnalyticsEvent.onTheDayEventEventClick,
                           params: <String, Object>{
-                            'lincaEvent': event,
-                            'participationInfo':
-                                participations[event] ?? 'no participation'
+                            'lincaEventId': event.event.id,
+                            'lincaEventName': event.event.title,
+                            'participationEventId':
+                                participationInfo?.eventId ?? 'no event id',
+                            'participationType':
+                                participationInfo?.participationType?.name ??
+                                    'none type',
                           },
                         );
                       },
@@ -216,7 +227,7 @@ class OnTheDayEventDialog extends HookConsumerWidget
                 logEvent(
                   event: AnalyticsEvent.onTheDayEventCloseClick,
                   params: <String, Object>{
-                    'hideOnTheDayDialog': dontShowToday.value
+                    'hideOnTheDayDialog': dontShowToday.value ? 1 : 0,
                   },
                 );
 
@@ -272,11 +283,10 @@ class OnTheDayEventDialog extends HookConsumerWidget
     );
   }
 
-  /// ---------- static show() はそのまま ----------
   static Future<bool?> show({
     required BuildContext context,
     required List<LincaEvent> events,
-    required Map<LincaEvent, ParticipationInfo> participations,
+    required List<ParticipationInfo> participations,
   }) {
     return showDialog<bool>(
       context: context,

@@ -119,18 +119,7 @@ class CreateEventPage extends HookConsumerWidget
                 errorMessage = 'error';
               }
               if (titleController.text.isEmpty || selectedDate.value == null) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      errorMessage,
-                      style: context.textTheme.titleMedium?.copyWith(
-                        color: Colors.white,
-                      ),
-                    ),
-                    backgroundColor: Colors.red,
-                    duration: const Duration(seconds: 1),
-                  ),
-                );
+                context.showErrorSnackBar(message: errorMessage);
                 return;
               }
 
@@ -174,28 +163,22 @@ class CreateEventPage extends HookConsumerWidget
                 );
               }
 
-              if (context.mounted) {
-                final String text = isEditMode
-                    ? context.l10n.create_event_event_updated
-                    : context.l10n.create_event_event_created;
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      text,
-                      style: context.textTheme.titleMedium?.copyWith(
-                        color: Colors.white,
-                      ),
+              if (!context.mounted) return;
+              final String text = isEditMode
+                  ? context.l10n.create_event_event_updated
+                  : context.l10n.create_event_event_created;
+              context.showSuccessSnackBar(
+                message: text,
+                effect: () {
+                  context.router.pop();
+                  context.router.push(
+                    EventDetailRoute(
+                      lincaEvent: lincaEvent,
+                      participationInfo: participationInfo,
                     ),
-                  ),
-                );
-                context.router.pop();
-                context.router.push(
-                  EventDetailRoute(
-                    lincaEvent: lincaEvent,
-                    participationInfo: participationInfo,
-                  ),
-                );
-              }
+                  );
+                },
+              );
             },
           ),
         ],

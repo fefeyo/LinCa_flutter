@@ -26,7 +26,7 @@ import 'package:linca_otaku_support/core/utils/tag_extension.dart';
 import 'package:linca_otaku_support/core/widgets/common/common_simple_dialog.dart';
 import 'package:linca_otaku_support/core/widgets/common/common_simple_loading_dialog.dart';
 import 'package:linca_otaku_support/core/widgets/common/event_status_badges.dart';
-import 'package:linca_otaku_support/core/widgets/common/image_preview_dialog.dart';
+import 'package:linca_otaku_support/core/widgets/dialog/image_preview_dialog.dart';
 import 'package:linca_otaku_support/features/create_event/data/create_event_type.dart';
 import 'package:linca_otaku_support/features/event_detail/data/event_detail_state.dart';
 import 'package:linca_otaku_support/features/event_detail/view/custom_participation_button.dart';
@@ -38,6 +38,7 @@ import '../../../core/utils/context_extension.dart';
 import '../../../core/utils/date_extension.dart';
 import '../../core/asset_gen/assets.gen.dart';
 import '../../core/models/check_in_condition.dart';
+import '../../core/models/event_memory.dart';
 import '../../core/models/linca_event.dart';
 import '../../core/network/model/tag.dart';
 import '../../core/network/providers.dart';
@@ -64,7 +65,7 @@ class EventDetailPage extends HookConsumerWidget
     final EventDetailViewModel viewModel =
         ref.read(eventDetailViewModelProvider.notifier);
     final ParticipationController participationController =
-        ref.watch(participationControllerProvider.notifier);
+        ref.read(participationControllerProvider.notifier);
     final ValueNotifier<ParticipationType> selectedParticipationType = useState(
         participationInfo?.participationType ?? ParticipationType.onSite);
     final TextEditingController participationMemoController =
@@ -85,6 +86,8 @@ class EventDetailPage extends HookConsumerWidget
         useMemoized(() => GlobalKey());
     final GlobalKey<State<StatefulWidget>> saveButtonKey =
         useMemoized(() => GlobalKey());
+    final ValueNotifier<List<EventMemory>> eventMemories =
+        useState(participationInfo?.eventMemories ?? <EventMemory>[]);
 
     final List<TutorialStep> steps = <TutorialStep>[
       TutorialStep(
@@ -133,7 +136,8 @@ class EventDetailPage extends HookConsumerWidget
       (CheckInCondition? previous, CheckInCondition? next) async {
         final CheckInCondition? checkInCondition = next;
         if (checkInCondition != null) {
-          final String? message;
+          String? title;
+          final String message;
           switch (checkInCondition) {
             case CheckInCondition.locationPermissionDisabled:
               message = context.l10n.check_in_location_permission_disabled;
@@ -147,13 +151,19 @@ class EventDetailPage extends HookConsumerWidget
               break;
             case CheckInCondition.inRange:
               userController.acquireBadge(lincaEvent.event.displayCheckInId);
-              message = context.l10n.check_in_in_range;
+              title = context.l10n.check_in_in_range_title;
+              message = context.l10n.check_in_in_range_description;
               break;
             case CheckInCondition.outRange:
               message = context.l10n.check_in_out_range;
               break;
           }
-          await CommonSimpleDialog.show(context: context, title: message);
+          if (title != null) {
+            await CommonSimpleDialog.show(
+                context: context, title: title, content: message);
+          } else {
+            await CommonSimpleDialog.show(context: context, title: message);
+          }
           viewModel.resetCheckInState();
         }
       },
@@ -257,18 +267,58 @@ class EventDetailPage extends HookConsumerWidget
                           selectedParticipationType.value = participationType;
                         },
                       ),
-                      ..._buildEventMemoryArea(
-                        context: context,
-                        uid: lincaUser?.user.id,
-                        participationInfo: participationInfo,
-                        updateUserPhoto: (String photoUrl, int index) {
-                          participationController.updateParticipationMemory(
-                            participationInfo: participationInfo,
-                            index: index,
-                            photoUrl: photoUrl,
-                          );
-                        },
-                      ),
+                      if (participationInfo != null)
+                        ..._buildEventMemoryArea(
+                          context: context,
+                          uid: lincaUser?.user.id,
+                          eventMemories: eventMemories.value,
+                          addEventMemory: (EventMemory eventMemory) async {
+                            final List<EventMemory> resultMemories =
+                                await participationController
+                                    .updateParticipationMemory(
+                              targetParticipationInfo: participationInfo,
+                              eventMemory: eventMemory,
+                            );
+                            eventMemories.value = resultMemories;
+                          },
+                          editEventMemory: (EventMemory eventMemory) async {
+                            final String? uid = lincaUser?.user.id;
+                            if (uid == null) return;
+                            final String? targetPhotoUrl =
+                                await pickCompressAndUploadImage(
+                              uid: uid,
+                              uploadPath: eventMemory.path,
+                              imageQuality: ImageQuality.memory,
+                            );
+                            if (targetPhotoUrl == null) return;
+                            final List<EventMemory> resultMemories =
+                                await participationController
+                                    .updateParticipationMemory(
+                              targetParticipationInfo: participationInfo,
+                              eventMemory: EventMemory(
+                                url: targetPhotoUrl,
+                                path: eventMemory.path,
+                              ),
+                              isEdit: true,
+                            );
+                            eventMemories.value = resultMemories;
+                          },
+                          deleteEventMemory: (EventMemory eventMemory) async {
+                            final String? uid = lincaUser?.user.id;
+                            if (uid == null) return;
+                            final List<EventMemory> resultMemories =
+                                await participationController
+                                    .deleteParticipationMemory(
+                              targetParticipationInfo: participationInfo,
+                              eventMemory: eventMemory,
+                            );
+                            eventMemories.value = resultMemories;
+                            if (!context.mounted) return;
+                            context.showSuccessSnackBar(
+                                message:
+                                    context.l10n.event_detail_memory_deleted);
+                          },
+                        ),
                       ..._buildEventMemoArea(
                         context: context,
                         participationMemoController:
@@ -360,21 +410,25 @@ class EventDetailPage extends HookConsumerWidget
                       );
                     }
                     if (value == 'delete') {
+                      if (participationInfo == null) return;
                       logEvent(event: AnalyticsEvent.eventDetailCloseClick);
 
-                      participationController.deleteParticipation(
-                        lincaEvent,
-                        participationInfo!,
+                      CommonSimpleDialog.show(
+                        context: context,
+                        title: context.l10n.my_event_delete_dialog_title,
+                        content:
+                            context.l10n.my_event_delete_dialog_description,
+                        onClickOk: () {
+                          participationController
+                              .deleteParticipation(participationInfo!);
+                          if (!context.mounted) return;
+                          context.showSuccessSnackBar(
+                            message: context.l10n.my_event_deleted,
+                            effect: () => context.router.pop(),
+                          );
+                        },
+                        onClickCancel: () {},
                       );
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(context.l10n.my_event_deleted),
-                            backgroundColor: Colors.red,
-                          ),
-                        );
-                        context.router.pop();
-                      }
                     }
                   },
                   child: Container(
@@ -411,17 +465,13 @@ class EventDetailPage extends HookConsumerWidget
               participationMemo: participationMemoController.text,
               groupSlug: lincaEvent.organizer,
             ),
-            needsRefresh: true,
           );
-          if (context.mounted) {
-            context.router.pop();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(context.l10n.common_save_suceeded),
-                backgroundColor: Colors.green,
-              ),
-            );
-          }
+          if (!context.mounted) return;
+          context.router.pop();
+          context.showSuccessSnackBar(
+            message: context.l10n.common_save_suceeded,
+            effect: () => context.router.pop(),
+          );
         },
         icon: const Icon(Icons.save),
         label: Text(
@@ -617,46 +667,61 @@ class EventDetailPage extends HookConsumerWidget
   List<Widget> _buildEventMemoryArea({
     required BuildContext context,
     required String? uid,
-    required ParticipationInfo? participationInfo,
-    required Function(String photoUrl, int index) updateUserPhoto,
+    required List<EventMemory> eventMemories,
+    required Function(EventMemory eventMemory) addEventMemory,
+    required Function(EventMemory eventMemory) editEventMemory,
+    required Function(EventMemory eventMemory) deleteEventMemory,
   }) {
-    if (participationInfo == null) return <Widget>[];
-
     return <Widget>[
       Text(
-        'イベントメモリー(3枚まで)',
+        context.l10n.event_detail_memory_title,
         style: context.textTheme.titleMedium,
       ),
       const SizedBox(height: 8),
-      SizedBox(
-        height: 96,
-        child: ListView(
-          scrollDirection: Axis.horizontal,
-          children: <Widget>[
-            for (final String imageUrl in participationInfo.imageUrls)
-              Padding(
-                padding: const EdgeInsets.only(right: 8),
-                child: GestureDetector(
-                  onTap: () => ImagePreviewDialog.show(
-                    context: context,
-                    imageUrl: imageUrl,
+      LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          const double spacing = 8;
+          final double itemWidth = (constraints.maxWidth - spacing * 2) / 3;
+
+          return SizedBox(
+            height: itemWidth,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: <Widget>[
+                for (final EventMemory eventMemory in eventMemories)
+                  Padding(
+                    padding: const EdgeInsets.only(right: spacing),
+                    child: SizedBox(
+                      width: itemWidth,
+                      height: itemWidth,
+                      child: GestureDetector(
+                        onTap: () => ImagePreviewDialog.showEditable(
+                          context: context,
+                          imageUrl: eventMemory.url,
+                          onEdit: () => editEventMemory(eventMemory),
+                          onDelete: () => deleteEventMemory(eventMemory),
+                        ),
+                        child: CachedNetworkImage(
+                          imageUrl: eventMemory.url,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
                   ),
-                  child: CachedNetworkImage(
-                    imageUrl: imageUrl,
-                    width: 96,
-                    height: 96,
-                    fit: BoxFit.cover,
+                if (eventMemories.length < 3 && uid != null)
+                  SizedBox(
+                    width: itemWidth,
+                    height: itemWidth,
+                    child: buildAddImageButton(
+                      context: context,
+                      uid: uid,
+                      updateUserPhoto: addEventMemory,
+                    ),
                   ),
-                ),
-              ),
-            if (participationInfo.imageUrls.length < 3 && uid != null)
-              buildAddImageButton(
-                context: context,
-                uid: uid,
-                updateUserPhoto: updateUserPhoto,
-              ),
-          ],
-        ),
+              ],
+            ),
+          );
+        },
       ),
       const SizedBox(height: 16),
     ];
@@ -665,7 +730,7 @@ class EventDetailPage extends HookConsumerWidget
   Widget buildAddImageButton({
     required BuildContext context,
     required String uid,
-    required Function(String photoUrl, int index) updateUserPhoto,
+    required Function(EventMemory eventMemory) updateUserPhoto,
   }) {
     return GestureDetector(
       onTap: () async {
@@ -677,13 +742,15 @@ class EventDetailPage extends HookConsumerWidget
           ),
         );
         final String uuid = const Uuid().v4();
+        final String path = 'participations/$uid/$uuid.jpg';
         final String? photoUrl = await pickCompressAndUploadImage(
           uid: uid,
-          uploadPath: 'participations/$uid/$uuid.jpg',
+          uploadPath: path,
+          imageQuality: ImageQuality.memory,
         );
         if (context.mounted) context.router.pop();
         if (photoUrl == null) return;
-        updateUserPhoto(photoUrl, -1);
+        updateUserPhoto(EventMemory(url: photoUrl, path: path));
       },
       child: Container(
         width: 96,
@@ -776,17 +843,11 @@ class EventDetailPage extends HookConsumerWidget
             icon: const Icon(Icons.copy, size: 20),
             onPressed: () async {
               await Clipboard.setData(ClipboardData(text: userEvent.id));
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content:
-                        Text(context.l10n.event_detail_text_event_code_copied),
-                    behavior: SnackBarBehavior.floating,
-                    duration: const Duration(seconds: 1),
-                    backgroundColor: context.colorScheme.secondaryContainer,
-                  ),
-                );
-              }
+              if (!context.mounted) return;
+              context.showSuccessSnackBar(
+                message: context.l10n.event_detail_text_event_code_copied,
+                duration: const Duration(milliseconds: 1000),
+              );
             },
           ),
         ],

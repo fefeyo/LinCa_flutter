@@ -10,10 +10,9 @@ part 'output_participate_events_state.freezed.dart';
 abstract class OutputParticipateEventsState
     with _$OutputParticipateEventsState {
   const factory OutputParticipateEventsState({
-    @Default(<LincaEvent, ParticipationInfo>{})
-    Map<LincaEvent, ParticipationInfo> initialEvents,
-    @Default(<LincaEvent, ParticipationInfo>{})
-    Map<LincaEvent, ParticipationInfo> sortedEvents,
+    @Default(<LincaEvent>[]) List<LincaEvent> allEvents,
+    @Default(<LincaEvent>[]) List<LincaEvent> sortedEvents,
+    @Default(<ParticipationInfo>[]) List<ParticipationInfo> participations,
     @Default(FilterSettings()) FilterSettings filterSettings,
   }) = _OutputParticipateEventsState;
 }

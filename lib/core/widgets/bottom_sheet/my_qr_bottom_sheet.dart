@@ -69,16 +69,10 @@ class MyQRBottomSheet extends HookConsumerWidget
                       if (result != null) {
                         final String friendUid = result.userId;
                         await friendController.registerFriend(friendUid);
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                  context.l10n.my_qr_code_success_linca_trade),
-                              backgroundColor: Colors.green,
-                              behavior: SnackBarBehavior.floating,
-                            ),
-                          );
-                        }
+                        if (!context.mounted) return;
+                        context.showSuccessSnackBar(
+                            message:
+                                context.l10n.my_qr_code_success_linca_trade);
                       }
                     },
                     icon: const Icon(Icons.qr_code_scanner),

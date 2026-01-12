@@ -8,6 +8,7 @@ import 'package:linca_otaku_support/core/network/model/participation_info.dart';
 import 'package:linca_otaku_support/core/utils/coach_manager.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
 import 'package:linca_otaku_support/core/utils/event_analytics_manager.dart';
+import 'package:linca_otaku_support/core/utils/participation_extension.dart';
 import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
 
 import '../../core/constants/analytics_event.dart';
@@ -149,7 +150,7 @@ class ChooseEventPage extends HookConsumerWidget
                   itemBuilder: (BuildContext context, int index) {
                     final LincaEvent lincaEvent = state.sortedEvents[index];
                     final ParticipationInfo? participationInfo =
-                        state.participations[lincaEvent];
+                        state.participations.getByEventId(lincaEvent.event.id);
                     return EventCard(
                       lincaEvent: lincaEvent,
                       onClick: () {

@@ -84,15 +84,11 @@ class LincaEditPage extends HookConsumerWidget
           ) ??
           const User();
       await userController.updateUserData(user);
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(context.l10n.common_save_suceeded),
-            backgroundColor: Colors.green,
-          ),
-        );
-        context.router.pop();
-      }
+      if (!context.mounted) return;
+      context.showSuccessSnackBar(
+        message: context.l10n.common_save_suceeded,
+        effect: () => context.router.pop(),
+      );
     }
 
     return Scaffold(
@@ -172,6 +168,7 @@ class LincaEditPage extends HookConsumerWidget
                                       await pickCompressAndUploadImage(
                                     uid: uid,
                                     uploadPath: 'users/$uid/profile.jpg',
+                                    imageQuality: ImageQuality.icon,
                                   );
                                   if (context.mounted) context.router.pop();
                                   if (photoUrl == null) return;

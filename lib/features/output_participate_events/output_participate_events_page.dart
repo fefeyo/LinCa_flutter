@@ -11,6 +11,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
 import 'package:linca_otaku_support/core/utils/list_extension.dart';
+import 'package:linca_otaku_support/core/utils/participation_extension.dart';
+import 'package:linca_otaku_support/core/widgets/common/common_simple_dialog.dart';
 import 'package:linca_otaku_support/features/output_participate_events/data/output_participate_events_state.dart';
 import 'package:linca_otaku_support/features/output_participate_events/view/output_participate_event_page.dart';
 import 'package:linca_otaku_support/features/output_participate_events/view_model/output_participate_events_view_model.dart';
@@ -32,8 +34,12 @@ class OutputParticipateEventsPage extends HookConsumerWidget {
         ref.read(outputParticipateEventsViewModelProvider.notifier);
     final ValueNotifier<bool> isSearching = useState(false);
     final TextEditingController searchController = useTextEditingController();
-    final List<List<LincaEvent>> pages =
-        state.sortedEvents.keys.toList().chunk(12);
+    final List<LincaEvent> participatedEvents = state.sortedEvents
+        .where(
+          (LincaEvent event) => state.participations.hasEventId(event.event.id),
+        )
+        .toList();
+    final List<List<LincaEvent>> pages = participatedEvents.chunk(10);
     final PageController pageController = usePageController();
     final List<GlobalKey> pageKeys = List<GlobalKey>.generate(
       pages.length,
@@ -115,7 +121,13 @@ class OutputParticipateEventsPage extends HookConsumerWidget {
           final Uint8List png = await _capture(key);
 
           if (!context.mounted) return;
-          await _saveImageToGallery(context, png);
+          CommonSimpleDialog.show(
+            context: context,
+            title: context.l10n.picture_save_dialog_title,
+            content: context.l10n.picture_save_dialog_description,
+            onClickOk: () => _saveImageToGallery(context, png),
+            onClickCancel: () {},
+          );
         },
         child: const Icon(Icons.download),
       ),
@@ -140,12 +152,9 @@ class OutputParticipateEventsPage extends HookConsumerWidget {
       final PermissionStatus status = await Permission.photos.request();
 
       if (!status.isGranted) {
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text(context.l10n.picture_save_permission_disabled)),
-          );
-        }
+        if (!context.mounted) return;
+        context.showErrorSnackBar(
+            message: context.l10n.picture_save_permission_disabled);
         return;
       }
     }
@@ -159,18 +168,14 @@ class OutputParticipateEventsPage extends HookConsumerWidget {
     if (!context.mounted) return;
 
     if (result['isSuccess'] == true) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(context.l10n.picture_saved),
-          duration: const Duration(milliseconds: 1500),
-        ),
+      context.showSuccessSnackBar(
+        message: context.l10n.picture_saved,
+        duration: const Duration(milliseconds: 1500),
       );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(context.l10n.picture_save_failed),
-          duration: const Duration(milliseconds: 1500),
-        ),
+      context.showErrorSnackBar(
+        message: context.l10n.picture_save_failed,
+        duration: const Duration(milliseconds: 1500),
       );
     }
   }

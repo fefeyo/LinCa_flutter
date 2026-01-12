@@ -32,8 +32,8 @@ class YearSelectPage extends HookConsumerWidget
       Future<void>.microtask(() async {
         if (!context.mounted) return;
         if (state.selectedYear.isEmpty &&
-            state.myEvents.selectableYears.isNotEmpty) {
-          viewModel.setSelectedYear(state.myEvents.selectableYears.first);
+            state.allEvents.selectableYears.isNotEmpty) {
+          viewModel.setSelectedYear(state.allEvents.selectableYears.first);
         }
       });
       return null;
@@ -96,7 +96,7 @@ class YearSelectPage extends HookConsumerWidget
                                 color: context.colorScheme.primary,
                               ),
                               icon: const Icon(Icons.expand_more),
-                              items: state.myEvents.selectableYears
+                              items: state.allEvents.selectableYears
                                   .map(
                                     (String year) => DropdownMenuItem<String>(
                                       value: year,

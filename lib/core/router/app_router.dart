@@ -38,8 +38,7 @@ class AppRouter extends RootStackRouter {
         CustomRoute<EventSortFilterRoute>(
           page: EventSortFilterRoute.page,
           transitionsBuilder: TransitionsBuilders.slideBottom,
-          durationInMilliseconds: 500,
-          reverseDurationInMilliseconds: 500,
+          duration: const Duration(milliseconds: 500),
         ),
       ];
 }

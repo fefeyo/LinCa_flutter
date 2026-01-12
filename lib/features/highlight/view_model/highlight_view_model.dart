@@ -1,5 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/constants/participation_type.dart';
+import 'package:linca_otaku_support/core/utils/participation_extension.dart';
 import '../../../core/models/linca_event.dart';
 import '../../../core/network/model/participation_info.dart';
 import '../../../core/network/providers.dart';
@@ -8,38 +9,47 @@ import '../data/highlight_state.dart';
 final StateNotifierProvider<HighlightViewModel, HighlightState>
     highlightViewModelProvider =
     StateNotifierProvider<HighlightViewModel, HighlightState>((Ref ref) {
-  final Map<LincaEvent, ParticipationInfo> myEvents =
-      ref.watch(participationControllerProvider).value ??
-          <LincaEvent, ParticipationInfo>{};
+  final List<ParticipationInfo> participations =
+      ref.read(participationControllerProvider).value ?? <ParticipationInfo>[];
+  final List<LincaEvent> officialEvents =
+      ref.read(eventControllerProvider).value ?? <LincaEvent>[];
+  final List<LincaEvent> originalEvents =
+      ref.read(userEventControllerProvider).value ?? <LincaEvent>[];
 
-  return HighlightViewModel(myEvents);
+  return HighlightViewModel(
+    <LincaEvent>[...officialEvents, ...originalEvents],
+    participations,
+  );
 });
 
 class HighlightViewModel extends StateNotifier<HighlightState> {
-  HighlightViewModel(this.myEvents) : super(HighlightState(myEvents: myEvents));
+  HighlightViewModel(this.allEvents, this.participations)
+      : super(
+          HighlightState(
+            allEvents: allEvents,
+            filteredMyEvents: allEvents,
+            participations: participations,
+          ),
+        );
 
-  final Map<LincaEvent, ParticipationInfo> myEvents;
+  final List<LincaEvent> allEvents;
+  final List<ParticipationInfo> participations;
 
   void setSelectedYear(String year) {
     final int targetYear = int.parse(year);
-    final Map<LincaEvent, ParticipationInfo> filteredMyEvents = state
-        .myEvents.entries
-        .where((MapEntry<LincaEvent, ParticipationInfo> entry) {
-      if (entry.value.participationType == ParticipationType.absent) {
+    final List<LincaEvent> filteredMyEvents =
+        state.allEvents.where((LincaEvent lincaEvent) {
+      final ParticipationInfo? participationInfo =
+          state.participations.getByEventId(lincaEvent.event.id);
+      if (participationInfo?.participationType == ParticipationType.absent) {
         return false;
       }
-      final DateTime? eventDate = entry.key.event.date;
+      final DateTime? eventDate = lincaEvent.event.date;
       if (eventDate == null) return false;
 
       return eventDate.year == targetYear;
-    }).fold<Map<LincaEvent, ParticipationInfo>>(
-      <LincaEvent, ParticipationInfo>{},
-      (Map<LincaEvent, ParticipationInfo> map,
-          MapEntry<LincaEvent, ParticipationInfo> entry) {
-        map[entry.key] = entry.value;
-        return map;
-      },
-    );
+    }).toList();
+
     state = state.copyWith(
       filteredMyEvents: filteredMyEvents,
       selectedYear: year,

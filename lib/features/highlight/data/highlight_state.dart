@@ -7,10 +7,9 @@ part 'highlight_state.freezed.dart';
 @freezed
 abstract class HighlightState with _$HighlightState {
   const factory HighlightState({
-    @Default(<LincaEvent, ParticipationInfo>{})
-    Map<LincaEvent, ParticipationInfo> myEvents,
-    @Default(<LincaEvent, ParticipationInfo>{})
-    Map<LincaEvent, ParticipationInfo> filteredMyEvents,
+    @Default(<LincaEvent>[]) List<LincaEvent> allEvents,
+    @Default(<LincaEvent>[]) List<LincaEvent> filteredMyEvents,
+    @Default(<ParticipationInfo>[]) List<ParticipationInfo> participations,
     @Default('') String selectedYear,
   }) = _HighlightState;
 }
