@@ -12,7 +12,6 @@ import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
 import 'package:linca_otaku_support/core/utils/list_extension.dart';
 import 'package:linca_otaku_support/core/utils/participation_extension.dart';
-import 'package:linca_otaku_support/core/widgets/common/common_simple_dialog.dart';
 import 'package:linca_otaku_support/features/output_participate_events/data/output_participate_events_state.dart';
 import 'package:linca_otaku_support/features/output_participate_events/view/output_participate_event_page.dart';
 import 'package:linca_otaku_support/features/output_participate_events/view_model/output_participate_events_view_model.dart';
