@@ -275,9 +275,9 @@ class EventSortFilterPage extends HookConsumerWidget
                           ),
                         ),
                       ),
-                      const SizedBox(width: 16),
                     ],
-                  )
+                  ),
+                  const SizedBox(height: 16),
                 ],
               ),
             ),
@@ -619,7 +619,7 @@ class EventSortFilterPage extends HookConsumerWidget
         childrenPadding: const EdgeInsets.only(bottom: 8),
         initiallyExpanded: isSelected,
         title: Row(
-          children: [
+          children: <Widget>[
             Text(
               title,
               style: context.textTheme.bodyMedium,

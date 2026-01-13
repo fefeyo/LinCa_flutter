@@ -4,9 +4,11 @@ import 'package:linca_otaku_support/core/constants/analytics_screen.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
 import 'package:linca_otaku_support/core/utils/event_analytics_manager.dart';
 import 'package:linca_otaku_support/core/utils/linca_event_extension.dart';
+import 'package:linca_otaku_support/core/utils/participation_extension.dart';
 import 'package:linca_otaku_support/features/highlight/data/highlight_state.dart';
 import 'package:linca_otaku_support/features/highlight/view_model/highlight_view_model.dart';
 
+import '../../../core/models/linca_event.dart';
 import '../../../core/utils/screen_analytics_manager.dart';
 
 class EventCountPage extends HookConsumerWidget
@@ -25,6 +27,11 @@ class EventCountPage extends HookConsumerWidget
     logScreen(AnalyticsScreen.highlightEventCount);
 
     final HighlightState state = ref.watch(highlightViewModelProvider);
+    final List<LincaEvent> participatedEvents = state.filteredMyEvents
+        .where(
+          (LincaEvent event) => state.participations.hasEventId(event.event.id),
+    )
+        .toList();
 
     return Stack(
       children: <Widget>[
@@ -44,7 +51,7 @@ class EventCountPage extends HookConsumerWidget
                 const SizedBox(height: 24),
 
                 Text(
-                  context.l10n.common_count(state.filteredMyEvents.length),
+                  context.l10n.common_count(participatedEvents.length),
                   style: context.textTheme.displayLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -57,14 +64,14 @@ class EventCountPage extends HookConsumerWidget
                   children: <Widget>[
                     _CountCard(
                       label: context.l10n.common_official_event,
-                      count: state.filteredMyEvents.officialEventCount,
+                      count: participatedEvents.officialEventCount,
                       icon: Icons.verified,
                       color: Colors.blue,
                     ),
                     const SizedBox(width: 16),
                     _CountCard(
                       label: context.l10n.common_original_event,
-                      count: state.filteredMyEvents.unofficialEventCount,
+                      count: participatedEvents.unofficialEventCount,
                       icon: Icons.favorite,
                       color: Colors.pink,
                     ),

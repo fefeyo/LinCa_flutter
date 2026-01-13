@@ -37,9 +37,21 @@ class ParticipationController extends LincaController<List<ParticipationInfo>> {
 
     final AsyncValue<List<ParticipationInfo>> currentState = state;
     if (currentState is AsyncData<List<ParticipationInfo>>) {
-      final List<ParticipationInfo> updated =
-          List<ParticipationInfo>.of(currentState.value);
-      updated.add(participation);
+      final bool exists = currentState.value.any(
+          (ParticipationInfo participationInfo) =>
+              participationInfo.eventId == participation.eventId);
+
+      final List<ParticipationInfo> updated = <ParticipationInfo>[
+        for (final ParticipationInfo participationInfo in currentState.value)
+          if (participationInfo.eventId == participation.eventId)
+            participation
+          else
+            participationInfo,
+      ];
+
+      if (!exists) {
+        updated.add(participation);
+      }
 
       state = AsyncValue<List<ParticipationInfo>>.data(updated);
     } else {

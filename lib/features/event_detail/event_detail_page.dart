@@ -280,6 +280,10 @@ class EventDetailPage extends HookConsumerWidget
                               eventMemory: eventMemory,
                             );
                             eventMemories.value = resultMemories;
+                            if (!context.mounted) return;
+                            context.showSuccessSnackBar(
+                                message:
+                                    context.l10n.event_detail_memory_saved);
                           },
                           editEventMemory: (EventMemory eventMemory) async {
                             final String? uid = lincaUser?.user.id;
@@ -302,6 +306,10 @@ class EventDetailPage extends HookConsumerWidget
                               isEdit: true,
                             );
                             eventMemories.value = resultMemories;
+                            if (!context.mounted) return;
+                            context.showSuccessSnackBar(
+                                message:
+                                    context.l10n.event_detail_memory_saved);
                           },
                           deleteEventMemory: (EventMemory eventMemory) async {
                             final String? uid = lincaUser?.user.id;
@@ -451,7 +459,7 @@ class EventDetailPage extends HookConsumerWidget
             event: AnalyticsEvent.eventDetailSaveClick,
             params: <String, Object>{
               'eventId': lincaEvent.event.id,
-              'participationType': selectedParticipationType.value,
+              'participationType': selectedParticipationType.value.name,
               'participationMemo': participationMemoController.text,
               'groupSlug': lincaEvent.organizer,
             },
@@ -464,10 +472,10 @@ class EventDetailPage extends HookConsumerWidget
               participationType: selectedParticipationType.value,
               participationMemo: participationMemoController.text,
               groupSlug: lincaEvent.organizer,
+              eventMemories: eventMemories.value,
             ),
           );
           if (!context.mounted) return;
-          context.router.pop();
           context.showSuccessSnackBar(
             message: context.l10n.common_save_suceeded,
             effect: () => context.router.pop(),

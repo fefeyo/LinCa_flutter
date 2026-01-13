@@ -8,9 +8,9 @@ import '../../../core/network/model/participation_info.dart';
 import '../../../core/network/providers.dart';
 import '../data/output_participate_events_state.dart';
 
-final StateNotifierProvider<OutputParticipateEventsViewModel,
+final AutoDisposeStateNotifierProvider<OutputParticipateEventsViewModel,
         OutputParticipateEventsState> outputParticipateEventsViewModelProvider =
-    StateNotifierProvider<OutputParticipateEventsViewModel,
+    StateNotifierProvider.autoDispose<OutputParticipateEventsViewModel,
         OutputParticipateEventsState>((Ref ref) {
   final List<LincaEvent> officialEvents =
       ref.read(eventControllerProvider).value ?? <LincaEvent>[];

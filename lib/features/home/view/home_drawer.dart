@@ -115,7 +115,7 @@ class HomeDrawer extends HookConsumerWidget
             ListTile(
               leading: const Icon(Icons.event_note),
               title: Text(
-                context.l10n.recent_event_title,
+                context.l10n.event_calendar_title,
                 style: context.textTheme.bodyMedium,
               ),
               onTap: () {

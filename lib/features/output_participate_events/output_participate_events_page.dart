@@ -17,6 +17,7 @@ import 'package:linca_otaku_support/features/output_participate_events/data/outp
 import 'package:linca_otaku_support/features/output_participate_events/view/output_participate_event_page.dart';
 import 'package:linca_otaku_support/features/output_participate_events/view_model/output_participate_events_view_model.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../core/models/filter_settings.dart';
 import '../../core/models/linca_event.dart';
@@ -104,16 +105,35 @@ class OutputParticipateEventsPage extends HookConsumerWidget {
                 style: context.textTheme.titleMedium,
               ),
             )
-          : PageView(
-              controller: pageController,
-              children:
-                  pages.mapIndexed((int pageIndex, List<LincaEvent> page) {
-                final GlobalKey pageKey = pageKeys[pageIndex];
-                return RepaintBoundary(
-                  key: pageKey,
-                  child: OutputParticipateEventPage(events: page),
-                );
-              }).toList(),
+          : SafeArea(
+              child: Column(
+                children: <Widget>[
+                  Expanded(
+                    child: PageView(
+                      controller: pageController,
+                      children: pages
+                          .mapIndexed((int pageIndex, List<LincaEvent> page) {
+                        final GlobalKey pageKey = pageKeys[pageIndex];
+                        return RepaintBoundary(
+                          key: pageKey,
+                          child: OutputParticipateEventPage(events: page),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                  SmoothPageIndicator(
+                    controller: pageController,
+                    count: pages.length,
+                    effect: WormEffect(
+                      dotHeight: 8,
+                      dotWidth: 8,
+                      spacing: 12,
+                      activeDotColor: context.colorScheme.primary,
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                ],
+              ),
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
@@ -121,15 +141,9 @@ class OutputParticipateEventsPage extends HookConsumerWidget {
           final Uint8List png = await _capture(key);
 
           if (!context.mounted) return;
-          CommonSimpleDialog.show(
-            context: context,
-            title: context.l10n.picture_save_dialog_title,
-            content: context.l10n.picture_save_dialog_description,
-            onClickOk: () => _saveImageToGallery(context, png),
-            onClickCancel: () {},
-          );
+          _saveImageToGallery(context, png);
         },
-        child: const Icon(Icons.download),
+        child: const Icon(Icons.camera_alt),
       ),
     );
   }

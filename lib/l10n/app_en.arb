@@ -353,5 +353,6 @@
   "my_event_delete_dialog_title": "my_event_delete_dialog_title",
   "my_event_delete_dialog_description": "my_event_delete_dialog_description",
   "picture_save_dialog_title": "picture_save_dialog_title",
-  "picture_save_dialog_description": "picture_save_dialog_description"
+  "picture_save_dialog_description": "picture_save_dialog_description",
+  "event_detail_memory_saved": "event_detail_memory_saved"
 }

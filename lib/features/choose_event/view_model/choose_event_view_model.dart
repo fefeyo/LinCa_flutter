@@ -51,7 +51,12 @@ final AutoDisposeStateNotifierProvider<ChooseEventViewModel, ChooseEventState>
       (_, AsyncValue<List<LincaEvent>> next) {
     final List<LincaEvent>? events = next.value;
     if (events != null) {
-      viewModel.updateEvents(events);
+      viewModel.updateEvents(
+        events
+            .where((LincaEvent event) =>
+                (event.event as UnOfficialEvent).visibility == true)
+            .toList(),
+      );
     }
   });
 

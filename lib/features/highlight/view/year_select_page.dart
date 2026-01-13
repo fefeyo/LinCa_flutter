@@ -7,9 +7,12 @@ import 'package:linca_otaku_support/core/constants/analytics_screen.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
 import 'package:linca_otaku_support/core/utils/event_analytics_manager.dart';
 import 'package:linca_otaku_support/core/utils/linca_event_extension.dart';
+import 'package:linca_otaku_support/core/utils/participation_extension.dart';
 import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
 import 'package:linca_otaku_support/features/highlight/data/highlight_state.dart';
 import 'package:linca_otaku_support/features/highlight/view_model/highlight_view_model.dart';
+
+import '../../../core/models/linca_event.dart';
 
 class YearSelectPage extends HookConsumerWidget
     with ScreenAnalyticsManager, EventAnalyticsManager {
@@ -27,13 +30,18 @@ class YearSelectPage extends HookConsumerWidget
     final HighlightState state = ref.watch(highlightViewModelProvider);
     final HighlightViewModel viewModel =
         ref.read(highlightViewModelProvider.notifier);
+    final List<LincaEvent> participatedEvents = state.allEvents
+        .where(
+          (LincaEvent event) => state.participations.hasEventId(event.event.id),
+        )
+        .toList();
 
     useEffect(() {
       Future<void>.microtask(() async {
         if (!context.mounted) return;
         if (state.selectedYear.isEmpty &&
-            state.allEvents.selectableYears.isNotEmpty) {
-          viewModel.setSelectedYear(state.allEvents.selectableYears.first);
+            participatedEvents.selectableYears.isNotEmpty) {
+          viewModel.setSelectedYear(participatedEvents.selectableYears.first);
         }
       });
       return null;
@@ -96,7 +104,7 @@ class YearSelectPage extends HookConsumerWidget
                                 color: context.colorScheme.primary,
                               ),
                               icon: const Icon(Icons.expand_more),
-                              items: state.allEvents.selectableYears
+                              items: participatedEvents.selectableYears
                                   .map(
                                     (String year) => DropdownMenuItem<String>(
                                       value: year,

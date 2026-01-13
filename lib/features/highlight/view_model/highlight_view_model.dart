@@ -10,11 +10,11 @@ final StateNotifierProvider<HighlightViewModel, HighlightState>
     highlightViewModelProvider =
     StateNotifierProvider<HighlightViewModel, HighlightState>((Ref ref) {
   final List<ParticipationInfo> participations =
-      ref.read(participationControllerProvider).value ?? <ParticipationInfo>[];
+      ref.watch(participationControllerProvider).value ?? <ParticipationInfo>[];
   final List<LincaEvent> officialEvents =
-      ref.read(eventControllerProvider).value ?? <LincaEvent>[];
+      ref.watch(eventControllerProvider).value ?? <LincaEvent>[];
   final List<LincaEvent> originalEvents =
-      ref.read(userEventControllerProvider).value ?? <LincaEvent>[];
+      ref.watch(userEventControllerProvider).value ?? <LincaEvent>[];
 
   return HighlightViewModel(
     <LincaEvent>[...officialEvents, ...originalEvents],

@@ -353,5 +353,6 @@
   "my_event_delete_dialog_title": "マイイベントから削除しますか？",
   "my_event_delete_dialog_description": "マイイベントから削除すると登録した画像やメモも削除されます。よろしいですか？",
   "picture_save_dialog_title": "画像を保存しますか？",
-  "picture_save_dialog_description": "表示されているイベントの一覧を画像で保存します。よろしいですか？"
+  "picture_save_dialog_description": "表示されているイベントの一覧を画像で保存します。よろしいですか？",
+  "event_detail_memory_saved": "画像を登録しました"
 }
