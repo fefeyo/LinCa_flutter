@@ -110,30 +110,39 @@ class OutputParticipateEventsPage extends HookConsumerWidget {
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final GlobalKey key = pageKeys[pageController.page!.round()];
-          final Uint8List png = await _capture(key);
+          if (pages.isEmpty) {
+            return;
+          }
+          final List<Uint8List> pngs = await _captureAll(pageKeys);
 
           if (!context.mounted) return;
-          await _saveImageToGallery(context, png);
+          await _saveImagesToGallery(context, pngs);
         },
         child: const Icon(Icons.download),
       ),
     );
   }
 
-  Future<Uint8List> _capture(GlobalKey key) async {
-    final RenderRepaintBoundary boundary =
-        key.currentContext!.findRenderObject() as RenderRepaintBoundary;
-    final ui.Image image = await boundary.toImage(pixelRatio: 3);
-    final ByteData byteData =
-        (await image.toByteData(format: ui.ImageByteFormat.png))!;
-    return byteData.buffer.asUint8List();
+  Future<List<Uint8List>> _captureAll(List<GlobalKey> keys) async {
+    final List<Uint8List> images = <Uint8List>[];
+    for (final GlobalKey key in keys) {
+      final RenderRepaintBoundary boundary =
+          key.currentContext!.findRenderObject() as RenderRepaintBoundary;
+      final ui.Image image = await boundary.toImage(pixelRatio: 3);
+      final ByteData byteData =
+          (await image.toByteData(format: ui.ImageByteFormat.png))!;
+      images.add(byteData.buffer.asUint8List());
+    }
+    return images;
   }
 
-  Future<void> _saveImageToGallery(
+  Future<void> _saveImagesToGallery(
     BuildContext context,
-    Uint8List pngBytes,
+    List<Uint8List> pngBytesList,
   ) async {
+    if (pngBytesList.isEmpty) {
+      return;
+    }
     // Android 権限
     if (Theme.of(context).platform == TargetPlatform.android) {
       final PermissionStatus status = await Permission.photos.request();
@@ -148,21 +157,35 @@ class OutputParticipateEventsPage extends HookConsumerWidget {
       }
     }
 
-    final Map<String, dynamic> result = await ImageGallerySaverPlus.saveImage(
-      pngBytes,
-      quality: 100,
-      name: 'linca_events_${DateTime.now().millisecondsSinceEpoch}',
-    );
+    int successCount = 0;
+    final String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+    for (int index = 0; index < pngBytesList.length; index++) {
+      final Map<String, dynamic> result =
+          await ImageGallerySaverPlus.saveImage(
+        pngBytesList[index],
+        quality: 100,
+        name: 'linca_events_${timestamp}_${index + 1}',
+      );
+      if (result['isSuccess'] == true) {
+        successCount++;
+      }
+    }
 
     if (!context.mounted) return;
 
-    if (result['isSuccess'] == true) {
+    if (successCount == pngBytesList.length) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('画像を保存しました')),
       );
-    } else {
+    } else if (successCount == 0) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('画像の保存に失敗しました')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('一部の画像の保存に失敗しました ($successCount/${pngBytesList.length})'),
+        ),
       );
     }
   }
