@@ -35,10 +35,6 @@ class OutputParticipateEventsPage extends HookConsumerWidget {
     final List<List<LincaEvent>> pages =
         state.sortedEvents.keys.toList().chunk(12);
     final PageController pageController = usePageController();
-    final List<GlobalKey> pageKeys = List<GlobalKey>.generate(
-      pages.length,
-      (_) => GlobalKey(),
-    );
 
     return Scaffold(
       appBar: AppBar(
@@ -99,21 +95,19 @@ class OutputParticipateEventsPage extends HookConsumerWidget {
             )
           : PageView(
               controller: pageController,
-              children:
-                  pages.mapIndexed((int pageIndex, List<LincaEvent> page) {
-                final GlobalKey pageKey = pageKeys[pageIndex];
-                return RepaintBoundary(
-                  key: pageKey,
-                  child: OutputParticipateEventPage(events: page),
-                );
-              }).toList(),
+              children: pages
+                  .map(
+                    (List<LincaEvent> page) =>
+                        OutputParticipateEventPage(events: page),
+                  )
+                  .toList(),
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           if (pages.isEmpty) {
             return;
           }
-          final List<Uint8List> pngs = await _captureAll(pageKeys);
+          final List<Uint8List> pngs = await _captureAllPages(context, pages);
 
           if (!context.mounted) return;
           await _saveImagesToGallery(context, pngs);
@@ -123,16 +117,53 @@ class OutputParticipateEventsPage extends HookConsumerWidget {
     );
   }
 
-  Future<List<Uint8List>> _captureAll(List<GlobalKey> keys) async {
-    final List<Uint8List> images = <Uint8List>[];
-    for (final GlobalKey key in keys) {
-      final RenderRepaintBoundary boundary =
-          key.currentContext!.findRenderObject() as RenderRepaintBoundary;
-      final ui.Image image = await boundary.toImage(pixelRatio: 3);
-      final ByteData byteData =
-          (await image.toByteData(format: ui.ImageByteFormat.png))!;
-      images.add(byteData.buffer.asUint8List());
+  Future<List<Uint8List>> _captureAllPages(
+    BuildContext context,
+    List<List<LincaEvent>> pages,
+  ) async {
+    final OverlayState? overlay = Overlay.of(context);
+    if (overlay == null) {
+      return <Uint8List>[];
     }
+    final ThemeData theme = Theme.of(context);
+    final List<Uint8List> images = <Uint8List>[];
+
+    for (final List<LincaEvent> page in pages) {
+      final GlobalKey repaintKey = GlobalKey();
+      final OverlayEntry entry = OverlayEntry(
+        builder: (BuildContext context) {
+          return Offstage(
+            child: Material(
+              color: Colors.transparent,
+              child: Theme(
+                data: theme,
+                child: RepaintBoundary(
+                  key: repaintKey,
+                  child: OutputParticipateEventPage(events: page),
+                ),
+              ),
+            ),
+          );
+        },
+      );
+      overlay.insert(entry);
+      await WidgetsBinding.instance.endOfFrame;
+
+      final BuildContext? boundaryContext = repaintKey.currentContext;
+      if (boundaryContext != null) {
+        final RenderRepaintBoundary boundary =
+            boundaryContext.findRenderObject() as RenderRepaintBoundary;
+        final ui.Image image = await boundary.toImage(pixelRatio: 3);
+        final ByteData? byteData =
+            await image.toByteData(format: ui.ImageByteFormat.png);
+        if (byteData != null) {
+          images.add(byteData.buffer.asUint8List());
+        }
+      }
+
+      entry.remove();
+    }
+
     return images;
   }
 
