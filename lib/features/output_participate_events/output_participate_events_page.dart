@@ -35,10 +35,6 @@ class OutputParticipateEventsPage extends HookConsumerWidget {
     final List<List<LincaEvent>> pages =
         state.sortedEvents.keys.toList().chunk(12);
     final PageController pageController = usePageController();
-    final List<GlobalKey> pageKeys = List<GlobalKey>.generate(
-      pages.length,
-      (_) => GlobalKey(),
-    );
 
     return Scaffold(
       appBar: AppBar(
@@ -99,41 +95,85 @@ class OutputParticipateEventsPage extends HookConsumerWidget {
             )
           : PageView(
               controller: pageController,
-              children:
-                  pages.mapIndexed((int pageIndex, List<LincaEvent> page) {
-                final GlobalKey pageKey = pageKeys[pageIndex];
-                return RepaintBoundary(
-                  key: pageKey,
-                  child: OutputParticipateEventPage(events: page),
-                );
-              }).toList(),
+              children: pages
+                  .map(
+                    (List<LincaEvent> page) =>
+                        OutputParticipateEventPage(events: page),
+                  )
+                  .toList(),
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final GlobalKey key = pageKeys[pageController.page!.round()];
-          final Uint8List png = await _capture(key);
+          if (pages.isEmpty) {
+            return;
+          }
+          final List<Uint8List> pngs = await _captureAllPages(context, pages);
 
           if (!context.mounted) return;
-          await _saveImageToGallery(context, png);
+          await _saveImagesToGallery(context, pngs);
         },
         child: const Icon(Icons.download),
       ),
     );
   }
 
-  Future<Uint8List> _capture(GlobalKey key) async {
-    final RenderRepaintBoundary boundary =
-        key.currentContext!.findRenderObject() as RenderRepaintBoundary;
-    final ui.Image image = await boundary.toImage(pixelRatio: 3);
-    final ByteData byteData =
-        (await image.toByteData(format: ui.ImageByteFormat.png))!;
-    return byteData.buffer.asUint8List();
+  Future<List<Uint8List>> _captureAllPages(
+    BuildContext context,
+    List<List<LincaEvent>> pages,
+  ) async {
+    final OverlayState? overlay = Overlay.of(context);
+    if (overlay == null) {
+      return <Uint8List>[];
+    }
+    final ThemeData theme = Theme.of(context);
+    final List<Uint8List> images = <Uint8List>[];
+
+    for (final List<LincaEvent> page in pages) {
+      final GlobalKey repaintKey = GlobalKey();
+      final OverlayEntry entry = OverlayEntry(
+        builder: (BuildContext context) {
+          return Offstage(
+            child: Material(
+              color: Colors.transparent,
+              child: Theme(
+                data: theme,
+                child: RepaintBoundary(
+                  key: repaintKey,
+                  child: OutputParticipateEventPage(events: page),
+                ),
+              ),
+            ),
+          );
+        },
+      );
+      overlay.insert(entry);
+      await WidgetsBinding.instance.endOfFrame;
+
+      final BuildContext? boundaryContext = repaintKey.currentContext;
+      if (boundaryContext != null) {
+        final RenderRepaintBoundary boundary =
+            boundaryContext.findRenderObject() as RenderRepaintBoundary;
+        final ui.Image image = await boundary.toImage(pixelRatio: 3);
+        final ByteData? byteData =
+            await image.toByteData(format: ui.ImageByteFormat.png);
+        if (byteData != null) {
+          images.add(byteData.buffer.asUint8List());
+        }
+      }
+
+      entry.remove();
+    }
+
+    return images;
   }
 
-  Future<void> _saveImageToGallery(
+  Future<void> _saveImagesToGallery(
     BuildContext context,
-    Uint8List pngBytes,
+    List<Uint8List> pngBytesList,
   ) async {
+    if (pngBytesList.isEmpty) {
+      return;
+    }
     // Android 権限
     if (Theme.of(context).platform == TargetPlatform.android) {
       final PermissionStatus status = await Permission.photos.request();
@@ -148,21 +188,35 @@ class OutputParticipateEventsPage extends HookConsumerWidget {
       }
     }
 
-    final Map<String, dynamic> result = await ImageGallerySaverPlus.saveImage(
-      pngBytes,
-      quality: 100,
-      name: 'linca_events_${DateTime.now().millisecondsSinceEpoch}',
-    );
+    int successCount = 0;
+    final String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+    for (int index = 0; index < pngBytesList.length; index++) {
+      final Map<String, dynamic> result =
+          await ImageGallerySaverPlus.saveImage(
+        pngBytesList[index],
+        quality: 100,
+        name: 'linca_events_${timestamp}_${index + 1}',
+      );
+      if (result['isSuccess'] == true) {
+        successCount++;
+      }
+    }
 
     if (!context.mounted) return;
 
-    if (result['isSuccess'] == true) {
+    if (successCount == pngBytesList.length) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('画像を保存しました')),
       );
-    } else {
+    } else if (successCount == 0) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('画像の保存に失敗しました')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('一部の画像の保存に失敗しました ($successCount/${pngBytesList.length})'),
+        ),
       );
     }
   }
