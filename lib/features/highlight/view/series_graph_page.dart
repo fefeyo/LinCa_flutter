@@ -11,12 +11,14 @@ import 'package:linca_otaku_support/core/network/providers.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
 import 'package:linca_otaku_support/core/utils/event_analytics_manager.dart';
 import 'package:linca_otaku_support/core/utils/linca_event_extension.dart';
+import 'package:linca_otaku_support/core/utils/participation_extension.dart';
 import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
 import 'package:linca_otaku_support/core/utils/tag_extension.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../core/constants/analytics_screen.dart';
+import '../../../core/models/linca_event.dart';
 import '../data/highlight_state.dart';
 import '../view_model/highlight_view_model.dart';
 
@@ -41,8 +43,14 @@ class SeriesGraphPage extends HookConsumerWidget
     final List<Tag> seriesTags =
         (ref.read(tagControllerProvider).value ?? <Tag>[]).seriesTags;
 
+    final List<LincaEvent> participatedEvents = state.filteredMyEvents
+        .where(
+          (LincaEvent event) => state.participations.hasEventId(event.event.id),
+    )
+        .toList();
+
     final Map<String, int> counts =
-        state.filteredMyEvents.seriesParticipationCounts;
+        participatedEvents.seriesParticipationCounts;
 
     final List<PieChartSectionData> sections = seriesTags
         .map((Tag tag) {
@@ -112,7 +120,7 @@ class SeriesGraphPage extends HookConsumerWidget
                           const SizedBox(height: 8),
                           Text(
                               context.l10n.common_count(
-                                state.filteredMyEvents.officialEventCount,
+                                participatedEvents.officialEventCount,
                               ),
                               style: context.textTheme.headlineMedium),
                           const SizedBox(height: 16),

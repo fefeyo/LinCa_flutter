@@ -116,7 +116,7 @@ class MyPage extends HookConsumerWidget
                 },
               ),
               MyPageItem(
-                title: '参加イベント出力画面（beta）',
+                title: context.l10n.event_output_title,
                 onClickItem: () {
                   context.router.push(const OutputParticipateEventsRoute());
                 },
@@ -157,12 +157,8 @@ class MyPage extends HookConsumerWidget
                           await authController.unLinkGoogle();
                           ref.invalidate(authControllerProvider);
                           if (!context.mounted) return;
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content:
-                                  Text(context.l10n.success_unlink_account),
-                            ),
-                          );
+                          context.showSuccessSnackBar(
+                              message: context.l10n.success_unlink_account);
                         },
                         child: Text(
                           context.l10n.release_link,
@@ -182,16 +178,16 @@ class MyPage extends HookConsumerWidget
                         if (!context.mounted || !isSignedIn) {
                           return;
                         }
-                        final String message = authState.hasError == true
-                            ? context.l10n
-                                .signin_failure(authState.error.toString())
-                            : context.l10n.success_link_account;
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(message),
-                          ),
-                        );
+                        if (!authState.hasError) {
+                          context.showSuccessSnackBar(
+                              message: context.l10n.success_link_account);
+                        } else {
+                          context.showErrorSnackBar(
+                            message: context.l10n.signin_failure(
+                              authState.error.toString(),
+                            ),
+                          );
+                        }
                       },
               ),
               MyPageItem(
@@ -208,12 +204,8 @@ class MyPage extends HookConsumerWidget
                           await authController.unLinkTwitter();
                           ref.invalidate(authControllerProvider);
                           if (!context.mounted) return;
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content:
-                                  Text(context.l10n.success_unlink_account),
-                            ),
-                          );
+                          context.showSuccessSnackBar(
+                              message: context.l10n.success_unlink_account);
                         },
                         child: Text(
                           context.l10n.release_link,
@@ -233,16 +225,16 @@ class MyPage extends HookConsumerWidget
                         if (!context.mounted || !isSignedIn) {
                           return;
                         }
-                        final String message = authState.hasError == true
-                            ? context.l10n
-                                .signin_failure(authState.error.toString())
-                            : context.l10n.success_link_account;
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(message),
-                          ),
-                        );
+                        if (!authState.hasError) {
+                          context.showSuccessSnackBar(
+                              message: context.l10n.success_link_account);
+                        } else {
+                          context.showErrorSnackBar(
+                            message: context.l10n.signin_failure(
+                              authState.error.toString(),
+                            ),
+                          );
+                        }
                       },
               ),
               MyPageItem(

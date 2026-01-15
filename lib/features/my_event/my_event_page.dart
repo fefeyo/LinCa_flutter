@@ -9,6 +9,8 @@ import 'package:linca_otaku_support/core/network/model/participation_info.dart';
 import 'package:linca_otaku_support/core/utils/coach_manager.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
 import 'package:linca_otaku_support/core/utils/event_analytics_manager.dart';
+import 'package:linca_otaku_support/core/utils/linca_event_extension.dart';
+import 'package:linca_otaku_support/core/utils/participation_extension.dart';
 import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
 import 'package:linca_otaku_support/features/my_event/data/my_event_state.dart';
 import 'package:linca_otaku_support/features/my_event/view_model/my_event_view_model.dart';
@@ -32,6 +34,11 @@ class MyEventPage extends HookConsumerWidget
     final MyEventState state = ref.watch(myEventViewModelProvider);
     final GlobalKey eventListKey = useMemoized(() => GlobalKey());
     final GlobalKey floatingActionButtonKey = useMemoized(() => GlobalKey());
+    final List<ParticipationInfo> sortedParticipations = state.sortedEvents
+        .map((LincaEvent lincaEvent) =>
+            state.participations.getByEventId(lincaEvent.event.id))
+        .whereType<ParticipationInfo>()
+        .toList();
 
     final List<TutorialStep> steps = <TutorialStep>[
       TutorialStep(
@@ -72,7 +79,7 @@ class MyEventPage extends HookConsumerWidget
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-        child: state.sortedEvents.isEmpty
+        child: sortedParticipations.isEmpty
             ? Center(
                 key: eventListKey,
                 child: Text(
@@ -83,12 +90,13 @@ class MyEventPage extends HookConsumerWidget
             : ListView.separated(
                 key: eventListKey,
                 clipBehavior: Clip.none,
-                itemCount: state.sortedEvents.length,
+                itemCount: sortedParticipations.length,
                 itemBuilder: (BuildContext context, int index) {
-                  final LincaEvent lincaEvent =
-                      state.sortedEvents.keys.elementAt(index);
                   final ParticipationInfo participationInfo =
-                      state.sortedEvents.values.elementAt(index);
+                      sortedParticipations.elementAt(index);
+                  final LincaEvent? lincaEvent = state.sortedEvents
+                      .getEventById(participationInfo.eventId);
+                  if (lincaEvent == null) return const SizedBox.shrink();
                   return EventCard(
                     lincaEvent: lincaEvent,
                     onClick: () {

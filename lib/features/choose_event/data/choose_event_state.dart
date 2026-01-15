@@ -13,8 +13,7 @@ abstract class ChooseEventState with _$ChooseEventState {
     @Default(<LincaEvent>[]) List<LincaEvent> initialEvents,
     @Default(<LincaEvent>[]) List<LincaEvent> sortedEvents,
     @Default(FilterSettings()) FilterSettings filterSettings,
-    @Default(<LincaEvent, ParticipationInfo>{})
-    Map<LincaEvent, ParticipationInfo> participations,
+    @Default(<ParticipationInfo>[]) List<ParticipationInfo> participations,
     EventType? eventType,
   }) = _ChooseEventState;
 }

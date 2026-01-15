@@ -8,6 +8,7 @@ import 'package:linca_otaku_support/core/network/model/participation_info.dart';
 import 'package:linca_otaku_support/core/utils/coach_manager.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
 import 'package:linca_otaku_support/core/utils/event_analytics_manager.dart';
+import 'package:linca_otaku_support/core/utils/participation_extension.dart';
 import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
 
 import '../../core/constants/analytics_event.dart';
@@ -17,7 +18,6 @@ import '../../core/models/linca_event.dart';
 import '../../core/router/app_router.gr.dart';
 import '../../core/utils/preferences_service.dart';
 import '../../core/utils/providers.dart';
-import '../../core/widgets/bottom_sheet/event_sort_bottom_sheet.dart';
 import '../../core/widgets/event/event_card.dart';
 import 'data/choose_event_state.dart';
 import 'view_model/choose_event_view_model.dart';
@@ -100,7 +100,7 @@ class ChooseEventPage extends HookConsumerWidget
                     style: context.textTheme.titleMedium,
                   ),
                   Text(
-                    '件数: ${state.sortedEvents.length}',
+                    context.l10n.common_event_count(state.sortedEvents.length),
                     style: context.textTheme.bodyMedium,
                   ),
                 ],
@@ -111,12 +111,13 @@ class ChooseEventPage extends HookConsumerWidget
               onPressed: () async {
                 logEvent(event: AnalyticsEvent.chooseEventFilterClick);
 
-                final FilterSettings? result = await EventSortBottomSheet.show(
-                  context,
-                  state.filterSettings,
-                  needDisplayOrderArea: true,
-                  needHiddenParticipationArea: true,
-                  needTagsArea: true,
+                final FilterSettings? result = await context.router.push(
+                  EventSortFilterRoute(
+                    initialSettings: state.filterSettings,
+                    needDisplayOrderArea: true,
+                    needHiddenParticipationArea: true,
+                    needTagsArea: true,
+                  ),
                 );
                 if (result != null) {
                   viewModel.setFilterSettings(result);
@@ -149,7 +150,7 @@ class ChooseEventPage extends HookConsumerWidget
                   itemBuilder: (BuildContext context, int index) {
                     final LincaEvent lincaEvent = state.sortedEvents[index];
                     final ParticipationInfo? participationInfo =
-                        state.participations[lincaEvent];
+                        state.participations.getByEventId(lincaEvent.event.id);
                     return EventCard(
                       lincaEvent: lincaEvent,
                       onClick: () {

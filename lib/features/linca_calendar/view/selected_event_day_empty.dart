@@ -10,7 +10,7 @@ class SelectedEventDayEmpty extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Text(
-        'この日のイベントはありません',
+        context.l10n.event_calendar_empty,
         style: context.textTheme.bodyMedium?.copyWith(color: Colors.grey),
       ),
     );

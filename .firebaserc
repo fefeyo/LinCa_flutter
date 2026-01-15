@@ -1,5 +1,9 @@
 {
   "projects": {
-    "default": "linca-4202a"
-  }
+    "default": "linca-4202a",
+    "prod": "linca-4202a",
+    "dev": "linca-dev"
+  },
+  "targets": {},
+  "etags": {}
 }

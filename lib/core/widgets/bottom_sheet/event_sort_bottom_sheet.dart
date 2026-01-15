@@ -98,7 +98,7 @@ class EventSortBottomSheet extends HookConsumerWidget
                         onChanged: (DisplayOrder displayOrder) =>
                             currentDisplayOrder.value = displayOrder,
                       ),
-                      _buildParticipationEnabled(
+                      ..._buildVisibilityOptionsAreaIfNeeded(
                         context: context,
                         isHiddenParticipationEvent:
                             isHiddenParticipationEvent.value,
@@ -106,9 +106,6 @@ class EventSortBottomSheet extends HookConsumerWidget
                             isHiddenParticipationEvent.value =
                                 selected ?? false,
                       ),
-                      const SizedBox(height: 8),
-                      const Divider(),
-                      const SizedBox(height: 8),
                       _buildDateRangeArea(
                         context: context,
                         startDate: startDate.value,
@@ -119,6 +116,9 @@ class EventSortBottomSheet extends HookConsumerWidget
                           endDate.value = inputEndDate;
                         },
                       ),
+                      const SizedBox(height: 8),
+                      const Divider(),
+                      const SizedBox(height: 8),
                       ..._buildParticipationAreaIfNeeded(
                         context: context,
                         currentParticipationTypes:
@@ -263,54 +263,73 @@ class EventSortBottomSheet extends HookConsumerWidget
     if (!needDisplayOrderArea) return <Widget>[];
 
     return <Widget>[
-      Center(
-        child: Wrap(
-          spacing: 12,
-          children: DisplayOrder.values.map(
-            (DisplayOrder displayOrder) {
-              return ChoiceChip(
-                showCheckmark: false,
-                label: Text(
-                  displayOrder.label(context),
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                visualDensity: VisualDensity.comfortable,
-                selected: currentDisplayOrder == displayOrder,
-                onSelected: (_) => onChanged(displayOrder),
-              );
-            },
-          ).toList(),
+      _buildExpansionSection(
+        context: context,
+        title: '並び順',
+        initiallyExpanded: true,
+        child: Center(
+          child: Wrap(
+            spacing: 12,
+            children: DisplayOrder.values.map(
+              (DisplayOrder displayOrder) {
+                return ChoiceChip(
+                  showCheckmark: false,
+                  label: Text(
+                    displayOrder.label(context),
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  visualDensity: VisualDensity.comfortable,
+                  selected: currentDisplayOrder == displayOrder,
+                  onSelected: (_) => onChanged(displayOrder),
+                );
+              },
+            ).toList(),
+          ),
         ),
       ),
+      const SizedBox(height: 8),
+      const Divider(),
+      const SizedBox(height: 8),
     ];
   }
 
-  Widget _buildParticipationEnabled({
+  List<Widget> _buildVisibilityOptionsAreaIfNeeded({
     required BuildContext context,
     required bool isHiddenParticipationEvent,
     required Function(bool? selected) onChanged,
   }) {
-    if (!needHiddenParticipationArea) return const SizedBox.shrink();
+    if (!needHiddenParticipationArea) return <Widget>[];
 
-    return GestureDetector(
-      onTap: () => onChanged(!isHiddenParticipationEvent),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Checkbox(
-            value: isHiddenParticipationEvent,
-            onChanged: onChanged,
+    return <Widget>[
+      _buildExpansionSection(
+        context: context,
+        title: '表示オプション',
+        initiallyExpanded: isHiddenParticipationEvent,
+        child: GestureDetector(
+          onTap: () => onChanged(!isHiddenParticipationEvent),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Checkbox(
+                value: isHiddenParticipationEvent,
+                onChanged: onChanged,
+              ),
+              Flexible(
+                child: Text(
+                  context.l10n.event_sort_section_title_hidden_already_added,
+                  style: context.textTheme.titleMedium?.copyWith(
+                    color: Colors.black54,
+                  ),
+                ),
+              ),
+            ],
           ),
-          Text(
-            context.l10n.event_sort_section_title_hidden_already_added,
-            style: context.textTheme.titleMedium?.copyWith(
-              color: Colors.black54,
-            ),
-          ),
-        ],
+        ),
       ),
-    );
+      const SizedBox(height: 8),
+      const Divider(),
+      const SizedBox(height: 8),
+    ];
   }
 
   List<Widget> _buildParticipationAreaIfNeeded({
@@ -321,37 +340,37 @@ class EventSortBottomSheet extends HookConsumerWidget
     if (!needParticipationArea) return <Widget>[];
 
     return <Widget>[
-      Text(
-        context.l10n.event_sort_section_title_paricipation,
-        style: context.textTheme.bodyMedium,
-      ),
-      const SizedBox(height: 8),
-      Wrap(
-        spacing: 4,
-        runSpacing: 8,
-        children: ParticipationType.values.map(
-          (ParticipationType participationType) {
-            return ChoiceChip(
-              label: Text(
-                participationType.label(context),
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-              showCheckmark: false,
-              visualDensity: VisualDensity.comfortable,
-              selected: currentParticipationTypes.contains(participationType),
-              onSelected: (bool selected) {
-                final List<ParticipationType> current =
-                    List<ParticipationType>.of(currentParticipationTypes);
-                if (selected) {
-                  current.add(participationType);
-                } else {
-                  current.remove(participationType);
-                }
-                onChanged(current);
-              },
-            );
-          },
-        ).toList(),
+      _buildExpansionSection(
+        context: context,
+        title: context.l10n.event_sort_section_title_paricipation,
+        initiallyExpanded: currentParticipationTypes.isNotEmpty,
+        child: Wrap(
+          spacing: 4,
+          runSpacing: 8,
+          children: ParticipationType.values.map(
+            (ParticipationType participationType) {
+              return ChoiceChip(
+                label: Text(
+                  participationType.label(context),
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                showCheckmark: false,
+                visualDensity: VisualDensity.comfortable,
+                selected: currentParticipationTypes.contains(participationType),
+                onSelected: (bool selected) {
+                  final List<ParticipationType> current =
+                      List<ParticipationType>.of(currentParticipationTypes);
+                  if (selected) {
+                    current.add(participationType);
+                  } else {
+                    current.remove(participationType);
+                  }
+                  onChanged(current);
+                },
+              );
+            },
+          ).toList(),
+        ),
       ),
       const SizedBox(height: 8),
       const Divider(),
@@ -368,32 +387,32 @@ class EventSortBottomSheet extends HookConsumerWidget
     if (!needEventTypeArea) return <Widget>[];
 
     return <Widget>[
-      Text(
-        context.l10n.event_sort_section_title_event_type,
-        style: context.textTheme.bodyMedium,
-      ),
-      const SizedBox(height: 8),
-      Wrap(
-        spacing: 4,
-        runSpacing: 8,
-        children: EventType.values.map(
-          (EventType eventType) {
-            return ChoiceChip(
-              label: Text(
-                eventType.label(context),
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-              showCheckmark: false,
-              visualDensity: VisualDensity.comfortable,
-              selected: (eventType == EventType.official &&
-                      isShowOfficialEvent) ||
-                  (eventType == EventType.unofficial && isShowOriginalEvent),
-              onSelected: (bool selected) {
-                onChanged(eventType);
-              },
-            );
-          },
-        ).toList(),
+      _buildExpansionSection(
+        context: context,
+        title: context.l10n.event_sort_section_title_event_type,
+        initiallyExpanded: !isShowOfficialEvent || !isShowOriginalEvent,
+        child: Wrap(
+          spacing: 4,
+          runSpacing: 8,
+          children: EventType.values.map(
+            (EventType eventType) {
+              return ChoiceChip(
+                label: Text(
+                  eventType.label(context),
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                showCheckmark: false,
+                visualDensity: VisualDensity.comfortable,
+                selected: (eventType == EventType.official &&
+                        isShowOfficialEvent) ||
+                    (eventType == EventType.unofficial && isShowOriginalEvent),
+                onSelected: (bool selected) {
+                  onChanged(eventType);
+                },
+              );
+            },
+          ).toList(),
+        ),
       ),
       const SizedBox(height: 8),
       const Divider(),
@@ -410,36 +429,36 @@ class EventSortBottomSheet extends HookConsumerWidget
     if (!needTagsArea) return <Widget>[];
 
     return <Widget>[
-      Text(
-        context.l10n.event_sort_section_title_event_style,
-        style: context.textTheme.bodyMedium,
-      ),
-      const SizedBox(height: 8),
-      Wrap(
-        spacing: 4,
-        runSpacing: 8,
-        children: tags.map(
-          (Tag tag) {
-            return ChoiceChip(
-              showCheckmark: false,
-              label: Text(
-                tag.name,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-              visualDensity: VisualDensity.comfortable,
-              selected: currentTags.contains(tag),
-              onSelected: (bool selected) {
-                final List<Tag> current = List<Tag>.of(currentTags);
-                if (selected) {
-                  current.add(tag);
-                } else {
-                  current.remove(tag);
-                }
-                onChanged(current);
-              },
-            );
-          },
-        ).toList(),
+      _buildExpansionSection(
+        context: context,
+        title: context.l10n.event_sort_section_title_event_style,
+        initiallyExpanded: currentTags.isNotEmpty,
+        child: Wrap(
+          spacing: 4,
+          runSpacing: 8,
+          children: tags.map(
+            (Tag tag) {
+              return ChoiceChip(
+                showCheckmark: false,
+                label: Text(
+                  tag.name,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                visualDensity: VisualDensity.comfortable,
+                selected: currentTags.contains(tag),
+                onSelected: (bool selected) {
+                  final List<Tag> current = List<Tag>.of(currentTags);
+                  if (selected) {
+                    current.add(tag);
+                  } else {
+                    current.remove(tag);
+                  }
+                  onChanged(current);
+                },
+              );
+            },
+          ).toList(),
+        ),
       ),
       const SizedBox(height: 8),
       const Divider(),
@@ -456,36 +475,36 @@ class EventSortBottomSheet extends HookConsumerWidget
     if (!needTagsArea) return <Widget>[];
 
     return <Widget>[
-      Text(
-        context.l10n.event_sort_section_title_series_tag,
-        style: context.textTheme.bodyMedium,
-      ),
-      const SizedBox(height: 8),
-      Wrap(
-        spacing: 4,
-        runSpacing: 8,
-        children: tags.map(
-          (Tag tag) {
-            return ChoiceChip(
-              showCheckmark: false,
-              label: Text(
-                tag.name,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-              visualDensity: VisualDensity.comfortable,
-              selected: currentTags.contains(tag),
-              onSelected: (bool selected) {
-                final List<Tag> current = List<Tag>.of(currentTags);
-                if (selected) {
-                  current.add(tag);
-                } else {
-                  current.remove(tag);
-                }
-                onChanged(current);
-              },
-            );
-          },
-        ).toList(),
+      _buildExpansionSection(
+        context: context,
+        title: context.l10n.event_sort_section_title_series_tag,
+        initiallyExpanded: currentTags.isNotEmpty,
+        child: Wrap(
+          spacing: 4,
+          runSpacing: 8,
+          children: tags.map(
+            (Tag tag) {
+              return ChoiceChip(
+                showCheckmark: false,
+                label: Text(
+                  tag.name,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                visualDensity: VisualDensity.comfortable,
+                selected: currentTags.contains(tag),
+                onSelected: (bool selected) {
+                  final List<Tag> current = List<Tag>.of(currentTags);
+                  if (selected) {
+                    current.add(tag);
+                  } else {
+                    current.remove(tag);
+                  }
+                  onChanged(current);
+                },
+              );
+            },
+          ).toList(),
+        ),
       ),
     ];
   }
@@ -496,72 +515,91 @@ class EventSortBottomSheet extends HookConsumerWidget
     required DateTime? endDate,
     required void Function(DateTime? start, DateTime? end) onChanged,
   }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          '期間を選択',
+    return _buildExpansionSection(
+      context: context,
+      title: '期間を選択',
+      initiallyExpanded: startDate != null || endDate != null,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () async {
+                    final DateTime now = DateTime.now();
+                    final DateTime? picked = await showDatePicker(
+                      context: context,
+                      initialDate: startDate ?? DateTime.now(),
+                      // 最小はμ's1stがある2012
+                      firstDate: DateTime(2012),
+                      // 最大は現在の1年後まで
+                      lastDate: now.copyWith(year: now.year + 1),
+                    );
+                    if (picked != null) {
+                      onChanged(picked, endDate);
+                    }
+                  },
+                  child: Text(
+                    startDate != null ? startDate.simpleDateFormat() : '開始日',
+                    style: context.textTheme.bodyMedium,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                '〜',
+                style: context.textTheme.bodyMedium,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () async {
+                    final DateTime? picked = await showDatePicker(
+                      context: context,
+                      initialDate: endDate ?? DateTime.now(),
+                      firstDate: DateTime(2010),
+                      lastDate: DateTime(2100),
+                    );
+                    if (picked != null) {
+                      onChanged(startDate, picked);
+                    }
+                  },
+                  child: Text(
+                    endDate != null ? endDate.simpleDateFormat() : '終了日',
+                    style: context.textTheme.bodyMedium,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          TextButton(
+            onPressed: () => onChanged(null, null),
+            child: const Text('期間をクリア'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildExpansionSection({
+    required BuildContext context,
+    required String title,
+    required Widget child,
+    bool initiallyExpanded = false,
+  }) {
+    return Theme(
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: ExpansionTile(
+        tilePadding: EdgeInsets.zero,
+        childrenPadding: const EdgeInsets.only(bottom: 8),
+        initiallyExpanded: initiallyExpanded,
+        title: Text(
+          title,
           style: context.textTheme.bodyMedium,
         ),
-        const SizedBox(height: 8),
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: OutlinedButton(
-                onPressed: () async {
-                  final DateTime now = DateTime.now();
-                  final DateTime? picked = await showDatePicker(
-                    context: context,
-                    initialDate: startDate ?? DateTime.now(),
-                    // 最小はμ's1stがある2012
-                    firstDate: DateTime(2012),
-                    // 最大は現在の1年後まで
-                    lastDate: now.copyWith(year: now.year + 1),
-                  );
-                  if (picked != null) {
-                    onChanged(picked, endDate);
-                  }
-                },
-                child: Text(
-                  startDate != null ? startDate.simpleDateFormat() : '開始日',
-                  style: context.textTheme.bodyMedium,
-                ),
-              ),
-            ),
-            const SizedBox(width: 8),
-            Text(
-              '〜',
-              style: context.textTheme.bodyMedium,
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: OutlinedButton(
-                onPressed: () async {
-                  final DateTime? picked = await showDatePicker(
-                    context: context,
-                    initialDate: endDate ?? DateTime.now(),
-                    firstDate: DateTime(2010),
-                    lastDate: DateTime(2100),
-                  );
-                  if (picked != null) {
-                    onChanged(startDate, picked);
-                  }
-                },
-                child: Text(
-                  endDate != null ? endDate.simpleDateFormat() : '終了日',
-                  style: context.textTheme.bodyMedium,
-                ),
-              ),
-            ),
-          ],
-        ),
-        TextButton(
-          onPressed: () => onChanged(null, null),
-          child: const Text('期間をクリア'),
-        ),
-        const Divider(),
-        const SizedBox(height: 8),
-      ],
+        children: <Widget>[child],
+      ),
     );
   }
 

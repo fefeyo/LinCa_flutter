@@ -33,12 +33,8 @@ class LoginPage extends HookConsumerWidget
     void actionAfterSignIn(bool isSignedIn) async {
       if (!context.mounted || !isSignedIn) return;
       if (authState.hasError) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              context.l10n.signin_failure(authState.error.toString()),
-            ),
-          ),
+        context.showErrorSnackBar(
+          message: context.l10n.signin_failure(authState.error.toString()),
         );
       } else {
         final SharedPreferences sharedPreferences =

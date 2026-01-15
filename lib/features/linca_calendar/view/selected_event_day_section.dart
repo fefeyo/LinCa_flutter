@@ -32,7 +32,8 @@ class SelectedDayEventSection extends StatelessWidget {
       children: <Widget>[
         const SizedBox(height: 16),
         Text(
-          '${selectedDate?.month}月${selectedDate?.day}日 のイベント',
+          context.l10n.event_calendar_month_day_title(
+              '${selectedDate?.month}', '${selectedDate?.day}'),
           style: context.textTheme.titleMedium,
         ),
         const SizedBox(height: 8),

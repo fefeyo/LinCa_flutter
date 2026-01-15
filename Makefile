@@ -1,6 +1,6 @@
 	# Makefile
 
-.PHONY: init format analyze build clean env pubget test
+.PHONY: init format analyze build clean env pubget test build-function deploy-function-dev deploy-function-prod
 
 init: env pubget build
 
@@ -33,3 +33,14 @@ generate_dev_apk:
 
 generate_launcher_icon:
 	flutter pub run flutter_launcher_icons
+
+build-function:
+	cd functions && npm run build
+
+# dev 環境に Functions を deploy
+deploy-function-dev: build-function
+	firebase deploy --only functions --project dev
+
+# prod 環境に Functions を deploy（※注意）
+deploy-function-prod: build-function
+	firebase deploy --only functions --project prod

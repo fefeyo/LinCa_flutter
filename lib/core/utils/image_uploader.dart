@@ -6,7 +6,45 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
-Future<String?> pickCompressAndUploadImage(String uid) async {
+enum ImageQuality {
+  icon,
+  memory,
+}
+
+extension ImageQualityExtension on ImageQuality {
+  int get quality {
+    switch (this) {
+      case ImageQuality.icon:
+        return 75;
+      case ImageQuality.memory:
+        return 80;
+    }
+  }
+
+  int get minWidth {
+    switch (this) {
+      case ImageQuality.icon:
+        return 512;
+      case ImageQuality.memory:
+        return 1024;
+    }
+  }
+
+  int get minHeight {
+    switch (this) {
+      case ImageQuality.icon:
+        return 512;
+      case ImageQuality.memory:
+        return 1024;
+    }
+  }
+}
+
+Future<String?> pickCompressAndUploadImage({
+  required String uid,
+  required String uploadPath,
+  required ImageQuality imageQuality,
+}) async {
   try {
     // 画像を選択
     final XFile? pickedFile =
@@ -17,21 +55,21 @@ Future<String?> pickCompressAndUploadImage(String uid) async {
     final File originalFile = File(pickedFile.path);
     // 2. 一時ディレクトリへ圧縮
     final Directory tempDir = await getTemporaryDirectory();
-    final String targetPath = '${tempDir.path}/profile.jpg';
+    final String targetPath = '${tempDir.path}/tmp.jpg';
 
     final XFile? compressedFile = await FlutterImageCompress.compressAndGetFile(
       originalFile.path,
       targetPath,
-      quality: 75, // 0〜100（小さいほど圧縮される）
-      minWidth: 600, // サイズ調整（任意）
-      minHeight: 600,
+      quality: imageQuality.quality,
+      minWidth: imageQuality.minWidth,
+      minHeight: imageQuality.minHeight,
     );
 
     if (compressedFile == null) throw Exception('Image compression failed');
 
     // 3. Firebase Storage にアップロード
     final Reference storageRef =
-        FirebaseStorage.instance.ref().child('users/$uid/profile.jpg');
+        FirebaseStorage.instance.ref().child(uploadPath);
 
     await storageRef.putFile(
       File(compressedFile.path),

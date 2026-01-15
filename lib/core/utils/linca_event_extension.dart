@@ -39,6 +39,64 @@ extension LincaEventExtension on LincaEvent {
 }
 
 extension LincaEventsExtension on List<LincaEvent> {
+  int get officialEventCount => map((LincaEvent lincaEvent) => lincaEvent.event)
+      .whereType<OfficialEvent>()
+      .length;
+
+  int get unofficialEventCount =>
+      map((LincaEvent lincaEvent) => lincaEvent.event)
+          .whereType<UnOfficialEvent>()
+          .length;
+
+  Map<String, int> get seriesParticipationCounts {
+    final Map<String, int> seriesCount = <String, int>{};
+
+    for (final LincaEvent event in this) {
+      final String seriesTag = event.group.seriesTag;
+      seriesCount[seriesTag] = (seriesCount[seriesTag] ?? 0) + 1;
+    }
+
+    return seriesCount;
+  }
+
+  List<String> get selectableYears {
+    final Set<String> years = <String>{};
+    final int nowYear = DateTime.now().year;
+
+    for (final LincaEvent event in this) {
+      final DateTime? date = event.event.date;
+      if (date != null && date.year <= nowYear) {
+        years.add(date.year.toString());
+      }
+    }
+
+    final List<String> sortedYears = years.toList()
+      ..sort((String a, String b) => b.compareTo(a));
+
+    return sortedYears;
+  }
+
+  String get mostParticipatedSeries {
+    final Map<String, int> seriesCount = <String, int>{};
+
+    for (final LincaEvent event in this) {
+      final String seriesTag = event.group.seriesTag;
+      seriesCount[seriesTag] = (seriesCount[seriesTag] ?? 0) + 1;
+    }
+
+    String mostParticipatedSeries = '';
+    int maxCount = 0;
+
+    seriesCount.forEach((String seriesTag, int count) {
+      if (count > maxCount) {
+        maxCount = count;
+        mostParticipatedSeries = seriesTag;
+      }
+    });
+
+    return mostParticipatedSeries;
+  }
+
   // キーワードフィルタリング
   List<LincaEvent> filterWithKeyword(String keyword) {
     if (keyword.isEmpty) return this;
@@ -63,7 +121,7 @@ extension LincaEventsExtension on List<LincaEvent> {
   List<LincaEvent> sortWithDisplayOrder({
     DisplayOrder displayOrder = DisplayOrder.newest,
   }) {
-    final List<LincaEvent> sortedEvents = this;
+    final List<LincaEvent> sortedEvents = List<LincaEvent>.of(this);
     switch (displayOrder) {
       case DisplayOrder.newest:
         sortedEvents.sort((LincaEvent a, LincaEvent b) {
@@ -114,13 +172,20 @@ extension LincaEventsExtension on List<LincaEvent> {
     return sortedEvents;
   }
 
-  List<LincaEvent> filterOnlyNotPaticipationEvent(
-      Map<LincaEvent, ParticipationInfo> participations) {
-    List<LincaEvent> sortedEvents = this;
+  List<LincaEvent> filterOnlyNotPaticipationEvent({
+    required List<LincaEvent> allEvents,
+    required List<ParticipationInfo> participations,
+  }) {
+    List<LincaEvent> sortedEvents = List<LincaEvent>.of(this);
     if (participations.isNotEmpty) {
-      sortedEvents =
-          where((LincaEvent event) => !participations.containsKey(event))
-              .toList();
+      sortedEvents = where(
+        (LincaEvent event) => !allEvents.any(
+          (LincaEvent lincaEvent) => participations.any(
+            (ParticipationInfo participationInfo) =>
+                participationInfo.eventId == lincaEvent.event.id,
+          ),
+        ),
+      ).toList();
     }
 
     return sortedEvents;
@@ -164,6 +229,9 @@ extension LincaEventsExtension on List<LincaEvent> {
       return eventDate == today;
     }).toList().sortWithDisplayOrder(displayOrder: DisplayOrder.oldest);
   }
+
+  LincaEvent? getEventById(String eventId) =>
+      firstWhereOrNull((LincaEvent event) => event.event.id == eventId);
 }
 
 extension LincaParticipationEventExtension
@@ -175,66 +243,5 @@ extension LincaParticipationEventExtension
     return <LincaEvent, ParticipationInfo>{
       for (final LincaEvent event in events) event: this[event]!,
     };
-  }
-
-  int get eventCount => length;
-
-  int get officialEventCount => keys
-      .map((LincaEvent lincaEvent) => lincaEvent.event)
-      .whereType<OfficialEvent>()
-      .length;
-
-  int get unofficialEventCount => keys
-      .map((LincaEvent lincaEvent) => lincaEvent.event)
-      .whereType<UnOfficialEvent>()
-      .length;
-
-  String get mostParticipatedSeries {
-    final Map<String, int> seriesCount = <String, int>{};
-
-    for (final LincaEvent event in keys) {
-      final String seriesTag = event.group.seriesTag;
-      seriesCount[seriesTag] = (seriesCount[seriesTag] ?? 0) + 1;
-    }
-
-    String mostParticipatedSeries = '';
-    int maxCount = 0;
-
-    seriesCount.forEach((String seriesTag, int count) {
-      if (count > maxCount) {
-        maxCount = count;
-        mostParticipatedSeries = seriesTag;
-      }
-    });
-
-    return mostParticipatedSeries;
-  }
-
-  Map<String, int> get seriesParticipationCounts {
-    final Map<String, int> seriesCount = <String, int>{};
-
-    for (final LincaEvent event in keys) {
-      final String seriesTag = event.group.seriesTag;
-      seriesCount[seriesTag] = (seriesCount[seriesTag] ?? 0) + 1;
-    }
-
-    return seriesCount;
-  }
-
-  List<String> get selectableYears {
-    final Set<String> years = <String>{};
-    final int nowYear = DateTime.now().year;
-
-    for (final LincaEvent event in keys) {
-      final DateTime? date = event.event.date;
-      if (date != null && date.year <= nowYear) {
-        years.add(date.year.toString());
-      }
-    }
-
-    final List<String> sortedYears = years.toList()
-      ..sort((String a, String b) => b.compareTo(a));
-
-    return sortedYears;
   }
 }

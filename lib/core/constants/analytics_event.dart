@@ -56,4 +56,5 @@ enum AnalyticsEvent {
   coachNextClick,
   coachCompleteClick,
   coachSkipClick,
+  filterResetClick,
 }

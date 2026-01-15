@@ -35,5 +35,10 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: SelectFavoriteTagRoute.page),
         AutoRoute(page: HighlightRoute.page),
         AutoRoute(page: OutputParticipateEventsRoute.page),
+        CustomRoute<EventSortFilterRoute>(
+          page: EventSortFilterRoute.page,
+          transitionsBuilder: TransitionsBuilders.slideBottom,
+          duration: const Duration(milliseconds: 500),
+        ),
       ];
 }

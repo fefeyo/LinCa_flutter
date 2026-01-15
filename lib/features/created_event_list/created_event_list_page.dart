@@ -9,6 +9,7 @@ import 'package:linca_otaku_support/core/network/model/participation_info.dart';
 import 'package:linca_otaku_support/core/network/providers.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
 import 'package:linca_otaku_support/core/utils/event_analytics_manager.dart';
+import 'package:linca_otaku_support/core/utils/participation_extension.dart';
 import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
 import 'package:linca_otaku_support/core/widgets/common/common_simple_dialog.dart';
 
@@ -33,9 +34,9 @@ class CreatedEventListPage extends HookConsumerWidget
         ref.watch(createdEventListViewModelProvider);
     final UserEventController userEventController =
         ref.read(userEventControllerProvider.notifier);
-    final Map<LincaEvent, ParticipationInfo> participations =
+    final List<ParticipationInfo> participations =
         ref.watch(participationControllerProvider).value ??
-            <LincaEvent, ParticipationInfo>{};
+            <ParticipationInfo>[];
     final ParticipationController participationController =
         ref.read(participationControllerProvider.notifier);
 
@@ -52,17 +53,17 @@ class CreatedEventListPage extends HookConsumerWidget
             ? ListView.separated(
                 itemCount: state.events.length,
                 itemBuilder: (BuildContext context, int index) {
-                  final LincaEvent event = state.events[index];
+                  final LincaEvent lincaEvent = state.events[index];
                   return _buildEventCardWithDelete(
                     context: context,
-                    event: event,
+                    event: lincaEvent,
                     onDelete: () {
-                      userEventController.deleteEvent(event: event);
+                      userEventController.deleteEvent(event: lincaEvent);
                       final ParticipationInfo? participation =
-                          participations[event];
+                          participations.getByEventId(lincaEvent.event.id);
                       if (participation != null) {
-                        participationController.deleteParticipation(
-                            event, participation);
+                        participationController
+                            .deleteParticipation(participation);
                       }
                     },
                   );
@@ -72,7 +73,7 @@ class CreatedEventListPage extends HookConsumerWidget
               )
             : Center(
                 child: Text(
-                  '作成したイベントがありません',
+                  context.l10n.created_events_empty,
                   style: context.textTheme.titleMedium,
                 ),
               ),
@@ -117,15 +118,18 @@ class CreatedEventListPage extends HookConsumerWidget
 
               final bool? confirmed = await CommonSimpleDialog.show(
                 context: context,
-                title: '削除の確認',
-                content: 'このイベントを削除しますか？',
+                title: context.l10n.created_event_delete_event_title,
+                content: context.l10n.created_event_delete_event_description,
                 cancelText: context.l10n.common_cancel,
                 onClickCancel: () => <dynamic, dynamic>{},
-                okText: '削除する',
+                okText: context.l10n.created_event_delete_event_confirm,
               );
 
               if (confirmed == true) {
                 onDelete();
+                if (!context.mounted) return;
+                context.showSuccessSnackBar(
+                    message: context.l10n.original_event_deleted);
               }
             },
           ),

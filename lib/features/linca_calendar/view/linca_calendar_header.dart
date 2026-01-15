@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:linca_otaku_support/core/utils/context_extension.dart';
 
 class LincaCalendarHeader extends StatelessWidget {
   const LincaCalendarHeader({
@@ -22,7 +23,8 @@ class LincaCalendarHeader extends StatelessWidget {
           icon: const Icon(Icons.chevron_left),
         ),
         Text(
-          '${focusedMonth.year}年 ${focusedMonth.month}月',
+          context.l10n.event_calendar_year_month_title(
+              '${focusedMonth.year}', '${focusedMonth.month}'),
           style: Theme.of(context).textTheme.titleMedium,
         ),
         IconButton(

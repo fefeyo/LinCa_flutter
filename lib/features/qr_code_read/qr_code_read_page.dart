@@ -50,7 +50,7 @@ class QrCodeReadPage extends HookConsumerWidget with ScreenAnalyticsManager {
             right: 0,
             bottom: 300,
             child: Text(
-              'QRコードを枠内にかざしてください',
+              context.l10n.qr_hold_up_message,
               textAlign: TextAlign.center,
               style:
                   context.textTheme.titleMedium?.copyWith(color: Colors.white),

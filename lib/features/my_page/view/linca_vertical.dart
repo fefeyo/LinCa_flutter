@@ -10,6 +10,7 @@ import 'package:linca_otaku_support/core/utils/color_extension.dart';
 import 'package:linca_otaku_support/core/utils/favorite_badges_extension.dart';
 import 'package:linca_otaku_support/core/utils/group_extension.dart';
 import 'package:linca_otaku_support/core/widgets/common/common_close_button.dart';
+import 'package:linca_otaku_support/core/widgets/dialog/image_preview_dialog.dart';
 import 'package:linca_otaku_support/core/widgets/event/event_card.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -22,7 +23,7 @@ class LincaVertical extends HookConsumerWidget {
   const LincaVertical({
     super.key,
     required this.lincaUser,
-    this.upcomingEvent,
+    this.upcomingEvents = const <LincaEvent>[],
     this.isFullScreen = false,
     this.animationTag = '',
     this.onTap,
@@ -31,7 +32,7 @@ class LincaVertical extends HookConsumerWidget {
   });
 
   final LincaUser lincaUser;
-  final LincaEvent? upcomingEvent;
+  final List<LincaEvent> upcomingEvents;
   final bool isFullScreen;
   final String animationTag;
   final Function(LincaUser lincaUser, String animationTag)? onTap;
@@ -113,7 +114,7 @@ class LincaVertical extends HookConsumerWidget {
 
                     ..._buildUpcomingEvent(
                       context: context,
-                      upcomingEvent: upcomingEvent,
+                      upcomingEvents: upcomingEvents,
                     ),
 
                     // Xアカウント、Instagramアカウント、Blueskyアカウント
@@ -164,10 +165,21 @@ class LincaVertical extends HookConsumerWidget {
                       )
                     ],
                   ),
-                  child: CircleAvatar(
-                    backgroundImage: lincaUser.user.photoUrl.isNotEmpty == true
-                        ? CachedNetworkImageProvider(lincaUser.user.photoUrl)
-                        : AssetImage(Assets.images.userIcon.path),
+                  child: GestureDetector(
+                    onTap: () {
+                      if (lincaUser.user.photoUrl.isNotEmpty == true &&
+                          isFullScreen) {
+                        ImagePreviewDialog.show(
+                            context: context,
+                            imageUrl: lincaUser.user.photoUrl);
+                      }
+                    },
+                    child: CircleAvatar(
+                      backgroundImage: lincaUser.user.photoUrl.isNotEmpty ==
+                              true
+                          ? CachedNetworkImageProvider(lincaUser.user.photoUrl)
+                          : AssetImage(Assets.images.userIcon.path),
+                    ),
                   ),
                 ),
               ),
@@ -245,9 +257,9 @@ class LincaVertical extends HookConsumerWidget {
                   child: buildCard(),
                 )
               : SizedBox(
-            width: double.infinity,
-            child: buildCard(),
-          ),
+                  width: double.infinity,
+                  child: buildCard(),
+                ),
         );
       } else {
         return isFullScreen
@@ -269,11 +281,11 @@ class LincaVertical extends HookConsumerWidget {
 
   List<Widget> _buildUpcomingEvent({
     required BuildContext context,
-    required LincaEvent? upcomingEvent,
+    required List<LincaEvent> upcomingEvents,
   }) {
     if (!isFullScreen) return <Widget>[];
 
-    if (upcomingEvent != null) {
+    if (upcomingEvents.isNotEmpty) {
       return <Widget>[
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -286,17 +298,18 @@ class LincaVertical extends HookConsumerWidget {
           ),
         ),
         const SizedBox(height: 4),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: EventCard(
-            lincaEvent: upcomingEvent,
-            onClick: () => context.router.push(
-              EventDetailRoute(
-                lincaEvent: upcomingEvent,
+        for (final LincaEvent event in upcomingEvents)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: EventCard(
+              lincaEvent: event,
+              onClick: () => context.router.push(
+                EventDetailRoute(
+                  lincaEvent: event,
+                ),
               ),
             ),
           ),
-        ),
         const SizedBox(height: 16),
       ];
     } else {

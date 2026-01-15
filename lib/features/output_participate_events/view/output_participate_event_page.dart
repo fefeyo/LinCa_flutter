@@ -43,7 +43,7 @@ class OutputParticipateEventPage extends StatelessWidget {
                 Expanded(
                   child: Text(
                     _buildEventText(lincaEvent),
-                    style: context.textTheme.bodyMedium,
+                    style: context.textTheme.bodySmall,
                   ),
                 ),
               ],

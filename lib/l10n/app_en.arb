@@ -65,12 +65,14 @@
   "my_event_title": "MyEvent",
   "recent_event_title": "RecentEvent",
   "recent_event_appbar_title": "RecentEvent",
+  "event_calendar_title": "Calendar",
   "my_page_title": "MyPage",
   "traded_linca_list_title": "TradedLinCaList",
   "my_qr_code_title": "ShowMyQRCode",
   "edit_my_linca_title": "EditMyLinCa",
   "acquired_badges_title": "AcquiredBadges",
   "created_events_title": "CreatedEvents",
+  "created_events_empty": "NoCreatedEvents",
   "app_settings_title": "AppSettings",
   "delete_account_title": "DeleteMyAccount",
   "participation_on_site": "On-site",
@@ -115,7 +117,6 @@
   "onboarding_step3_description": "Exchange your profile with people you meet at events and build lasting connections.",
   "onboarding_step4_title": "Set Your Nickname First",
   "onboarding_step4_description": "This name will appear on your LinCa card. You can change it anytime later.",
-  "snackbar_title_deleted": "Event deleted",
   "my_event_deleted": "my_event_deleted",
   "original_event_deleted": "original_event_deleted",
   "map_launch_url": "https://www.google.com/maps/search/?api=1&query={query}",
@@ -172,7 +173,7 @@
     }
   },
   "linca_edit_label_bio": "linca_edit_label_bio",
-  "linca_edit_label_hint": "linca_edit_label_hint",
+  "linca_edit_bio_label_hint": "linca_edit_label_hint",
   "linca_edit_favorite_badge_title": "linca_edit_favorite_badge_title",
   "linca_edit_label_edit_tag": "linca_edit_label_edit_tag",
   "create_public_event_title": "create_public_event_title",
@@ -209,7 +210,6 @@
   },
   "event_detail_text_event_code_copy": "event_detail_text_event_code_copy",
   "event_detail_text_event_code_copied": "event_detail_text_event_code_copied",
-  "created_event_page_title": "created_event_page_title",
   "acquired_badges_select_title": "acquired_badges_select_title",
   "acquired_badges_list_title": "acquired_badges_list_title",
   "acquired_badges_list_unselect": "acquired_badges_list_unselect",
@@ -228,7 +228,8 @@
   "check_in_location_permission_disabled": "check_in_location_permission_disabled",
   "check_in_location_permission_denied": "check_in_location_permission_denied",
   "check_in_location_permission_denied_forever": "check_in_location_permission_denied_forever",
-  "check_in_in_range": "check_in_in_range",
+  "check_in_in_range_title": "check_in_in_range_title",
+  "check_in_in_range_description": "check_in_in_range_description",
   "check_in_already_checked_in": "check_in_already_checked_in",
   "check_in_out_range": "check_in_out_range",
   "create_event_event_name_required": "create_event_event_name_required",
@@ -286,5 +287,72 @@
   },
   "highlight_series_breakdown_subtitle": "highlight_series_breakdown_subtitle",
   "highlight_generated_sign": "highlight_print_sign",
-  "highlight_end": "highlight_end"
+  "highlight_end": "highlight_end",
+  "event_calendar_birthday": "calendar_birthday",
+  "@event_calendar_birthday": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "event_calendar_month_day_title": "event_calendar_month_day_title",
+  "@event_calendar_month_day_title": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "created_event_delete_event_title": "created_event_delete_event_title",
+  "created_event_delete_event_description": "created_event_delete_event_description",
+  "created_event_delete_event_confirm": "created_event_delete_event_confirm",
+  "common_event_count": "common_event_count",
+  "@common_event_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "aqcuired_badge_title_select": "aqcuired_badge_title_select",
+  "aqcuired_badge_title_list": "aqcuired_badge_title_list",
+  "common_no_selected": "common_no_selected",
+  "event_output_title": "event_output_title",
+  "check_in": "check_in",
+  "event_sort_span_clear": "event_sort_span_clear",
+  "event_sort_span_start": "event_sort_span_start",
+  "event_sort_span_end": "event_sort_span_end",
+  "event_calendar_year_month_title": "event_calendar_year_month_title",
+  "@event_calendar_year_month_title": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      },
+      "month": {
+        "type": "String"
+      }
+    }
+  },
+  "event_calendar_empty": "event_calendar_empty",
+  "linca_edit_label_nickname_hint": "linca_edit_label_nickname_hint",
+  "picture_saved": "picture_saved",
+  "picture_save_failed": "picture_save_failed",
+  "picture_save_permission_disabled": "picture_save_permission_disabled",
+  "qr_hold_up_message": "qr_hold_up_message",
+  "event_sort_span_title": "event_sort_span_title",
+  "common_today": "common_today",
+  "event_sort_clear": "event_sort_clear",
+  "event_sort_selected": "event_sort_selected",
+  "badge_list_empty_title": "badge_list_empty_title",
+  "event_detail_memory_title": "event_detail_memory_title",
+  "event_detail_memory_deleted": "event_detail_memory_deleted",
+  "my_event_delete_dialog_title": "my_event_delete_dialog_title",
+  "my_event_delete_dialog_description": "my_event_delete_dialog_description",
+  "picture_save_dialog_title": "picture_save_dialog_title",
+  "picture_save_dialog_description": "picture_save_dialog_description",
+  "event_detail_memory_saved": "event_detail_memory_saved"
 }

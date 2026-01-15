@@ -11,14 +11,16 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
 import 'package:linca_otaku_support/core/utils/list_extension.dart';
+import 'package:linca_otaku_support/core/utils/participation_extension.dart';
 import 'package:linca_otaku_support/features/output_participate_events/data/output_participate_events_state.dart';
 import 'package:linca_otaku_support/features/output_participate_events/view/output_participate_event_page.dart';
 import 'package:linca_otaku_support/features/output_participate_events/view_model/output_participate_events_view_model.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../core/models/filter_settings.dart';
 import '../../core/models/linca_event.dart';
-import '../../core/widgets/bottom_sheet/event_sort_bottom_sheet.dart';
+import '../../core/router/app_router.gr.dart';
 
 @RoutePage()
 class OutputParticipateEventsPage extends HookConsumerWidget {
@@ -32,8 +34,12 @@ class OutputParticipateEventsPage extends HookConsumerWidget {
         ref.read(outputParticipateEventsViewModelProvider.notifier);
     final ValueNotifier<bool> isSearching = useState(false);
     final TextEditingController searchController = useTextEditingController();
-    final List<List<LincaEvent>> pages =
-        state.sortedEvents.keys.toList().chunk(12);
+    final List<LincaEvent> participatedEvents = state.sortedEvents
+        .where(
+          (LincaEvent event) => state.participations.hasEventId(event.event.id),
+        )
+        .toList();
+    final List<List<LincaEvent>> pages = participatedEvents.chunk(10);
     final PageController pageController = usePageController();
     final List<GlobalKey> pageKeys = List<GlobalKey>.generate(
       pages.length,
@@ -56,21 +62,22 @@ class OutputParticipateEventsPage extends HookConsumerWidget {
                 },
               )
             : Text(
-                '参加イベント出力画面',
+                context.l10n.event_output_title,
                 style: context.textTheme.titleMedium,
               ),
         actions: <Widget>[
           IconButton(
             onPressed: () async {
-              final FilterSettings? result = await EventSortBottomSheet.show(
-                context,
-                state.filterSettings,
-                needInputArea: true,
-                needHiddenOriginalEventArea: true,
-                needDisplayOrderArea: true,
-                needParticipationArea: true,
-                needEventTypeArea: true,
-                needTagsArea: true,
+              final FilterSettings? result = await context.router.push(
+                EventSortFilterRoute(
+                  initialSettings: state.filterSettings,
+                  needInputArea: true,
+                  needHiddenOriginalEventArea: true,
+                  needDisplayOrderArea: true,
+                  needParticipationArea: true,
+                  needEventTypeArea: true,
+                  needTagsArea: true,
+                ),
               );
               if (result != null) {
                 viewModel.setFilterSettings(result);
@@ -97,16 +104,35 @@ class OutputParticipateEventsPage extends HookConsumerWidget {
                 style: context.textTheme.titleMedium,
               ),
             )
-          : PageView(
-              controller: pageController,
-              children:
-                  pages.mapIndexed((int pageIndex, List<LincaEvent> page) {
-                final GlobalKey pageKey = pageKeys[pageIndex];
-                return RepaintBoundary(
-                  key: pageKey,
-                  child: OutputParticipateEventPage(events: page),
-                );
-              }).toList(),
+          : SafeArea(
+              child: Column(
+                children: <Widget>[
+                  Expanded(
+                    child: PageView(
+                      controller: pageController,
+                      children: pages
+                          .mapIndexed((int pageIndex, List<LincaEvent> page) {
+                        final GlobalKey pageKey = pageKeys[pageIndex];
+                        return RepaintBoundary(
+                          key: pageKey,
+                          child: OutputParticipateEventPage(events: page),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                  SmoothPageIndicator(
+                    controller: pageController,
+                    count: pages.length,
+                    effect: WormEffect(
+                      dotHeight: 8,
+                      dotWidth: 8,
+                      spacing: 12,
+                      activeDotColor: context.colorScheme.primary,
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                ],
+              ),
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
@@ -114,9 +140,9 @@ class OutputParticipateEventsPage extends HookConsumerWidget {
           final Uint8List png = await _capture(key);
 
           if (!context.mounted) return;
-          await _saveImageToGallery(context, png);
+          _saveImageToGallery(context, png);
         },
-        child: const Icon(Icons.download),
+        child: const Icon(Icons.camera_alt),
       ),
     );
   }
@@ -139,16 +165,14 @@ class OutputParticipateEventsPage extends HookConsumerWidget {
       final PermissionStatus status = await Permission.photos.request();
 
       if (!status.isGranted) {
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('保存に必要な権限がありません')),
-          );
-        }
+        if (!context.mounted) return;
+        context.showErrorSnackBar(
+            message: context.l10n.picture_save_permission_disabled);
         return;
       }
     }
 
-    final Map<String, dynamic> result = await ImageGallerySaverPlus.saveImage(
+    final Map<Object?, Object?> result = await ImageGallerySaverPlus.saveImage(
       pngBytes,
       quality: 100,
       name: 'linca_events_${DateTime.now().millisecondsSinceEpoch}',
@@ -157,12 +181,14 @@ class OutputParticipateEventsPage extends HookConsumerWidget {
     if (!context.mounted) return;
 
     if (result['isSuccess'] == true) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('画像を保存しました')),
+      context.showSuccessSnackBar(
+        message: context.l10n.picture_saved,
+        duration: const Duration(milliseconds: 1500),
       );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('画像の保存に失敗しました')),
+      context.showErrorSnackBar(
+        message: context.l10n.picture_save_failed,
+        duration: const Duration(milliseconds: 1500),
       );
     }
   }

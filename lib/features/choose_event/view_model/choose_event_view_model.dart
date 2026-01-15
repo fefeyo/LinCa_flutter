@@ -21,9 +21,8 @@ final AutoDisposeStateNotifierProvider<ChooseEventViewModel, ChooseEventState>
               (event.event as UnOfficialEvent).visibility == true)
           .toList() ??
       <LincaEvent>[];
-  final Map<LincaEvent, ParticipationInfo> participations =
-      ref.read(participationControllerProvider).value ??
-          <LincaEvent, ParticipationInfo>{};
+  final List<ParticipationInfo> participations =
+      ref.read(participationControllerProvider).value ?? <ParticipationInfo>[];
 
   final ChooseEventViewModel viewModel = ChooseEventViewModel(
     ref,
@@ -35,11 +34,10 @@ final AutoDisposeStateNotifierProvider<ChooseEventViewModel, ChooseEventState>
   );
 
   ref.listen(participationControllerProvider,
-      (_, AsyncValue<Map<LincaEvent, ParticipationInfo>> next) {
-    final Map<LincaEvent, ParticipationInfo>? newParticipations = next.value;
-    if (newParticipations != null) {
-      viewModel.updateParticipations(newParticipations);
-    }
+      (_, AsyncValue<List<ParticipationInfo>> next) {
+    final List<ParticipationInfo> newParticipations =
+        next.value ?? <ParticipationInfo>[];
+    viewModel.updateParticipations(newParticipations);
   });
 
   ref.listen(eventControllerProvider, (_, AsyncValue<List<LincaEvent>> next) {
@@ -53,7 +51,12 @@ final AutoDisposeStateNotifierProvider<ChooseEventViewModel, ChooseEventState>
       (_, AsyncValue<List<LincaEvent>> next) {
     final List<LincaEvent>? events = next.value;
     if (events != null) {
-      viewModel.updateEvents(events);
+      viewModel.updateEvents(
+        events
+            .where((LincaEvent event) =>
+                (event.event as UnOfficialEvent).visibility == true)
+            .toList(),
+      );
     }
   });
 
@@ -64,7 +67,7 @@ class ChooseEventViewModel extends StateNotifier<ChooseEventState> {
   ChooseEventViewModel(
     this.ref,
     List<LincaEvent> initialEvents,
-    final Map<LincaEvent, ParticipationInfo> participations,
+    final List<ParticipationInfo> participations,
   ) : super(
           ChooseEventState(
             initialEvents: initialEvents,
@@ -122,8 +125,10 @@ class ChooseEventViewModel extends StateNotifier<ChooseEventState> {
     }).toList();
 
     if (filterSettings.isHiddenParticipationEvent) {
-      sortedEvents =
-          sortedEvents.filterOnlyNotPaticipationEvent(state.participations);
+      sortedEvents = sortedEvents.filterOnlyNotPaticipationEvent(
+        allEvents: initialEvents,
+        participations: state.participations,
+      );
     }
 
     sortedEvents = sortedEvents
@@ -139,13 +144,13 @@ class ChooseEventViewModel extends StateNotifier<ChooseEventState> {
     return sortedEvents;
   }
 
-  void updateParticipations(
-    Map<LincaEvent, ParticipationInfo> newParticipations,
-  ) {
+  void updateParticipations(List<ParticipationInfo> newParticipations) {
     List<LincaEvent> sortedEvents = state.sortedEvents;
     if (state.filterSettings.isHiddenParticipationEvent) {
-      sortedEvents =
-          sortedEvents.filterOnlyNotPaticipationEvent(newParticipations);
+      sortedEvents = sortedEvents.filterOnlyNotPaticipationEvent(
+        allEvents: state.initialEvents,
+        participations: newParticipations,
+      );
     }
     state = state.copyWith(
       participations: newParticipations,

@@ -84,15 +84,11 @@ class LincaEditPage extends HookConsumerWidget
           ) ??
           const User();
       await userController.updateUserData(user);
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(context.l10n.common_save_suceeded),
-            backgroundColor: Colors.green,
-          ),
-        );
-        context.router.pop();
-      }
+      if (!context.mounted) return;
+      context.showSuccessSnackBar(
+        message: context.l10n.common_save_suceeded,
+        effect: () => context.router.pop(),
+      );
     }
 
     return Scaffold(
@@ -169,7 +165,11 @@ class LincaEditPage extends HookConsumerWidget
                                     ),
                                   );
                                   final String? photoUrl =
-                                      await pickCompressAndUploadImage(uid);
+                                      await pickCompressAndUploadImage(
+                                    uid: uid,
+                                    uploadPath: 'users/$uid/profile.jpg',
+                                    imageQuality: ImageQuality.icon,
+                                  );
                                   if (context.mounted) context.router.pop();
                                   if (photoUrl == null) return;
                                   userController.updateUserPhoto(photoUrl);
@@ -245,9 +245,9 @@ class LincaEditPage extends HookConsumerWidget
                       style: context.textTheme.bodyMedium,
                       maxLines: 10,
                       maxLength: AppConstants.bioMaxLength,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: '自己紹介を書いてみましょう！',
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        hintText: context.l10n.linca_edit_bio_label_hint,
                       ),
                     ),
                   ),
@@ -256,7 +256,7 @@ class LincaEditPage extends HookConsumerWidget
                 const SizedBox(height: 16),
 
                 // SNSリンク
-                _sectionTitle(context, 'SNSリンク'),
+                _sectionTitle(context, context.l10n.sns_link_section_title),
                 Card(
                   child: Padding(
                     padding: const EdgeInsets.all(12),
@@ -265,7 +265,7 @@ class LincaEditPage extends HookConsumerWidget
                         _snsField(
                           context,
                           icon: Icons.alternate_email,
-                          label: 'X（旧Twitter）',
+                          label: context.l10n.sns_title_x,
                           textController: twitterTextController,
                           onChanged: (String value) =>
                               viewModel.updateSnsLink(SnsType.x, value),
@@ -274,7 +274,7 @@ class LincaEditPage extends HookConsumerWidget
                         _snsField(
                           context,
                           icon: Icons.camera_alt_outlined,
-                          label: 'Instagram',
+                          label: context.l10n.sns_title_instagram,
                           textController: instagramTextController,
                           onChanged: (String value) =>
                               viewModel.updateSnsLink(SnsType.instagram, value),
@@ -283,7 +283,7 @@ class LincaEditPage extends HookConsumerWidget
                         _snsField(
                           context,
                           icon: Icons.cloud_outlined,
-                          label: 'Bluesky',
+                          label: context.l10n.sns_title_bluesky,
                           textController: blueskyTextController,
                           onChanged: (String value) =>
                               viewModel.updateSnsLink(SnsType.bluesky, value),
