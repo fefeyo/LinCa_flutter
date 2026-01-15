@@ -248,7 +248,8 @@ class EventDetailPage extends HookConsumerWidget
                       _buildVenueAreaIfNeeded(context),
                       if (isToday &&
                           lincaEvent.event is OfficialEvent &&
-                          isCheckInAvailable)
+                          isCheckInAvailable &&
+                          participationInfo != null)
                         ..._buildCheckInButtonIfNeeded(
                             context: context,
                             onClick: () => viewModel.checkLocation(lincaEvent),

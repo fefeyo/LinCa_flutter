@@ -23,6 +23,16 @@ class PreferencesService {
     return sharedPreferences.getBool(AppConstants.hasSeenTutorial) ?? false;
   }
 
+  Future<void> switchEventNotificationEnabled(bool isEnabled) async {
+    await sharedPreferences.setBool(
+        AppConstants.eventNotificationEnabled, isEnabled);
+  }
+
+  Future<bool> isEventNotificationEnabled() async {
+    return sharedPreferences.getBool(AppConstants.eventNotificationEnabled) ??
+        true;
+  }
+
   Future<void> clear() async {
     await sharedPreferences.clear();
   }

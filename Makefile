@@ -1,6 +1,6 @@
 	# Makefile
 
-.PHONY: init format analyze build clean env pubget test build-function deploy-function-dev deploy-function-prod
+.PHONY: init format analyze build clean env pubget test create_feature generate_dev_apk generate_dev_release_apk build-function deploy-function-dev deploy-function-prod
 
 init: env pubget build
 
@@ -30,6 +30,9 @@ create_feature:
 
 generate_dev_apk:
 	flutter build apk --debug --flavor dev -t lib/main_dev.dart
+
+generate_dev_release_apk:
+	flutter build apk --release --flavor dev -t lib/main_dev.dart
 
 generate_launcher_icon:
 	flutter pub run flutter_launcher_icons

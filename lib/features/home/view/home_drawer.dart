@@ -8,7 +8,6 @@ import 'package:linca_otaku_support/core/utils/event_analytics_manager.dart';
 import 'package:linca_otaku_support/core/utils/group_extension.dart';
 import 'package:linca_otaku_support/core/utils/linca_user_extension.dart';
 import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/constants/analytics_event.dart';
@@ -263,7 +262,7 @@ class HomeDrawer extends HookConsumerWidget
               onTap: () {
                 logEvent(event: AnalyticsEvent.openAppSettingsClick);
 
-                openAppSettings();
+                transitPage(const AppSettingsRoute());
               },
             ),
             const Divider(),
