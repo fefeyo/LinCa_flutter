@@ -414,6 +414,7 @@ class EventDetailPage extends HookConsumerWidget
                               : CreateEventType.private,
                           isEditMode: true,
                           unOfficialEvent: event,
+                          participationInfo: participationInfo,
                         ),
                       );
                     }
