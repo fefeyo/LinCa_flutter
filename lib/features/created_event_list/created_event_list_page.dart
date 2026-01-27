@@ -54,13 +54,14 @@ class CreatedEventListPage extends HookConsumerWidget
                 itemCount: state.events.length,
                 itemBuilder: (BuildContext context, int index) {
                   final LincaEvent lincaEvent = state.events[index];
+                  final ParticipationInfo? participation =
+                      participations.getByEventId(lincaEvent.event.id);
                   return _buildEventCardWithDelete(
                     context: context,
                     event: lincaEvent,
+                    participationInfo: participation,
                     onDelete: () {
                       userEventController.deleteEvent(event: lincaEvent);
-                      final ParticipationInfo? participation =
-                          participations.getByEventId(lincaEvent.event.id);
                       if (participation != null) {
                         participationController
                             .deleteParticipation(participation);
@@ -84,6 +85,7 @@ class CreatedEventListPage extends HookConsumerWidget
   Widget _buildEventCardWithDelete({
     required BuildContext context,
     required LincaEvent event,
+    required ParticipationInfo? participationInfo,
     required Function() onDelete,
   }) {
     return Stack(
@@ -102,6 +104,7 @@ class CreatedEventListPage extends HookConsumerWidget
                       : CreateEventType.private,
                   isEditMode: true,
                   unOfficialEvent: unOfficialEvent,
+                  participationInfo: participationInfo,
                 ),
               );
             }),

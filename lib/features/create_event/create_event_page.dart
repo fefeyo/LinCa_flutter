@@ -30,11 +30,13 @@ class CreateEventPage extends HookConsumerWidget
     required this.createEventType,
     this.isEditMode = false,
     this.unOfficialEvent,
+    this.participationInfo,
   });
 
   final CreateEventType createEventType;
   final bool isEditMode;
   final UnOfficialEvent? unOfficialEvent;
+  final ParticipationInfo? participationInfo;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -152,14 +154,16 @@ class CreateEventPage extends HookConsumerWidget
               final LincaEvent lincaEvent = LincaEvent(
                 event: registeredEvent,
               );
-              final ParticipationInfo participationInfo = ParticipationInfo(
-                eventId: eventId,
-                participationType: ParticipationType.onSite,
-              );
+              final ParticipationInfo createdParticipationInfo =
+                  participationInfo?.copyWith() ??
+                      ParticipationInfo(
+                        eventId: eventId,
+                        participationType: ParticipationType.onSite,
+                      );
               if (!isEditMode) {
                 await participationController.createParticipation(
                   lincaEvent: lincaEvent,
-                  participation: participationInfo,
+                  participation: createdParticipationInfo,
                 );
               }
 
@@ -174,7 +178,7 @@ class CreateEventPage extends HookConsumerWidget
                   context.router.push(
                     EventDetailRoute(
                       lincaEvent: lincaEvent,
-                      participationInfo: participationInfo,
+                      participationInfo: createdParticipationInfo,
                     ),
                   );
                 },
