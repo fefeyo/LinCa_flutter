@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/models/linca_event.dart';
 import 'package:linca_otaku_support/core/network/model/participation_info.dart';
 import 'package:linca_otaku_support/core/network/providers.dart';
+import 'package:linca_otaku_support/core/utils/context_extension.dart';
 import 'package:linca_otaku_support/core/utils/notification/linca_notification_controller.dart';
 import 'package:linca_otaku_support/core/utils/notification/providers.dart';
 import 'package:linca_otaku_support/core/utils/participation_extension.dart';
@@ -49,7 +50,10 @@ class AppSettingsPage extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('設定'),
+        title: Text(
+          '設定',
+          style: context.textTheme.titleMedium,
+        ),
       ),
       body: Column(
         children: <Widget>[
