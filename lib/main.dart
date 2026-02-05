@@ -28,7 +28,6 @@ void main() async {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
-    await _initTimeZone();
     GoogleSignIn.instance.initialize(
         serverClientId:
             // ignore: lines_longer_than_80_chars
@@ -48,13 +47,11 @@ void main() async {
       container.read(eventControllerProvider.future),
       container.read(userEventControllerProvider.future),
     ]);
-    await container.read(participationControllerProvider.future);
     await container.read(calendarEventsProvider.future);
 
+    await _initTimeZone();
     await _initLocalNotifications(
         container.read(localNotificationsPluginProvider));
-
-    await requestNotificationPermission();
 
     runApp(
       UncontrolledProviderScope(
@@ -85,14 +82,6 @@ Future<void> _initLocalNotifications(
   );
 
   await plugin.initialize(settings);
-}
-
-Future<void> requestNotificationPermission() async {
-  final PermissionStatus status = await Permission.notification.request();
-
-  if (!status.isGranted) {
-    debugPrint('通知権限が拒否されています');
-  }
 }
 
 class MyApp extends StatelessWidget {

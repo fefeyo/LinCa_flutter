@@ -45,14 +45,14 @@ class LincaNotificationController {
     if (!await notificationsEnabled) return;
 
     final DateTime notifyAt =
-        DateTime.now().add(const Duration(milliseconds: 5000));
+        DateTime.now().add(const Duration(milliseconds: 1000));
 
     if (notifyAt.isBefore(DateTime.now())) return;
 
     _notificationService.schedule(
       id: 100000,
-      title: '通知のテストです',
-      body: 'ちゃーーーーーーーーーーーーーーーーー',
+      title: 'イベント当日です',
+      body: '会場付近でチェックインを忘れずに！',
       scheduledAt: notifyAt,
     );
   }

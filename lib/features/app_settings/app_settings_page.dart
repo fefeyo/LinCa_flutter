@@ -10,6 +10,7 @@ import 'package:linca_otaku_support/core/utils/notification/linca_notification_c
 import 'package:linca_otaku_support/core/utils/notification/providers.dart';
 import 'package:linca_otaku_support/core/utils/participation_extension.dart';
 import 'package:linca_otaku_support/core/utils/preferences_service.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../core/utils/providers.dart';
 import '../my_page/view/my_page_item.dart';
@@ -24,7 +25,7 @@ class AppSettingsPage extends HookConsumerWidget {
         ref.read(preferencesServiceProvider);
     final ValueNotifier<bool> isNotificationEnabled = useState(false);
     final LincaNotificationController notificationController =
-        ref.refresh(eventNotificationControllerProvider);
+        ref.watch(eventNotificationControllerProvider);
     final List<ParticipationInfo> participations =
         ref.watch(participationControllerProvider).value ??
             <ParticipationInfo>[];
@@ -86,12 +87,20 @@ class AppSettingsPage extends HookConsumerWidget {
           ),
           MyPageItem(
             title: '通知テスト',
-            onClickItem: () {
+            onClickItem: () async {
+              await requestNotificationPermission();
               notificationController.scheduleDummy();
             },
           ),
         ],
       ),
     );
+  }
+
+  Future<void> requestNotificationPermission() async {
+    final PermissionStatus status = await Permission.notification.request();
+    if (!status.isGranted) {
+      debugPrint('通知権限が拒否されています');
+    }
   }
 }
