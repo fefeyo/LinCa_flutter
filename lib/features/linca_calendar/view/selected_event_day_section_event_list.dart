@@ -27,7 +27,10 @@ class SelectedEventDaySectionEventList extends StatelessWidget {
           lincaEvent: event,
           participationInfo: participationInfo,
           onClick: () => context.router.push(
-            EventDetailRoute(lincaEvent: event),
+            EventDetailRoute(
+              lincaEvent: event,
+              participationInfo: participationInfo,
+            ),
           ),
         );
       },
