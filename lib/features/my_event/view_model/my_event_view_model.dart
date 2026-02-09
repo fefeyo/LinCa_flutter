@@ -22,14 +22,8 @@ final StateNotifierProvider<MyEventViewModel, MyEventState>
     participations,
   );
 
-  ref.listen(userEventControllerProvider,
-      (_, AsyncValue<List<LincaEvent>> next) {
-    final List<LincaEvent> newOriginalEvents = next.value ?? <LincaEvent>[];
-    final List<LincaEvent> allEvents = <LincaEvent>[
-      ...officialEvents,
-      ...newOriginalEvents
-    ];
-    viewModel.updateAllEvents(allEvents);
+  ref.listen(combinedEventProvider, (_, List<LincaEvent> next) {
+    viewModel.updateAllEvents(next);
   });
 
   ref.listen(participationControllerProvider,

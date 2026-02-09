@@ -41,9 +41,10 @@ void main() async {
       container.read(venueControllerProvider.future),
     ]);
     await container.read(userControllerProvider.future);
-    await Future.wait(<Future<List<LincaEvent>>>[
+    await Future.wait(<Future<List<Object>>>[
       container.read(eventControllerProvider.future),
       container.read(userEventControllerProvider.future),
+      container.read(participationControllerProvider.future),
     ]);
     await container.read(calendarEventsProvider.future);
 

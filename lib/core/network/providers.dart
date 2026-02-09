@@ -148,3 +148,12 @@ final AsyncNotifierProvider<UserEventController, List<LincaEvent>>
     userEventControllerProvider =
     AsyncNotifierProvider<UserEventController, List<LincaEvent>>(
         UserEventController.new);
+
+final Provider<List<LincaEvent>> combinedEventProvider =
+    Provider<List<LincaEvent>>((Ref ref) {
+  final List<LincaEvent> official =
+      ref.watch(eventControllerProvider).value ?? <LincaEvent>[];
+  final List<LincaEvent> original =
+      ref.watch(userEventControllerProvider).value ?? <LincaEvent>[];
+  return <LincaEvent>[...official, ...original];
+});

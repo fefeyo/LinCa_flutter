@@ -92,6 +92,12 @@ class AppSettingsPage extends HookConsumerWidget {
               notificationController.scheduleDummy();
             },
           ),
+          MyPageItem(
+            title: '端末設定',
+            onClickItem: () {
+              openAppSettings();
+            },
+          ),
         ],
       ),
     );

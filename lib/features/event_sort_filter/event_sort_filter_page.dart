@@ -246,11 +246,12 @@ class EventSortFilterPage extends HookConsumerWidget
                               event: AnalyticsEvent.filterConfirmClick,
                               params: <String, Object>{
                                 'keyword': keywordController.text,
-                                'displayOrder': currentDisplayOrder.value,
+                                'displayOrder': currentDisplayOrder.value.name,
                                 'participationFilters':
-                                    currentParticipationTypes.value,
-                                'seriesTags': currentSeriesTags.value,
-                                'typeTags': currentTypeTags.value,
+                                    currentParticipationTypes.value.toString(),
+                                'seriesTags':
+                                    currentSeriesTags.value.toString(),
+                                'typeTags': currentTypeTags.value.toString(),
                                 'isHiddenParticipationEvent':
                                     isHiddenParticipationEvent.value ? 1 : 0,
                                 'isHiddenOriginalEvent':
@@ -259,8 +260,8 @@ class EventSortFilterPage extends HookConsumerWidget
                                     isShowOfficialEvent.value ? 1 : 0,
                                 'isShowOriginalEvent':
                                     isShowOriginalEvent.value ? 1 : 0,
-                                'startDate': startDate,
-                                'endDate': endDate,
+                                'startDate': startDate.toString(),
+                                'endDate': endDate.toString(),
                               },
                             );
 
