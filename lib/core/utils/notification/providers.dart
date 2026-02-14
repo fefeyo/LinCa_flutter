@@ -11,13 +11,12 @@ final Provider<FlutterLocalNotificationsPlugin>
 });
 
 final Provider<LincaNotificationService> localNotificationServiceProvider =
-    Provider<LincaNotificationService>(
-        (Ref ref) {
+    Provider<LincaNotificationService>((Ref ref) {
   return LincaNotificationService(ref.read(localNotificationsPluginProvider));
 });
 
 final Provider<LincaNotificationController>
-eventNotificationControllerProvider = Provider<LincaNotificationController>(
-        (Ref ref) {
-      return LincaNotificationController(ref);
-    });
+    eventNotificationControllerProvider =
+    Provider<LincaNotificationController>((Ref ref) {
+  return LincaNotificationController(ref);
+});

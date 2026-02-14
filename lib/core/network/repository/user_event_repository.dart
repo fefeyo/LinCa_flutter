@@ -69,17 +69,15 @@ class UserEventRepository extends FirestoreRepository<UnOfficialEvent> {
       int serverReadCount = 0;
 
       cacheReadCount =
-          publicCacheSnapshot.docs.length +
-              privateCacheSnapshot.docs.length;
+          publicCacheSnapshot.docs.length + privateCacheSnapshot.docs.length;
 
       serverReadCount =
-          publicServerSnapshot.docs.length +
-              privateServerSnapshot.docs.length;
+          publicServerSnapshot.docs.length + privateServerSnapshot.docs.length;
 
       debugPrint(
         '[Firestore READ][user_events] '
-            'cache=$cacheReadCount '
-            'server=$serverReadCount',
+        'cache=$cacheReadCount '
+        'server=$serverReadCount',
       );
 
       // 最後に同期時間を更新
@@ -155,7 +153,7 @@ class UserEventRepository extends FirestoreRepository<UnOfficialEvent> {
     if (userId == null) return;
 
     final CollectionReference<Map<String, dynamic>> col =
-    fireStore.collection(AppConstants.userEventPath);
+        fireStore.collection(AppConstants.userEventPath);
 
     final QuerySnapshot<Map<String, dynamic>> privateSnapshot = await col
         .where('visibility', isEqualTo: false)
@@ -165,7 +163,7 @@ class UserEventRepository extends FirestoreRepository<UnOfficialEvent> {
     final WriteBatch batch = fireStore.batch();
 
     for (final QueryDocumentSnapshot<Map<String, dynamic>> doc
-    in privateSnapshot.docs) {
+        in privateSnapshot.docs) {
       batch.delete(doc.reference);
     }
 

@@ -7,5 +7,4 @@ abstract class HomeState with _$HomeState {
   const factory HomeState({
     @Default('HomePage') String pageTitle,
   }) = _HomeState;
-
 }

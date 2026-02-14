@@ -51,6 +51,7 @@ enum AnalyticsEvent {
   twitterAccountUnLinkClick,
   signOutClick,
   deleteMyAccountClick,
+
   /// HomeDrawer
   openPrivacyPolicyClick,
   coachNextClick,

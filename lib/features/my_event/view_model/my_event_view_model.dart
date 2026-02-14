@@ -92,7 +92,8 @@ class MyEventViewModel extends StateNotifier<MyEventState> {
 
     if (!filterSettings.isShowOfficialEvent &&
         !filterSettings.isShowOriginalEvent) {
-      events = List<LincaEvent>.of(baseEvents);    }
+      events = List<LincaEvent>.of(baseEvents);
+    }
 
     events = events
         .filterWithPeriod(

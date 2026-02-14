@@ -29,18 +29,16 @@ class CustomParticipationButton extends StatelessWidget {
       duration: const Duration(milliseconds: 200),
       margin: EdgeInsets.zero, // ← 親に任せる
       decoration: BoxDecoration(
-        color: isSelected
-            ? primary
-            : Colors.transparent,
+        color: isSelected ? primary : Colors.transparent,
         borderRadius: BorderRadius.circular(22),
         boxShadow: isSelected
             ? <BoxShadow>[
-          BoxShadow(
-            color: primary.withValues(alpha: 0.35),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ]
+                BoxShadow(
+                  color: primary.withValues(alpha: 0.35),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ]
             : null,
       ),
       child: InkWell(
@@ -73,4 +71,3 @@ class CustomParticipationButton extends StatelessWidget {
     );
   }
 }
-

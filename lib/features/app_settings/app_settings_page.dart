@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_local_notifications/src/flutter_local_notifications_plugin.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/constants/app_constants.dart';
 import 'package:linca_otaku_support/core/constants/participation_type.dart';
@@ -146,9 +145,6 @@ class AppSettingsPage extends HookConsumerWidget {
         }
       }
 
-      print(
-          'Target events for notifications: ${targetEvents.map((e) => e.event.title).toList()}');
-
       preferencesService.updateAppSettings(mutableAppSettings);
 
       return null;
@@ -290,14 +286,14 @@ class AppSettingsPage extends HookConsumerWidget {
                     color: context.colorScheme.surfaceContainerHighest,
                     child: Opacity(
                       opacity:
-                      appSettings.value?.isMyEventNotificationEnabled ??
-                          false
-                          ? 1.0
-                          : 0.4,
+                          appSettings.value?.isMyEventNotificationEnabled ??
+                                  false
+                              ? 1.0
+                              : 0.4,
                       child: IgnorePointer(
                         ignoring:
-                        appSettings.value?.isMyEventNotificationEnabled ==
-                            false,
+                            appSettings.value?.isMyEventNotificationEnabled ==
+                                false,
                         child: RadioGroup<EventNotificationType?>(
                           onChanged: (EventNotificationType? value) {
                             if (value == null) return;
@@ -307,19 +303,19 @@ class AppSettingsPage extends HookConsumerWidget {
                           },
                           groupValue: appSettings.value?.eventNotificationType,
                           child: const Column(
-                            children: [
+                            children: <Widget>[
                               RadioListTile<EventNotificationType?>(
                                 title: Text('登録済みの全てのイベント'),
                                 value: EventNotificationType.allParticipation,
                                 controlAffinity:
-                                ListTileControlAffinity.trailing,
+                                    ListTileControlAffinity.trailing,
                               ),
                               Divider(),
                               RadioListTile<EventNotificationType?>(
                                 title: Text('現地チェックインができるイベントのみ'),
                                 value: EventNotificationType.onlyHasCheckedIn,
                                 controlAffinity:
-                                ListTileControlAffinity.trailing,
+                                    ListTileControlAffinity.trailing,
                               ),
                             ],
                           ),
@@ -353,28 +349,28 @@ class AppSettingsPage extends HookConsumerWidget {
                         ? 1.0
                         : 0.4,
                     child: IgnorePointer(
-                      ignoring:
-                          appSettings.value?.isAllEventNotificationEnabled ==
-                              false,
-                      child: Card(
-                        color: context.colorScheme.surfaceContainerHighest,
-                        child: Column(
-                          children: generateGroupNotificationTiles(),
-                        ),
-                      )
-                    ),
+                        ignoring:
+                            appSettings.value?.isAllEventNotificationEnabled ==
+                                false,
+                        child: Card(
+                          color: context.colorScheme.surfaceContainerHighest,
+                          child: Column(
+                            children: generateGroupNotificationTiles(),
+                          ),
+                        )),
                   ),
                   for (final PendingNotificationRequest request
                       in notificationEvents.value)
                     ListTile(
                       title: Text('通知ID: ${request.id}'),
-                      subtitle: Text(
-                          'タイトル: ${request.title}\n本文: ${request.body}\nペイロード: ${request.payload}'),
+                      subtitle:
+                          Text('タイトル: ${request.title}\n本文: ${request.body}'),
                     ),
                   MyPageItem(
                     title: '通知予定一覧',
                     onClickItem: () async {
-                      final result = await currentNotifications;
+                      final List<PendingNotificationRequest> result =
+                          await currentNotifications;
                       notificationEvents.value = result;
                       // openAppSettings();
                     },

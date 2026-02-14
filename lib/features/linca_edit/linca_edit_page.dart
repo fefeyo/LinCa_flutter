@@ -467,15 +467,15 @@ class LincaEditPage extends HookConsumerWidget
                         color: Colors.grey,
                       ),
               ),
-              const SizedBox(height: 4,),
+              const SizedBox(
+                height: 4,
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: Text(
                   lincaBadge?.name ??
                       context.l10n.acquired_badges_list_unselect,
-                  style: context.textTheme.labelSmall?.copyWith(
-                    fontSize: 10
-                  ),
+                  style: context.textTheme.labelSmall?.copyWith(fontSize: 10),
                 ),
               ),
               const SizedBox(height: 8),

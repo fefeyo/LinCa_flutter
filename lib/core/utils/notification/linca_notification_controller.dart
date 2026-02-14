@@ -1,7 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/utils/notification/linca_notification_service.dart';
 import 'package:linca_otaku_support/core/utils/notification/providers.dart';
-import 'package:linca_otaku_support/core/utils/providers.dart';
 
 class LincaNotificationController {
   LincaNotificationController(this.ref);
@@ -17,7 +16,6 @@ class LincaNotificationController {
     required String body,
     required DateTime eventDate,
   }) async {
-
     final DateTime notifyAt = DateTime(
       eventDate.year,
       eventDate.month,

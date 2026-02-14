@@ -30,7 +30,7 @@ class EventCountPage extends HookConsumerWidget
     final List<LincaEvent> participatedEvents = state.filteredMyEvents
         .where(
           (LincaEvent event) => state.participations.hasEventId(event.event.id),
-    )
+        )
         .toList();
 
     return Stack(
