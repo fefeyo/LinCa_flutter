@@ -62,7 +62,7 @@ class AcquiredBadgePage extends HookConsumerWidget with ScreenAnalyticsManager {
               child: GridView.builder(
                 itemCount: acquiredBadges.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
+                  crossAxisCount: 3,
                   mainAxisSpacing: 16,
                   crossAxisSpacing: 8,
                   childAspectRatio: 1,
@@ -103,8 +103,8 @@ class AcquiredBadgePage extends HookConsumerWidget with ScreenAnalyticsManager {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
                                     SizedBox(
-                                      width: 120,
-                                      height: 120,
+                                      width: 60,
+                                      height: 60,
                                       child: item.iconUrl.isNotEmpty
                                           ? CachedNetworkImage(
                                               imageUrl: item.iconUrl)
@@ -113,7 +113,7 @@ class AcquiredBadgePage extends HookConsumerWidget with ScreenAnalyticsManager {
                                               size: 40,
                                             ),
                                     ),
-                                    const SizedBox(height: 8),
+                                    const SizedBox(height: 4),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 8),

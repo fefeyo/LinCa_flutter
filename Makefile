@@ -31,6 +31,9 @@ create_feature:
 generate_dev_apk:
 	flutter build apk --debug --flavor dev -t lib/main_dev.dart
 
+generate_prod_appbundle:
+	flutter build appbundle --release --flavor prod -t lib/main.dart
+
 generate_launcher_icon:
 	flutter pub run flutter_launcher_icons
 

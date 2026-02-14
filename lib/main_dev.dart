@@ -7,6 +7,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/models/linca_event.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'core/local/controller/calendar_event_controller.dart';
 import 'core/network/providers.dart';
 import 'core/theme/app_schemes.dart';
 import 'core/theme/app_theme.dart';
@@ -40,9 +41,7 @@ void main() async {
       container.read(eventControllerProvider.future),
       container.read(userEventControllerProvider.future),
     ]);
-    await Future.wait(<Future<Object>>[
-      container.read(participationControllerProvider.future),
-    ]);
+    await container.read(calendarEventsProvider.future);
     runApp(
       UncontrolledProviderScope(
         container: container,

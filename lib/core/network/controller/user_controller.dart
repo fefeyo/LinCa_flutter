@@ -38,9 +38,9 @@ class UserController extends LincaController<LincaUser> {
 
     final User user = await userRepository.fetchUserData(uid!);
     final List<Group> groups =
-        ref.watch(groupControllerProvider).value ?? <Group>[];
+        ref.read(groupControllerProvider).value ?? <Group>[];
     final List<LincaBadge> badges =
-        ref.watch(badgeControllerProvider).value ?? <LincaBadge>[];
+        ref.read(badgeControllerProvider).value ?? <LincaBadge>[];
     final List<String> acquiredBadgeIds =
         await badgeRepository.acuqiredBadgeIds();
     final List<User> friends = await friendRepository.fetch();
