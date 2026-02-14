@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 
-/// ブランドの基準色（LinCaのポップ感：シアン→ピンク系）
-const Color kSeed = Color(0xFF4CC3FF); // 例：シアン
-const Color kSecondarySeed = Color(0xFFFF5BA1); // 例：ピンク
+/// ブランドの基準色（ネオン感のあるサイバー×ポップ）
+const Color kSeed = Color(0xFF5B6CFF);
+const Color kSecondarySeed = Color(0xFFFF4DA6);
+const Color kTertiarySeed = Color(0xFF00D1FF);
 
 /// ライト/ダークの ColorScheme を fromSeed で生成。
 final ColorScheme lightScheme = ColorScheme.fromSeed(
   seedColor: kSeed,
+  secondary: kSecondarySeed,
+  tertiary: kTertiarySeed,
   brightness: Brightness.light,
 );
 
 final ColorScheme darkScheme = ColorScheme.fromSeed(
   seedColor: kSeed,
+  secondary: kSecondarySeed,
+  tertiary: kTertiarySeed,
   brightness: Brightness.dark,
 );
 
