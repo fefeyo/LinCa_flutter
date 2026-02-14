@@ -44,9 +44,9 @@ class HomePage extends HookConsumerWidget
     final ValueNotifier<bool> isSearching = useState(false);
     final TextEditingController searchController = useTextEditingController();
     final List<LincaEvent> events =
-        ref.watch(eventControllerProvider).value ?? <LincaEvent>[];
+        ref.read(eventControllerProvider).value ?? <LincaEvent>[];
     final List<ParticipationInfo> participations =
-        ref.watch(participationControllerProvider).value ??
+        ref.read(participationControllerProvider).value ??
             <ParticipationInfo>[];
     final LincaCalendarViewModel lincaCalendarViewModel =
         ref.read(lincaCalendarViewModelProvider.notifier);

@@ -67,12 +67,10 @@ class MyEventViewModel extends StateNotifier<MyEventState> {
     required FilterSettings filterSettings,
     List<LincaEvent> targetList = const <LincaEvent>[],
   }) {
-    List<LincaEvent> events;
-    if (targetList.isNotEmpty) {
-      events = List<LincaEvent>.of(targetList);
-    } else {
-      events = List<LincaEvent>.of(state.allEvents);
-    }
+    final List<LincaEvent> baseEvents = targetList.isNotEmpty
+        ? List<LincaEvent>.of(targetList)
+        : List<LincaEvent>.of(state.allEvents);
+    List<LincaEvent> events = List<LincaEvent>.of(baseEvents);
 
     if (filterSettings.isHiddenOriginalEvent) {
       events = events
@@ -94,8 +92,7 @@ class MyEventViewModel extends StateNotifier<MyEventState> {
 
     if (!filterSettings.isShowOfficialEvent &&
         !filterSettings.isShowOriginalEvent) {
-      events = state.allEvents;
-    }
+      events = List<LincaEvent>.of(baseEvents);    }
 
     events = events
         .filterWithPeriod(

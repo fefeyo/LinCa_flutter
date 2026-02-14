@@ -25,6 +25,11 @@ final StateNotifierProvider<LincaCalendarViewModel, LincaCalendarState>
       participations: participations,
     );
 
+    ref.listen(eventControllerProvider, (_, AsyncValue<List<LincaEvent>> next) {
+      final List<LincaEvent> events = next.value ?? <LincaEvent>[];
+      viewModel.updateEvents(events);
+    });
+
     ref.listen(
       participationControllerProvider,
       (_, AsyncValue<List<ParticipationInfo>> next) {
@@ -118,6 +123,10 @@ class LincaCalendarViewModel extends StateNotifier<LincaCalendarState> {
 
   void updateCalendarEvents(List<CalendarEvent> calendarEvents) {
     state = state.copyWith(calendarEvents: calendarEvents);
+  }
+
+  void updateEvents(List<LincaEvent> events) {
+    state = state.copyWith(events: events);
   }
 
   void resetCalendar() {

@@ -263,8 +263,7 @@ class HomeDrawer extends HookConsumerWidget
               onTap: () {
                 logEvent(event: AnalyticsEvent.openAppSettingsClick);
 
-                openAppSettings();
-                // transitPage(const AppSettingsRoute());
+                transitPage(const AppSettingsRoute());
               },
             ),
             const Divider(),

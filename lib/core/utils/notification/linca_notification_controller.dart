@@ -8,9 +8,6 @@ class LincaNotificationController {
 
   final Ref ref;
 
-  Future<bool> get notificationsEnabled async =>
-      await ref.watch(preferencesServiceProvider).isEventNotificationEnabled();
-
   LincaNotificationService get _notificationService =>
       ref.read(localNotificationServiceProvider);
 
@@ -20,14 +17,12 @@ class LincaNotificationController {
     required String body,
     required DateTime eventDate,
   }) async {
-    // アプリ設定チェック
-    if (!await notificationsEnabled) return;
 
     final DateTime notifyAt = DateTime(
       eventDate.year,
       eventDate.month,
       eventDate.day,
-      9,
+      10,
     );
 
     if (notifyAt.isBefore(DateTime.now())) return;
@@ -41,9 +36,6 @@ class LincaNotificationController {
   }
 
   Future<void> scheduleDummy() async {
-    // アプリ設定チェック
-    if (!await notificationsEnabled) return;
-
     final DateTime notifyAt =
         DateTime.now().add(const Duration(milliseconds: 1000));
 

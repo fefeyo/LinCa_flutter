@@ -140,8 +140,7 @@ class MyPage extends HookConsumerWidget
                 onClickItem: () {
                   logEvent(event: AnalyticsEvent.openAppSettingsClick);
 
-                  openAppSettings();
-                  // context.router.push(const AppSettingsRoute());
+                  context.router.push(const AppSettingsRoute());
                 },
               ),
               MyPageItem(

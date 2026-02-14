@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:linca_otaku_support/core/constants/app_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../models/app_settings.dart';
 
 class PreferencesService {
   PreferencesService(this.sharedPreferences);
@@ -23,14 +27,19 @@ class PreferencesService {
     return sharedPreferences.getBool(AppConstants.hasSeenTutorial) ?? false;
   }
 
-  Future<void> switchEventNotificationEnabled(bool isEnabled) async {
-    await sharedPreferences.setBool(
-        AppConstants.eventNotificationEnabled, isEnabled);
+  Future<void> updateAppSettings(AppSettings appSettings) async {
+    final String json = jsonEncode(appSettings.toJson());
+    await sharedPreferences.setString(AppConstants.appSettings, json);
   }
 
-  Future<bool> isEventNotificationEnabled() async {
-    return sharedPreferences.getBool(AppConstants.eventNotificationEnabled) ??
-        true;
+  AppSettings getAppSettings() {
+    final String? jsonString =
+        sharedPreferences.getString(AppConstants.appSettings);
+    if (jsonString == null) return const AppSettings();
+    final Map<String, dynamic> json =
+        jsonDecode(jsonString) as Map<String, dynamic>;
+
+    return AppSettings.fromJson(json);
   }
 
   Future<void> clear() async {
