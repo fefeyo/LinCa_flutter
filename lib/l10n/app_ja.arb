@@ -1,32 +1,5 @@
 {
   "@@locale": "ja",
-  "events_count": "{count} events",
-  "@events_count": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "welcome_user": "Welcome {user}, you have {count}.",
-  "@welcome_user": {
-    "placeholders": {
-      "user": {
-        "type": "String"
-      },
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "last_login": "Last login: {date}",
-  "@last_login": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
   "common_year": "{year}年",
   "@common_year": {
     "placeholders": {
@@ -37,6 +10,14 @@
   },
   "common_count": "{count}回",
   "@common_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "common_event_count": "件数: {count}",
+  "@common_event_count": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -55,6 +36,8 @@
   "common_skip": "スキップ",
   "common_determination": "決定",
   "common_required": "※必須",
+  "common_no_selected": "未選択",
+  "common_today": "今日",
   "common_event": "イベント",
   "common_official_event": "公式イベント",
   "common_original_event": "オリジナルイベント",
@@ -63,8 +46,6 @@
   "common_save_suceeded": "保存に成功しました",
   "menu_title": "メニュー",
   "my_event_title": "マイイベント",
-  "recent_event_title": "直近のイベント",
-  "recent_event_appbar_title": "直近開催の公式イベント",
   "event_calendar_title": "カレンダー",
   "my_page_title": "マイページ",
   "traded_linca_list_title": "交換済みLinCaカード一覧",
@@ -310,17 +291,8 @@
   "created_event_delete_event_title": "このイベントを削除しますか？",
   "created_event_delete_event_description": "削除したイベントは復元できません。よろしいですか？",
   "created_event_delete_event_confirm": "削除する",
-  "common_event_count": "件数: {count}",
-  "@common_event_count": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "aqcuired_badge_title_select": "バッジ選択",
   "aqcuired_badge_title_list": "獲得済みバッジ一覧",
-  "common_no_selected": "未選択",
   "event_output_title": "イベント一覧出力",
   "check_in": "会場チェックイン",
   "event_sort_span_clear": "期間をクリア",
@@ -344,7 +316,6 @@
   "picture_save_permission_disabled": "画像の保存に必要な権限がありません\n端末のアプリ設定から写真へのアクセスを有効にしてください",
   "qr_hold_up_message": "QRコードを枠内にかざしてください",
   "event_sort_span_title": "期間",
-  "common_today": "今日",
   "event_sort_clear": "条件をクリア",
   "event_sort_selected": "選択中",
   "badge_list_empty_title": "獲得済みバッジがありません",
@@ -352,7 +323,25 @@
   "event_detail_memory_deleted": "画像を削除しました",
   "my_event_delete_dialog_title": "マイイベントから削除しますか？",
   "my_event_delete_dialog_description": "マイイベントから削除すると登録した画像やメモも削除されます。よろしいですか？",
-  "picture_save_dialog_title": "画像を保存しますか？",
-  "picture_save_dialog_description": "表示されているイベントの一覧を画像で保存します。よろしいですか？",
-  "event_detail_memory_saved": "画像を登録しました"
+  "event_detail_memory_saved": "画像を登録しました",
+  "notification_title": "通知設定",
+  "notification_description": "通知をオンにすると、イベント当日にプッシュ通知が届きます。",
+  "notification_my_event": "マイイベントに登録済みのイベント",
+  "notification_my_event_all": "すべてのイベント",
+  "notification_my_event_check_in_only": "会場チェックインに対応しているイベントのみ",
+  "notification_not_registered_event": "マイイベントに未登録のイベント",
+  "notification_series_filter": "次のシリーズタグを含むイベントを通知する",
+  "common_series_lovelive": "ラブライブ！",
+  "common_series_sunshine": "ラブライブ！サンシャイン!!",
+  "common_series_nijigasaki": "ラブライブ！虹ヶ咲学園スクールアイドル同好会",
+  "common_series_superstar": "ラブライブ！スーパースター!!",
+  "common_series_hasunosora": "ラブライブ！蓮ノ空女学院スクールアイドルクラブ",
+  "common_series_musical": "スクールアイドルミュージカル",
+  "common_series_yohane": "幻日のヨハネ -SUNSHINE in the MIRROR-",
+  "common_series_ikizulive": "イキヅライブ！ LOVELIVE! BLUEBIRD",
+  "common_series_collaborative": "シリーズ合同",
+  "inquiry_title": "お問い合わせ",
+  "inquiry_url": "https://forms.gle/YvR5x3EFxHFsWPhm7",
+  "push_notifications_title_check_in": "本日開催の公式イベントがあります！会場チェックインをしてバッジをゲットしましょう！",
+  "push_notifications_title_not_check_in": "本日開催の公式イベントがあります！"
 }

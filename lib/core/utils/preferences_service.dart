@@ -10,8 +10,8 @@ class PreferencesService {
 
   final SharedPreferences sharedPreferences;
 
-  Future<void> updateLastUpdatedAt(String key) async {
-    await sharedPreferences.setString(key, DateTime.now().toIso8601String());
+  Future<void> updateLastUpdatedAt(String key, DateTime lastUpdatedAt) async {
+    await sharedPreferences.setString(key, lastUpdatedAt.toIso8601String());
   }
 
   Future<DateTime?> getLastUpdatedAt(String key) async {

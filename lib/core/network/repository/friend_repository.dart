@@ -65,7 +65,8 @@ class FriendRepository extends FirestoreRepository<User> {
           .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) => doc.id)
           .toList();
       friendUids.addAll(serverUidResult);
-      preferences.updateLastUpdatedAt(AppConstants.friendLastFetchedAtKey);
+      preferences.updateLastUpdatedAt(
+          AppConstants.friendLastFetchedAtKey, DateTime.now());
     } catch (e) {
       return <User>[];
     }

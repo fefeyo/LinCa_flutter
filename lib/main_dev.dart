@@ -79,7 +79,7 @@ Future<void> _initLocalNotifications(
     iOS: ios,
   );
 
-  await plugin.initialize(settings);
+  await plugin.initialize(settings: settings);
 }
 
 class MyApp extends StatelessWidget {

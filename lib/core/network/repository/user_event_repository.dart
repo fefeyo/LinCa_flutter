@@ -81,7 +81,14 @@ class UserEventRepository extends FirestoreRepository<UnOfficialEvent> {
       );
 
       // 最後に同期時間を更新
-      preferences.updateLastUpdatedAt(AppConstants.userEventLastFetchedAtKey);
+      final DateTime latestUpdatedAt = serverResult
+          .where((UnOfficialEvent event) => event.updatedAt != null)
+          .map((UnOfficialEvent e) => e.updatedAt!)
+          .reduce(
+            (DateTime a, DateTime b) => a.isAfter(b) ? a : b,
+          );
+      preferences.updateLastUpdatedAt(
+          AppConstants.userEventLastFetchedAtKey, latestUpdatedAt);
     } catch (e) {
       return <UnOfficialEvent>[];
     }

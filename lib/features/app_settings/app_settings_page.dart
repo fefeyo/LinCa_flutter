@@ -10,10 +10,12 @@ import 'package:linca_otaku_support/core/models/linca_event.dart';
 import 'package:linca_otaku_support/core/network/model/participation_info.dart';
 import 'package:linca_otaku_support/core/network/providers.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
+import 'package:linca_otaku_support/core/utils/event_base_extension.dart';
 import 'package:linca_otaku_support/core/utils/notification/linca_notification_controller.dart';
 import 'package:linca_otaku_support/core/utils/notification/providers.dart';
 import 'package:linca_otaku_support/core/utils/participation_extension.dart';
 import 'package:linca_otaku_support/core/utils/preferences_service.dart';
+import 'package:linca_otaku_support/l10n/app_localizations.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../core/network/model/event_base.dart';
@@ -51,6 +53,7 @@ class AppSettingsPage extends HookConsumerWidget {
     // 今日以降の現地参加予定のイベント
     final List<LincaEvent> onSiteAndHasCheckInParticipateEvents =
         upcomingEvents.where((LincaEvent event) {
+      if (event.event.isCanceled) return false;
       final ParticipationInfo? participation =
           participations.getByEventId(event.event.id);
       final OfficialEvent officialEvent = event.event as OfficialEvent;
@@ -60,6 +63,7 @@ class AppSettingsPage extends HookConsumerWidget {
     // 今日以降の参加予定のイベント
     final List<LincaEvent> participateEvents =
         upcomingEvents.where((LincaEvent event) {
+      if (event.event.isCanceled) return false;
       final ParticipationInfo? participation =
           participations.getByEventId(event.event.id);
       return participations.hasEventId(event.event.id) &&
@@ -67,12 +71,15 @@ class AppSettingsPage extends HookConsumerWidget {
     }).toList();
     // 今日以降の参加予定じゃないイベント
     final List<LincaEvent> notParticipateEvents = upcomingEvents
-        .where((LincaEvent event) => !participations.hasEventId(event.event.id))
+        .where((LincaEvent event) =>
+            !participations.hasEventId(event.event.id) &&
+            !event.event.isCanceled)
         .toList();
     final Future<List<PendingNotificationRequest>> currentNotifications =
         notificationPlugin.pendingNotificationRequests();
     final ValueNotifier<List<PendingNotificationRequest>> notificationEvents =
         useState(<PendingNotificationRequest>[]);
+    final AppLocalizations l10n = context.l10n;
 
     useEffect(() {
       final AppSettings? mutableAppSettings = appSettings.value;
@@ -125,21 +132,26 @@ class AppSettingsPage extends HookConsumerWidget {
           targetEvents.addAll(notParticipateEvents.where((LincaEvent event) =>
               event.event.tagIds.contains(AppConstants.seriesTagYohane)));
         }
+        if (mutableAppSettings.isCollaborativeNotificationEnabled) {
+          targetEvents.addAll(notParticipateEvents.where((LincaEvent event) =>
+              event.event.tagIds
+                  .contains(AppConstants.seriesTagCollaborative)));
+        }
       }
       targetEvents = targetEvents.toSet().toList();
       for (final LincaEvent event in targetEvents) {
         if (onSiteAndHasCheckInParticipateEvents.contains(event)) {
           notificationController.scheduleEventDayNotification(
             eventId: event.event.id,
-            title: 'イベント当日です',
-            body: '${event.event.title}のイベント当日です。会場付近でのチェックインを忘れずに！',
+            title: l10n.push_notifications_title_check_in,
+            body: event.event.title,
             eventDate: event.event.date!,
           );
         } else {
           notificationController.scheduleEventDayNotification(
             eventId: event.event.id,
-            title: 'イベント当日です',
-            body: '${event.event.title}のイベント当日です。会場付近でのチェックインを忘れずに！',
+            title: l10n.push_notifications_title_check_in,
+            body: event.event.title,
             eventDate: event.event.date!,
           );
         }
@@ -153,7 +165,7 @@ class AppSettingsPage extends HookConsumerWidget {
     List<Widget> generateGroupNotificationTiles() {
       return <Widget>[
         CheckboxListTile.adaptive(
-          title: const Text('ラブライブ！'),
+          title: Text(context.l10n.common_series_lovelive),
           value: appSettings.value?.isLoveLiveNotificationEnabled ?? false,
           onChanged: (bool? value) {
             appSettings.value = appSettings.value?.copyWith(
@@ -163,7 +175,7 @@ class AppSettingsPage extends HookConsumerWidget {
         ),
         const Divider(),
         CheckboxListTile.adaptive(
-          title: const Text('ラブライブ！サンシャイン!!'),
+          title: Text(context.l10n.common_series_sunshine),
           value: appSettings.value?.isSunshineNotificationEnabled ?? false,
           onChanged: (bool? value) {
             appSettings.value = appSettings.value?.copyWith(
@@ -173,7 +185,7 @@ class AppSettingsPage extends HookConsumerWidget {
         ),
         const Divider(),
         CheckboxListTile.adaptive(
-          title: const Text('ラブライブ！虹ヶ咲学園スクールアイドル同好会'),
+          title: Text(context.l10n.common_series_nijigasaki),
           value: appSettings.value?.isNijigasakiNotificationEnabled ?? false,
           onChanged: (bool? value) {
             appSettings.value = appSettings.value?.copyWith(
@@ -183,7 +195,7 @@ class AppSettingsPage extends HookConsumerWidget {
         ),
         const Divider(),
         CheckboxListTile.adaptive(
-          title: const Text('ラブライブ！スーパースター!!'),
+          title: Text(context.l10n.common_series_superstar),
           value: appSettings.value?.isSuperstarNotificationEnabled ?? false,
           onChanged: (bool? value) {
             appSettings.value = appSettings.value?.copyWith(
@@ -193,7 +205,7 @@ class AppSettingsPage extends HookConsumerWidget {
         ),
         const Divider(),
         CheckboxListTile.adaptive(
-          title: const Text('ラブライブ！蓮ノ空女学院スクールアイドルクラブ'),
+          title: Text(context.l10n.common_series_hasunosora),
           value: appSettings.value?.isHasunosoraNotificationEnabled ?? false,
           onChanged: (bool? value) {
             appSettings.value = appSettings.value?.copyWith(
@@ -203,7 +215,7 @@ class AppSettingsPage extends HookConsumerWidget {
         ),
         const Divider(),
         CheckboxListTile.adaptive(
-          title: const Text('イキヅライブ！LOVELIVE!BLUEBIRD'),
+          title: Text(context.l10n.common_series_ikizulive),
           value: appSettings.value?.isIkizuliveNotificationEnabled ?? false,
           onChanged: (bool? value) {
             appSettings.value = appSettings.value?.copyWith(
@@ -213,7 +225,7 @@ class AppSettingsPage extends HookConsumerWidget {
         ),
         const Divider(),
         CheckboxListTile.adaptive(
-          title: const Text('スクールアイドルミュージカル'),
+          title: Text(context.l10n.common_series_musical),
           value: appSettings.value?.isMusicalNotificationEnabled ?? false,
           onChanged: (bool? value) {
             appSettings.value = appSettings.value?.copyWith(
@@ -223,11 +235,21 @@ class AppSettingsPage extends HookConsumerWidget {
         ),
         const Divider(),
         CheckboxListTile.adaptive(
-          title: const Text('幻日のヨハネ'),
+          title: Text(context.l10n.common_series_yohane),
           value: appSettings.value?.isYohaneNotificationEnabled ?? false,
           onChanged: (bool? value) {
             appSettings.value = appSettings.value?.copyWith(
               isYohaneNotificationEnabled: value ?? false,
+            );
+          },
+        ),
+        const Divider(),
+        CheckboxListTile.adaptive(
+          title: Text(context.l10n.common_series_collaborative),
+          value: appSettings.value?.isCollaborativeNotificationEnabled ?? false,
+          onChanged: (bool? value) {
+            appSettings.value = appSettings.value?.copyWith(
+              isCollaborativeNotificationEnabled: value ?? false,
             );
           },
         ),
@@ -237,7 +259,7 @@ class AppSettingsPage extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '設定',
+          context.l10n.notification_title,
           style: context.textTheme.titleMedium,
         ),
         actions: <Widget>[
@@ -271,8 +293,16 @@ class AppSettingsPage extends HookConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  Center(
+                    child: Text(
+                      context.l10n.notification_description,
+                      style: context.textTheme.titleMedium,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  const Divider(),
                   SwitchListTile(
-                    title: const Text('マイイベントに登録済みのイベントを通知する'),
+                    title: Text(context.l10n.notification_my_event),
                     value: appSettings.value?.isMyEventNotificationEnabled ??
                         false,
                     onChanged: (bool value) {
@@ -302,17 +332,19 @@ class AppSettingsPage extends HookConsumerWidget {
                             );
                           },
                           groupValue: appSettings.value?.eventNotificationType,
-                          child: const Column(
+                          child: Column(
                             children: <Widget>[
                               RadioListTile<EventNotificationType?>(
-                                title: Text('登録済みの全てのイベント'),
+                                title: Text(
+                                    context.l10n.notification_my_event_all),
                                 value: EventNotificationType.allParticipation,
                                 controlAffinity:
                                     ListTileControlAffinity.trailing,
                               ),
-                              Divider(),
+                              const Divider(),
                               RadioListTile<EventNotificationType?>(
-                                title: Text('現地チェックインができるイベントのみ'),
+                                title: Text(context
+                                    .l10n.notification_my_event_check_in_only),
                                 value: EventNotificationType.onlyHasCheckedIn,
                                 controlAffinity:
                                     ListTileControlAffinity.trailing,
@@ -327,7 +359,7 @@ class AppSettingsPage extends HookConsumerWidget {
                   const Divider(),
                   const SizedBox(height: 8),
                   SwitchListTile(
-                    title: const Text('マイイベントに未登録のイベントを通知する'),
+                    title: Text(context.l10n.notification_not_registered_event),
                     value: appSettings.value?.isAllEventNotificationEnabled ??
                         false,
                     onChanged: (bool value) {
@@ -338,7 +370,7 @@ class AppSettingsPage extends HookConsumerWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '対象シリーズを選択',
+                    context.l10n.notification_series_filter,
                     style: context.textTheme.titleMedium,
                     textAlign: TextAlign.left,
                   ),
@@ -349,32 +381,34 @@ class AppSettingsPage extends HookConsumerWidget {
                         ? 1.0
                         : 0.4,
                     child: IgnorePointer(
-                        ignoring:
-                            appSettings.value?.isAllEventNotificationEnabled ==
-                                false,
-                        child: Card(
-                          color: context.colorScheme.surfaceContainerHighest,
-                          child: Column(
-                            children: generateGroupNotificationTiles(),
-                          ),
-                        )),
-                  ),
-                  for (final PendingNotificationRequest request
-                      in notificationEvents.value)
-                    ListTile(
-                      title: Text('通知ID: ${request.id}'),
-                      subtitle:
-                          Text('タイトル: ${request.title}\n本文: ${request.body}'),
+                      ignoring:
+                          appSettings.value?.isAllEventNotificationEnabled ==
+                              false,
+                      child: Card(
+                        color: context.colorScheme.surfaceContainerHighest,
+                        child: Column(
+                          children: generateGroupNotificationTiles(),
+                        ),
+                      ),
                     ),
-                  MyPageItem(
-                    title: '通知予定一覧',
-                    onClickItem: () async {
-                      final List<PendingNotificationRequest> result =
-                          await currentNotifications;
-                      notificationEvents.value = result;
-                      // openAppSettings();
-                    },
                   ),
+                  // 通知の予定一覧表示（デバッグ用）
+                  // for (final PendingNotificationRequest request
+                  //     in notificationEvents.value)
+                  //   ListTile(
+                  //     title: Text('通知ID: ${request.id}'),
+                  //     subtitle:
+                  //         Text('タイトル: ${request.title}\n本文: ${request.body}'),
+                  //   ),
+                  // MyPageItem(
+                  //   title: '通知予定一覧',
+                  //   onClickItem: () async {
+                  //     final List<PendingNotificationRequest> result =
+                  //         await currentNotifications;
+                  //     notificationEvents.value = result;
+                  //   },
+                  // ),
+                  const SizedBox(height: 64),
                 ],
               ),
             ),

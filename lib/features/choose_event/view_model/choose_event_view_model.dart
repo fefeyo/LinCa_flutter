@@ -19,7 +19,7 @@ final AutoDisposeStateNotifierProvider<ChooseEventViewModel, ChooseEventState>
           .value
           ?.where((LincaEvent event) =>
               (event.event as UnOfficialEvent).visibility == true)
-          .toList() ??
+          .toList().sortWithDisplayOrder() ??
       <LincaEvent>[];
   final List<ParticipationInfo> participations =
       ref.read(participationControllerProvider).value ?? <ParticipationInfo>[];

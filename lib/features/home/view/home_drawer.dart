@@ -254,9 +254,9 @@ class HomeDrawer extends HookConsumerWidget
               ),
             ),
             ListTile(
-              leading: const Icon(Icons.settings),
+              leading: const Icon(Icons.notifications),
               title: Text(
-                context.l10n.app_settings_title,
+                context.l10n.notification_title,
                 style: context.textTheme.bodyMedium,
               ),
               onTap: () {
@@ -274,6 +274,21 @@ class HomeDrawer extends HookConsumerWidget
                   fontWeight: FontWeight.bold,
                 ),
               ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.question_answer),
+              title: Text(
+                context.l10n.inquiry_title,
+                style: context.textTheme.bodyMedium,
+              ),
+              onTap: () {
+                logEvent(event: AnalyticsEvent.openContactSupportClick);
+
+                launchUrl(
+                  Uri.parse(context.l10n.inquiry_url),
+                  mode: LaunchMode.externalApplication,
+                );
+              },
             ),
             ListTile(
               leading: const Icon(Icons.privacy_tip_outlined),

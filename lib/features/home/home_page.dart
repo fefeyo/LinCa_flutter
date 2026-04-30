@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/constants/analytics_event.dart';
 import 'package:linca_otaku_support/core/constants/app_constants.dart';
+import 'package:linca_otaku_support/core/constants/participation_type.dart';
 import 'package:linca_otaku_support/core/models/filter_settings.dart';
 import 'package:linca_otaku_support/core/models/linca_event.dart';
 import 'package:linca_otaku_support/core/models/linca_user.dart';
@@ -72,7 +73,11 @@ class HomePage extends HookConsumerWidget
             OnTheDayEventDialog.show(
               context: context,
               events: todayEvents,
-              participations: participations,
+              participations: participations
+                  .where((ParticipationInfo participation) =>
+                      participation.participationType !=
+                      ParticipationType.absent)
+                  .toList(),
             );
           });
         }

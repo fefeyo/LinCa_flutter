@@ -135,7 +135,7 @@ class MyPage extends HookConsumerWidget
               ),
               const SizedBox(height: 16),
               MyPageItem(
-                title: context.l10n.app_settings_title,
+                title: context.l10n.notification_title,
                 onClickItem: () {
                   logEvent(event: AnalyticsEvent.openAppSettingsClick);
 

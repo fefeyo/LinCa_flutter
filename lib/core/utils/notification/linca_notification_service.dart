@@ -13,11 +13,12 @@ class LincaNotificationService {
     required DateTime scheduledAt,
   }) async {
     await _plugin.zonedSchedule(
-      id,
-      title,
-      body,
-      tz.TZDateTime.from(scheduledAt, tz.getLocation('Asia/Tokyo')),
-      const NotificationDetails(
+      id: id,
+      title: title,
+      body: body,
+      scheduledDate:
+          tz.TZDateTime.from(scheduledAt, tz.getLocation('Asia/Tokyo')),
+      notificationDetails: const NotificationDetails(
         android: AndroidNotificationDetails(
           'event_day',
           'Event Day',
@@ -31,6 +32,6 @@ class LincaNotificationService {
   }
 
   Future<void> cancel(int id) async {
-    await _plugin.cancel(id);
+    await _plugin.cancel(id: id);
   }
 }

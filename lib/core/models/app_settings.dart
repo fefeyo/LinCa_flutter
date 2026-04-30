@@ -17,21 +17,23 @@ abstract class AppSettings with _$AppSettings {
     // 参加登録していないイベント通知
     @Default(false) bool isAllEventNotificationEnabled,
     // ラブライブ！のイベント通知
-    @Default(false) bool isLoveLiveNotificationEnabled,
+    @Default(true) bool isLoveLiveNotificationEnabled,
     // ラブライブ！サンシャイン!!のイベント通知
-    @Default(false) bool isSunshineNotificationEnabled,
+    @Default(true) bool isSunshineNotificationEnabled,
     // ラブライブ！虹ヶ咲学園スクールアイドル同好会のイベント通知
-    @Default(false) bool isNijigasakiNotificationEnabled,
+    @Default(true) bool isNijigasakiNotificationEnabled,
     // ラブライブ！スーパースター!!のイベント通知
-    @Default(false) bool isSuperstarNotificationEnabled,
+    @Default(true) bool isSuperstarNotificationEnabled,
     // ラブライブ！蓮ノ空女学院スクールアイドルクラブのイベント通知
-    @Default(false) bool isHasunosoraNotificationEnabled,
+    @Default(true) bool isHasunosoraNotificationEnabled,
     // イキヅライブ！LOVELIVE!BLUEBIRDのイベント通知
-    @Default(false) bool isIkizuliveNotificationEnabled,
+    @Default(true) bool isIkizuliveNotificationEnabled,
     // スクールアイドルミュージカルのイベント通知
-    @Default(false) bool isMusicalNotificationEnabled,
+    @Default(true) bool isMusicalNotificationEnabled,
     // 幻日のヨハネのイベント通知
-    @Default(false) bool isYohaneNotificationEnabled,
+    @Default(true) bool isYohaneNotificationEnabled,
+    // 合同イベントのイベント通知
+    @Default(true) bool isCollaborativeNotificationEnabled,
   }) = _AppSettings;
 
   factory AppSettings.fromJson(Map<String, dynamic> json) =>

@@ -219,15 +219,16 @@ extension LincaEventsExtension on List<LincaEvent> {
   List<LincaEvent> getTodayEvents() {
     final DateTime now = DateTime.now();
     final DateTime today = DateTime(now.year, now.month, now.day);
-    // final DateTime today = DateTime(2025, 10, 4); // 横長
-    // final DateTime today = DateTime(2025, 11, 1); // 縦長
     return where((LincaEvent event) {
+      if (event.event.isCanceled) return false;
       final DateTime? date = event.event.date;
       if (date == null) return false;
 
       final DateTime eventDate = DateTime(date.year, date.month, date.day);
       return eventDate == today;
-    }).toList().sortWithDisplayOrder(displayOrder: DisplayOrder.oldest);
+    })
+        .toList()
+        .sortWithDisplayOrder(displayOrder: DisplayOrder.oldest);
   }
 
   LincaEvent? getEventById(String eventId) =>

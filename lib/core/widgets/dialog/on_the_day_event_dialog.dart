@@ -235,8 +235,8 @@ class OnTheDayEventDialog extends HookConsumerWidget
                   // 今日表示しない設定を保存
                   final PreferencesService sharedPreferences =
                       ref.read(preferencesServiceProvider);
-                  sharedPreferences
-                      .updateLastUpdatedAt(AppConstants.hideOnTheDayDialog);
+                  sharedPreferences.updateLastUpdatedAt(
+                      AppConstants.hideOnTheDayDialog, DateTime.now());
                 }
                 Navigator.of(context).pop();
               },

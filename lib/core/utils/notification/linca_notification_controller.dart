@@ -20,7 +20,7 @@ class LincaNotificationController {
       eventDate.year,
       eventDate.month,
       eventDate.day,
-      10,
+      12, // 12:00 PM
     );
 
     if (notifyAt.isBefore(DateTime.now())) return;

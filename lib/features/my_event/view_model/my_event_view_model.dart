@@ -42,7 +42,7 @@ class MyEventViewModel extends StateNotifier<MyEventState> {
       : super(
           MyEventState(
             allEvents: allEvents,
-            sortedEvents: allEvents,
+            sortedEvents: allEvents.sortWithDisplayOrder(),
             participations: participations,
           ),
         );

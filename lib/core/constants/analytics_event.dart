@@ -53,6 +53,7 @@ enum AnalyticsEvent {
   deleteMyAccountClick,
 
   /// HomeDrawer
+  openContactSupportClick,
   openPrivacyPolicyClick,
   coachNextClick,
   coachCompleteClick,

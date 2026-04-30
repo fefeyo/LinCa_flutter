@@ -52,7 +52,11 @@ abstract class FirestoreRepository<T> {
           .toList();
 
       if (lastUpdatedAtKey != null) {
-        preferences.updateLastUpdatedAt(lastUpdatedAtKey);
+        final DateTime latestUpdatedAt = querySnapshot.docs
+            .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) =>
+                (doc.data()['updatedAt'] as Timestamp).toDate())
+            .reduce((DateTime a, DateTime b) => a.isAfter(b) ? a : b);
+        preferences.updateLastUpdatedAt(lastUpdatedAtKey, latestUpdatedAt);
       }
 
       return updatedResult;
