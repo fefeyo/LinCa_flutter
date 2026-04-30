@@ -11,7 +11,6 @@ import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
 import 'package:linca_otaku_support/core/widgets/common/common_simple_dialog.dart';
 import 'package:linca_otaku_support/features/my_page/data/my_page_state.dart';
 import 'package:linca_otaku_support/features/my_page/view_model/my_page_view_model.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import '../../core/constants/app_constants.dart';
 import '../../core/utils/context_extension.dart';
@@ -136,11 +135,11 @@ class MyPage extends HookConsumerWidget
               ),
               const SizedBox(height: 16),
               MyPageItem(
-                title: context.l10n.app_settings_title,
+                title: context.l10n.notification_title,
                 onClickItem: () {
                   logEvent(event: AnalyticsEvent.openAppSettingsClick);
 
-                  openAppSettings();
+                  context.router.push(const AppSettingsRoute());
                 },
               ),
               MyPageItem(

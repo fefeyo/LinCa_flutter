@@ -40,5 +40,6 @@ class AppRouter extends RootStackRouter {
           transitionsBuilder: TransitionsBuilders.slideBottom,
           duration: const Duration(milliseconds: 500),
         ),
+        AutoRoute(page: AppSettingsRoute.page),
       ];
 }

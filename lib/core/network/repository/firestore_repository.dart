@@ -35,31 +35,34 @@ abstract class FirestoreRepository<T> {
 
     try {
       final QuerySnapshot<Map<String, dynamic>> querySnapshot =
-      await query.get();
+          await query.get();
 
       final int readCount = querySnapshot.docs.length;
 
       debugPrint(
         '[Firestore READ] '
-            'collection=$collectionPath '
-            'read=$readCount '
-            'diffFetch=${lastUpdatedAtKey != null}',
+        'collection=$collectionPath '
+        'read=$readCount '
+        'diffFetch=${lastUpdatedAtKey != null}',
       );
 
       final List<T> updatedResult = querySnapshot.docs
           .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) =>
-          fromJson(<String, dynamic>{...doc.data(), 'id': doc.id}))
+              fromJson(<String, dynamic>{...doc.data(), 'id': doc.id}))
           .toList();
 
       if (lastUpdatedAtKey != null) {
-        preferences.updateLastUpdatedAt(lastUpdatedAtKey);
+        final DateTime latestUpdatedAt = querySnapshot.docs
+            .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) =>
+                (doc.data()['updatedAt'] as Timestamp).toDate())
+            .reduce((DateTime a, DateTime b) => a.isAfter(b) ? a : b);
+        preferences.updateLastUpdatedAt(lastUpdatedAtKey, latestUpdatedAt);
       }
 
       return updatedResult;
     } catch (e) {
       return <T>[];
     }
-
   }
 
   /// ================================
@@ -101,5 +104,4 @@ abstract class FirestoreRepository<T> {
       onChanged(current);
     }
   }
-
 }

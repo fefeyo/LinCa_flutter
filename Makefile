@@ -1,6 +1,6 @@
 	# Makefile
 
-.PHONY: init format analyze build clean env pubget test build-function deploy-function-dev deploy-function-prod
+.PHONY: init format analyze build clean env pubget test create_feature generate_dev_apk generate_dev_release_apk build-function deploy-function-dev deploy-function-prod
 
 init: env pubget build
 
@@ -29,7 +29,10 @@ create_feature:
 	@bash scripts/create_feature.sh $(name)
 
 generate_dev_apk:
-	flutter build apk --debug --flavor dev -t lib/main_dev.dart
+	flutter build apk --release --flavor dev -t lib/main_dev.dart
+
+generate_prod_release_apk:
+	flutter build apk --release --flavor prod -t lib/main.dart
 
 generate_prod_appbundle:
 	flutter build appbundle --release --flavor prod -t lib/main.dart
@@ -47,3 +50,6 @@ deploy-function-dev: build-function
 # prod 環境に Functions を deploy（※注意）
 deploy-function-prod: build-function
 	firebase deploy --only functions --project prod
+
+gen_l10n:
+	flutter gen-l10n

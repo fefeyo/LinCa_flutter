@@ -26,13 +26,13 @@ final Provider<String?> uidProvider = Provider<String?>(
 
 final Provider<FirebaseFirestore> fireStoreProvider =
     Provider<FirebaseFirestore>((Ref ref) {
-      final FirebaseFirestore fireStore = FirebaseFirestore.instance;
-      fireStore.settings = const Settings(
-        persistenceEnabled: true,
-        cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
-      );
-      return fireStore;
-    });
+  final FirebaseFirestore fireStore = FirebaseFirestore.instance;
+  fireStore.settings = const Settings(
+    persistenceEnabled: true,
+    cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
+  );
+  return fireStore;
+});
 
 final AsyncNotifierProvider<AuthController, AuthState> authControllerProvider =
     AsyncNotifierProvider<AuthController, AuthState>(() => AuthController());

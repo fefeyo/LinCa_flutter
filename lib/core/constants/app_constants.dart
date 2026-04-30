@@ -25,6 +25,7 @@ class AppConstants {
   static const String participationLastUpdatedAtKey =
       'participation_last_updated_at_key';
   static const String hasSeenTutorial = 'has_seen_tutorial';
+  static const String appSettings = 'app_settings';
 
   static const String eventLastFetchedAtKey = 'event_last_fetched_at_key';
   static const String userEventLastFetchedAtKey =
@@ -55,7 +56,7 @@ class AppConstants {
   static const int maxProfileTagCount = 20;
 
   // チェックイン範囲(m)
-  static const int checkInRadius = 150;
+  static const int checkInRadius = 300;
 
   static const int userNameMaxLength = 30;
   static const int bioMaxLength = 300;
@@ -90,5 +91,4 @@ class AppConstants {
     'カラオケ好きの学院生',
     'アイドル好きの学院生',
   ];
-
 }

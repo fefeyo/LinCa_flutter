@@ -3,10 +3,13 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:linca_otaku_support/core/models/linca_event.dart';
+import 'package:linca_otaku_support/core/utils/notification/providers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 import 'core/local/controller/calendar_event_controller.dart';
 import 'core/network/providers.dart';
 import 'core/theme/app_schemes.dart';
@@ -37,11 +40,17 @@ void main() async {
       container.read(venueControllerProvider.future),
     ]);
     await container.read(userControllerProvider.future);
-    await Future.wait(<Future<List<LincaEvent>>>[
+    await Future.wait(<Future<List<Object>>>[
       container.read(eventControllerProvider.future),
       container.read(userEventControllerProvider.future),
+      container.read(participationControllerProvider.future),
     ]);
     await container.read(calendarEventsProvider.future);
+
+    await _initTimeZone();
+    await _initLocalNotifications(
+        container.read(localNotificationsPluginProvider));
+
     runApp(
       UncontrolledProviderScope(
         container: container,
@@ -51,6 +60,26 @@ void main() async {
   }, (Object error, StackTrace stacktrace) {
     FirebaseCrashlytics.instance.recordError(error, stacktrace, fatal: true);
   });
+}
+
+Future<void> _initTimeZone() async {
+  tz.initializeTimeZones();
+
+  tz.setLocalLocation(tz.getLocation('Asia/Tokyo'));
+}
+
+Future<void> _initLocalNotifications(
+    FlutterLocalNotificationsPlugin plugin) async {
+  const AndroidInitializationSettings android =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+  const DarwinInitializationSettings ios = DarwinInitializationSettings();
+
+  const InitializationSettings settings = InitializationSettings(
+    android: android,
+    iOS: ios,
+  );
+
+  await plugin.initialize(settings: settings);
 }
 
 class MyApp extends StatelessWidget {

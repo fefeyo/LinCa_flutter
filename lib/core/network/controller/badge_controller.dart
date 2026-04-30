@@ -25,8 +25,7 @@ class BadgeController extends LincaController<List<LincaBadge>> {
   }
 
   Future<void> _refreshInBackground(List<LincaBadge> current) async {
-    final List<LincaBadge> fetched =
-        await badgeRepository.fetch(); // 差分 or 全件
+    final List<LincaBadge> fetched = await badgeRepository.fetch(); // 差分 or 全件
 
     badgeRepository.refreshInBackground(
       current: current,
