@@ -21,7 +21,7 @@ mixin CoachManager {
               context: context,
               steps: steps,
               nextText: context.l10n.common_next,
-              finishText: isCompletable
+              finshText: isCompletable
                   ? context.l10n.common_finish
                   : context.l10n.common_next,
               skipText: context.l10n.common_skip,
