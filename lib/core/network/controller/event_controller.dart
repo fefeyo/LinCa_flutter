@@ -45,7 +45,7 @@ class EventController extends LincaController<List<LincaEvent>> {
     };
 
     if (events.isNotEmpty) {
-      unawaited(refreshInBackground());
+      await refreshInBackground();
     } else {
       events.addAll(await eventRepository.fetch());
     }

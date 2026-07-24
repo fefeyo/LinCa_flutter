@@ -8,7 +8,6 @@ import 'package:linca_otaku_support/core/utils/event_analytics_manager.dart';
 import 'package:linca_otaku_support/core/utils/group_extension.dart';
 import 'package:linca_otaku_support/core/utils/linca_user_extension.dart';
 import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/constants/analytics_event.dart';
@@ -255,15 +254,15 @@ class HomeDrawer extends HookConsumerWidget
               ),
             ),
             ListTile(
-              leading: const Icon(Icons.settings),
+              leading: const Icon(Icons.notifications),
               title: Text(
-                context.l10n.app_settings_title,
+                context.l10n.notification_title,
                 style: context.textTheme.bodyMedium,
               ),
               onTap: () {
                 logEvent(event: AnalyticsEvent.openAppSettingsClick);
 
-                openAppSettings();
+                transitPage(const AppSettingsRoute());
               },
             ),
             const Divider(),
@@ -275,6 +274,21 @@ class HomeDrawer extends HookConsumerWidget
                   fontWeight: FontWeight.bold,
                 ),
               ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.question_answer),
+              title: Text(
+                context.l10n.inquiry_title,
+                style: context.textTheme.bodyMedium,
+              ),
+              onTap: () {
+                logEvent(event: AnalyticsEvent.openContactSupportClick);
+
+                launchUrl(
+                  Uri.parse(context.l10n.inquiry_url),
+                  mode: LaunchMode.externalApplication,
+                );
+              },
             ),
             ListTile(
               leading: const Icon(Icons.privacy_tip_outlined),

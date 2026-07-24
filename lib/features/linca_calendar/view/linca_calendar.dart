@@ -36,22 +36,26 @@ class LincaCalendar extends HookConsumerWidget {
       children: <Widget>[
         LincaCalendarHeader(
           focusedMonth: state.focusedMonth,
-          onPrev: viewModel.canGoPrevMonth ? () {
-            viewModel.updateFocusedMonth(
-              DateTime(
-                state.focusedMonth.year,
-                state.focusedMonth.month - 1,
-              ),
-            );
-          } : null,
-          onNext: viewModel.canGoNextMonth ? () {
-            viewModel.updateFocusedMonth(
-              DateTime(
-                state.focusedMonth.year,
-                state.focusedMonth.month + 1,
-              ),
-            );
-          } : null,
+          onPrev: viewModel.canGoPrevMonth
+              ? () {
+                  viewModel.updateFocusedMonth(
+                    DateTime(
+                      state.focusedMonth.year,
+                      state.focusedMonth.month - 1,
+                    ),
+                  );
+                }
+              : null,
+          onNext: viewModel.canGoNextMonth
+              ? () {
+                  viewModel.updateFocusedMonth(
+                    DateTime(
+                      state.focusedMonth.year,
+                      state.focusedMonth.month + 1,
+                    ),
+                  );
+                }
+              : null,
         ),
         const SizedBox(height: 8),
         const LincaCalendarWeeklyRow(),
