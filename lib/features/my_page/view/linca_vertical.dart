@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/constants/app_constants.dart';
@@ -15,7 +14,6 @@ import 'package:linca_otaku_support/core/widgets/event/event_card.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-import '../../../core/router/app_router.gr.dart';
 import '../../../core/utils/context_extension.dart';
 import '../../../core/asset_gen/assets.gen.dart';
 
@@ -303,11 +301,7 @@ class LincaVertical extends HookConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: EventCard(
               lincaEvent: event,
-              onClick: () => context.router.push(
-                EventDetailRoute(
-                  lincaEvent: event,
-                ),
-              ),
+              onClick: () {},
             ),
           ),
         const SizedBox(height: 16),
