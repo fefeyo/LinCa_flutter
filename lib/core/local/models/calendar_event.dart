@@ -13,8 +13,7 @@ abstract class CalendarEvent with _$CalendarEvent {
     required String name,
     required CalendarEventType type,
     required String color,
-    @LocalDateConverter()
-    required DateTime date,
+    @LocalDateConverter() required DateTime date,
     required int priority,
   }) = _CalendarEvent;
 

@@ -1,32 +1,5 @@
 {
   "@@locale": "en",
-  "events_count": "{count} 件のイベント",
-  "@events_count": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "welcome_user": "{user} さん、{count} 件あります。",
-  "@welcome_user": {
-    "placeholders": {
-      "user": {
-        "type": "String"
-      },
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "last_login": "最終ログイン: {date}",
-  "@last_login": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
   "common_year": "common_year",
   "@common_year": {
     "placeholders": {
@@ -37,6 +10,14 @@
   },
   "common_count": "common_count",
   "@common_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "common_event_count": "common_event_count",
+  "@common_event_count": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -55,6 +36,8 @@
   "common_skip": "Skip",
   "common_determination": "common_determination",
   "common_required": "common_required",
+  "common_no_selected": "common_no_selected",
+  "common_today": "common_today",
   "common_event": "Event",
   "common_official_event": "common_official_event",
   "common_original_event": "common_original_event",
@@ -63,8 +46,6 @@
   "common_save_suceeded": "Event saved",
   "menu_title": "Menu",
   "my_event_title": "MyEvent",
-  "recent_event_title": "RecentEvent",
-  "recent_event_appbar_title": "RecentEvent",
   "event_calendar_title": "Calendar",
   "my_page_title": "MyPage",
   "traded_linca_list_title": "TradedLinCaList",
@@ -310,17 +291,8 @@
   "created_event_delete_event_title": "created_event_delete_event_title",
   "created_event_delete_event_description": "created_event_delete_event_description",
   "created_event_delete_event_confirm": "created_event_delete_event_confirm",
-  "common_event_count": "common_event_count",
-  "@common_event_count": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "aqcuired_badge_title_select": "aqcuired_badge_title_select",
   "aqcuired_badge_title_list": "aqcuired_badge_title_list",
-  "common_no_selected": "common_no_selected",
   "event_output_title": "event_output_title",
   "check_in": "check_in",
   "event_sort_span_clear": "event_sort_span_clear",
@@ -344,7 +316,6 @@
   "picture_save_permission_disabled": "picture_save_permission_disabled",
   "qr_hold_up_message": "qr_hold_up_message",
   "event_sort_span_title": "event_sort_span_title",
-  "common_today": "common_today",
   "event_sort_clear": "event_sort_clear",
   "event_sort_selected": "event_sort_selected",
   "badge_list_empty_title": "badge_list_empty_title",
@@ -352,7 +323,25 @@
   "event_detail_memory_deleted": "event_detail_memory_deleted",
   "my_event_delete_dialog_title": "my_event_delete_dialog_title",
   "my_event_delete_dialog_description": "my_event_delete_dialog_description",
-  "picture_save_dialog_title": "picture_save_dialog_title",
-  "picture_save_dialog_description": "picture_save_dialog_description",
-  "event_detail_memory_saved": "event_detail_memory_saved"
+  "event_detail_memory_saved": "event_detail_memory_saved",
+  "notification_title": "notification_title",
+  "notification_description": "notification_description",
+  "notification_my_event": "notification_my_event",
+  "notification_my_event_all": "notification_my_event_all",
+  "notification_my_event_check_in_only": "notification_my_event_check_in_only",
+  "notification_not_registered_event": "notification_not_registered_event",
+  "notification_series_filter": "notification_series_filter",
+  "common_series_lovelive": "common_series_lovelive",
+  "common_series_sunshine": "common_series_sunshine",
+  "common_series_nijigasaki": "common_series_nijigasaki",
+  "common_series_superstar": "common_series_superstar",
+  "common_series_hasunosora": "common_series_hasunosora",
+  "common_series_musical": "common_series_musical",
+  "common_series_yohane": "common_series_yohane",
+  "common_series_ikizulive": "common_series_ikizulive",
+  "common_series_collaborative": "common_series_collaborative",
+  "inquiry_title": "inquiry_title",
+  "inquiry_url": "inquiry_url",
+  "push_notifications_title_check_in": "",
+  "push_notifications_title_not_check_in": ""
 }

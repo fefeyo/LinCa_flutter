@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-class LocalDateConverter
-    implements JsonConverter<DateTime, Object> {
+class LocalDateConverter implements JsonConverter<DateTime, Object> {
   const LocalDateConverter();
 
   @override
@@ -26,8 +25,7 @@ class LocalDateConverter
   }
 
   @override
-  Object toJson(DateTime date) =>
-      '${date.year.toString().padLeft(4, '0')}-'
-          '${date.month.toString().padLeft(2, '0')}-'
-          '${date.day.toString().padLeft(2, '0')}';
+  Object toJson(DateTime date) => '${date.year.toString().padLeft(4, '0')}-'
+      '${date.month.toString().padLeft(2, '0')}-'
+      '${date.day.toString().padLeft(2, '0')}';
 }

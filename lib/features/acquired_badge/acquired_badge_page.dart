@@ -119,7 +119,8 @@ class AcquiredBadgePage extends HookConsumerWidget with ScreenAnalyticsManager {
                                           horizontal: 8),
                                       child: Text(
                                         item.name,
-                                        style: context.textTheme.bodySmall,
+                                        style: context.textTheme.labelSmall
+                                            ?.copyWith(fontSize: 9),
                                       ),
                                     ),
                                   ],

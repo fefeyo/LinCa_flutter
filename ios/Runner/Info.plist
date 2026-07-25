@@ -65,5 +65,7 @@
   <string>現在地を表示するために位置情報を使用します</string>
   <key>NSPhotoLibraryAddUsageDescription</key>
   <string>画像を保存するために写真ライブラリへのアクセスが必要です</string>
+  <key>NSUserNotificationUsageDescription</key>
+  <string>イベント当日のリマインド通知を送るために使用します</string>
 </dict>
 </plist>

@@ -17,6 +17,26 @@ abstract class FirestoreRepository<T> {
 
   Future<List<T>> get();
 
+  /// キャッシュを先に読み、1回の差分取得結果を統合して返す。
+  ///
+  /// Firestoreへの問い合わせ回数は、従来のバックグラウンド更新と同じ。
+  Future<List<T>> getLatest({
+    required String Function(T item) getId,
+  }) async {
+    final List<T> current = await get();
+    final List<T> updated = await fetch();
+
+    if (current.isEmpty) return updated;
+    if (updated.isEmpty) return current;
+
+    final Map<String, T> merged = <String, T>{
+      for (final T item in current) getId(item): item,
+      for (final T item in updated) getId(item): item,
+    };
+
+    return merged.values.toList();
+  }
+
   /// ================================
   /// 通常：サーバーからデータ取得
   /// ================================
@@ -35,31 +55,34 @@ abstract class FirestoreRepository<T> {
 
     try {
       final QuerySnapshot<Map<String, dynamic>> querySnapshot =
-      await query.get();
+          await query.get();
 
       final int readCount = querySnapshot.docs.length;
 
       debugPrint(
         '[Firestore READ] '
-            'collection=$collectionPath '
-            'read=$readCount '
-            'diffFetch=${lastUpdatedAtKey != null}',
+        'collection=$collectionPath '
+        'read=$readCount '
+        'diffFetch=${lastUpdatedAtKey != null}',
       );
 
       final List<T> updatedResult = querySnapshot.docs
           .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) =>
-          fromJson(<String, dynamic>{...doc.data(), 'id': doc.id}))
+              fromJson(<String, dynamic>{...doc.data(), 'id': doc.id}))
           .toList();
 
       if (lastUpdatedAtKey != null) {
-        preferences.updateLastUpdatedAt(lastUpdatedAtKey);
+        final DateTime latestUpdatedAt = querySnapshot.docs
+            .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) =>
+                (doc.data()['updatedAt'] as Timestamp).toDate())
+            .reduce((DateTime a, DateTime b) => a.isAfter(b) ? a : b);
+        preferences.updateLastUpdatedAt(lastUpdatedAtKey, latestUpdatedAt);
       }
 
       return updatedResult;
     } catch (e) {
       return <T>[];
     }
-
   }
 
   /// ================================
@@ -101,5 +124,4 @@ abstract class FirestoreRepository<T> {
       onChanged(current);
     }
   }
-
 }

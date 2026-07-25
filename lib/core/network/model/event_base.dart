@@ -54,6 +54,7 @@ sealed class EventBase with _$EventBase {
       toJson: participationTypesToJson,
     )
     List<ParticipationType> availableParticipationTypes,
+    @JsonKey(fromJson: fromJsonDate, toJson: toJsonDate) DateTime? updatedAt,
   }) = UnOfficialEvent;
 
   factory EventBase.fromJson(Map<String, dynamic> json) =>

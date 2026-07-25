@@ -32,7 +32,7 @@ final StateNotifierProvider<TradedLincaListViewModel, TradedLincaListState>
       user: user,
       favoriteGroups: user.favoriteGroups
           .map((String tagId) =>
-          groups.firstWhereOrNull((Group group) => group.slug == tagId))
+              groups.firstWhereOrNull((Group group) => group.slug == tagId))
           .whereType<Group>()
           .toList(),
       favoriteBadges: favoriteBadges,

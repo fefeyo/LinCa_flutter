@@ -457,8 +457,8 @@ class LincaEditPage extends HookConsumerWidget
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               SizedBox(
-                width: 100,
-                height: 100,
+                width: 80,
+                height: 80,
                 child: imageProvider != null
                     ? Image(image: imageProvider)
                     : const Icon(
@@ -467,12 +467,15 @@ class LincaEditPage extends HookConsumerWidget
                         color: Colors.grey,
                       ),
               ),
+              const SizedBox(
+                height: 4,
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: Text(
                   lincaBadge?.name ??
                       context.l10n.acquired_badges_list_unselect,
-                  style: context.textTheme.bodySmall,
+                  style: context.textTheme.labelSmall?.copyWith(fontSize: 10),
                 ),
               ),
               const SizedBox(height: 8),

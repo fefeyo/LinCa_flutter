@@ -46,7 +46,7 @@ class SeriesGraphPage extends HookConsumerWidget
     final List<LincaEvent> participatedEvents = state.filteredMyEvents
         .where(
           (LincaEvent event) => state.participations.hasEventId(event.event.id),
-    )
+        )
         .toList();
 
     final Map<String, int> counts =

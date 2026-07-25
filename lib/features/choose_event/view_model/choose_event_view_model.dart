@@ -19,7 +19,7 @@ final AutoDisposeStateNotifierProvider<ChooseEventViewModel, ChooseEventState>
           .value
           ?.where((LincaEvent event) =>
               (event.event as UnOfficialEvent).visibility == true)
-          .toList() ??
+          .toList().sortWithDisplayOrder() ??
       <LincaEvent>[];
   final List<ParticipationInfo> participations =
       ref.read(participationControllerProvider).value ?? <ParticipationInfo>[];
@@ -40,24 +40,15 @@ final AutoDisposeStateNotifierProvider<ChooseEventViewModel, ChooseEventState>
     viewModel.updateParticipations(newParticipations);
   });
 
-  ref.listen(eventControllerProvider, (_, AsyncValue<List<LincaEvent>> next) {
-    final List<LincaEvent>? events = next.value;
-    if (events != null) {
-      viewModel.updateEvents(events);
-    }
-  });
+  ref.listen(combinedEventProvider, (_, List<LincaEvent> next) {
+    final List<LincaEvent> filtered = next.where((LincaEvent event) {
+      if (event.event is UnOfficialEvent) {
+        return (event.event as UnOfficialEvent).visibility == true;
+      }
+      return true; // OfficialEvent はそのまま通す
+    }).toList();
 
-  ref.listen(userEventControllerProvider,
-      (_, AsyncValue<List<LincaEvent>> next) {
-    final List<LincaEvent>? events = next.value;
-    if (events != null) {
-      viewModel.updateEvents(
-        events
-            .where((LincaEvent event) =>
-                (event.event as UnOfficialEvent).visibility == true)
-            .toList(),
-      );
-    }
+    viewModel.updateEvents(filtered);
   });
 
   return viewModel;

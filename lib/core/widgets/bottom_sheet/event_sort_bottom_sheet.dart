@@ -17,6 +17,7 @@ import '../../constants/participation_type.dart';
 import '../../network/model/tag.dart';
 import '../../utils/sort_items_extension.dart';
 
+@Deprecated('Use event_sort_filter_page')
 class EventSortBottomSheet extends HookConsumerWidget
     with ScreenAnalyticsManager, EventAnalyticsManager {
   const EventSortBottomSheet({
@@ -216,7 +217,8 @@ class EventSortBottomSheet extends HookConsumerWidget
                             event: AnalyticsEvent.filterConfirmClick,
                             params: <String, Object>{
                               'keyword': keywordController.text,
-                              'displayOrder': currentDisplayOrder.value,
+                              'displayOrder':
+                                  currentDisplayOrder.value.label(context),
                               'participationFilters':
                                   currentParticipationTypes.value,
                               'seriesTags': currentSeriesTags.value,
