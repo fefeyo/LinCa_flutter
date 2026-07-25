@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/constants/app_constants.dart';
 import 'package:linca_otaku_support/core/constants/participation_type.dart';
@@ -20,7 +19,6 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../../core/network/model/event_base.dart';
 import '../../core/utils/providers.dart';
-import '../my_page/view/my_page_item.dart';
 
 @RoutePage()
 class AppSettingsPage extends HookConsumerWidget {
@@ -41,8 +39,6 @@ class AppSettingsPage extends HookConsumerWidget {
     final List<ParticipationInfo> participations =
         ref.watch(participationControllerProvider).value ??
             <ParticipationInfo>[];
-    final FlutterLocalNotificationsPlugin notificationPlugin =
-        ref.watch(localNotificationsPluginProvider);
     final List<LincaEvent> events =
         ref.watch(eventControllerProvider).value ?? <LincaEvent>[];
     final List<LincaEvent> upcomingEvents = events.where((LincaEvent event) {
@@ -75,10 +71,6 @@ class AppSettingsPage extends HookConsumerWidget {
             !participations.hasEventId(event.event.id) &&
             !event.event.isCanceled)
         .toList();
-    final Future<List<PendingNotificationRequest>> currentNotifications =
-        notificationPlugin.pendingNotificationRequests();
-    final ValueNotifier<List<PendingNotificationRequest>> notificationEvents =
-        useState(<PendingNotificationRequest>[]);
     final AppLocalizations l10n = context.l10n;
 
     useEffect(() {
