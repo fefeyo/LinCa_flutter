@@ -15,7 +15,7 @@ class ParticipationController extends LincaController<List<ParticipationInfo>> {
 
   @override
   Future<List<ParticipationInfo>> buildImpl() async {
-    participationRepository = ref.read(participationRepositoryProvider);
+    participationRepository = ref.watch(participationRepositoryProvider);
 
     return participationRepository.getLatest(
       getId: (ParticipationInfo participation) => participation.eventId,
