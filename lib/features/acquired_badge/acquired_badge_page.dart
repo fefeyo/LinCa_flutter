@@ -10,6 +10,7 @@ import 'package:linca_otaku_support/core/network/model/linca_badge.dart';
 import 'package:linca_otaku_support/core/network/providers.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
 import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
+import 'package:linca_otaku_support/core/widgets/common/linca_interaction.dart';
 
 @RoutePage()
 class AcquiredBadgePage extends HookConsumerWidget with ScreenAnalyticsManager {
@@ -70,62 +71,68 @@ class AcquiredBadgePage extends HookConsumerWidget with ScreenAnalyticsManager {
                 itemBuilder: (BuildContext context, int index) {
                   final LincaBadge? item = acquiredBadges[index];
 
-                  return GestureDetector(
-                    onTap: selectable
-                        ? item != null
-                            ? () => context.router.pop(item)
-                            : () => context.router.pop(LincaBadge.unselected)
-                        : null,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.grey,
-                          width: 1,
+                  return LincaInteractive(
+                    builder:
+                        (BuildContext context, WidgetStatesController states) =>
+                            InkWell(
+                      statesController: states,
+                      borderRadius: BorderRadius.circular(8),
+                      onTap: selectable
+                          ? item != null
+                              ? () => context.router.pop(item)
+                              : () => context.router.pop(LincaBadge.unselected)
+                          : null,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Center(
-                        child: item == null
-                            ? Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  const Icon(Icons.cancel, size: 40),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    context.l10n.common_no_selected,
-                                    style: context.textTheme.bodySmall,
-                                  ),
-                                ],
-                              )
-                            : Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Column(
+                        child: Center(
+                          child: item == null
+                              ? Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
-                                    SizedBox(
-                                      width: 60,
-                                      height: 60,
-                                      child: item.iconUrl.isNotEmpty
-                                          ? CachedNetworkImage(
-                                              imageUrl: item.iconUrl)
-                                          : const Icon(
-                                              Icons.device_unknown,
-                                              size: 40,
-                                            ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8),
-                                      child: Text(
-                                        item.name,
-                                        style: context.textTheme.labelSmall
-                                            ?.copyWith(fontSize: 9),
-                                      ),
+                                    const Icon(Icons.cancel, size: 40),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      context.l10n.common_no_selected,
+                                      style: context.textTheme.bodySmall,
                                     ),
                                   ],
+                                )
+                              : Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      SizedBox(
+                                        width: 60,
+                                        height: 60,
+                                        child: item.iconUrl.isNotEmpty
+                                            ? CachedNetworkImage(
+                                                imageUrl: item.iconUrl)
+                                            : const Icon(
+                                                Icons.device_unknown,
+                                                size: 40,
+                                              ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8),
+                                        child: Text(
+                                          item.name,
+                                          style: context.textTheme.labelSmall
+                                              ?.copyWith(fontSize: 9),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
+                        ),
                       ),
                     ),
                   );

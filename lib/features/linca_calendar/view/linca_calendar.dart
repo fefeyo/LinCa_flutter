@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:linca_otaku_support/core/widgets/common/linca_interaction.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/local/controller/calendar_event_controller.dart';
@@ -63,7 +64,7 @@ class LincaCalendar extends HookConsumerWidget {
         const LincaCalendarWeeklyRow(),
         const SizedBox(height: 8),
         AnimatedSwitcher(
-          duration: const Duration(milliseconds: 240),
+          duration: lincaMotionDuration(context),
           switchInCurve: Curves.easeOutCubic,
           switchOutCurve: Curves.easeInCubic,
           child: LincaCalendarGrid(
@@ -79,7 +80,7 @@ class LincaCalendar extends HookConsumerWidget {
         ),
         Expanded(
           child: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 240),
+            duration: lincaMotionDuration(context),
             switchInCurve: Curves.easeOutCubic,
             switchOutCurve: Curves.easeInCubic,
             transitionBuilder: (Widget child, Animation<double> animation) {

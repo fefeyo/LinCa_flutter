@@ -18,6 +18,7 @@ import 'package:linca_otaku_support/core/utils/providers.dart';
 import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
 import 'package:linca_otaku_support/features/linca_calendar/view_model/linca_calendar_view_model.dart';
 import 'package:linca_otaku_support/features/my_event/data/my_event_state.dart';
+import 'package:linca_otaku_support/core/widgets/common/linca_interaction.dart';
 
 import '../../../core/utils/context_extension.dart';
 import '../../core/network/model/participation_info.dart';
@@ -39,9 +40,8 @@ class HomePage extends HookConsumerWidget
       context.l10n.my_page_title,
     ];
     final MyEventState myEventState = ref.watch(myEventViewModelProvider);
-    final MyEventViewModel myEventViewModel = ref.read(
-      myEventViewModelProvider.notifier,
-    );
+    final MyEventViewModel myEventViewModel =
+        ref.read(myEventViewModelProvider.notifier);
     final LincaUser lincaUser = ref.watch(userControllerProvider).value!;
     final ValueNotifier<bool> isSearching = useState(false);
     final TextEditingController searchController = useTextEditingController();
@@ -50,14 +50,11 @@ class HomePage extends HookConsumerWidget
     final List<ParticipationInfo> participations =
         ref.read(participationControllerProvider).value ??
             <ParticipationInfo>[];
-    final LincaCalendarViewModel lincaCalendarViewModel = ref.read(
-      lincaCalendarViewModelProvider.notifier,
-    );
+    final LincaCalendarViewModel lincaCalendarViewModel =
+        ref.read(lincaCalendarViewModelProvider.notifier);
     final int sortedParticipationCount = myEventState.sortedEvents
-        .map(
-          (LincaEvent lincaEvent) =>
-              myEventState.participations.getByEventId(lincaEvent.event.id),
-        )
+        .map((LincaEvent lincaEvent) =>
+            myEventState.participations.getByEventId(lincaEvent.event.id))
         .whereType<ParticipationInfo>()
         .toList()
         .length;
@@ -65,9 +62,8 @@ class HomePage extends HookConsumerWidget
     useEffect(() {
       Future<void> effect() async {
         final List<LincaEvent> todayEvents = events.getTodayEvents();
-        final PreferencesService preferences = ref.read(
-          preferencesServiceProvider,
-        );
+        final PreferencesService preferences =
+            ref.read(preferencesServiceProvider);
         final DateTime? hideOnTheDayDialogDate =
             await preferences.getLastUpdatedAt(AppConstants.hideOnTheDayDialog);
         final bool hasSeenTutorial = await preferences.hasSeenTutorial();
@@ -94,6 +90,8 @@ class HomePage extends HookConsumerWidget
     }, const <Object?>[]);
 
     return AutoTabsRouter(
+      duration: lincaMotionDuration(context),
+      curve: Curves.easeOutCubic,
       routes: const <PageRouteInfo<Object?>>[
         MyEventRoute(),
         LincaCalendarRoute(),
@@ -104,27 +102,8 @@ class HomePage extends HookConsumerWidget
         final TabsRouter tabs = AutoTabsRouter.of(context);
         return Scaffold(
           appBar: AppBar(
-            title: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 220),
-              switchInCurve: Curves.easeOutCubic,
-              switchOutCurve: Curves.easeInCubic,
-              transitionBuilder: (Widget child, Animation<double> animation) {
-                final Animation<Offset> slideAnimation = Tween<Offset>(
-                  begin: const Offset(0, 0.12),
-                  end: Offset.zero,
-                ).animate(animation);
-
-                return FadeTransition(
-                  opacity: animation,
-                  child: SlideTransition(
-                    position: slideAnimation,
-                    child: child,
-                  ),
-                );
-              },
-              child: isSearching.value
+              title: isSearching.value
                   ? TextField(
-                      key: const ValueKey<String>('event-search-field'),
                       controller: searchController,
                       autofocus: true,
                       decoration: InputDecoration(
@@ -137,82 +116,90 @@ class HomePage extends HookConsumerWidget
                         myEventViewModel.setKeyword(value);
                       },
                     )
-                  : Column(
-                      key: ValueKey<int>(tabs.activeIndex),
-                      children: <Widget>[
-                        Text(
-                          titles[tabs.activeIndex],
-                          style: context.textTheme.titleMedium,
-                        ),
-                        if (tabs.activeIndex == 0)
+                  : LincaAnimatedLabel(
+                      child: Column(
+                        key: ValueKey<int>(tabs.activeIndex),
+                        children: <Widget>[
                           Text(
-                            context.l10n.common_event_count(
-                              sortedParticipationCount,
-                            ),
-                            style: context.textTheme.bodyMedium,
+                            titles[tabs.activeIndex],
+                            style: context.textTheme.titleMedium,
                           ),
-                      ],
-                    ),
-            ),
-            actions: <Widget>[
-              if (tabs.activeIndex == 0)
-                IconButton(
-                  onPressed: () async {
-                    logEvent(event: AnalyticsEvent.myEventFilterClick);
-
-                    final FilterSettings? result = await context.router.push(
-                      EventSortFilterRoute(
-                        initialSettings: myEventState.filterSettings,
-                        needInputArea: true,
-                        needHiddenOriginalEventArea: true,
-                        needDisplayOrderArea: true,
-                        needParticipationArea: true,
-                        needEventTypeArea: true,
-                        needTagsArea: true,
+                          if (tabs.activeIndex == 0)
+                            LincaAnimatedLabel(
+                              child: Text(
+                                key: ValueKey<int>(sortedParticipationCount),
+                                context.l10n.common_event_count(
+                                    sortedParticipationCount),
+                                style: context.textTheme.bodyMedium,
+                              ),
+                            ),
+                        ],
                       ),
-                    );
-                    if (result != null) {
-                      myEventViewModel.setFilterSettings(result);
-                    }
-                  },
-                  icon: const Icon(Icons.sort),
-                ),
-              if (tabs.activeIndex == 0)
-                IconButton(
-                  icon: Icon(
-                    isSearching.value ? Icons.close : Icons.search,
-                  ),
-                  onPressed: () {
-                    isSearching.value = !isSearching.value;
-                    if (!isSearching.value) {
-                      searchController.clear();
-                      myEventViewModel.setKeyword('');
-                    }
+                    ),
+              actions: <Widget>[
+                if (tabs.activeIndex == 0)
+                  IconButton(
+                    onPressed: () async {
+                      logEvent(event: AnalyticsEvent.myEventFilterClick);
 
-                    logEvent(event: AnalyticsEvent.myEventSearchClick);
-                  },
-                ),
-              if (tabs.activeIndex == 1)
-                TextButton.icon(
-                  onPressed: () => lincaCalendarViewModel.resetCalendar(),
-                  icon: const Icon(Icons.today),
-                  label: Text(context.l10n.common_today),
-                ),
-            ],
+                      final FilterSettings? result = await context.router.push(
+                        EventSortFilterRoute(
+                          initialSettings: myEventState.filterSettings,
+                          needInputArea: true,
+                          needHiddenOriginalEventArea: true,
+                          needDisplayOrderArea: true,
+                          needParticipationArea: true,
+                          needEventTypeArea: true,
+                          needTagsArea: true,
+                        ),
+                      );
+                      if (result != null) {
+                        myEventViewModel.setFilterSettings(result);
+                      }
+                    },
+                    icon: const Icon(Icons.sort),
+                  ),
+                if (tabs.activeIndex == 0)
+                  IconButton(
+                    icon: LincaAnimatedLabel(
+                      child: Icon(
+                        isSearching.value ? Icons.close : Icons.search,
+                        key: ValueKey<bool>(isSearching.value),
+                      ),
+                    ),
+                    onPressed: () {
+                      isSearching.value = !isSearching.value;
+                      if (!isSearching.value) {
+                        searchController.clear();
+                        myEventViewModel.setKeyword('');
+                      }
+
+                      logEvent(event: AnalyticsEvent.myEventSearchClick);
+                    },
+                  ),
+                if (tabs.activeIndex == 1)
+                  TextButton.icon(
+                    onPressed: () => lincaCalendarViewModel.resetCalendar(),
+                    icon: const Icon(Icons.today),
+                    label: Text(context.l10n.common_today),
+                  ),
+              ]),
+          drawer: HomeDrawer(
+            lincaUser: lincaUser,
           ),
-          drawer: HomeDrawer(lincaUser: lincaUser),
           body: FadeTransition(
-            opacity: animation,
+            opacity: MediaQuery.disableAnimationsOf(context)
+                ? const AlwaysStoppedAnimation<double>(1)
+                : animation,
             child: SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(0.035, 0),
-                end: Offset.zero,
-              ).animate(
-                CurvedAnimation(
-                  parent: animation,
-                  curve: Curves.easeOutCubic,
-                ),
-              ),
+              position: MediaQuery.disableAnimationsOf(context)
+                  ? const AlwaysStoppedAnimation<Offset>(Offset.zero)
+                  : animation.drive(
+                      Tween<Offset>(
+                        begin: const Offset(0, 0.015),
+                        end: Offset.zero,
+                      ),
+                    ),
               child: child,
             ),
           ),
@@ -232,21 +219,21 @@ class HomePage extends HookConsumerWidget
             },
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                icon: _AnimatedNavigationIcon(
+                icon: LincaNavigationIcon(
                   icon: Icons.event,
                   selected: tabs.activeIndex == 0,
                 ),
                 label: titles[0],
               ),
               BottomNavigationBarItem(
-                icon: _AnimatedNavigationIcon(
+                icon: LincaNavigationIcon(
                   icon: Icons.event_note,
                   selected: tabs.activeIndex == 1,
                 ),
                 label: titles[1],
               ),
               BottomNavigationBarItem(
-                icon: _AnimatedNavigationIcon(
+                icon: LincaNavigationIcon(
                   icon: Icons.person,
                   selected: tabs.activeIndex == 2,
                 ),
@@ -256,39 +243,6 @@ class HomePage extends HookConsumerWidget
           ),
         );
       },
-    );
-  }
-}
-
-class _AnimatedNavigationIcon extends StatelessWidget {
-  const _AnimatedNavigationIcon({required this.icon, required this.selected});
-
-  final IconData icon;
-  final bool selected;
-
-  @override
-  Widget build(BuildContext context) {
-    final bool disableAnimations = MediaQuery.disableAnimationsOf(context);
-    final Duration duration =
-        disableAnimations ? Duration.zero : const Duration(milliseconds: 260);
-
-    return AnimatedScale(
-      scale: selected ? 1.08 : 1,
-      duration: duration,
-      curve: selected ? Curves.easeOutBack : Curves.easeOutCubic,
-      child: AnimatedContainer(
-        width: 40,
-        height: 32,
-        duration: duration,
-        curve: Curves.easeOutCubic,
-        decoration: BoxDecoration(
-          color: selected
-              ? context.colorScheme.primary.withValues(alpha: 0.14)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Icon(icon),
-      ),
     );
   }
 }

@@ -6,7 +6,7 @@ import 'package:linca_otaku_support/core/utils/event_analytics_manager.dart';
 import 'package:linca_otaku_support/core/utils/group_extension.dart';
 import 'package:linca_otaku_support/core/utils/linca_event_extension.dart';
 import 'package:linca_otaku_support/core/widgets/common/event_status_badges.dart';
-import 'package:linca_otaku_support/core/widgets/common/pressable_scale.dart';
+import 'package:linca_otaku_support/core/widgets/common/linca_interaction.dart';
 
 import '../../constants/analytics_event.dart';
 import '../../models/linca_event.dart';
@@ -28,11 +28,12 @@ class EventCard extends StatelessWidget with EventAnalyticsManager {
   Widget build(BuildContext context) {
     final String? tagName = lincaEvent.displayTagLabel;
 
-    return PressableScale(
-      pressedScale: 0.975,
-      child: Card(
+    return LincaInteractive(
+      builder: (BuildContext context, WidgetStatesController states) => Card(
         elevation: 4,
-        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.zero,
+        ),
         child: Stack(
           clipBehavior: Clip.none,
           children: <Widget>[
@@ -56,7 +57,9 @@ class EventCard extends StatelessWidget with EventAnalyticsManager {
                             style: Theme.of(context)
                                 .textTheme
                                 .titleSmall
-                                ?.copyWith(color: context.colorScheme.textGrey),
+                                ?.copyWith(
+                                  color: context.colorScheme.textGrey,
+                                ),
                           ),
                           const SizedBox(height: 4),
                           Text(
@@ -64,7 +67,9 @@ class EventCard extends StatelessWidget with EventAnalyticsManager {
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
-                                ?.copyWith(color: context.colorScheme.textGrey),
+                                ?.copyWith(
+                                  color: context.colorScheme.textGrey,
+                                ),
                           ),
                           const SizedBox(height: 8),
                           IntrinsicHeight(
@@ -102,6 +107,7 @@ class EventCard extends StatelessWidget with EventAnalyticsManager {
               child: Material(
                 type: MaterialType.transparency,
                 child: InkWell(
+                  statesController: states,
                   onTap: () {
                     logEvent(
                       event: AnalyticsEvent.eventCardClick,

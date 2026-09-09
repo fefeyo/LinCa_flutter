@@ -16,6 +16,10 @@ class _TestParticipationController extends ParticipationController {
 }
 
 void main() {
+  setUpAll(() {
+    registerFallbackValue((ParticipationInfo value) => value.eventId);
+  });
+
   test('reloads participations when the signed-in repository changes',
       () async {
     final _MockParticipationRepository signedOutRepository =
@@ -27,18 +31,10 @@ void main() {
       participationType: ParticipationType.onSite,
     );
 
-    when(signedOutRepository.get).thenAnswer(
-      (_) async => <ParticipationInfo>[],
-    );
-    when(signedOutRepository.fetch).thenAnswer(
-      (_) async => <ParticipationInfo>[],
-    );
-    when(signedInRepository.get).thenAnswer(
-      (_) async => <ParticipationInfo>[],
-    );
-    when(signedInRepository.fetch).thenAnswer(
-      (_) async => <ParticipationInfo>[linkedEvent],
-    );
+    when(() => signedOutRepository.getLatest(getId: any(named: 'getId')))
+        .thenAnswer((_) async => <ParticipationInfo>[]);
+    when(() => signedInRepository.getLatest(getId: any(named: 'getId')))
+        .thenAnswer((_) async => <ParticipationInfo>[linkedEvent]);
 
     final StateProvider<bool> signedInProvider =
         StateProvider<bool>((Ref ref) => false);
@@ -67,7 +63,9 @@ void main() {
       await container.read(participationControllerProvider.future),
       <ParticipationInfo>[linkedEvent],
     );
-    verify(signedInRepository.get).called(1);
-    verify(signedInRepository.fetch).called(1);
+    verify(() => signedOutRepository.getLatest(getId: any(named: 'getId')))
+        .called(1);
+    verify(() => signedInRepository.getLatest(getId: any(named: 'getId')))
+        .called(1);
   });
 }

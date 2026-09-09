@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:linca_otaku_support/core/widgets/common/linca_interaction.dart';
 
 import '../../l10n/app_localizations.dart';
 
@@ -25,11 +26,19 @@ extension BuildContextExtension on BuildContext {
   }) {
     ScaffoldMessenger.of(this).showSnackBar(
       SnackBar(
-        content: Text(
-          message,
-          style: textTheme.titleMedium?.copyWith(
-            color: Colors.white,
-          ),
+        content: Row(
+          children: <Widget>[
+            const LincaSuccessIcon(),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                message,
+                style: textTheme.titleMedium?.copyWith(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
         ),
         backgroundColor: Colors.green,
         behavior: SnackBarBehavior.floating,
