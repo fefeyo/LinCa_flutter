@@ -28,7 +28,9 @@ class EventController extends LincaController<List<LincaEvent>> {
     tagRepository = ref.read(tagRepositoryProvider);
     venueRepository = ref.read(venueRepositoryProvider);
     groupRepository = ref.read(groupRepositoryProvider);
-    final List<OfficialEvent> events = await eventRepository.get();
+    final List<OfficialEvent> events = await eventRepository.getLatest(
+      getId: (OfficialEvent event) => event.id,
+    );
     final Map<String, Venue> venuesMap = <String, Venue>{
       for (final Venue venue
           in ref.watch(venueControllerProvider).value ?? <Venue>[])
@@ -43,12 +45,6 @@ class EventController extends LincaController<List<LincaEvent>> {
           in ref.watch(groupControllerProvider).value ?? <Group>[])
         group.slug: group
     };
-
-    if (events.isNotEmpty) {
-      await refreshInBackground();
-    } else {
-      events.addAll(await eventRepository.fetch());
-    }
 
     final List<LincaEvent> lincaEvents =
         await Future.wait(events.map((OfficialEvent event) async {

@@ -266,6 +266,7 @@ void main() {
         tester.getSemantics(find.byType(LincaCalendarDayCell)),
         matchesSemantics(
             isSelected: true,
+            isButton: true,
             hasSelectedState: true,
             hasTapAction: true,
             hasFocusAction: true,

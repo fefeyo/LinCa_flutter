@@ -116,22 +116,25 @@ class HomePage extends HookConsumerWidget
                         myEventViewModel.setKeyword(value);
                       },
                     )
-                  : Column(
-                      children: <Widget>[
-                        Text(
-                          titles[tabs.activeIndex],
-                          style: context.textTheme.titleMedium,
-                        ),
-                        if (tabs.activeIndex == 0)
-                          LincaAnimatedLabel(
-                            child: Text(
-                              key: ValueKey<int>(sortedParticipationCount),
-                              context.l10n
-                                  .common_event_count(sortedParticipationCount),
-                              style: context.textTheme.bodyMedium,
-                            ),
+                  : LincaAnimatedLabel(
+                      child: Column(
+                        key: ValueKey<int>(tabs.activeIndex),
+                        children: <Widget>[
+                          Text(
+                            titles[tabs.activeIndex],
+                            style: context.textTheme.titleMedium,
                           ),
-                      ],
+                          if (tabs.activeIndex == 0)
+                            LincaAnimatedLabel(
+                              child: Text(
+                                key: ValueKey<int>(sortedParticipationCount),
+                                context.l10n.common_event_count(
+                                    sortedParticipationCount),
+                                style: context.textTheme.bodyMedium,
+                              ),
+                            ),
+                        ],
+                      ),
                     ),
               actions: <Widget>[
                 if (tabs.activeIndex == 0)

@@ -17,16 +17,9 @@ class ParticipationController extends LincaController<List<ParticipationInfo>> {
   Future<List<ParticipationInfo>> buildImpl() async {
     participationRepository = ref.watch(participationRepositoryProvider);
 
-    List<ParticipationInfo> participationInfos =
-        await participationRepository.get();
-
-    if (participationInfos.isNotEmpty) {
-      unawaited(_refreshInBackground());
-    } else {
-      participationInfos = await participationRepository.fetch();
-    }
-
-    return participationInfos;
+    return participationRepository.getLatest(
+      getId: (ParticipationInfo participation) => participation.eventId,
+    );
   }
 
   Future<void> createParticipation({
@@ -77,22 +70,6 @@ class ParticipationController extends LincaController<List<ParticipationInfo>> {
     } else {
       // fallback：強制再読み込み
       ref.invalidateSelf();
-    }
-  }
-
-  Future<void> _refreshInBackground() async {
-    final List<ParticipationInfo> participations =
-        state.value ?? <ParticipationInfo>[];
-
-    try {
-      final List<ParticipationInfo> updated =
-          await participationRepository.fetch();
-
-      if (updated.isNotEmpty) {
-        state = AsyncValue<List<ParticipationInfo>>.data(updated);
-      }
-    } catch (_) {
-      state = AsyncValue<List<ParticipationInfo>>.data(participations);
     }
   }
 
