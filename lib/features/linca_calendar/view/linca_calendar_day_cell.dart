@@ -65,7 +65,7 @@ class LincaCalendarDayCell extends StatelessWidget {
               ),
               if (hasEvent || hasAnniversary)
                 Positioned(
-                  bottom: 9,
+                  bottom: 4,
                   left: 0,
                   right: 0,
                   child: Container(
