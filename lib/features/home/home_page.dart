@@ -18,6 +18,7 @@ import 'package:linca_otaku_support/core/utils/providers.dart';
 import 'package:linca_otaku_support/core/utils/screen_analytics_manager.dart';
 import 'package:linca_otaku_support/features/linca_calendar/view_model/linca_calendar_view_model.dart';
 import 'package:linca_otaku_support/features/my_event/data/my_event_state.dart';
+import 'package:linca_otaku_support/core/widgets/common/linca_interaction.dart';
 
 import '../../../core/utils/context_extension.dart';
 import '../../core/network/model/participation_info.dart';
@@ -89,6 +90,8 @@ class HomePage extends HookConsumerWidget
     }, const <Object?>[]);
 
     return AutoTabsRouter(
+      duration: lincaMotionDuration(context),
+      curve: Curves.easeOutCubic,
       routes: const <PageRouteInfo<Object?>>[
         MyEventRoute(),
         LincaCalendarRoute(),
@@ -120,10 +123,13 @@ class HomePage extends HookConsumerWidget
                           style: context.textTheme.titleMedium,
                         ),
                         if (tabs.activeIndex == 0)
-                          Text(
-                            context.l10n
-                                .common_event_count(sortedParticipationCount),
-                            style: context.textTheme.bodyMedium,
+                          LincaAnimatedLabel(
+                            child: Text(
+                              key: ValueKey<int>(sortedParticipationCount),
+                              context.l10n
+                                  .common_event_count(sortedParticipationCount),
+                              style: context.textTheme.bodyMedium,
+                            ),
                           ),
                       ],
                     ),
@@ -152,7 +158,12 @@ class HomePage extends HookConsumerWidget
                   ),
                 if (tabs.activeIndex == 0)
                   IconButton(
-                    icon: Icon(isSearching.value ? Icons.close : Icons.search),
+                    icon: LincaAnimatedLabel(
+                      child: Icon(
+                        isSearching.value ? Icons.close : Icons.search,
+                        key: ValueKey<bool>(isSearching.value),
+                      ),
+                    ),
                     onPressed: () {
                       isSearching.value = !isSearching.value;
                       if (!isSearching.value) {
@@ -173,7 +184,22 @@ class HomePage extends HookConsumerWidget
           drawer: HomeDrawer(
             lincaUser: lincaUser,
           ),
-          body: FadeTransition(opacity: animation, child: child),
+          body: FadeTransition(
+            opacity: MediaQuery.disableAnimationsOf(context)
+                ? const AlwaysStoppedAnimation<double>(1)
+                : animation,
+            child: SlideTransition(
+              position: MediaQuery.disableAnimationsOf(context)
+                  ? const AlwaysStoppedAnimation<Offset>(Offset.zero)
+                  : animation.drive(
+                      Tween<Offset>(
+                        begin: const Offset(0, 0.015),
+                        end: Offset.zero,
+                      ),
+                    ),
+              child: child,
+            ),
+          ),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: tabs.activeIndex,
             onTap: (int index) {
@@ -190,15 +216,24 @@ class HomePage extends HookConsumerWidget
             },
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                icon: const Icon(Icons.event),
+                icon: LincaNavigationIcon(
+                  icon: Icons.event,
+                  selected: tabs.activeIndex == 0,
+                ),
                 label: titles[0],
               ),
               BottomNavigationBarItem(
-                icon: const Icon(Icons.event_note),
+                icon: LincaNavigationIcon(
+                  icon: Icons.event_note,
+                  selected: tabs.activeIndex == 1,
+                ),
                 label: titles[1],
               ),
               BottomNavigationBarItem(
-                icon: const Icon(Icons.person),
+                icon: LincaNavigationIcon(
+                  icon: Icons.person,
+                  selected: tabs.activeIndex == 2,
+                ),
                 label: titles[2],
               ),
             ],

@@ -13,6 +13,7 @@ import 'package:linca_otaku_support/core/widgets/dialog/image_preview_dialog.dar
 import 'package:linca_otaku_support/core/widgets/event/event_card.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:linca_otaku_support/core/widgets/common/linca_interaction.dart';
 
 import '../../../core/utils/context_extension.dart';
 import '../../../core/asset_gen/assets.gen.dart';
@@ -247,17 +248,21 @@ class LincaVertical extends HookConsumerWidget {
 
     Widget buildBody() {
       if (onTap != null) {
-        return InkWell(
-          onTap: () => onTap?.call(lincaUser, animationTag),
-          borderRadius: BorderRadius.circular(20),
-          child: isFullScreen
-              ? SizedBox.expand(
-                  child: buildCard(),
-                )
-              : SizedBox(
-                  width: double.infinity,
-                  child: buildCard(),
-                ),
+        return LincaInteractive(
+          builder: (BuildContext context, WidgetStatesController states) =>
+              InkWell(
+            statesController: states,
+            onTap: () => onTap?.call(lincaUser, animationTag),
+            borderRadius: BorderRadius.circular(20),
+            child: isFullScreen
+                ? SizedBox.expand(
+                    child: buildCard(),
+                  )
+                : SizedBox(
+                    width: double.infinity,
+                    child: buildCard(),
+                  ),
+          ),
         );
       } else {
         return isFullScreen

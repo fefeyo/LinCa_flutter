@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:linca_otaku_support/core/utils/color_extension.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
 import 'package:linca_otaku_support/core/utils/date_extension.dart';
+import 'package:linca_otaku_support/core/widgets/common/linca_interaction.dart';
 
 class LincaCalendarDayCell extends StatelessWidget {
   const LincaCalendarDayCell({
@@ -37,38 +38,48 @@ class LincaCalendarDayCell extends StatelessWidget {
       background = context.colorScheme.primary.withValues(alpha: 0.15);
     }
 
-    return GestureDetector(
-      onTap: onTap,
-      child: Stack(
-        children: <Widget>[
-          Container(
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: background,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Text(
-              '${date.day}',
-              style: context.textTheme.bodyMedium?.copyWith(
-                color: textColor,
-              ),
-            ),
-          ),
-          if (hasEvent || hasAnniversary)
-            Positioned(
-              bottom: 9,
-              left: 0,
-              right: 0,
-              child: Container(
-                width: 5,
-                height: 5,
+    return Semantics(
+      selected: isSelected,
+      child: LincaInteractive(
+        builder: (BuildContext context, WidgetStatesController states) =>
+            InkWell(
+          statesController: states,
+          borderRadius: BorderRadius.circular(10),
+          onTap: onTap,
+          child: Stack(
+            children: <Widget>[
+              AnimatedContainer(
+                duration: lincaMotionDuration(context),
+                curve: Curves.easeOutCubic,
+                alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: dotColor,
-                  shape: BoxShape.circle,
+                  color: background,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  '${date.day}',
+                  style: context.textTheme.bodyMedium?.copyWith(
+                    color: textColor,
+                  ),
                 ),
               ),
-            ),
-        ],
+              if (hasEvent || hasAnniversary)
+                Positioned(
+                  bottom: 9,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    width: 5,
+                    height: 5,
+                    decoration: BoxDecoration(
+                      color: dotColor,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }
