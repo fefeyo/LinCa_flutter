@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:collection/collection.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/network/controller/linca_controller.dart';
 import 'package:linca_otaku_support/core/utils/linca_event_extension.dart';
 
+import '../../models/event_details_mapper.dart';
 import '../../models/linca_event.dart';
 import '../model/event_base.dart';
 import '../model/group.dart';
@@ -31,34 +31,14 @@ class EventController extends LincaController<List<LincaEvent>> {
     final List<OfficialEvent> events = await eventRepository.getLatest(
       getId: (OfficialEvent event) => event.id,
     );
-    final Map<String, Venue> venuesMap = <String, Venue>{
-      for (final Venue venue
-          in ref.watch(venueControllerProvider).value ?? <Venue>[])
-        venue.id: venue
-    };
-    final Map<String, Tag> tagsMap = <String, Tag>{
-      for (final Tag tag in ref.watch(tagControllerProvider).value ?? <Tag>[])
-        tag.id: tag
-    };
-    final Map<String, Group> groupsMap = <String, Group>{
-      for (final Group group
-          in ref.watch(groupControllerProvider).value ?? <Group>[])
-        group.slug: group
-    };
-
-    final List<LincaEvent> lincaEvents =
-        await Future.wait(events.map((OfficialEvent event) async {
-      return LincaEvent(
-        event: event,
-        tags: event.tagIds
-            .map((String id) => tagsMap[id])
-            .whereType<Tag>()
-            .sorted((Tag a, Tag b) => a.order.compareTo(b.order))
-            .toList(),
-        venue: venuesMap[event.venueId] ?? const Venue(),
-        group: groupsMap[event.organizer] ?? const Group(),
-      );
-    }).toList());
+    final EventDetailsMapper mapper = EventDetailsMapper(
+      venues: ref.watch(venueControllerProvider).value ?? <Venue>[],
+      tags: ref.watch(tagControllerProvider).value ?? <Tag>[],
+      groups: ref.watch(groupControllerProvider).value ?? <Group>[],
+    );
+    final List<LincaEvent> lincaEvents = events
+        .map((OfficialEvent event) => mapper.official(event, sortTags: true))
+        .toList();
 
     return lincaEvents.sortWithDisplayOrder();
   }
@@ -68,33 +48,14 @@ class EventController extends LincaController<List<LincaEvent>> {
       final List<OfficialEvent> updated = await eventRepository.fetch();
       if (updated.isEmpty) return;
 
-      final Map<String, Venue> venuesMap = <String, Venue>{
-        for (final Venue venue
-            in ref.read(venueControllerProvider).value ?? <Venue>[])
-          venue.id: venue,
-      };
-      final Map<String, Tag> tagsMap = <String, Tag>{
-        for (final Tag tag in ref.read(tagControllerProvider).value ?? <Tag>[])
-          tag.id: tag,
-      };
-      final Map<String, Group> groupsMap = <String, Group>{
-        for (final Group group
-            in ref.read(groupControllerProvider).value ?? <Group>[])
-          group.slug: group,
-      };
-
+      final EventDetailsMapper mapper = EventDetailsMapper(
+        venues: ref.read(venueControllerProvider).value ?? <Venue>[],
+        tags: ref.read(tagControllerProvider).value ?? <Tag>[],
+        groups: ref.read(groupControllerProvider).value ?? <Group>[],
+      );
+      // Refresh keeps the event's declared tag order, as before.
       final List<LincaEvent> refreshed =
-          await Future.wait(updated.map((OfficialEvent event) async {
-        return LincaEvent(
-          event: event,
-          tags: event.tagIds
-              .map((String id) => tagsMap[id])
-              .whereType<Tag>()
-              .toList(),
-          venue: venuesMap[event.venueId] ?? const Venue(),
-          group: groupsMap[event.organizer] ?? const Group(),
-        );
-      }));
+          updated.map((OfficialEvent event) => mapper.official(event)).toList();
 
       final Map<String, LincaEvent> merged = <String, LincaEvent>{
         for (final LincaEvent event in state.value ?? <LincaEvent>[])

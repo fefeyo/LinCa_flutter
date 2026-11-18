@@ -4,7 +4,7 @@ on:
   push:
     branches: [ develop ]              # マージ後のdevelopをビルドしたいなら
   pull_request:
-    branches: [ main, develop ]
+    branches: [ main, develop, release/v1.0.4 ]
     types: [ opened, synchronize, reopened ]
 
 concurrency:
@@ -53,3 +53,18 @@ jobs:
         with:
           name: app-release
           path: build/app/outputs/flutter-apk/app-release.apk
+
+  compile:
+    name: Compile ${{ matrix.target }} (PR)
+    if: github.event_name == 'pull_request'
+    needs: setup
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [ lib/main.dart, lib/main_dev.dart ]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/workflows/setup
+      # Compile Dart and assets without requiring release signing credentials.
+      - run: flutter build bundle --release --no-pub --target ${{ matrix.target }}

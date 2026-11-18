@@ -2,22 +2,18 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:linca_otaku_support/core/constants/app_constants.dart';
-import 'package:linca_otaku_support/core/constants/participation_type.dart';
 import 'package:linca_otaku_support/core/models/app_settings.dart';
 import 'package:linca_otaku_support/core/models/linca_event.dart';
 import 'package:linca_otaku_support/core/network/model/participation_info.dart';
 import 'package:linca_otaku_support/core/network/providers.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
-import 'package:linca_otaku_support/core/utils/event_base_extension.dart';
 import 'package:linca_otaku_support/core/utils/notification/linca_notification_controller.dart';
 import 'package:linca_otaku_support/core/utils/notification/providers.dart';
-import 'package:linca_otaku_support/core/utils/participation_extension.dart';
 import 'package:linca_otaku_support/core/utils/preferences_service.dart';
 import 'package:linca_otaku_support/l10n/app_localizations.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../../core/network/model/event_base.dart';
+import '../../core/utils/notification/event_notification_plan.dart';
 import '../../core/utils/providers.dart';
 
 @RoutePage()
@@ -31,9 +27,6 @@ class AppSettingsPage extends HookConsumerWidget {
     final ValueNotifier<AppSettings?> appSettings =
         useState(preferencesService.getAppSettings());
 
-    final DateTime now = DateTime.now();
-    final DateTime today = DateTime(now.year, now.month, now.day);
-
     final LincaNotificationController notificationController =
         ref.watch(eventNotificationControllerProvider);
     final List<ParticipationInfo> participations =
@@ -41,112 +34,28 @@ class AppSettingsPage extends HookConsumerWidget {
             <ParticipationInfo>[];
     final List<LincaEvent> events =
         ref.watch(eventControllerProvider).value ?? <LincaEvent>[];
-    final List<LincaEvent> upcomingEvents = events.where((LincaEvent event) {
-      final DateTime? date = event.event.date;
-      if (date == null) return false;
-      return !date.isBefore(today);
-    }).toList();
-    // 今日以降の現地参加予定のイベント
-    final List<LincaEvent> onSiteAndHasCheckInParticipateEvents =
-        upcomingEvents.where((LincaEvent event) {
-      if (event.event.isCanceled) return false;
-      final ParticipationInfo? participation =
-          participations.getByEventId(event.event.id);
-      final OfficialEvent officialEvent = event.event as OfficialEvent;
-      return participation?.participationType == ParticipationType.onSite &&
-          officialEvent.checkInId.isNotEmpty;
-    }).toList();
-    // 今日以降の参加予定のイベント
-    final List<LincaEvent> participateEvents =
-        upcomingEvents.where((LincaEvent event) {
-      if (event.event.isCanceled) return false;
-      final ParticipationInfo? participation =
-          participations.getByEventId(event.event.id);
-      return participations.hasEventId(event.event.id) &&
-          participation?.participationType != ParticipationType.absent;
-    }).toList();
-    // 今日以降の参加予定じゃないイベント
-    final List<LincaEvent> notParticipateEvents = upcomingEvents
-        .where((LincaEvent event) =>
-            !participations.hasEventId(event.event.id) &&
-            !event.event.isCanceled)
-        .toList();
     final AppLocalizations l10n = context.l10n;
 
     useEffect(() {
       final AppSettings? mutableAppSettings = appSettings.value;
       if (mutableAppSettings == null) return;
-      for (final LincaEvent event in upcomingEvents) {
+      final EventNotificationPlan plan = EventNotificationPlan(
+        events: events,
+        participations: participations,
+        settings: mutableAppSettings,
+        now: DateTime.now(),
+      );
+      for (final LincaEvent event in plan.upcomingEvents) {
         notificationController.cancelEventNotification(event.event.id);
       }
       if (!mutableAppSettings.isNotificationEnabled) return;
-      List<LincaEvent> targetEvents = <LincaEvent>[];
-      if (mutableAppSettings.isMyEventNotificationEnabled) {
-        switch (mutableAppSettings.eventNotificationType) {
-          case EventNotificationType.allParticipation:
-            targetEvents.addAll(participateEvents);
-            break;
-          case EventNotificationType.onlyHasCheckedIn:
-            targetEvents.addAll(onSiteAndHasCheckInParticipateEvents);
-            break;
-        }
-      }
-      if (mutableAppSettings.isAllEventNotificationEnabled) {
-        if (mutableAppSettings.isLoveLiveNotificationEnabled) {
-          targetEvents.addAll(notParticipateEvents.where((LincaEvent event) =>
-              event.event.tagIds.contains(AppConstants.seriesTagLovelive)));
-        }
-        if (mutableAppSettings.isSunshineNotificationEnabled) {
-          targetEvents.addAll(notParticipateEvents.where((LincaEvent event) =>
-              event.event.tagIds.contains(AppConstants.seriesTagSunshine)));
-        }
-        if (mutableAppSettings.isNijigasakiNotificationEnabled) {
-          targetEvents.addAll(notParticipateEvents.where((LincaEvent event) =>
-              event.event.tagIds.contains(AppConstants.seriesTagNijigasaki)));
-        }
-        if (mutableAppSettings.isSuperstarNotificationEnabled) {
-          targetEvents.addAll(notParticipateEvents.where((LincaEvent event) =>
-              event.event.tagIds.contains(AppConstants.seriesTagSuperstar)));
-        }
-        if (mutableAppSettings.isHasunosoraNotificationEnabled) {
-          targetEvents.addAll(notParticipateEvents.where((LincaEvent event) =>
-              event.event.tagIds.contains(AppConstants.seriesTagHasunosora)));
-        }
-        if (mutableAppSettings.isIkizuliveNotificationEnabled) {
-          targetEvents.addAll(notParticipateEvents.where((LincaEvent event) =>
-              event.event.tagIds.contains(AppConstants.seriesTagIkizulive)));
-        }
-        if (mutableAppSettings.isMusicalNotificationEnabled) {
-          targetEvents.addAll(notParticipateEvents.where((LincaEvent event) =>
-              event.event.tagIds.contains(AppConstants.seriesTagMusical)));
-        }
-        if (mutableAppSettings.isYohaneNotificationEnabled) {
-          targetEvents.addAll(notParticipateEvents.where((LincaEvent event) =>
-              event.event.tagIds.contains(AppConstants.seriesTagYohane)));
-        }
-        if (mutableAppSettings.isCollaborativeNotificationEnabled) {
-          targetEvents.addAll(notParticipateEvents.where((LincaEvent event) =>
-              event.event.tagIds
-                  .contains(AppConstants.seriesTagCollaborative)));
-        }
-      }
-      targetEvents = targetEvents.toSet().toList();
-      for (final LincaEvent event in targetEvents) {
-        if (onSiteAndHasCheckInParticipateEvents.contains(event)) {
-          notificationController.scheduleEventDayNotification(
-            eventId: event.event.id,
-            title: l10n.push_notifications_title_check_in,
-            body: event.event.title,
-            eventDate: event.event.date!,
-          );
-        } else {
-          notificationController.scheduleEventDayNotification(
-            eventId: event.event.id,
-            title: l10n.push_notifications_title_check_in,
-            body: event.event.title,
-            eventDate: event.event.date!,
-          );
-        }
+      for (final LincaEvent event in plan.targetEvents) {
+        notificationController.scheduleEventDayNotification(
+          eventId: event.event.id,
+          title: l10n.push_notifications_title_check_in,
+          body: event.event.title,
+          eventDate: event.event.date!,
+        );
       }
 
       preferencesService.updateAppSettings(mutableAppSettings);

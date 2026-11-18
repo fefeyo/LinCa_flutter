@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:collection/collection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/models/linca_user.dart';
@@ -8,6 +7,7 @@ import 'package:linca_otaku_support/core/network/controller/linca_controller.dar
 import 'package:linca_otaku_support/core/network/repository/participation_repository.dart';
 
 import '../../auth/providers.dart';
+import '../../models/event_details_mapper.dart';
 import '../../models/linca_event.dart';
 import '../model/event_base.dart';
 import '../model/tag.dart';
@@ -38,20 +38,10 @@ class UserEventController extends LincaController<List<LincaEvent>> {
     final List<UnOfficialEvent> events = await userEventRepository.getLatest(
       getId: (UnOfficialEvent event) => event.id,
     );
-    final List<LincaEvent> lincaEvents =
-        await Future.wait(events.map((UnOfficialEvent event) async {
-      // タグ一覧を取得
-      final List<Tag> tags = event.tagIds
-          .map((String tagId) =>
-              allTags.firstWhereOrNull((Tag tag) => tag.id == tagId))
-          .whereType<Tag>()
-          .toList();
-
-      return LincaEvent(
-        event: event,
-        tags: tags,
-      );
-    }).toList());
+    final List<LincaEvent> lincaEvents = events
+        .map((UnOfficialEvent event) =>
+            EventDetailsMapper.unofficial(event, allTags))
+        .toList();
 
     return lincaEvents.sortWithDisplayOrder();
   }
@@ -108,23 +98,11 @@ class UserEventController extends LincaController<List<LincaEvent>> {
       current: current,
       updated: fetched,
       getId: (UnOfficialEvent event) => event.id,
-      onChanged: (List<UnOfficialEvent> merged) async {
-        final List<LincaEvent> lincaEvents = await Future.wait(
-          merged.map(
-            (UnOfficialEvent event) async {
-              final List<Tag> tags = event.tagIds
-                  .map((String id) =>
-                      allTags.firstWhereOrNull((Tag tag) => tag.id == id))
-                  .whereType<Tag>()
-                  .toList();
-
-              return LincaEvent(
-                event: event,
-                tags: tags,
-              );
-            },
-          ),
-        );
+      onChanged: (List<UnOfficialEvent> merged) {
+        final List<LincaEvent> lincaEvents = merged
+            .map((UnOfficialEvent event) =>
+                EventDetailsMapper.unofficial(event, allTags))
+            .toList();
 
         state = AsyncValue<List<LincaEvent>>.data(lincaEvents);
       },
