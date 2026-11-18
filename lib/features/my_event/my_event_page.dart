@@ -20,6 +20,7 @@ import '../../core/router/app_router.gr.dart';
 import '../../core/utils/preferences_service.dart';
 import '../../core/utils/providers.dart';
 import '../../core/widgets/bottom_sheet/add_event_bottom_sheet.dart';
+import '../../core/widgets/common/pressable_scale.dart';
 import '../../core/widgets/event/event_card.dart';
 
 @RoutePage()
@@ -35,8 +36,10 @@ class MyEventPage extends HookConsumerWidget
     final GlobalKey eventListKey = useMemoized(() => GlobalKey());
     final GlobalKey floatingActionButtonKey = useMemoized(() => GlobalKey());
     final List<ParticipationInfo> sortedParticipations = state.sortedEvents
-        .map((LincaEvent lincaEvent) =>
-            state.participations.getByEventId(lincaEvent.event.id))
+        .map(
+          (LincaEvent lincaEvent) =>
+              state.participations.getByEventId(lincaEvent.event.id),
+        )
         .whereType<ParticipationInfo>()
         .toList();
 
@@ -62,8 +65,9 @@ class MyEventPage extends HookConsumerWidget
     useEffect(() {
       Future<void>.microtask(() async {
         if (!context.mounted) return;
-        final PreferencesService preferences =
-            ref.read(preferencesServiceProvider);
+        final PreferencesService preferences = ref.read(
+          preferencesServiceProvider,
+        );
         await showIfNeeded(
           context: context,
           preferences: preferences,
@@ -113,19 +117,21 @@ class MyEventPage extends HookConsumerWidget
                   );
                 },
                 separatorBuilder: (BuildContext context, int index) {
-                  return const SizedBox(
-                    height: 12,
-                  );
-                }),
+                  return const SizedBox(height: 12);
+                },
+              ),
       ),
-      floatingActionButton: FloatingActionButton(
-        key: floatingActionButtonKey,
-        onPressed: () {
-          AddEventBottomSheet.show(context);
+      floatingActionButton: PressableScale(
+        pressedScale: 0.9,
+        child: FloatingActionButton(
+          key: floatingActionButtonKey,
+          onPressed: () {
+            AddEventBottomSheet.show(context);
 
-          logEvent(event: AnalyticsEvent.eventAddClick);
-        },
-        child: const Icon(Icons.add),
+            logEvent(event: AnalyticsEvent.eventAddClick);
+          },
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }

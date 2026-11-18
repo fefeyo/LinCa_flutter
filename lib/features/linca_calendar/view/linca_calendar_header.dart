@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:linca_otaku_support/core/utils/context_extension.dart';
+import 'package:linca_otaku_support/core/widgets/common/linca_interaction.dart';
 
 class LincaCalendarHeader extends StatelessWidget {
   const LincaCalendarHeader({
@@ -22,10 +23,13 @@ class LincaCalendarHeader extends StatelessWidget {
           onPressed: onPrev,
           icon: const Icon(Icons.chevron_left),
         ),
-        Text(
-          context.l10n.event_calendar_year_month_title(
-              '${focusedMonth.year}', '${focusedMonth.month}'),
-          style: Theme.of(context).textTheme.titleMedium,
+        LincaAnimatedLabel(
+          child: Text(
+            key: ValueKey<String>('${focusedMonth.year}-${focusedMonth.month}'),
+            context.l10n.event_calendar_year_month_title(
+                '${focusedMonth.year}', '${focusedMonth.month}'),
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
         ),
         IconButton(
           onPressed: onNext,

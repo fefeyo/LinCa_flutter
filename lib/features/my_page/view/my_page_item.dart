@@ -1,5 +1,6 @@
 import '../../../core/utils/context_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:linca_otaku_support/core/widgets/common/linca_interaction.dart';
 
 class MyPageItem extends StatelessWidget {
   const MyPageItem({
@@ -17,20 +18,24 @@ class MyPageItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      tileColor: context.colorScheme.surfaceContainer,
-      title: Text(
-        title,
-        style: context.textTheme.bodyMedium,
+    return LincaInteractive(
+      builder: (BuildContext context, WidgetStatesController states) =>
+          ListTile(
+        statesController: states,
+        tileColor: context.colorScheme.surfaceContainer,
+        title: Text(
+          title,
+          style: context.textTheme.bodyMedium,
+        ),
+        subtitle: subtitle != null
+            ? Text(
+                subtitle!,
+                style: context.textTheme.bodySmall,
+              )
+            : null,
+        trailing: trailing,
+        onTap: onClickItem,
       ),
-      subtitle: subtitle != null
-          ? Text(
-              subtitle!,
-              style: context.textTheme.bodySmall,
-            )
-          : null,
-      trailing: trailing,
-      onTap: onClickItem,
     );
   }
 }

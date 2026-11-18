@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:linca_otaku_support/core/widgets/common/linca_interaction.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/local/controller/calendar_event_controller.dart';
@@ -17,10 +18,12 @@ class LincaCalendar extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final LincaCalendarState state = ref.watch(lincaCalendarViewModelProvider);
-    final LincaCalendarViewModel viewModel =
-        ref.read(lincaCalendarViewModelProvider.notifier);
-    final AsyncValue<List<CalendarEvent>> calendarEventsAsync =
-        ref.watch(calendarEventsProvider);
+    final LincaCalendarViewModel viewModel = ref.read(
+      lincaCalendarViewModelProvider.notifier,
+    );
+    final AsyncValue<List<CalendarEvent>> calendarEventsAsync = ref.watch(
+      calendarEventsProvider,
+    );
 
     useEffect(() {
       Future<void>.microtask(() async {
@@ -60,19 +63,43 @@ class LincaCalendar extends HookConsumerWidget {
         const SizedBox(height: 8),
         const LincaCalendarWeeklyRow(),
         const SizedBox(height: 8),
-        LincaCalendarGrid(
-          focusedMonth: state.focusedMonth,
-          selectedDate: state.selectedDate,
-          onSelect: (DateTime date) {
-            viewModel.updateSelectedDate(date);
-          },
+        AnimatedSwitcher(
+          duration: lincaMotionDuration(context),
+          switchInCurve: Curves.easeOutCubic,
+          switchOutCurve: Curves.easeInCubic,
+          child: LincaCalendarGrid(
+            key: ValueKey<String>(
+              '${state.focusedMonth.year}-${state.focusedMonth.month}',
+            ),
+            focusedMonth: state.focusedMonth,
+            selectedDate: state.selectedDate,
+            onSelect: (DateTime date) {
+              viewModel.updateSelectedDate(date);
+            },
+          ),
         ),
         Expanded(
-          child: SelectedDayEventSection(
-            key: ValueKey<DateTime?>(state.selectedDate),
-            selectedDate: state.selectedDate,
-            events: state.selectedDateEventMap,
-            calendarEvents: state.selectedDateCalendarEvents,
+          child: AnimatedSwitcher(
+            duration: lincaMotionDuration(context),
+            switchInCurve: Curves.easeOutCubic,
+            switchOutCurve: Curves.easeInCubic,
+            transitionBuilder: (Widget child, Animation<double> animation) {
+              final Animation<Offset> slideAnimation = Tween<Offset>(
+                begin: const Offset(0, 0.05),
+                end: Offset.zero,
+              ).animate(animation);
+
+              return FadeTransition(
+                opacity: animation,
+                child: SlideTransition(position: slideAnimation, child: child),
+              );
+            },
+            child: SelectedDayEventSection(
+              key: ValueKey<DateTime?>(state.selectedDate),
+              selectedDate: state.selectedDate,
+              events: state.selectedDateEventMap,
+              calendarEvents: state.selectedDateCalendarEvents,
+            ),
           ),
         ),
       ],

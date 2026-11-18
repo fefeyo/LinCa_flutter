@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:linca_otaku_support/core/widgets/common/linca_interaction.dart';
 import 'app_typography.dart';
 
 ThemeData buildAppTheme(ColorScheme scheme) {
@@ -26,7 +27,19 @@ ThemeData buildAppTheme(ColorScheme scheme) {
           borderRadius: BorderRadius.circular(24),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-      ),
+      ).copyWith(foregroundBuilder: lincaButtonForeground),
+    ),
+    filledButtonTheme: const FilledButtonThemeData(
+      style: ButtonStyle(foregroundBuilder: lincaButtonForeground),
+    ),
+    outlinedButtonTheme: const OutlinedButtonThemeData(
+      style: ButtonStyle(foregroundBuilder: lincaButtonForeground),
+    ),
+    textButtonTheme: const TextButtonThemeData(
+      style: ButtonStyle(foregroundBuilder: lincaButtonForeground),
+    ),
+    iconButtonTheme: const IconButtonThemeData(
+      style: ButtonStyle(foregroundBuilder: lincaButtonForeground),
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: scheme.primary,

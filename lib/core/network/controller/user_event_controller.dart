@@ -35,12 +35,9 @@ class UserEventController extends LincaController<List<LincaEvent>> {
     user = ref.read(userControllerProvider).value;
     final List<Tag> allTags = ref.read(tagControllerProvider).value ?? <Tag>[];
 
-    final List<UnOfficialEvent> events = await userEventRepository.get();
-    if (events.isNotEmpty) {
-      unawaited(refreshInBackground(current: events));
-    } else {
-      events.addAll(await userEventRepository.fetch());
-    }
+    final List<UnOfficialEvent> events = await userEventRepository.getLatest(
+      getId: (UnOfficialEvent event) => event.id,
+    );
     final List<LincaEvent> lincaEvents =
         await Future.wait(events.map((UnOfficialEvent event) async {
       // タグ一覧を取得
