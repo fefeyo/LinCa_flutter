@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:linca_otaku_support/core/widgets/common/linca_interaction.dart';
-import 'package:linca_otaku_support/core/utils/color_extension.dart';
-import 'package:linca_otaku_support/core/utils/context_extension.dart';
-import 'package:linca_otaku_support/core/utils/date_extension.dart';
 
 class LincaCalendarDayCell extends StatelessWidget {
   const LincaCalendarDayCell({
@@ -26,23 +23,17 @@ class LincaCalendarDayCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color? background;
-    Color textColor = date.isWeekEnd || isHoliday
-        ? context.colorScheme.error
-        : context.colorScheme.onSurface;
-    final Color dotColor =
-        hasEvent ? context.colorScheme.colorLovelive : Colors.blue;
-    final bool showDot = hasEvent || hasAnniversary;
-    final bool disableAnimations = MediaQuery.disableAnimationsOf(context);
-    final Duration duration =
-        disableAnimations ? Duration.zero : const Duration(milliseconds: 220);
-
-    if (isSelected) {
-      background = context.colorScheme.primary;
-      textColor = Colors.white;
-    } else if (isToday) {
-      background = context.colorScheme.primary.withValues(alpha: 0.15);
-    }
+    final ColorScheme scheme = Theme.of(context).colorScheme;
+    final bool dark = scheme.brightness == Brightness.dark;
+    final bool reduced = MediaQuery.disableAnimationsOf(context);
+    final Duration duration = lincaMotionDuration(context);
+    final Color ink = isSelected
+        ? const Color(0xFF183C50)
+        : isHoliday || date.weekday == DateTime.sunday
+            ? (dark ? const Color(0xFFFFA6C5) : const Color(0xFFB5416C))
+            : date.weekday == DateTime.saturday
+                ? (dark ? const Color(0xFF86D7FF) : const Color(0xFF086DA8))
+                : scheme.onSurface;
 
     return Semantics(
       selected: isSelected,
@@ -51,67 +42,88 @@ class LincaCalendarDayCell extends StatelessWidget {
         builder: (BuildContext context, WidgetStatesController states) =>
             InkWell(
           statesController: states,
-          borderRadius: BorderRadius.circular(isSelected ? 14 : 10),
+          borderRadius: BorderRadius.circular(14),
           onTap: onTap,
           child: AnimatedScale(
-            scale: isSelected && !disableAnimations ? 1.08 : 1,
+            scale: isSelected && !reduced ? 1.04 : 1,
             duration: duration,
-            curve: isSelected ? Curves.easeOutBack : Curves.easeOutCubic,
+            curve: Curves.easeOutBack,
             child: Stack(
+              alignment: Alignment.center,
               children: <Widget>[
-                AnimatedContainer(
-                  duration: duration,
-                  curve: Curves.easeOutCubic,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: background,
-                    borderRadius: BorderRadius.circular(isSelected ? 14 : 10),
-                    boxShadow: isSelected
-                        ? <BoxShadow>[
-                            BoxShadow(
-                              color: context.colorScheme.primary.withValues(
-                                alpha: 0.24,
-                              ),
-                              blurRadius: 10,
-                              offset: const Offset(0, 4),
-                            ),
-                          ]
-                        : const <BoxShadow>[],
-                  ),
-                  child: AnimatedDefaultTextStyle(
+                Positioned.fill(
+                  child: AnimatedRotation(
+                    turns: isSelected && !reduced ? -0.012 : 0,
                     duration: duration,
-                    curve: Curves.easeOutCubic,
-                    style: context.textTheme.bodyMedium?.copyWith(
-                          color: textColor,
-                          fontWeight:
-                              isSelected ? FontWeight.bold : FontWeight.normal,
-                        ) ??
-                        TextStyle(color: textColor),
-                    child: Text('${date.day}'),
+                    curve: Curves.easeOutBack,
+                    child: AnimatedContainer(
+                      duration: duration,
+                      decoration: BoxDecoration(
+                        color: isSelected ? const Color(0xFF91E6F8) : null,
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(
+                          color: isSelected
+                              ? Colors.white
+                              : isToday
+                                  ? const Color(0xFF4CC3FF)
+                                  : Colors.transparent,
+                          width: isSelected ? 3 : 2,
+                        ),
+                        boxShadow: isSelected
+                            ? <BoxShadow>[
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.14),
+                                  blurRadius: 5,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ]
+                            : const <BoxShadow>[],
+                      ),
+                    ),
+                  ),
+                ),
+                if (isSelected)
+                  const Positioned(
+                    top: 6,
+                    left: 7,
+                    child: ExcludeSemantics(
+                      child: SizedBox(
+                        width: 8,
+                        height: 3,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(Radius.circular(3)),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 6),
+                  child: Text(
+                    '${date.day}',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: ink,
+                          fontWeight: FontWeight.w700,
+                        ),
                   ),
                 ),
                 Positioned(
                   bottom: 4,
-                  left: 0,
-                  right: 0,
-                  child: AnimatedScale(
-                    scale: showDot ? 1 : 0,
-                    duration: duration,
-                    curve: showDot ? Curves.easeOutBack : Curves.easeInCubic,
-                    child: AnimatedOpacity(
-                      opacity: showDot ? 1 : 0,
-                      duration: duration,
-                      child: Center(
-                        child: AnimatedContainer(
-                          width: isSelected ? 6 : 5,
-                          height: isSelected ? 6 : 5,
-                          duration: duration,
-                          decoration: BoxDecoration(
-                            color: isSelected ? Colors.white : dotColor,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      ),
+                  child: ExcludeSemantics(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        if (hasEvent)
+                          const Icon(Icons.circle,
+                              size: 7, color: Color(0xFFE84586)),
+                        if (hasEvent && hasAnniversary)
+                          const SizedBox(width: 3),
+                        if (hasAnniversary)
+                          const Icon(Icons.star_rounded,
+                              size: 11, color: Color(0xFF9860CB)),
+                      ],
                     ),
                   ),
                 ),
