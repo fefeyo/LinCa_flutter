@@ -37,46 +37,60 @@ class LincaCalendar extends HookConsumerWidget {
 
     return Column(
       children: <Widget>[
-        LincaCalendarHeader(
-          focusedMonth: state.focusedMonth,
-          onPrev: viewModel.canGoPrevMonth
-              ? () {
-                  viewModel.updateFocusedMonth(
-                    DateTime(
-                      state.focusedMonth.year,
-                      state.focusedMonth.month - 1,
-                    ),
-                  );
-                }
-              : null,
-          onNext: viewModel.canGoNextMonth
-              ? () {
-                  viewModel.updateFocusedMonth(
-                    DateTime(
-                      state.focusedMonth.year,
-                      state.focusedMonth.month + 1,
-                    ),
-                  );
-                }
-              : null,
-        ),
-        const SizedBox(height: 8),
-        const LincaCalendarWeeklyRow(),
-        const SizedBox(height: 8),
-        AnimatedSwitcher(
-          duration: lincaMotionDuration(context),
-          switchInCurve: Curves.easeOutCubic,
-          switchOutCurve: Curves.easeInCubic,
-          child: LincaCalendarGrid(
-            key: ValueKey<String>(
-              '${state.focusedMonth.year}-${state.focusedMonth.month}',
-            ),
-            focusedMonth: state.focusedMonth,
-            selectedDate: state.selectedDate,
-            onSelect: (DateTime date) {
-              viewModel.updateSelectedDate(date);
-            },
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(
+                color: Theme.of(context)
+                    .colorScheme
+                    .primary
+                    .withValues(alpha: 0.18)),
           ),
+          child: Column(children: <Widget>[
+            LincaCalendarHeader(
+              focusedMonth: state.focusedMonth,
+              onPrev: viewModel.canGoPrevMonth
+                  ? () {
+                      viewModel.updateFocusedMonth(
+                        DateTime(
+                          state.focusedMonth.year,
+                          state.focusedMonth.month - 1,
+                        ),
+                      );
+                    }
+                  : null,
+              onNext: viewModel.canGoNextMonth
+                  ? () {
+                      viewModel.updateFocusedMonth(
+                        DateTime(
+                          state.focusedMonth.year,
+                          state.focusedMonth.month + 1,
+                        ),
+                      );
+                    }
+                  : null,
+            ),
+            const SizedBox(height: 8),
+            const LincaCalendarWeeklyRow(),
+            const SizedBox(height: 8),
+            AnimatedSwitcher(
+              duration: lincaMotionDuration(context),
+              switchInCurve: Curves.easeOutCubic,
+              switchOutCurve: Curves.easeInCubic,
+              child: LincaCalendarGrid(
+                key: ValueKey<String>(
+                  '${state.focusedMonth.year}-${state.focusedMonth.month}',
+                ),
+                focusedMonth: state.focusedMonth,
+                selectedDate: state.selectedDate,
+                onSelect: (DateTime date) {
+                  viewModel.updateSelectedDate(date);
+                },
+              ),
+            ),
+          ]),
         ),
         Expanded(
           child: AnimatedSwitcher(

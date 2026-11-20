@@ -19,12 +19,22 @@ class LincaCalendarWeeklyRow extends StatelessWidget {
       children: _labels.map((String label) {
         return Expanded(
           child: Center(
-            child: Text(
-              label,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall
-                  ?.copyWith(color: Colors.grey),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+              decoration: BoxDecoration(
+                color: label == '日'
+                    ? const Color(0xFFFF5BA1).withValues(alpha: 0.12)
+                    : label == '土'
+                        ? const Color(0xFF4CC3FF).withValues(alpha: 0.12)
+                        : Colors.transparent,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                label,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant),
+              ),
             ),
           ),
         );

@@ -27,8 +27,8 @@ class LincaCalendarGrid extends HookConsumerWidget {
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 7,
-        mainAxisSpacing: 8,
-        crossAxisSpacing: 8,
+        mainAxisSpacing: 5,
+        crossAxisSpacing: 5,
       ),
       itemCount: days.length,
       itemBuilder: (BuildContext context, int index) {
