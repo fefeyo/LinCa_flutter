@@ -53,9 +53,12 @@ class ParticipationRepository extends FirestoreRepository<ParticipationInfo> {
         .collection(AppConstants.participationsPath)
         .doc(participation.eventId)
         .set(
-          participation.toJson(),
-          SetOptions(merge: true),
-        );
+      <String, dynamic>{
+        ...participation.toJson(),
+        'updatedAt': FieldValue.serverTimestamp(),
+      },
+      SetOptions(merge: true),
+    );
   }
 
   Future<void> delete(String eventId) async {

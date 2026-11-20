@@ -1,8 +1,8 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/models/filter_settings.dart';
 import 'package:linca_otaku_support/core/models/linca_event.dart';
-import 'package:linca_otaku_support/core/network/model/event_base.dart';
 import 'package:linca_otaku_support/core/utils/linca_event_extension.dart';
+import '../../../core/utils/event_filter.dart';
 import '../../../core/network/model/participation_info.dart';
 import '../../../core/network/providers.dart';
 import '../data/my_event_state.dart';
@@ -55,12 +55,7 @@ class MyEventViewModel extends StateNotifier<MyEventState> {
   }
 
   void setKeyword(String keyword) {
-    final FilterSettings filterSettings =
-        state.filterSettings.copyWith(keyword: keyword);
-    state = state.copyWith(
-      filterSettings: filterSettings,
-      sortedEvents: sortEvents(filterSettings: filterSettings),
-    );
+    setFilterSettings(state.filterSettings.copyWith(keyword: keyword));
   }
 
   List<LincaEvent> sortEvents({
@@ -70,42 +65,9 @@ class MyEventViewModel extends StateNotifier<MyEventState> {
     final List<LincaEvent> baseEvents = targetList.isNotEmpty
         ? List<LincaEvent>.of(targetList)
         : List<LincaEvent>.of(state.allEvents);
-    List<LincaEvent> events = List<LincaEvent>.of(baseEvents);
-
-    if (filterSettings.isHiddenOriginalEvent) {
-      events = events
-          .where((LincaEvent event) => event.event is OfficialEvent)
-          .toList();
-    }
-
-    if (filterSettings.isShowOfficialEvent) {
-      events = events
-          .where((LincaEvent lincaEvent) => lincaEvent.event is OfficialEvent)
-          .toList();
-    }
-
-    if (filterSettings.isShowOriginalEvent) {
-      events = events
-          .where((LincaEvent lincaEvent) => lincaEvent.event is UnOfficialEvent)
-          .toList();
-    }
-
-    if (!filterSettings.isShowOfficialEvent &&
-        !filterSettings.isShowOriginalEvent) {
-      events = List<LincaEvent>.of(baseEvents);
-    }
-
-    events = events
-        .filterWithPeriod(
-          startDate: filterSettings.startDate,
-          endDate: filterSettings.endDate,
-        )
-        .filterWithTag(filterSettings.typeTags)
-        .filterWithTag(filterSettings.seriesTags)
-        .filterWithKeyword(filterSettings.keyword)
-        .sortWithDisplayOrder(displayOrder: filterSettings.displayOrder);
-
-    return events;
+    return baseEvents
+        .filterWithEventVisibility(filterSettings)
+        .applyFilterSettings(filterSettings);
   }
 
   void updateAllEvents(List<LincaEvent> newAllEvents) {

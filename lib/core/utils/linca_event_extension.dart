@@ -77,12 +77,7 @@ extension LincaEventsExtension on List<LincaEvent> {
   }
 
   String get mostParticipatedSeries {
-    final Map<String, int> seriesCount = <String, int>{};
-
-    for (final LincaEvent event in this) {
-      final String seriesTag = event.group.seriesTag;
-      seriesCount[seriesTag] = (seriesCount[seriesTag] ?? 0) + 1;
-    }
+    final Map<String, int> seriesCount = seriesParticipationCounts;
 
     String mostParticipatedSeries = '';
     int maxCount = 0;
@@ -122,40 +117,21 @@ extension LincaEventsExtension on List<LincaEvent> {
     DisplayOrder displayOrder = DisplayOrder.newest,
   }) {
     final List<LincaEvent> sortedEvents = List<LincaEvent>.of(this);
-    switch (displayOrder) {
-      case DisplayOrder.newest:
-        sortedEvents.sort((LincaEvent a, LincaEvent b) {
-          final DateTime? dateA = a.event.date;
-          final DateTime? dateB = b.event.date;
+    final int direction = displayOrder == DisplayOrder.newest ? -1 : 1;
+    sortedEvents.sort((LincaEvent a, LincaEvent b) {
+      final DateTime? dateA = a.event.date;
+      final DateTime? dateB = b.event.date;
 
-          if (dateA == null && dateB == null) return 0;
-          if (dateA == null) return 1; // null は後ろ
-          if (dateB == null) return -1;
+      // Undated events remain last in either direction.
+      if (dateA == null && dateB == null) return 0;
+      if (dateA == null) return 1;
+      if (dateB == null) return -1;
 
-          if (dateA.isSameDate(dateB)) {
-            return b.event.id.compareTo(a.event.id);
-          }
-
-          return dateB.compareTo(dateA); // 新しい順
-        });
-        break;
-      case DisplayOrder.oldest:
-        sortedEvents.sort((LincaEvent a, LincaEvent b) {
-          final DateTime? dateA = a.event.date;
-          final DateTime? dateB = b.event.date;
-
-          if (dateA == null && dateB == null) return 0;
-          if (dateA == null) return 1;
-          if (dateB == null) return -1;
-
-          if (dateA.isSameDate(dateB)) {
-            return a.event.id.compareTo(b.event.id);
-          }
-
-          return dateA.compareTo(dateB); // 古い順
-        });
-        break;
-    }
+      final int comparison = dateA.isSameDate(dateB)
+          ? a.event.id.compareTo(b.event.id)
+          : dateA.compareTo(dateB);
+      return direction * comparison;
+    });
 
     return sortedEvents;
   }
@@ -226,9 +202,7 @@ extension LincaEventsExtension on List<LincaEvent> {
 
       final DateTime eventDate = DateTime(date.year, date.month, date.day);
       return eventDate == today;
-    })
-        .toList()
-        .sortWithDisplayOrder(displayOrder: DisplayOrder.oldest);
+    }).toList().sortWithDisplayOrder(displayOrder: DisplayOrder.oldest);
   }
 
   LincaEvent? getEventById(String eventId) =>

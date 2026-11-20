@@ -50,7 +50,9 @@ abstract class FirestoreRepository<T> {
     if (lastUpdatedAtKey != null) {
       final DateTime? lastUpdatedAt =
           await preferences.getLastUpdatedAt(lastUpdatedAtKey);
-      query = query.where('updatedAt', isGreaterThan: lastUpdatedAt);
+      if (lastUpdatedAt != null) {
+        query = query.where('updatedAt', isGreaterThan: lastUpdatedAt);
+      }
     }
 
     try {
@@ -71,12 +73,26 @@ abstract class FirestoreRepository<T> {
               fromJson(<String, dynamic>{...doc.data(), 'id': doc.id}))
           .toList();
 
-      if (lastUpdatedAtKey != null) {
-        final DateTime latestUpdatedAt = querySnapshot.docs
+      if (lastUpdatedAtKey != null && querySnapshot.docs.isNotEmpty) {
+        final List<Timestamp> timestamps = querySnapshot.docs
             .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) =>
-                (doc.data()['updatedAt'] as Timestamp).toDate())
-            .reduce((DateTime a, DateTime b) => a.isAfter(b) ? a : b);
-        preferences.updateLastUpdatedAt(lastUpdatedAtKey, latestUpdatedAt);
+                doc.data()['updatedAt'])
+            .whereType<Timestamp>()
+            .toList();
+        // Legacy documents remain usable. Do not advance past documents
+        // without a valid timestamp, or a later delta query would omit them.
+        if (timestamps.length == querySnapshot.docs.length) {
+          final DateTime latestUpdatedAt = timestamps
+              .map((Timestamp timestamp) => timestamp.toDate())
+              .reduce((DateTime a, DateTime b) => a.isAfter(b) ? a : b);
+          try {
+            await preferences.updateLastUpdatedAt(
+                lastUpdatedAtKey, latestUpdatedAt);
+          } catch (_) {
+            // A local cursor write failure must not erase fetched results.
+            debugPrint('[Firestore] Could not persist the update cursor.');
+          }
+        }
       }
 
       return updatedResult;

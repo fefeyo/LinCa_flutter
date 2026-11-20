@@ -1,5 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:linca_otaku_support/core/utils/linca_event_extension.dart';
+import '../../../core/utils/event_filter.dart';
 import '../../../core/constants/event_type.dart';
 import '../../../core/models/filter_settings.dart';
 import '../../../core/models/linca_event.dart';
@@ -19,7 +20,8 @@ final AutoDisposeStateNotifierProvider<ChooseEventViewModel, ChooseEventState>
           .value
           ?.where((LincaEvent event) =>
               (event.event as UnOfficialEvent).visibility == true)
-          .toList().sortWithDisplayOrder() ??
+          .toList()
+          .sortWithDisplayOrder() ??
       <LincaEvent>[];
   final List<ParticipationInfo> participations =
       ref.read(participationControllerProvider).value ?? <ParticipationInfo>[];
@@ -87,13 +89,7 @@ class ChooseEventViewModel extends StateNotifier<ChooseEventState> {
   }
 
   void setKeyword(String keyword) {
-    final FilterSettings filterSettings =
-        state.filterSettings.copyWith(keyword: keyword);
-
-    state = state.copyWith(
-      filterSettings: filterSettings,
-      sortedEvents: sortEvents(state.initialEvents, filterSettings),
-    );
+    setFilterSettings(state.filterSettings.copyWith(keyword: keyword));
   }
 
   void setFilterSettings(FilterSettings filterSettings) {
@@ -122,17 +118,7 @@ class ChooseEventViewModel extends StateNotifier<ChooseEventState> {
       );
     }
 
-    sortedEvents = sortedEvents
-        .filterWithPeriod(
-          startDate: filterSettings.startDate,
-          endDate: filterSettings.endDate,
-        )
-        .filterWithTag(filterSettings.typeTags)
-        .filterWithTag(filterSettings.seriesTags)
-        .filterWithKeyword(filterSettings.keyword)
-        .sortWithDisplayOrder(displayOrder: filterSettings.displayOrder);
-
-    return sortedEvents;
+    return sortedEvents.applyFilterSettings(filterSettings);
   }
 
   void updateParticipations(List<ParticipationInfo> newParticipations) {

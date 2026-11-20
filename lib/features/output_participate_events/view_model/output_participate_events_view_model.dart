@@ -1,9 +1,8 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:linca_otaku_support/core/utils/linca_event_extension.dart';
 import 'package:linca_otaku_support/core/utils/sort_items_extension.dart';
+import '../../../core/utils/event_filter.dart';
 import '../../../core/models/filter_settings.dart';
 import '../../../core/models/linca_event.dart';
-import '../../../core/network/model/event_base.dart';
 import '../../../core/network/model/participation_info.dart';
 import '../../../core/network/providers.dart';
 import '../data/output_participate_events_state.dart';
@@ -53,50 +52,12 @@ class OutputParticipateEventsViewModel
   }
 
   void setKeyword(String keyword) {
-    final FilterSettings filterSettings =
-        state.filterSettings.copyWith(keyword: keyword);
-    state = state.copyWith(
-      filterSettings: filterSettings,
-      sortedEvents: sortEvents(filterSettings),
-    );
+    setFilterSettings(state.filterSettings.copyWith(keyword: keyword));
   }
 
   List<LincaEvent> sortEvents(FilterSettings filterSettings) {
-    List<LincaEvent> events = List<LincaEvent>.of(state.allEvents);
-
-    if (filterSettings.isHiddenOriginalEvent) {
-      events = events
-          .where((LincaEvent event) => event.event is OfficialEvent)
-          .toList();
-    }
-
-    if (filterSettings.isShowOfficialEvent) {
-      events = events
-          .where((LincaEvent lincaEvent) => lincaEvent.event is OfficialEvent)
-          .toList();
-    }
-
-    if (filterSettings.isShowOriginalEvent) {
-      events = events
-          .where((LincaEvent lincaEvent) => lincaEvent.event is UnOfficialEvent)
-          .toList();
-    }
-
-    if (!filterSettings.isShowOfficialEvent &&
-        !filterSettings.isShowOriginalEvent) {
-      events = state.allEvents;
-    }
-
-    events = events
-        .filterWithPeriod(
-          startDate: filterSettings.startDate,
-          endDate: filterSettings.endDate,
-        )
-        .filterWithKeyword(filterSettings.keyword)
-        .filterWithTag(filterSettings.typeTags)
-        .filterWithTag(filterSettings.seriesTags)
-        .sortWithDisplayOrder(displayOrder: filterSettings.displayOrder);
-
-    return events;
+    return state.allEvents
+        .filterWithEventVisibility(filterSettings)
+        .applyFilterSettings(filterSettings);
   }
 }
